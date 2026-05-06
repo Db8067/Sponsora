@@ -4,13 +4,14 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { LayoutDashboard, CalendarDays, Users, Briefcase, Settings, MessageSquare, Plus, ShieldCheck, Ticket } from "lucide-react";
 import { cn } from "@/lib/utils";
+import MobileDashboardNav from "@/components/dashboard/MobileDashboardNav";
 
 const sidebarLinks = [
   { name: "Overview", href: "/dashboard/organizer", icon: LayoutDashboard },
   { name: "Manage Events", href: "/dashboard/organizer/events", icon: CalendarDays },
   { name: "Participants", href: "/dashboard/organizer/participants", icon: Users },
   { name: "Sponsors CRM", href: "/dashboard/organizer/sponsors", icon: Briefcase },
-  { name: "Inbox", href: "/dashboard/organizer/inbox", icon: MessageSquare },
+  { name: "Inbox", href: "/chat", icon: MessageSquare },
   { name: "Team & Access", href: "/dashboard/organizer/team", icon: ShieldCheck },
   { name: "Support Tickets", href: "/dashboard/organizer/support", icon: Ticket },
   { name: "Settings", href: "/dashboard/organizer/settings", icon: Settings },
@@ -24,11 +25,22 @@ export default function OrganizerDashboardLayout({
   const pathname = usePathname();
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
       <div className="flex flex-col md:flex-row gap-8">
         
-        {/* Sidebar */}
-        <aside className="w-full md:w-64 shrink-0">
+        {/* Mobile Nav Trigger */}
+        <MobileDashboardNav 
+          links={sidebarLinks}
+          orgName="Tech Club HQ"
+          orgRole="Pro Plan"
+          orgLogo="TC"
+          createLink="/dashboard/organizer/events/create"
+          createLabel="Create Event"
+          publicProfileLink="/organizer/tech-club-hq"
+        />
+
+        {/* Desktop Sidebar */}
+        <aside className="hidden md:block w-64 shrink-0">
           <div className="glass rounded-2xl p-4 sticky top-24">
             
             <div className="mb-6 px-3">
@@ -82,7 +94,7 @@ export default function OrganizerDashboardLayout({
         </aside>
 
         {/* Main Content */}
-        <main className="flex-1 min-w-0">
+        <main className="flex-1 min-w-0 pb-20 md:pb-0">
           {children}
         </main>
         

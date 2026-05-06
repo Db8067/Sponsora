@@ -1,105 +1,125 @@
 import Link from "next/link";
-import { ArrowRight, Search, Calendar, Users, Trophy, DollarSign } from "lucide-react";
+import { ArrowRight, Search, Calendar, Users, Trophy, DollarSign, Sparkles, ShieldCheck, Zap, TrendingUp, Handshake } from "lucide-react";
 
 export default function Home() {
   return (
     <div className="flex flex-col min-h-screen">
       {/* Hero Section */}
-      <section className="relative px-6 py-24 sm:py-32 lg:px-8 bg-gradient-to-b from-primary/10 to-background overflow-hidden">
+      <section className="relative px-6 pt-32 pb-20 sm:pt-40 sm:pb-32 lg:px-8 bg-gradient-to-b from-primary/10 to-background overflow-hidden">
         <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/20 via-background to-background"></div>
-        <div className="mx-auto max-w-2xl text-center">
-          <h1 className="font-heading text-4xl font-bold tracking-tight text-foreground sm:text-6xl text-balance">
-            Where Great Events Meet <span className="text-primary bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary-dark">Incredible Sponsors</span>
+        <div className="mx-auto max-w-4xl text-center">
+          <h1 className="font-heading font-black tracking-tighter text-foreground sm:text-7xl text-balance leading-[0.9]">
+            WHERE EVENTS MEET <span className="text-primary italic">SPONSORS</span>
           </h1>
-          <p className="mt-6 text-lg leading-8 text-foreground/80 font-sans">
-            Sponsora is the ultimate platform for finding hackathons, cultural fests, and sports events. 
-            Register as a participant, or connect with organizers as a sponsor.
+          <p className="mt-8 text-base sm:text-xl leading-relaxed text-foreground/70 font-medium max-w-2xl mx-auto px-4">
+            The ultimate platform for hackathons, cultural fests, and sports. 
+            Connect with organizers as a sponsor or join as a participant.
           </p>
-          <div className="mt-10 flex items-center justify-center gap-x-6">
+          <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-4 px-6">
             <Link
               href="/events"
-              className="rounded-full bg-primary px-6 py-3.5 text-sm font-semibold text-white shadow-sm hover:bg-primary-dark hover:-translate-y-1 transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary flex items-center gap-2"
+              className="w-full sm:w-auto rounded-2xl bg-primary px-8 py-5 text-sm font-bold text-white shadow-xl shadow-primary/20 hover:bg-primary-dark hover:-translate-y-1 transition-all flex items-center justify-center gap-2"
             >
               Explore Events <ArrowRight className="w-4 h-4" />
             </Link>
-            <Link href="/dashboard/sponsor" className="text-sm font-semibold leading-6 text-foreground hover:text-primary transition-colors">
-              Become a Sponsor <span aria-hidden="true">→</span>
+            <Link href="/dashboard/sponsor" className="w-full sm:w-auto text-sm font-bold bg-white/5 border border-white/10 px-8 py-5 rounded-2xl hover:bg-white/10 transition-all text-center">
+              Become a Sponsor
             </Link>
           </div>
         </div>
 
         {/* Quick Search */}
-        <div className="mt-16 mx-auto max-w-3xl bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-800 p-2 sm:p-4 flex flex-col sm:flex-row gap-4">
+        <div className="mt-16 mx-auto max-w-3xl glass rounded-3xl shadow-2xl p-2 flex flex-col sm:flex-row gap-2">
           <div className="relative flex-1">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-foreground/30" />
             <input 
               type="text" 
-              placeholder="Search for hackathons, fests..." 
-              className="w-full bg-transparent pl-12 pr-4 py-3 text-foreground placeholder:text-gray-400 border-none outline-none focus:ring-0"
+              placeholder="Search hackathons, fests..." 
+              className="w-full bg-transparent pl-12 pr-4 py-4 text-foreground placeholder:text-foreground/30 border-none outline-none focus:ring-0 text-sm sm:text-base"
             />
           </div>
-          <button className="bg-foreground text-background px-8 py-3 rounded-xl font-medium hover:bg-foreground/90 transition-colors">
-            Search
+          <button className="bg-primary text-white px-8 py-4 rounded-2xl font-bold hover:bg-primary-dark transition-all">
+            Find Now
           </button>
         </div>
       </section>
 
-      {/* Featured Categories */}
-      <section className="py-20 px-6 lg:px-8 max-w-7xl mx-auto w-full">
-        <h2 className="font-heading text-3xl font-bold text-center mb-12">Discover Opportunities</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      {/* Stats / Trust Bar */}
+      <section className="py-12 border-y border-white/5 bg-black/20">
+        <div className="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8">
           {[
-            { title: "Hackathons", icon: <Trophy className="w-6 h-6" />, color: "bg-blue-100 text-blue-600", count: "120+ Events" },
-            { title: "Cultural Fests", icon: <Users className="w-6 h-6" />, color: "bg-purple-100 text-purple-600", count: "85+ Events" },
-            { title: "Workshops", icon: <Calendar className="w-6 h-6" />, color: "bg-orange-100 text-orange-600", count: "200+ Events" },
-            { title: "Sponsorships", icon: <DollarSign className="w-6 h-6" />, color: "bg-green-100 text-green-600", count: "50+ Active" },
+            { label: "Active Events", val: "120+" },
+            { label: "Sponsors", val: "450+" },
+            { label: "Participants", val: "25k+" },
+            { label: "Prize Pools", val: "₹5Cr+" },
+          ].map(stat => (
+            <div key={stat.label} className="text-center">
+              <p className="text-2xl sm:text-4xl font-black text-foreground">{stat.val}</p>
+              <p className="text-[10px] sm:text-xs font-bold uppercase tracking-widest text-foreground/40 mt-1">{stat.label}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Featured Categories - Responsive Grid */}
+      <section className="py-24 px-6 lg:px-8 max-w-7xl mx-auto w-full">
+        <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-4">
+          <div className="text-left">
+            <h2 className="font-heading text-3xl sm:text-5xl font-black tracking-tighter">DISCOVER</h2>
+            <p className="text-foreground/50 font-bold uppercase tracking-widest text-xs mt-2">Browse by category</p>
+          </div>
+        </div>
+        
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+          {[
+            { title: "Hackathons", icon: <Trophy />, color: "from-blue-500/20 to-indigo-500/20", count: "120+ Events" },
+            { title: "Cultural Fests", icon: <Sparkles />, color: "from-purple-500/20 to-pink-500/20", count: "85+ Events" },
+            { title: "Workshops", icon: <Zap />, color: "from-orange-500/20 to-red-500/20", count: "200+ Events" },
+            { title: "Sponsorships", icon: <DollarSign />, color: "from-green-500/20 to-emerald-500/20", count: "50+ Active" },
           ].map((cat, i) => (
-            <Link href={`/events?category=${cat.title.toLowerCase()}`} key={i} className="group relative bg-white dark:bg-slate-900 rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-gray-800 hover:shadow-md transition-all hover:-translate-y-1">
-              <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-4 ${cat.color}`}>
+            <Link href={`/events?category=${cat.title.toLowerCase()}`} key={i} className="group relative glass rounded-3xl p-8 hover:-translate-y-2 transition-all">
+              <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 bg-gradient-to-br ${cat.color} text-foreground`}>
                 {cat.icon}
               </div>
-              <h3 className="font-semibold text-lg text-foreground group-hover:text-primary transition-colors">{cat.title}</h3>
-              <p className="text-sm text-foreground/60 mt-1">{cat.count}</p>
+              <h3 className="font-bold text-xl text-foreground group-hover:text-primary transition-colors">{cat.title}</h3>
+              <p className="text-sm font-bold text-foreground/40 mt-2">{cat.count}</p>
             </Link>
           ))}
         </div>
       </section>
 
-      {/* Trending Events Preview */}
-      <section className="py-20 px-6 lg:px-8 bg-gray-50 dark:bg-slate-950 border-t border-b border-gray-100 dark:border-gray-900 w-full">
-        <div className="max-w-7xl mx-auto">
+      {/* Trending Events - Carousel on Mobile */}
+      <section className="py-24 bg-black/40 border-y border-white/5">
+        <div className="max-w-7xl mx-auto px-6">
           <div className="flex justify-between items-end mb-12">
             <div>
-              <h2 className="font-heading text-3xl font-bold">Trending Events</h2>
-              <p className="text-foreground/70 mt-2">The most popular events happening soon.</p>
+              <h2 className="font-heading text-3xl sm:text-5xl font-black tracking-tighter">TRENDING</h2>
+              <p className="text-foreground/50 font-bold uppercase tracking-widest text-xs mt-2">Hot opportunities</p>
             </div>
-            <Link href="/events" className="text-primary font-medium hover:text-primary-dark hidden sm:flex items-center gap-1">
-              View all <ArrowRight className="w-4 h-4" />
+            <Link href="/events" className="hidden sm:flex items-center gap-2 text-sm font-bold text-primary hover:gap-3 transition-all">
+              View All <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {/* Placeholder Event Cards */}
+          <div className="carousel-container gap-6">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="bg-white dark:bg-slate-900 rounded-2xl overflow-hidden shadow-sm border border-gray-100 dark:border-gray-800 hover:shadow-lg transition-all group">
-                <div className="h-48 bg-gradient-to-tr from-primary/20 to-accent/20 w-full relative">
-                  <div className="absolute top-4 left-4 bg-white/90 backdrop-blur text-xs font-bold px-3 py-1 rounded-full text-primary">
+              <div key={i} className="carousel-item bg-white/5 border border-white/10 rounded-[2.5rem] overflow-hidden hover:border-primary/50 transition-all group">
+                <div className="h-56 bg-gradient-to-tr from-primary/20 to-accent/20 w-full relative">
+                  <div className="absolute top-6 left-6 glass px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest">
                     HACKATHON
                   </div>
                 </div>
-                <div className="p-6">
-                  <div className="flex justify-between items-start mb-4">
-                    <h3 className="font-bold text-xl leading-tight group-hover:text-primary transition-colors">Global AI Hackathon 2026</h3>
+                <div className="p-8">
+                  <h3 className="font-black text-2xl group-hover:text-primary transition-colors leading-tight mb-6">Global AI Hackathon 2026</h3>
+                  <div className="space-y-4 mb-8 text-sm font-bold text-foreground/60">
+                    <div className="flex items-center gap-3"><Calendar className="w-5 h-5 text-primary" /> Oct 15 - 17, 2026</div>
+                    <div className="flex items-center gap-3"><Users className="w-5 h-5 text-primary" /> 1,500+ Participants</div>
+                    <div className="flex items-center gap-3"><Trophy className="w-5 h-5 text-primary" /> ₹5,00,000 Pool</div>
                   </div>
-                  <div className="space-y-2 mb-6 text-sm text-foreground/70">
-                    <div className="flex items-center gap-2"><Calendar className="w-4 h-4" /> Oct 15 - 17, 2026</div>
-                    <div className="flex items-center gap-2"><Users className="w-4 h-4" /> 1,500+ Participants</div>
-                    <div className="flex items-center gap-2"><Trophy className="w-4 h-4" /> ₹5,00,000 Prize Pool</div>
-                  </div>
-                  <div className="pt-4 border-t border-gray-100 dark:border-gray-800 flex justify-between items-center">
-                    <span className="font-semibold text-success">Free Entry</span>
-                    <Link href={`/events/demo-${i}`} className="bg-primary/10 text-primary hover:bg-primary hover:text-white px-4 py-2 rounded-lg font-medium transition-colors text-sm">
-                      Details
+                  <div className="pt-6 border-t border-white/5 flex justify-between items-center">
+                    <span className="font-black text-success uppercase tracking-widest text-xs">Free Entry</span>
+                    <Link href={`/events/demo-${i}`} className="bg-primary text-white px-6 py-3 rounded-xl font-bold text-xs hover:bg-primary-dark transition-colors">
+                      DETAILS
                     </Link>
                   </div>
                 </div>
@@ -107,31 +127,69 @@ export default function Home() {
             ))}
           </div>
           
-          <div className="mt-8 text-center sm:hidden">
-            <Link href="/events" className="text-primary font-medium hover:text-primary-dark flex items-center justify-center gap-1">
-              View all events <ArrowRight className="w-4 h-4" />
-            </Link>
+          <Link href="/events" className="sm:hidden flex items-center justify-center gap-2 text-sm font-bold text-primary mt-12 py-4 bg-primary/10 rounded-2xl">
+            View All Events <ArrowRight className="w-4 h-4" />
+          </Link>
+        </div>
+      </section>
+
+      {/* Sponsora Journey - Mobile Optimized Timeline */}
+      <section className="py-32 px-6 lg:px-8 max-w-7xl mx-auto w-full">
+        <div className="text-center mb-24">
+          <h2 className="font-heading text-3xl sm:text-5xl font-black tracking-tighter uppercase">The Journey</h2>
+          <p className="text-foreground/50 font-bold uppercase tracking-widest text-xs mt-2">How it works</p>
+        </div>
+        
+        <div className="relative">
+          {/* Vertical Line */}
+          <div className="absolute left-6 md:left-1/2 -translate-x-1/2 h-full w-0.5 bg-gradient-to-b from-primary/50 via-accent/50 to-transparent" />
+          
+          <div className="space-y-24">
+            {[
+              { title: "Dream & Design", desc: "Create your event page with our AI-powered builder and define your sponsorship goals.", icon: <Sparkles />, side: "left" },
+              { title: "Match & Connect", desc: "Our AI matches your event with the perfect sponsors based on industry and target audience.", icon: <Handshake />, side: "right" },
+              { title: "Secure & Manage", desc: "Generate legal agreements instantly and manage participant check-ins with ease.", icon: <ShieldCheck />, side: "left" },
+              { title: "Impact & Growth", desc: "Track ROI for sponsors and attendee satisfaction with automated reports.", icon: <TrendingUp />, side: "right" },
+            ].map((step, i) => (
+              <div key={i} className={`flex flex-col md:flex-row items-start md:items-center gap-12 ${step.side === 'right' ? 'md:flex-row-reverse' : ''}`}>
+                <div className={`flex-1 pl-16 md:pl-0 ${step.side === 'right' ? 'md:text-left' : 'md:text-right'}`}>
+                  <div className="glass p-8 rounded-[2rem] border-l-4 border-l-primary relative">
+                    <div className="w-12 h-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center mb-4 md:mx-0 inline-flex">
+                      {step.icon}
+                    </div>
+                    <h3 className="font-black text-2xl mb-3 text-foreground uppercase tracking-tight">{step.title}</h3>
+                    <p className="text-sm font-medium text-foreground/60 leading-relaxed">{step.desc}</p>
+                  </div>
+                </div>
+                <div className="absolute left-6 md:left-1/2 -translate-x-1/2 z-10 w-12 h-12 rounded-2xl bg-background border-4 border-primary flex items-center justify-center font-black text-primary shadow-2xl">
+                  {i + 1}
+                </div>
+                <div className="flex-1 hidden md:block" />
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-24 px-6 lg:px-8 max-w-7xl mx-auto text-center">
-        <div className="bg-gradient-to-br from-primary to-primary-dark rounded-3xl p-8 sm:p-16 text-white shadow-xl relative overflow-hidden">
-          <div className="absolute top-0 right-0 -mt-20 -mr-20 w-80 h-80 bg-white/10 rounded-full blur-3xl"></div>
-          <div className="absolute bottom-0 left-0 -mb-20 -ml-20 w-80 h-80 bg-accent/20 rounded-full blur-3xl"></div>
+      {/* CTA Section - Responsive */}
+      <section className="py-24 px-6 lg:px-8 max-w-7xl mx-auto w-full">
+        <div className="bg-gradient-to-br from-primary to-primary-dark rounded-[3rem] p-10 sm:p-20 text-white shadow-2xl relative overflow-hidden text-center sm:text-left">
+          <div className="absolute top-0 right-0 -mt-20 -mr-20 w-80 h-80 bg-white/10 rounded-full blur-3xl" />
           
-          <h2 className="font-heading text-3xl sm:text-4xl font-bold mb-6 relative z-10">Ready to host your next big event?</h2>
-          <p className="text-primary-50 text-lg mb-10 max-w-2xl mx-auto relative z-10 opacity-90">
-            Join thousands of organizers who use Sponsora to manage registrations, find sponsors, and deliver unforgettable experiences.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center relative z-10">
-            <Link href="/dashboard/organizer" className="bg-white text-primary px-8 py-4 rounded-xl font-bold hover:bg-gray-50 transition-colors shadow-lg">
-              Start Organizing
-            </Link>
+          <div className="relative z-10 max-w-2xl">
+            <h2 className="font-heading text-4xl sm:text-6xl font-black tracking-tighter leading-[0.9] mb-8">READY TO HOST YOUR NEXT BIG EVENT?</h2>
+            <p className="text-primary-100 text-lg sm:text-xl font-medium mb-12 opacity-90">
+              Join thousands of organizers who use Sponsora to manage registrations and find the best sponsors.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4">
+              <Link href="/dashboard/organizer" className="bg-white text-primary px-10 py-5 rounded-2xl font-black text-sm uppercase tracking-widest hover:bg-gray-50 transition-all shadow-xl">
+                Start Organizing
+              </Link>
+            </div>
           </div>
         </div>
       </section>
     </div>
   );
 }
+

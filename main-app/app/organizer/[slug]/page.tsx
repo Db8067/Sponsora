@@ -1,6 +1,6 @@
 "use client";
 
-import { Globe, MapPin, ExternalLink, Calendar, Users, Award, ShieldCheck } from "lucide-react";
+import { Globe, MapPin, ExternalLink, Calendar, Users, Award, ShieldCheck, MessageSquare } from "lucide-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 
@@ -23,7 +23,9 @@ export default function OrganizerProfilePage() {
                 <div>
                   <div className="flex items-center gap-2 mb-2">
                     <h1 className="font-heading text-4xl font-bold text-foreground">Tech Club HQ</h1>
-                    <ShieldCheck className="w-6 h-6 text-success" title="Verified Organizer" />
+                    <span title="Verified Organizer">
+                      <ShieldCheck className="w-6 h-6 text-success" />
+                    </span>
                   </div>
                   <p className="text-xl text-foreground/70">Building the biggest tech communities in India.</p>
                 </div>
@@ -72,7 +74,7 @@ export default function OrganizerProfilePage() {
               {[
                 { name: "Global AI Hackathon 2026", date: "Oct 15-17, 2026", type: "Hackathon", mode: "In-Person" },
                 { name: "Web3 Builders Meetup", date: "Nov 02, 2026", type: "Meetup", mode: "Online" },
-              ].map((event, i) => (
+              ].map((event: any, i: number) => (
                 <motion.div 
                   key={i}
                   whileHover={{ x: 5 }}

@@ -1,79 +1,62 @@
-import { Bookmark, Calendar, MapPin } from "lucide-react";
+"use client";
+
+import { Bookmark, MapPin, Users, Calendar, ArrowRight, X } from "lucide-react";
 import Link from "next/link";
+import { motion } from "framer-motion";
 
-export const metadata = {
-  title: "Saved Events | Sponsora",
-};
-
-export default function BookmarksPage() {
+export default function UserBookmarksPage() {
   const bookmarks = [
-    {
-      id: 1,
-      title: "Web3 Developers Summit",
-      date: "Aug 5 - 6, 2026",
-      location: "Bangalore, India",
-      category: "CONFERENCE",
-      price: "₹999",
-      image: "from-blue-500/20 to-cyan-500/20"
-    },
-    {
-      id: 2,
-      title: "UI/UX Design Challenge",
-      date: "Sep 12 - 14, 2026",
-      location: "Online",
-      category: "COMPETITION",
-      price: "Free",
-      image: "from-pink-500/20 to-rose-500/20"
-    }
+    { id: 1, name: "Global AI Hackathon 2026", org: "TechFlow", location: "San Francisco, CA", attendees: "5k+", date: "Oct 15-17", match: "98%", ask: "₹50k - ₹2L", tags: ["AI", "Web3", "Developers"] },
+    { id: 2, name: "React India Conf", org: "ReactDevs", location: "Bangalore, India", attendees: "2k+", date: "Sep 10", match: "92%", ask: "₹1L - ₹5L", tags: ["Frontend", "React"] },
   ];
 
   return (
     <div className="space-y-8">
       <div>
         <h1 className="font-heading text-3xl font-bold text-foreground">Saved Events</h1>
-        <p className="text-foreground/70 mt-1">Events you've bookmarked for later.</p>
+        <p className="text-foreground/70 mt-1">Events you are interested in attending.</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {bookmarks.map((event) => (
-          <div key={event.id} className="bg-white dark:bg-slate-900 rounded-2xl overflow-hidden shadow-sm border border-gray-100 dark:border-gray-800 flex flex-col group relative">
-            <button className="absolute top-4 right-4 z-10 p-2 bg-white/90 backdrop-blur rounded-full text-primary hover:bg-white transition-colors shadow-sm">
-              <Bookmark className="w-5 h-5 fill-current" />
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+        {bookmarks.map((event, i) => (
+          <motion.div 
+            key={event.id}
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: i * 0.1 }}
+            className="glass rounded-2xl overflow-hidden flex flex-col group relative"
+          >
+            <button className="absolute top-4 right-4 w-8 h-8 rounded-full bg-black/50 backdrop-blur-md flex items-center justify-center text-white/70 hover:text-red-500 hover:bg-black/70 transition-colors z-10">
+              <X className="w-4 h-4" />
             </button>
-            <div className={`h-32 bg-gradient-to-tr ${event.image} w-full relative`}>
-              <div className="absolute top-4 left-4 bg-white/90 backdrop-blur text-xs font-bold px-3 py-1 rounded-full text-foreground/80">
-                {event.category}
+            
+            <div className="p-5 flex-1 flex flex-col pt-10">
+              <div className="mb-4">
+                <p className="text-xs text-primary font-bold mb-1">{event.org}</p>
+                <h3 className="font-bold text-lg text-foreground line-clamp-1">{event.name}</h3>
               </div>
-            </div>
-            <div className="p-5 flex-1 flex flex-col">
-              <h3 className="font-bold text-lg leading-tight group-hover:text-primary transition-colors mb-3">
-                {event.title}
-              </h3>
-              <div className="space-y-2 mb-6 text-sm text-foreground/70 flex-1">
-                <div className="flex items-center gap-2"><Calendar className="w-4 h-4" /> {event.date}</div>
-                <div className="flex items-center gap-2"><MapPin className="w-4 h-4" /> {event.location}</div>
+              
+              <div className="space-y-2 mb-6 text-sm text-foreground/70">
+                <div className="flex items-center gap-2">
+                  <MapPin className="w-4 h-4 text-foreground/40" /> {event.location}
+                </div>
+                <div className="flex items-center gap-2">
+                  <Users className="w-4 h-4 text-foreground/40" /> {event.attendees} attendees
+                </div>
+                <div className="flex items-center gap-2">
+                  <Calendar className="w-4 h-4 text-foreground/40" /> {event.date}
+                </div>
               </div>
-              <div className="pt-4 border-t border-gray-100 dark:border-gray-800 flex justify-between items-center">
-                <span className="font-semibold text-foreground">{event.price}</span>
-                <Link href={`/events/demo-${event.id}`} className="bg-primary/10 text-primary hover:bg-primary hover:text-white px-4 py-2 rounded-lg font-medium transition-colors text-sm">
+
+              <div className="pt-4 border-t border-white/10 flex justify-between items-center mt-auto">
+                <Link href={`/events/${event.id}`} className="w-full bg-primary/10 hover:bg-primary hover:text-white text-primary px-4 py-2 rounded-xl text-sm font-bold transition-all text-center">
                   Register Now
                 </Link>
               </div>
             </div>
-          </div>
+          </motion.div>
         ))}
       </div>
-
-      {bookmarks.length === 0 && (
-        <div className="text-center py-20 bg-white dark:bg-slate-900 rounded-2xl border border-gray-100 dark:border-gray-800 border-dashed">
-          <Bookmark className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-          <h3 className="text-lg font-semibold text-foreground">No saved events yet</h3>
-          <p className="text-foreground/60 mt-1 mb-6">When you find an event you like, bookmark it to save it here.</p>
-          <Link href="/events" className="bg-primary text-white px-6 py-2 rounded-xl font-medium shadow-sm hover:bg-primary-dark transition-all">
-            Browse Events
-          </Link>
-        </div>
-      )}
     </div>
   );
 }

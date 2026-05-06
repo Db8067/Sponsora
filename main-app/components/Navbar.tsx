@@ -2,121 +2,158 @@
 
 import Link from "next/link";
 import { UserButton, useUser, SignInButton } from "@clerk/nextjs";
-import { Menu, X, Rocket } from "lucide-react";
-import { useState } from "react";
+import { Menu, X, Rocket, LayoutDashboard, Calendar, BookText } from "lucide-react";
+import { useState, useEffect } from "react";
 import { ThemeToggle } from "./ThemeToggle";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function Navbar() {
-  // Mock Clerk state for frontend testing
   const isLoaded = true;
   const isSignedIn = false;
   const user: any = { publicMetadata: { role: 'user' } };
-  /*
-  const { isLoaded, isSignedIn, user } = useUser();
-  */
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  
+  const [isOpen, setIsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const navLinks = [
+    { name: "Browse Events", href: "/events", icon: Calendar },
+    { name: "Blog", href: "/blog", icon: BookText },
+  ];
 
   return (
-    <nav className="border-b bg-background/80 dark:bg-black/60 backdrop-blur-md sticky top-0 z-50 transition-all duration-300">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16">
-          <div className="flex items-center">
-            <Link href="/" className="flex items-center gap-2">
-              <Rocket className="h-6 w-6 text-primary-dark" />
-              <span className="font-heading font-bold text-xl tracking-tight">Sponsora</span>
-            </Link>
-            
-            <div className="hidden sm:ml-8 sm:flex sm:space-x-8">
-              <Link href="/events" className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-foreground/80 hover:border-gray-300 hover:text-foreground">
-                Browse Events
-              </Link>
-              <Link href="/blog" className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-foreground/80 hover:border-gray-300 hover:text-foreground">
-                Blog
-              </Link>
-            </div>
+    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'glass h-16' : 'bg-transparent h-20'}`}>
+      <div className="max-w-7xl mx-auto px-6 h-full flex items-center justify-between">
+        <Link href="/" className="flex items-center gap-2 group">
+          <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-transform">
+            <Rocket className="h-6 w-6" />
           </div>
-          
-          <div className="hidden sm:ml-6 sm:flex sm:items-center space-x-4">
+          <span className="font-heading font-black text-2xl tracking-tighter text-foreground">SPONSORA</span>
+        </Link>
+        
+        {/* Desktop Nav */}
+        <div className="hidden md:flex items-center gap-8">
+          <div className="flex items-center gap-6">
+            {navLinks.map((link) => (
+              <Link 
+                key={link.name} 
+                href={link.href} 
+                className="text-sm font-bold text-foreground/70 hover:text-primary transition-colors relative group"
+              >
+                {link.name}
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all group-hover:w-full" />
+              </Link>
+            ))}
+          </div>
+
+          <div className="h-6 w-px bg-white/10 mx-2" />
+
+          <div className="flex items-center gap-4">
             {!isLoaded ? (
-              <div className="w-8 h-8 rounded-full bg-gray-200 animate-pulse"></div>
+              <div className="w-8 h-8 rounded-full bg-white/5 animate-pulse" />
             ) : isSignedIn ? (
               <>
                 <Link 
                   href={`/dashboard/${user.publicMetadata.role || 'user'}`}
-                  className="text-sm font-medium text-primary hover:text-primary-dark"
+                  className="flex items-center gap-2 text-sm font-bold bg-white/5 px-4 py-2 rounded-xl hover:bg-white/10 transition-all"
                 >
-                  Dashboard
+                  <LayoutDashboard className="w-4 h-4" /> Dashboard
                 </Link>
                 <UserButton />
               </>
             ) : (
               <>
-                {/* <SignInButton mode="modal"> */}
-                  <button className="text-sm font-medium text-foreground/80 hover:text-foreground">Log in</button>
-                {/* </SignInButton> */}
-                {/* <SignInButton mode="modal"> */}
-                  <button className="rounded-md bg-primary px-3.5 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-all">
-                    Sign up
-                  </button>
-                {/* </SignInButton> */}
+                <button className="text-sm font-bold text-foreground/70 hover:text-foreground">Log in</button>
+                <button className="bg-primary text-white px-6 py-2 rounded-xl text-sm font-bold shadow-lg shadow-primary/20 hover:bg-primary-dark transition-all">
+                  Sign up
+                </button>
               </>
             )}
             <ThemeToggle />
           </div>
-          
-          <div className="flex items-center sm:hidden">
-            <button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary"
-            >
-              {isMobileMenuOpen ? (
-                <X className="block h-6 w-6" aria-hidden="true" />
-              ) : (
-                <Menu className="block h-6 w-6" aria-hidden="true" />
-              )}
-            </button>
-          </div>
+        </div>
+
+        {/* Mobile Toggle */}
+        <div className="flex md:hidden items-center gap-4">
+          <ThemeToggle />
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="w-10 h-10 flex items-center justify-center rounded-xl glass border-white/20 text-foreground active:scale-90 transition-transform"
+          >
+            {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </button>
         </div>
       </div>
 
-      {isMobileMenuOpen && (
-        <div className="sm:hidden">
-          <div className="space-y-1 pb-3 pt-2">
-            <Link href="/events" className="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-foreground/80 hover:border-gray-300 hover:bg-gray-50 hover:text-foreground">
-              Browse Events
-            </Link>
-            <Link href="/blog" className="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-foreground/80 hover:border-gray-300 hover:bg-gray-50 hover:text-foreground">
-              Blog
-            </Link>
-          </div>
-          <div className="border-t border-gray-200 pb-3 pt-4">
-            {!isLoaded ? (
-               <div className="px-4 py-2 text-base font-medium text-gray-500">Loading...</div>
-            ) : isSignedIn ? (
-              <div className="flex items-center px-4 space-x-3">
-                <UserButton />
-                <Link 
-                  href={`/dashboard/${user.publicMetadata.role || 'user'}`}
-                  className="block text-base font-medium text-gray-500 hover:text-gray-800"
-                >
-                  Dashboard
-                </Link>
+      {/* Mobile Drawer Overlay */}
+      <AnimatePresence>
+        {isOpen && (
+          <>
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsOpen(false)}
+              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[55] md:hidden"
+            />
+            <motion.div
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ type: "spring", damping: 25, stiffness: 200 }}
+              className="fixed top-0 right-0 h-full w-[80%] max-w-sm bg-background border-l border-white/10 z-[60] md:hidden shadow-2xl p-8 flex flex-col"
+            >
+              <div className="flex items-center justify-between mb-12">
+                <span className="font-heading font-black text-xl tracking-tighter">MENU</span>
+                <button onClick={() => setIsOpen(false)} className="p-2 hover:bg-white/5 rounded-lg">
+                  <X className="w-6 h-6" />
+                </button>
               </div>
-            ) : (
-              <div className="flex flex-col px-4 space-y-2">
-                <SignInButton mode="modal">
-                  <button className="w-full text-left py-2 text-base font-medium text-foreground/80 hover:text-foreground">Log in</button>
-                </SignInButton>
-                <SignInButton mode="modal">
-                  <button className="w-full rounded-md bg-primary px-3.5 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary-dark text-center">
-                    Sign up
-                  </button>
-                </SignInButton>
+
+              <div className="flex flex-col gap-6 mb-auto">
+                {navLinks.map((link) => {
+                  const Icon = link.icon;
+                  return (
+                    <Link 
+                      key={link.name} 
+                      href={link.href}
+                      onClick={() => setIsOpen(false)}
+                      className="flex items-center gap-4 text-2xl font-bold text-foreground/70 hover:text-primary transition-all group"
+                    >
+                      <div className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center group-hover:bg-primary/10 group-hover:text-primary transition-all">
+                        <Icon className="w-6 h-6" />
+                      </div>
+                      {link.name}
+                    </Link>
+                  );
+                })}
               </div>
-            )}
-          </div>
-        </div>
-      )}
+
+              <div className="pt-8 border-t border-white/10 flex flex-col gap-4">
+                {isSignedIn ? (
+                  <Link 
+                    href={`/dashboard/${user.publicMetadata.role || 'user'}`}
+                    onClick={() => setIsOpen(false)}
+                    className="flex items-center justify-center gap-3 bg-primary text-white py-4 rounded-2xl font-bold text-lg"
+                  >
+                    <LayoutDashboard className="w-6 h-6" /> Dashboard
+                  </Link>
+                ) : (
+                  <>
+                    <button className="w-full py-4 rounded-2xl bg-white/5 border border-white/10 font-bold text-lg">Log in</button>
+                    <button className="w-full py-4 rounded-2xl bg-primary text-white font-bold text-lg shadow-xl shadow-primary/20">Sign up</button>
+                  </>
+                )}
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </nav>
   );
 }

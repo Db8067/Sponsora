@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Plus, Search, Building2, Handshake, CheckCircle2 } from "lucide-react";
-import { motion } from "framer-motion";
+import { Plus, Search, Building2, Handshake, CheckCircle2, ChevronLeft, ChevronRight } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const columns = [
   { id: "contacted", title: "Contacted" },
@@ -19,21 +19,21 @@ const initialLeads = [
 
 export default function SponsorsCRMPage() {
   const [leads, setLeads] = useState(initialLeads);
+  const [activeTab, setActiveTab] = useState("contacted");
 
-  // Simple move function for demonstration (no drag-and-drop library for MVP simplicity)
   const moveLead = (id: number, newStatus: string) => {
     setLeads(leads.map(lead => lead.id === id ? { ...lead, status: newStatus } : lead));
   };
 
   return (
-    <div className="space-y-8">
-      <div className="flex justify-between items-center">
+    <div className="space-y-6 sm:space-y-8">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="font-heading text-3xl font-bold text-foreground">Sponsors CRM</h1>
-          <p className="text-foreground/70 mt-1">Manage your sponsorship pipeline.</p>
+          <h1 className="font-heading text-2xl sm:text-3xl font-bold text-foreground">Sponsors CRM</h1>
+          <p className="text-foreground/70 text-sm mt-1">Manage your sponsorship pipeline.</p>
         </div>
-        <button className="bg-primary text-white px-4 py-2 rounded-xl text-sm font-semibold hover:bg-primary-dark transition-all shadow-md hover:shadow-lg flex items-center gap-2">
-          <Plus className="w-4 h-4" /> Add Lead
+        <button className="w-full sm:w-auto bg-primary text-white px-5 py-3 rounded-2xl text-sm font-bold hover:bg-primary-dark transition-all shadow-lg flex items-center justify-center gap-2">
+          <Plus className="w-5 h-5" /> Add Lead
         </button>
       </div>
 
@@ -42,59 +42,93 @@ export default function SponsorsCRMPage() {
         <input 
           type="text" 
           placeholder="Search sponsors..." 
-          className="w-full bg-white/5 border border-white/10 rounded-xl py-3 pl-10 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 text-foreground"
+          className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 pl-10 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 text-foreground"
         />
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {/* Mobile Tab Bar */}
+      <div className="flex md:hidden bg-white/5 p-1.5 rounded-2xl border border-white/10 overflow-x-auto scrollbar-hide">
         {columns.map((column) => (
-          <div key={column.id} className="glass p-4 rounded-2xl flex flex-col h-[600px]">
-            <div className="flex items-center justify-between mb-4 px-2">
-              <h2 className="font-bold text-foreground">{column.title}</h2>
-              <span className="text-xs font-medium bg-white/10 px-2 py-1 rounded-full text-foreground/70">
+          <button
+            key={column.id}
+            onClick={() => setActiveTab(column.id)}
+            className={`flex-1 py-3 px-4 rounded-xl text-sm font-bold whitespace-nowrap transition-all ${
+              activeTab === column.id ? 'bg-primary text-white shadow-lg' : 'text-foreground/50 hover:text-foreground'
+            }`}
+          >
+            {column.title} ({leads.filter(l => l.status === column.id).length})
+          </button>
+        ))}
+      </div>
+
+      {/* Kanban Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative">
+        {columns.map((column) => (
+          <div 
+            key={column.id} 
+            className={`glass p-4 sm:p-5 rounded-3xl flex flex-col h-[500px] sm:h-[600px] transition-all duration-300 ${
+              activeTab === column.id ? 'flex' : 'hidden md:flex'
+            }`}
+          >
+            <div className="flex items-center justify-between mb-6 px-2">
+              <div className="flex items-center gap-2">
+                <div className={`w-2 h-2 rounded-full ${column.id === 'closed' ? 'bg-success' : column.id === 'negotiating' ? 'bg-orange-500' : 'bg-primary'}`} />
+                <h2 className="font-bold text-foreground uppercase tracking-widest text-xs">{column.title}</h2>
+              </div>
+              <span className="text-xs font-bold bg-white/10 px-2 py-1 rounded-lg text-foreground/70">
                 {leads.filter(l => l.status === column.id).length}
               </span>
             </div>
             
-            <div className="flex-1 overflow-y-auto space-y-3 px-1">
-              {leads.filter(l => l.status === column.id).map(lead => (
-                <motion.div 
-                  layoutId={`lead-${lead.id}`}
-                  key={lead.id} 
-                  className="bg-white/5 border border-white/10 p-4 rounded-xl cursor-grab active:cursor-grabbing hover:border-primary/50 transition-colors"
-                >
-                  <div className="flex justify-between items-start mb-3">
-                    <div className="flex items-center gap-2">
-                      <div className="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center text-primary font-bold text-xs">
+            <div className="flex-1 overflow-y-auto space-y-4 px-1 scrollbar-hide">
+              <AnimatePresence mode="popLayout">
+                {leads.filter(l => l.status === column.id).map(lead => (
+                  <motion.div 
+                    layout
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.9 }}
+                    key={lead.id} 
+                    className="bg-white/5 border border-white/10 p-5 rounded-2xl cursor-grab active:cursor-grabbing hover:border-primary/50 transition-colors shadow-sm"
+                  >
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center text-primary font-bold">
                         {lead.company[0]}
                       </div>
-                      <h3 className="font-bold text-sm text-foreground">{lead.company}</h3>
+                      <h3 className="font-bold text-foreground">{lead.company}</h3>
                     </div>
-                  </div>
-                  <div className="flex justify-between items-center mt-4">
-                    <span className="text-xs font-semibold text-success bg-success/10 px-2 py-1 rounded-md">{lead.amount}</span>
                     
-                    {/* Quick Move Actions */}
-                    <div className="flex gap-1">
-                      {column.id !== "contacted" && (
-                        <button onClick={() => moveLead(lead.id, "contacted")} className="p-1.5 hover:bg-white/10 rounded-md text-foreground/50 hover:text-blue-500" title="Move to Contacted">
-                          <Building2 className="w-3.5 h-3.5" />
-                        </button>
-                      )}
-                      {column.id !== "negotiating" && (
-                        <button onClick={() => moveLead(lead.id, "negotiating")} className="p-1.5 hover:bg-white/10 rounded-md text-foreground/50 hover:text-orange-500" title="Move to Negotiating">
-                          <Handshake className="w-3.5 h-3.5" />
-                        </button>
-                      )}
-                      {column.id !== "closed" && (
-                        <button onClick={() => moveLead(lead.id, "closed")} className="p-1.5 hover:bg-white/10 rounded-md text-foreground/50 hover:text-green-500" title="Move to Closed">
-                          <CheckCircle2 className="w-3.5 h-3.5" />
-                        </button>
-                      )}
+                    <div className="flex justify-between items-center pt-4 border-t border-white/5">
+                      <span className="text-sm font-bold text-success bg-success/10 px-3 py-1 rounded-lg">{lead.amount}</span>
+                      
+                      <div className="flex gap-2">
+                        {column.id !== "contacted" && (
+                          <button onClick={() => moveLead(lead.id, "contacted")} className="p-2 hover:bg-white/10 rounded-xl text-foreground/50 hover:text-primary transition-all" title="Move to Contacted">
+                            <Building2 className="w-4 h-4" />
+                          </button>
+                        )}
+                        {column.id !== "negotiating" && (
+                          <button onClick={() => moveLead(lead.id, "negotiating")} className="p-2 hover:bg-white/10 rounded-xl text-foreground/50 hover:text-orange-500 transition-all" title="Move to Negotiating">
+                            <Handshake className="w-4 h-4" />
+                          </button>
+                        )}
+                        {column.id !== "closed" && (
+                          <button onClick={() => moveLead(lead.id, "closed")} className="p-2 hover:bg-white/10 rounded-xl text-foreground/50 hover:text-success transition-all" title="Move to Closed">
+                            <CheckCircle2 className="w-4 h-4" />
+                          </button>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                </motion.div>
-              ))}
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+              
+              {leads.filter(l => l.status === column.id).length === 0 && (
+                <div className="h-full flex flex-col items-center justify-center opacity-20">
+                  <Plus className="w-8 h-8 mb-2" />
+                  <p className="text-sm font-medium uppercase tracking-widest">No Leads</p>
+                </div>
+              )}
             </div>
           </div>
         ))}
