@@ -1,7 +1,11 @@
 import Link from "next/link";
 import { ArrowRight, Search, Calendar, Users, Trophy, DollarSign, Sparkles, ShieldCheck, Zap, TrendingUp, Handshake } from "lucide-react";
+import { Button } from "@/components/ui/Button";
+import { LiquidButton } from "@/components/ui/LiquidButton";
 
 export default function Home() {
+
+
   return (
     <div className="flex flex-col min-h-screen">
       {/* Hero Section */}
@@ -15,18 +19,29 @@ export default function Home() {
             The ultimate platform for hackathons, cultural fests, and sports. 
             Connect with organizers as a sponsor or join as a participant.
           </p>
-          <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-4 px-6">
-            <Link
-              href="/events"
-              className="w-full sm:w-auto rounded-2xl bg-primary px-8 py-5 text-sm font-bold text-white shadow-xl shadow-primary/20 hover:bg-primary-dark hover:-translate-y-1 transition-all flex items-center justify-center gap-2"
-            >
-              Explore Events <ArrowRight className="w-4 h-4" />
+          <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-6 px-6">
+            <Link href="/events" className="w-full sm:w-auto flex justify-center">
+              <LiquidButton>
+                Explore Events <ArrowRight className="w-5 h-5 ml-2" />
+              </LiquidButton>
             </Link>
-            <Link href="/dashboard/sponsor" className="w-full sm:w-auto text-sm font-bold bg-white/5 border border-white/10 px-8 py-5 rounded-2xl hover:bg-white/10 transition-all text-center">
-              Become a Sponsor
+            <Link href="/search-sponsors" className="w-full sm:w-auto">
+              <Button variant="default" size="lg" className="w-full font-bold">
+                Search for Sponsor
+              </Button>
+            </Link>
+            <Link href="/dashboard/sponsor" className="w-full sm:w-auto">
+              <Button variant="default" size="lg" className="w-full font-bold">
+                Become a Sponsor
+              </Button>
             </Link>
           </div>
+
+
+
+
         </div>
+
 
         {/* Quick Search */}
         <div className="mt-16 mx-auto max-w-3xl glass rounded-3xl shadow-2xl p-2 flex flex-col sm:flex-row gap-2">

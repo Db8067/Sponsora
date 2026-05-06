@@ -1,11 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { UserButton, useUser, SignInButton } from "@clerk/nextjs";
+import { UserButton, useUser } from "@clerk/nextjs";
 import { Menu, X, Rocket, LayoutDashboard, Calendar, BookText } from "lucide-react";
 import { useState, useEffect } from "react";
 import { ThemeToggle } from "./ThemeToggle";
+import CustomButton from "./ui/CustomButton";
 import { motion, AnimatePresence } from "framer-motion";
+import UserProfile from "./UserProfile";
 
 export default function Navbar() {
   const isLoaded = true;
@@ -53,29 +55,29 @@ export default function Navbar() {
 
           <div className="h-6 w-px bg-white/10 mx-2" />
 
-          <div className="flex items-center gap-4">
-            {!isLoaded ? (
-              <div className="w-8 h-8 rounded-full bg-white/5 animate-pulse" />
-            ) : isSignedIn ? (
-              <>
-                <Link 
-                  href={`/dashboard/${user.publicMetadata.role || 'user'}`}
-                  className="flex items-center gap-2 text-sm font-bold bg-white/5 px-4 py-2 rounded-xl hover:bg-white/10 transition-all"
-                >
-                  <LayoutDashboard className="w-4 h-4" /> Dashboard
-                </Link>
-                <UserButton />
-              </>
-            ) : (
-              <>
-                <button className="text-sm font-bold text-foreground/70 hover:text-foreground">Log in</button>
-                <button className="bg-primary text-white px-6 py-2 rounded-xl text-sm font-bold shadow-lg shadow-primary/20 hover:bg-primary-dark transition-all">
-                  Sign up
-                </button>
-              </>
-            )}
-            <ThemeToggle />
-          </div>
+           <div className="flex items-center gap-4">
+             {!isLoaded ? (
+               <div className="w-8 h-8 rounded-full bg-white/5 animate-pulse" />
+             ) : isSignedIn ? (
+               <>
+                 <Link 
+                   href={`/dashboard/${user.publicMetadata.role || 'user'}`}
+                   className="flex items-center gap-2 text-sm font-bold bg-white/5 px-4 py-2 rounded-xl hover:bg-white/10 transition-all"
+                 >
+                   <LayoutDashboard className="w-4 h-4" /> Dashboard
+                 </Link>
+                 <UserProfile />
+               </>
+             ) : (
+               <>
+                 <button className="text-sm font-bold text-foreground/70 hover:text-foreground">Log in</button>
+                 <CustomButton className="ml-4">
+                   Sign up
+                 </CustomButton>
+               </>
+             )}
+             <ThemeToggle />
+           </div>
         </div>
 
         {/* Mobile Toggle */}
@@ -134,22 +136,27 @@ export default function Navbar() {
                 })}
               </div>
 
-              <div className="pt-8 border-t border-white/10 flex flex-col gap-4">
-                {isSignedIn ? (
-                  <Link 
-                    href={`/dashboard/${user.publicMetadata.role || 'user'}`}
-                    onClick={() => setIsOpen(false)}
-                    className="flex items-center justify-center gap-3 bg-primary text-white py-4 rounded-2xl font-bold text-lg"
-                  >
-                    <LayoutDashboard className="w-6 h-6" /> Dashboard
-                  </Link>
-                ) : (
-                  <>
-                    <button className="w-full py-4 rounded-2xl bg-white/5 border border-white/10 font-bold text-lg">Log in</button>
-                    <button className="w-full py-4 rounded-2xl bg-primary text-white font-bold text-lg shadow-xl shadow-primary/20">Sign up</button>
-                  </>
-                )}
-              </div>
+               <div className="pt-8 border-t border-white/10 flex flex-col gap-4">
+                 {isSignedIn ? (
+                   <>
+                     <Link 
+                       href={`/dashboard/${user.publicMetadata.role || 'user'}`}
+                       onClick={() => setIsOpen(false)}
+                       className="flex items-center justify-center gap-3 bg-primary text-white py-4 rounded-2xl font-bold text-lg"
+                     >
+                       <LayoutDashboard className="w-6 h-6" /> Dashboard
+                     </Link>
+                     <UserProfile />
+                   </>
+                 ) : (
+                   <>
+                     <button className="w-full py-4 rounded-2xl bg-white/5 border border-white/10 font-bold text-lg">Log in</button>
+                     <CustomButton className="w-full py-4 rounded-2xl bg-primary text-white font-bold text-lg shadow-xl shadow-primary/20">
+                       Sign up
+                     </CustomButton>
+                   </>
+                 )}
+               </div>
             </motion.div>
           </>
         )}
