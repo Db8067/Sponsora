@@ -28,9 +28,12 @@ export default function Error({
             {error.message || "Unknown error occurred"}
           </p>
         </div>
-        <p className="text-gray-500 dark:text-gray-400 mb-8 text-sm">
-          Please make sure all environment variables (Supabase & Cloudinary) are properly set in your Vercel Dashboard.
-        </p>
+        <div className="text-gray-500 dark:text-gray-400 mb-8 text-sm space-y-2">
+          <p>Please make sure all environment variables (Supabase & Cloudinary) are properly set in your Vercel Dashboard.</p>
+          <p className="text-indigo-600 dark:text-indigo-400 font-medium bg-indigo-50 dark:bg-indigo-900/20 p-2 rounded">
+            Note: In Vercel, ignore the grey text that says "cloudinary://...". That is just a placeholder example! You must paste your actual individual API Key and Secret into their respective boxes.
+          </p>
+        </div>
         <button
           onClick={() => reset()}
           className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-3 px-4 rounded-lg transition-colors"
