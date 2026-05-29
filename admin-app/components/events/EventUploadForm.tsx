@@ -78,14 +78,17 @@ export default function EventUploadForm() {
     setError("");
 
     try {
-      const { data, error: submitError } = await supabase.from("events").insert([
-        {
-          ...formData,
-          slug: formData.title.toLowerCase().replace(/[^a-z0-9]+/g, "-") + "-" + Date.now(),
-          entry_fee: formData.is_paid ? Number(formData.entry_fee) : 0,
-          max_participants: Number(formData.max_participants) || null,
-        },
-      ]);
+      const payload = {
+        ...formData,
+        slug: formData.title.toLowerCase().replace(/[^a-z0-9]+/g, "-") + "-" + Date.now(),
+        entry_fee: formData.is_paid ? Number(formData.entry_fee) : 0,
+        max_participants: Number(formData.max_participants) || null,
+        category_id: formData.category_id === "" ? null : formData.category_id,
+        end_at: formData.end_at === "" ? null : formData.end_at,
+        registration_deadline: formData.registration_deadline === "" ? null : formData.registration_deadline,
+      };
+
+      const { data, error: submitError } = await supabase.from("events").insert([payload]);
 
       if (submitError) throw submitError;
 
