@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ArrowRight, Search, Calendar, Users, Trophy, DollarSign, Sparkles, ShieldCheck, Zap, TrendingUp, Handshake } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { LiquidButton } from "@/components/ui/LiquidButton";
+import EventGrid from "@/components/events/EventGrid";
 
 export default function Home() {
 
@@ -58,6 +59,9 @@ export default function Home() {
           </button>
         </div>
       </section>
+
+      {/* Real-time Events Feed */}
+      <EventGrid />
 
       {/* Stats / Trust Bar */}
       <section className="py-12 border-y border-white/5 bg-black/20">
