@@ -10,7 +10,7 @@ export default function Home() {
       <section className="relative px-6 lg:px-12 max-w-[1400px] mx-auto w-full flex-1 flex flex-col md:flex-row items-center justify-between pt-20 pb-10">
         
         {/* Left Content */}
-        <div className="w-full md:w-[45%] z-10 mt-8 md:mt-0">
+        <div className="w-full md:w-[45%] z-10 shrink-0 flex flex-col justify-center">
           <h1 className="font-heading font-black tracking-tighter text-foreground text-4xl sm:text-5xl lg:text-6xl leading-[0.95] text-balance">
             Incredible <br /> events <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">start here.</span>
@@ -27,26 +27,20 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Right Graphic (Hidden on mobile as requested, but stunning on desktop) */}
-        <div className="hidden md:flex w-full md:w-[50%] relative justify-end">
-          <div className="relative w-full max-w-xl aspect-square flex items-center">
+        {/* Right Graphic (Visible on all devices) */}
+        <div className="flex w-full md:w-[50%] relative justify-center md:justify-end mt-8 md:mt-0 flex-1 min-h-0 overflow-hidden pb-4 md:pb-0">
+          <div className="relative w-full h-full max-w-xl flex items-center justify-center">
             {/* The generated high quality doodle art image */}
-            <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 to-accent/20 rounded-[3rem] blur-3xl opacity-50 max-h-[80%] my-auto"></div>
+            <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 to-accent/20 rounded-[2rem] md:rounded-[3rem] blur-2xl md:blur-3xl opacity-50 max-h-[90%] md:max-h-[80%] my-auto mx-auto max-w-[90%] md:max-w-full"></div>
             <img 
               src="/images/hero-art.png" 
               alt="Sponsora Event Art" 
-              className="relative z-10 w-full max-h-[80%] object-cover rounded-[3rem] shadow-2xl border border-white/5 my-auto"
+              className="relative z-10 w-auto h-full max-h-[90%] md:max-h-[80%] object-contain md:object-cover rounded-[2rem] md:rounded-[3rem] shadow-2xl border border-white/5 my-auto"
             />
           </div>
         </div>
 
-        {/* Mobile Minimal Aesthetic Addition */}
-        <div className="md:hidden w-full mt-16 flex flex-col items-center">
-          <div className="w-full h-px bg-gradient-to-r from-transparent via-white/20 to-transparent mb-8"></div>
-          <Link href="/events" className="flex items-center gap-2 text-primary font-bold">
-            Discover upcoming events <ArrowRight className="w-4 h-4" />
-          </Link>
-        </div>
+
 
       </section>
     </div>
