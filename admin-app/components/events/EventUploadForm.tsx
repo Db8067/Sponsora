@@ -270,6 +270,11 @@ export default function EventUploadForm() {
                     <X className="w-4 h-4" />
                   </button>
                 </div>
+              ) : !process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME ? (
+                <div className="p-8 bg-red-50 text-red-600 rounded-lg">
+                  <p className="font-bold">Cloudinary Configuration Missing</p>
+                  <p className="text-sm mt-2">Please add NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME to your Vercel Environment Variables.</p>
+                </div>
               ) : (
                 <CldUploadWidget
                   uploadPreset="ml_default" // We can use signed uploads instead, or keep preset if it's simpler here
@@ -309,20 +314,26 @@ export default function EventUploadForm() {
                   </div>
                 ))}
                 
-                <CldUploadWidget
-                  uploadPreset="ml_default"
-                  signatureEndpoint="/api/cloudinary/sign"
-                  onSuccess={(result: any) => {
-                    setFormData({ ...formData, gallery_urls: [...formData.gallery_urls, result.info.secure_url] });
-                  }}
-                >
-                  {({ open }) => (
-                    <button type="button" onClick={() => open()} className="aspect-square border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-lg flex flex-col items-center justify-center text-gray-500 hover:text-indigo-600 hover:border-indigo-500 transition-colors">
-                      <UploadCloud className="w-6 h-6 mb-2" />
-                      <span className="text-xs font-medium">Add Photo</span>
-                    </button>
-                  )}
-                </CldUploadWidget>
+                {!process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME ? (
+                  <div className="aspect-square border-2 border-dashed border-red-300 bg-red-50 rounded-lg flex flex-col items-center justify-center text-red-500 text-center p-2">
+                    <span className="text-[10px] font-bold">Cloudinary Missing</span>
+                  </div>
+                ) : (
+                  <CldUploadWidget
+                    uploadPreset="ml_default"
+                    signatureEndpoint="/api/cloudinary/sign"
+                    onSuccess={(result: any) => {
+                      setFormData({ ...formData, gallery_urls: [...formData.gallery_urls, result.info.secure_url] });
+                    }}
+                  >
+                    {({ open }) => (
+                      <button type="button" onClick={() => open()} className="aspect-square border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-lg flex flex-col items-center justify-center text-gray-500 hover:text-indigo-600 hover:border-indigo-500 transition-colors">
+                        <UploadCloud className="w-6 h-6 mb-2" />
+                        <span className="text-xs font-medium">Add Photo</span>
+                      </button>
+                    )}
+                  </CldUploadWidget>
+                )}
               </div>
             </div>
           </div>
