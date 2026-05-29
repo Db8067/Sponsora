@@ -31,9 +31,8 @@ export default function Navbar() {
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? 'bg-background/80 backdrop-blur-xl py-4' : 'bg-transparent py-6'}`}>
       <div className="max-w-[1400px] mx-auto px-6 lg:px-12 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2 group">
-          <span className="font-heading font-bold text-2xl tracking-tighter text-foreground">
-            SPONSORA<span className="text-primary font-light text-3xl leading-none">*</span>
-          </span>
+          <img src="/images/logo-light.png" alt="Sponsora Logo" className="h-8 md:h-10 dark:hidden block" />
+          <img src="/images/logo-dark.png" alt="Sponsora Logo" className="h-8 md:h-10 hidden dark:block" />
         </Link>
         
         {/* Desktop Nav */}
@@ -108,7 +107,10 @@ export default function Navbar() {
               className="fixed top-0 left-0 right-0 bg-background z-[60] md:hidden p-6 flex flex-col border-b border-white/5"
             >
               <div className="flex items-center justify-between mb-8">
-                <span className="font-heading font-bold text-2xl tracking-tighter">SPONSORA*</span>
+                <div className="flex items-center gap-2">
+                  <img src="/images/logo-light.png" alt="Sponsora Logo" className="h-8 dark:hidden block" />
+                  <img src="/images/logo-dark.png" alt="Sponsora Logo" className="h-8 hidden dark:block" />
+                </div>
                 <button onClick={() => setIsOpen(false)} className="p-2">
                   <X className="w-6 h-6" />
                 </button>

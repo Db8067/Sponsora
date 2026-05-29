@@ -51,8 +51,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           )}>
             <div className="h-16 flex items-center px-6 border-b border-gray-200 dark:border-gray-800 shrink-0">
               <Link href="/" className="flex items-center gap-2">
-                <Rocket className="h-6 w-6 text-primary" />
-                <span className="font-heading font-bold text-xl tracking-tight text-foreground">Admin<span className="text-primary">OS</span></span>
+                <img src="/images/logo-light.png" alt="Sponsora Logo" className="h-7 dark:hidden block" />
+                <img src="/images/logo-dark.png" alt="Sponsora Logo" className="h-7 hidden dark:block" />
               </Link>
             </div>
             
@@ -100,8 +100,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             {/* Topbar for mobile */}
             <div className="h-16 bg-white dark:bg-slate-900 border-b border-gray-200 dark:border-gray-800 flex items-center justify-between px-4 md:hidden shrink-0">
               <div className="flex items-center gap-2">
-                <Rocket className="h-5 w-5 text-primary" />
-                <span className="font-heading font-bold tracking-tight text-foreground">Admin<span className="text-primary">OS</span></span>
+                <img src="/images/logo-light.png" alt="Sponsora Logo" className="h-6 dark:hidden block" />
+                <img src="/images/logo-dark.png" alt="Sponsora Logo" className="h-6 hidden dark:block" />
               </div>
               <button onClick={() => setIsMobileMenuOpen(true)} className="p-2 -mr-2 text-foreground/70 hover:text-foreground">
                 <Menu className="w-6 h-6" />
