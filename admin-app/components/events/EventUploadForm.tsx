@@ -275,7 +275,6 @@ export default function EventUploadForm() {
                 </div>
               ) : (
                 <CldUploadWidget
-                  uploadPreset="ml_default" // We can use signed uploads instead, or keep preset if it's simpler here
                   signatureEndpoint="/api/cloudinary/sign"
                   onSuccess={(result: any) => {
                     setFormData({ ...formData, banner_url: result.info.secure_url });
@@ -318,7 +317,6 @@ export default function EventUploadForm() {
                   </div>
                 ) : (
                   <CldUploadWidget
-                    uploadPreset="ml_default"
                     signatureEndpoint="/api/cloudinary/sign"
                     onSuccess={(result: any) => {
                       setFormData({ ...formData, gallery_urls: [...formData.gallery_urls, result.info.secure_url] });
