@@ -11,7 +11,7 @@ const config: Config = {
     extend: {
       fontFamily: {
         sans: ["var(--font-inter)", "sans-serif"],
-        heading: ["var(--font-jakarta)", "sans-serif"],
+        heading: ["var(--font-inter)", "sans-serif"],
       },
       colors: {
         background: "hsl(var(--background))",

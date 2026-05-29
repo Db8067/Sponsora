@@ -24,68 +24,63 @@ export default function Navbar() {
   }, []);
 
   const navLinks = [
-    { name: "Browse Events", href: "/events", icon: Calendar },
-    { name: "Blog", href: "/blog", icon: BookText },
+    { name: "Discover Events", href: "/events", icon: Calendar },
   ];
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'glass h-16' : 'bg-transparent h-20'}`}>
-      <div className="max-w-7xl mx-auto px-6 h-full flex items-center justify-between">
+    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? 'bg-background/80 backdrop-blur-xl border-b border-white/5 py-4' : 'bg-transparent py-6'}`}>
+      <div className="max-w-[1400px] mx-auto px-6 lg:px-12 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2 group">
-          <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-transform">
-            <Rocket className="h-6 w-6" />
-          </div>
-          <span className="font-heading font-black text-2xl tracking-tighter text-foreground">SPONSORA</span>
+          <span className="font-heading font-bold text-2xl tracking-tighter text-foreground">
+            SPONSORA<span className="text-primary font-light text-3xl leading-none">*</span>
+          </span>
         </Link>
         
         {/* Desktop Nav */}
         <div className="hidden md:flex items-center gap-8">
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-8">
             {navLinks.map((link) => (
               <Link 
                 key={link.name} 
                 href={link.href} 
-                className="text-sm font-bold text-foreground/70 hover:text-primary transition-colors relative group"
+                className="text-sm font-medium text-foreground/60 hover:text-foreground transition-colors"
               >
                 {link.name}
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all group-hover:w-full" />
               </Link>
             ))}
           </div>
 
-          <div className="h-6 w-px bg-white/10 mx-2" />
+          <div className="h-4 w-px bg-foreground/10" />
 
-           <div className="flex items-center gap-4">
+           <div className="flex items-center gap-6">
              {!isLoaded ? (
                <div className="w-8 h-8 rounded-full bg-white/5 animate-pulse" />
              ) : isSignedIn ? (
                <>
                  <Link 
                    href={`/dashboard/${user.publicMetadata.role || 'user'}`}
-                   className="flex items-center gap-2 text-sm font-bold bg-white/5 px-4 py-2 rounded-xl hover:bg-white/10 transition-all"
+                   className="text-sm font-medium hover:text-primary transition-colors"
                  >
-                   <LayoutDashboard className="w-4 h-4" /> Dashboard
+                   Dashboard
                  </Link>
                  <UserProfile />
                </>
              ) : (
                <>
-                 <button className="text-sm font-bold text-foreground/70 hover:text-foreground">Log in</button>
-                 <CustomButton className="ml-4">
-                   Sign up
-                 </CustomButton>
+                 <Link href="/sign-in" className="text-sm font-medium text-foreground/60 hover:text-foreground transition-colors">Sign In</Link>
+                 <Link href="/sign-up" className="text-sm font-medium bg-foreground text-background px-4 py-2 rounded-full hover:scale-105 transition-transform">
+                   Get Started
+                 </Link>
                </>
              )}
-             <ThemeToggle />
            </div>
         </div>
 
         {/* Mobile Toggle */}
         <div className="flex md:hidden items-center gap-4">
-          <ThemeToggle />
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="w-10 h-10 flex items-center justify-center rounded-xl glass border-white/20 text-foreground active:scale-90 transition-transform"
+            className="w-10 h-10 flex items-center justify-center text-foreground active:scale-90 transition-transform"
           >
             {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
@@ -101,60 +96,52 @@ export default function Navbar() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsOpen(false)}
-              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[55] md:hidden"
+              className="fixed inset-0 bg-background/95 backdrop-blur-xl z-[55] md:hidden"
             />
             <motion.div
-              initial={{ x: "100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: "100%" }}
+              initial={{ y: "-100%" }}
+              animate={{ y: 0 }}
+              exit={{ y: "-100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="fixed top-0 right-0 h-full w-[80%] max-w-sm bg-background border-l border-white/10 z-[60] md:hidden shadow-2xl p-8 flex flex-col"
+              className="fixed top-0 left-0 right-0 bg-background z-[60] md:hidden p-6 flex flex-col border-b border-white/5"
             >
-              <div className="flex items-center justify-between mb-12">
-                <span className="font-heading font-black text-xl tracking-tighter">MENU</span>
-                <button onClick={() => setIsOpen(false)} className="p-2 hover:bg-white/5 rounded-lg">
+              <div className="flex items-center justify-between mb-8">
+                <span className="font-heading font-bold text-2xl tracking-tighter">SPONSORA*</span>
+                <button onClick={() => setIsOpen(false)} className="p-2">
                   <X className="w-6 h-6" />
                 </button>
               </div>
 
-              <div className="flex flex-col gap-6 mb-auto">
-                {navLinks.map((link) => {
-                  const Icon = link.icon;
-                  return (
-                    <Link 
-                      key={link.name} 
-                      href={link.href}
-                      onClick={() => setIsOpen(false)}
-                      className="flex items-center gap-4 text-2xl font-bold text-foreground/70 hover:text-primary transition-all group"
-                    >
-                      <div className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center group-hover:bg-primary/10 group-hover:text-primary transition-all">
-                        <Icon className="w-6 h-6" />
-                      </div>
-                      {link.name}
-                    </Link>
-                  );
-                })}
+              <div className="flex flex-col gap-6 mb-8">
+                {navLinks.map((link) => (
+                  <Link 
+                    key={link.name} 
+                    href={link.href}
+                    onClick={() => setIsOpen(false)}
+                    className="text-2xl font-bold text-foreground hover:text-primary transition-colors"
+                  >
+                    {link.name}
+                  </Link>
+                ))}
               </div>
 
-               <div className="pt-8 border-t border-white/10 flex flex-col gap-4">
+               <div className="pt-8 border-t border-white/5 flex flex-col gap-4">
                  {isSignedIn ? (
                    <>
                      <Link 
                        href={`/dashboard/${user.publicMetadata.role || 'user'}`}
                        onClick={() => setIsOpen(false)}
-                       className="flex items-center justify-center gap-3 bg-primary text-white py-4 rounded-2xl font-bold text-lg"
+                       className="text-lg font-bold"
                      >
-                       <LayoutDashboard className="w-6 h-6" /> Dashboard
+                       Dashboard
                      </Link>
                      <UserProfile />
                    </>
                  ) : (
-                   <>
-                     <button className="w-full py-4 rounded-2xl bg-white/5 border border-white/10 font-bold text-lg">Log in</button>
-                     <CustomButton className="w-full py-4 rounded-2xl bg-primary text-white font-bold text-lg shadow-xl shadow-primary/20">
-                       Sign up
-                     </CustomButton>
-                   </>
+                   <div className="flex items-center gap-4">
+                     <Link href="/sign-in" className="flex-1 text-center py-3 rounded-full border border-white/10 font-medium">Sign In</Link>
+                     <Link href="/sign-up" className="flex-1 text-center py-3 rounded-full bg-foreground text-background font-medium">Get Started</Link>
+                   </div>
                  )}
                </div>
             </motion.div>
