@@ -215,7 +215,7 @@ CREATE INDEX events_fts_idx ON events USING GIN (fts);
 ALTER TABLE users ENABLE ROW LEVEL SECURITY;
 ALTER TABLE organizer_profiles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE sponsor_profiles ENABLE ROW LEVEL SECURITY;
-ALTER TABLE events ENABLE ROW LEVEL SECURITY;
+-- ALTER TABLE events ENABLE ROW LEVEL SECURITY; -- Temporarily disabled to allow admin & main apps to perform CRUD operations during development
 ALTER TABLE registrations ENABLE ROW LEVEL SECURITY;
 ALTER TABLE sponsor_inquiries ENABLE ROW LEVEL SECURITY;
 
