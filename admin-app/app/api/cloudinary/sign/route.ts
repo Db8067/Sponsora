@@ -6,8 +6,8 @@ export async function POST(request: Request) {
     const body = await request.json();
     const { paramsToSign } = body;
     
-    if (!process.env.CLOUDINARY_API_SECRET || !process.env.CLOUDINARY_API_KEY) {
-      throw new Error('Cloudinary credentials (API_KEY or API_SECRET) are missing from Vercel Environment Variables.');
+    if (!process.env.CLOUDINARY_API_SECRET || !process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY) {
+      throw new Error('Cloudinary credentials (NEXT_PUBLIC_CLOUDINARY_API_KEY or API_SECRET) are missing from Vercel Environment Variables.');
     }
 
     const signature = cloudinary.utils.api_sign_request(
