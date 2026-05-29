@@ -1,16 +1,50 @@
+"use client";
+
+import React, { useEffect, useState } from "react";
 import { Plus, Search, Filter, MoreVertical, Edit, Trash2, Eye } from "lucide-react";
 import Link from "next/link";
-
-export const metadata = {
-  title: "Events | AdminOS",
-};
+import { supabase } from "@/lib/supabase";
 
 export default function AdminEventsPage() {
-  const events = [
-    { id: 1, title: "Global AI Hackathon 2026", organizer: "Tech Nexus Foundation", status: "Published", date: "Oct 15, 2026", registrations: 1250, featured: true },
-    { id: 2, title: "Design Thinking Masterclass", organizer: "Sponsora Admin", status: "Published", date: "Nov 10, 2026", registrations: 450, featured: false },
-    { id: 3, title: "Web3 Developers Summit", organizer: "Crypto India", status: "Draft", date: "Dec 05, 2026", registrations: 0, featured: false },
-  ];
+  const [events, setEvents] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      const { data, error } = await supabase
+        .from("events")
+        .select(`
+          id,
+          title,
+          status,
+          start_at,
+          is_featured,
+          organizer_id,
+          organizer_profiles ( org_name )
+        `)
+        .order("created_at", { ascending: false });
+
+      if (data) setEvents(data);
+      setLoading(false);
+    };
+
+    fetchEvents();
+
+    const channel = supabase
+      .channel("public:events_admin")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "events" },
+        (payload) => {
+          fetchEvents(); // Re-fetch to get relations if needed, or update locally
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, []);
 
   return (
     <div className="space-y-8">
@@ -41,7 +75,7 @@ export default function AdminEventsPage() {
           </div>
         </div>
 
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto min-h-[300px]">
           <table className="w-full text-left text-sm whitespace-nowrap">
             <thead className="bg-gray-50 dark:bg-slate-800/50 text-foreground/60">
               <tr>
@@ -54,44 +88,57 @@ export default function AdminEventsPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
-              {events.map((event) => (
-                <tr key={event.id} className="hover:bg-gray-50 dark:hover:bg-slate-800/20 transition-colors">
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-2">
-                      <span className="font-semibold text-foreground">{event.title}</span>
-                      {event.featured && <span className="bg-accent/10 text-accent text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Featured</span>}
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 text-foreground/70">{event.organizer}</td>
-                  <td className="px-6 py-4">
-                    <span className={`px-2 py-1 rounded-md text-xs font-medium ${
-                      event.status === 'Published' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700 dark:bg-slate-800 dark:text-gray-300'
-                    }`}>
-                      {event.status}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 text-foreground/70">{event.date}</td>
-                  <td className="px-6 py-4 font-medium">{event.registrations.toLocaleString()}</td>
-                  <td className="px-6 py-4 text-right">
-                    <div className="flex justify-end gap-2 text-foreground/50">
-                      <button className="p-1.5 hover:text-primary hover:bg-primary/10 rounded-md transition-colors"><Eye className="w-4 h-4" /></button>
-                      <button className="p-1.5 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors"><Edit className="w-4 h-4" /></button>
-                      <button className="p-1.5 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors"><Trash2 className="w-4 h-4" /></button>
-                    </div>
-                  </td>
+              {loading ? (
+                <tr>
+                  <td colSpan={6} className="text-center py-8 text-foreground/50">Loading events...</td>
                 </tr>
-              ))}
+              ) : events.length === 0 ? (
+                <tr>
+                  <td colSpan={6} className="text-center py-8 text-foreground/50">No events found.</td>
+                </tr>
+              ) : (
+                events.map((event) => (
+                  <tr key={event.id} className="hover:bg-gray-50 dark:hover:bg-slate-800/20 transition-colors">
+                    <td className="px-6 py-4">
+                      <div className="flex items-center gap-2">
+                        <span className="font-semibold text-foreground max-w-[200px] truncate" title={event.title}>{event.title}</span>
+                        {event.is_featured && <span className="bg-accent/10 text-accent text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Featured</span>}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 text-foreground/70">
+                      {event.organizer_profiles?.org_name || "Admin"}
+                    </td>
+                    <td className="px-6 py-4">
+                      <span className={`px-2 py-1 rounded-md text-xs font-medium ${
+                        event.status === 'published' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' : 'bg-gray-100 text-gray-700 dark:bg-slate-800 dark:text-gray-300'
+                      }`}>
+                        {event.status ? event.status.charAt(0).toUpperCase() + event.status.slice(1) : "Draft"}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 text-foreground/70">
+                      {event.start_at ? new Date(event.start_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : "-"}
+                    </td>
+                    <td className="px-6 py-4 font-medium">0</td>
+                    <td className="px-6 py-4 text-right">
+                      <div className="flex justify-end gap-2 text-foreground/50">
+                        <button className="p-1.5 hover:text-primary hover:bg-primary/10 rounded-md transition-colors"><Eye className="w-4 h-4" /></button>
+                        <button className="p-1.5 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors"><Edit className="w-4 h-4" /></button>
+                        <button className="p-1.5 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors"><Trash2 className="w-4 h-4" /></button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
         
         <div className="p-4 border-t border-gray-100 dark:border-gray-800 flex items-center justify-between text-sm text-foreground/60">
-          <span>Showing 1 to 3 of 84 events</span>
+          <span>Showing {events.length > 0 ? 1 : 0} to {events.length} of {events.length} events</span>
           <div className="flex gap-1">
             <button className="px-3 py-1 rounded-md border border-gray-200 dark:border-gray-700 disabled:opacity-50" disabled>Prev</button>
             <button className="px-3 py-1 rounded-md bg-primary text-white">1</button>
-            <button className="px-3 py-1 rounded-md border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-slate-800">2</button>
-            <button className="px-3 py-1 rounded-md border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-slate-800">Next</button>
+            <button className="px-3 py-1 rounded-md border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-slate-800 disabled:opacity-50" disabled>Next</button>
           </div>
         </div>
       </div>
