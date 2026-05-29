@@ -28,7 +28,7 @@ export default function Navbar() {
   ];
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? 'bg-background/80 backdrop-blur-xl border-b border-white/5 py-4' : 'bg-transparent py-6'}`}>
+    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? 'bg-background/80 backdrop-blur-xl py-4' : 'bg-transparent py-6'}`}>
       <div className="max-w-[1400px] mx-auto px-6 lg:px-12 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2 group">
           <span className="font-heading font-bold text-2xl tracking-tighter text-foreground">
@@ -73,11 +73,13 @@ export default function Navbar() {
                  </Link>
                </>
              )}
+             <ThemeToggle />
            </div>
         </div>
 
         {/* Mobile Toggle */}
         <div className="flex md:hidden items-center gap-4">
+          <ThemeToggle />
           <button
             onClick={() => setIsOpen(!isOpen)}
             className="w-10 h-10 flex items-center justify-center text-foreground active:scale-90 transition-transform"
