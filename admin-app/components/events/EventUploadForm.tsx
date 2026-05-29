@@ -6,9 +6,7 @@ import { supabase } from "@/lib/supabase";
 import { CldUploadWidget } from "next-cloudinary";
 import { useRouter } from "next/navigation";
 import { CheckCircle2, ChevronRight, ChevronLeft, Image as ImageIcon, MapPin, UploadCloud, X } from "lucide-react";
-import "react-quill/dist/quill.snow.css";
-
-const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
+import TipTapEditor from "./TipTapEditor";
 
 export default function EventUploadForm() {
   const router = useRouter();
@@ -157,8 +155,8 @@ export default function EventUploadForm() {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Full Description</label>
-              <div className="bg-white text-gray-900 rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700">
-                <ReactQuill theme="snow" value={formData.description} onChange={handleDescriptionChange} className="h-48 mb-12" />
+              <div className="mb-12">
+                <TipTapEditor content={formData.description} onChange={handleDescriptionChange} />
               </div>
             </div>
 
