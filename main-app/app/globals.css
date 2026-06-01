@@ -3,12 +3,12 @@
 @tailwind utilities;
 
 :root {
-  --background: 225 35% 98%;
+  --background: 220 20% 97%; /* Soothing, premium soft-slate neutral background (eye-comfort) */
   --foreground: 222 47% 11%;
-  --primary: 243 100% 69%;
-  --primary-dark: 271 91% 65%;
-  --accent: 16 100% 60%;
-  --success: 160 84% 39%;
+  --primary: 243 75% 59%; /* Sophisticated, rich indigo-blue, premium and highly readable */
+  --primary-dark: 271 80% 60%;
+  --accent: 16 85% 56%; /* Calming, warm sunset coral */
+  --success: 160 80% 36%;
 }
 
 .dark {
