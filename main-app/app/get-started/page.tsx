@@ -1,10 +1,9 @@
-import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+"use client";
 
-export const metadata = {
-  title: "Get Started | Sponsora",
-  description: "Choose your path on Sponsora. Discover events, organize your own, ask for sponsorship, or become a sponsor.",
-};
+import { useState } from "react";
+import { ArrowRight } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
 
 const portalOptions = [
   {
@@ -15,81 +14,125 @@ const portalOptions = [
   {
     title: "Organise Event",
     href: "/dashboard/organizer",
-    bgImage: "/images/qutub-minar.png",
+    bgImage: "/images/doodle_organize.png",
   },
   {
     title: "Ask for Sponsorship",
     href: "/sponsorship/request",
-    bgImage: "/images/red-fort.png",
+    bgImage: "/images/doodle_ask_sponsorship.png",
   },
   {
     title: "Become a Sponsor",
     href: "/dashboard/sponsor",
-    bgImage: "/images/lotus-temple.png",
+    bgImage: "/images/doodle_become_sponsor.png",
   },
 ];
 
 export default function GetStartedPage() {
+  const router = useRouter();
+  const [isTransitioning, setIsTransitioning] = useState(false);
+
+  const handleNavigation = (href: string) => {
+    setIsTransitioning(true);
+    // Smooth transition overlay timeout before actually pushing
+    setTimeout(() => {
+      router.push(href);
+    }, 1000);
+  };
+
   return (
-    <div className="relative min-h-screen w-full flex flex-col overflow-hidden items-center justify-center pt-20 pb-12">
-      {/* Background Video */}
-      <video
-        autoPlay
-        loop
-        muted
-        playsInline
-        className="absolute inset-0 w-full h-full object-cover z-0 opacity-40 brightness-75"
-      >
-        <source src="/videos/Sponsoravideo.mp4" type="video/mp4" />
-      </video>
-
-      {/* Overlay to ensure text readability */}
-      <div className="absolute inset-0 bg-background/50 backdrop-blur-sm z-0 pointer-events-none" />
-
-      <div className="relative z-10 flex flex-col w-full max-w-[1400px] px-6 lg:px-12 mx-auto">
+    <>
+      {/* Full screen wrapper, preventing scroll on mobile, flex layout */}
+      <div className="relative h-[100dvh] w-full flex flex-col overflow-hidden bg-gradient-to-b from-primary/10 to-background pt-24 md:pt-28 pb-4 md:pb-8">
         
-        {/* Header */}
-        <div className="mb-12 text-center md:text-left">
-          <h1 className="font-heading font-black tracking-tighter text-foreground text-4xl sm:text-5xl lg:text-6xl text-balance drop-shadow-lg">
-            Choose your path on <br className="hidden md:block" />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">Sponsora</span>
-          </h1>
-        </div>
+        {/* Background ambient lighting (replaces video) */}
+        <div className="absolute inset-0 z-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/20 via-background to-background pointer-events-none"></div>
 
-        {/* Cards Row Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 w-full">
-          {portalOptions.map((option, index) => (
-            <Link
-              key={index}
-              href={option.href}
-              className="group relative flex flex-col justify-end h-[300px] sm:h-[400px] rounded-3xl overflow-hidden glass hover:scale-[1.02] transition-transform duration-300 ease-out"
-            >
-              {/* Doodle Art Background Image */}
-              <div 
-                className="absolute inset-0 z-0 opacity-60 group-hover:opacity-100 transition-opacity duration-300 group-hover:scale-110 ease-out bg-cover bg-center"
-                style={{ backgroundImage: `url('${option.bgImage}')` }}
-              />
-              
-              {/* Dark Gradient Overlay for text contrast */}
-              <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent z-10" />
-              
-              {/* Premium Neon Hover Glow */}
-              <div className="absolute inset-0 bg-gradient-to-t from-primary/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10 mix-blend-screen" />
+        <div className="relative z-10 flex flex-col h-full w-full max-w-[1400px] px-4 md:px-12 mx-auto">
+          
+          {/* Header - Centered on all devices */}
+          <div className="mb-4 md:mb-8 text-center shrink-0">
+            <h1 className="font-heading font-black tracking-tighter text-foreground text-3xl sm:text-5xl lg:text-6xl text-balance drop-shadow-md">
+              Choose your path on <br className="hidden md:block" />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">Sponsora</span>
+            </h1>
+          </div>
 
-              {/* Content */}
-              <div className="relative z-20 p-6 sm:p-8 flex items-center justify-between">
-                <h3 className="text-xl sm:text-2xl font-bold text-foreground group-hover:text-primary-foreground transition-colors max-w-[80%]">
-                  {option.title}
-                </h3>
-                <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center backdrop-blur-md border border-white/20 group-hover:bg-primary group-hover:border-primary transition-all duration-300">
-                  <ArrowRight className="w-5 h-5 text-foreground group-hover:text-background transition-colors" />
+          {/* Cards Flex/Grid - occupies remaining space fully, no scroll needed */}
+          <div className="flex-1 grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 w-full min-h-0">
+            {portalOptions.map((option, index) => (
+              <button
+                key={index}
+                onClick={() => handleNavigation(option.href)}
+                className="group relative flex flex-col justify-end w-full h-full rounded-2xl md:rounded-3xl overflow-hidden glass hover:scale-[1.02] transition-transform duration-300 ease-out text-left"
+              >
+                {/* Doodle Art Background Image */}
+                <div 
+                  className="absolute inset-0 z-0 opacity-70 group-hover:opacity-100 transition-opacity duration-300 group-hover:scale-110 ease-out bg-cover bg-center"
+                  style={{ backgroundImage: `url('${option.bgImage}')` }}
+                />
+                
+                {/* Dark Gradient Overlay for text contrast */}
+                <div className="absolute inset-0 bg-gradient-to-t from-background/95 via-background/40 to-transparent z-10" />
+                
+                {/* Premium Neon Hover Glow */}
+                <div className="absolute inset-0 bg-gradient-to-t from-primary/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10 mix-blend-screen" />
+
+                {/* Content */}
+                <div className="relative z-20 p-3 sm:p-6 md:p-8 flex flex-col md:flex-row md:items-center justify-between gap-2 md:gap-0">
+                  <h3 className="text-base sm:text-lg md:text-2xl font-bold text-foreground group-hover:text-primary-foreground transition-colors max-w-full md:max-w-[80%] leading-tight">
+                    {option.title}
+                  </h3>
+                  <div className="w-8 h-8 md:w-10 md:h-10 shrink-0 rounded-full bg-white/10 flex items-center justify-center backdrop-blur-md border border-white/20 group-hover:bg-primary group-hover:border-primary transition-all duration-300">
+                    <ArrowRight className="w-4 h-4 md:w-5 md:h-5 text-foreground group-hover:text-background transition-colors" />
+                  </div>
                 </div>
-              </div>
-            </Link>
-          ))}
-        </div>
+              </button>
+            ))}
+          </div>
 
+        </div>
       </div>
-    </div>
+
+      {/* Page Transition Overlay */}
+      <AnimatePresence>
+        {isTransitioning && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="fixed inset-0 z-[100] bg-background flex flex-col items-center justify-center backdrop-blur-lg"
+          >
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ 
+                duration: 0.5, 
+                ease: "easeOut",
+              }}
+              className="flex flex-col items-center gap-6"
+            >
+              {/* Pulsing Logos */}
+              <motion.div
+                animate={{ scale: [1, 1.05, 1] }}
+                transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+              >
+                <img src="/images/logo-light.png" alt="Sponsora Logo" className="h-16 md:h-20 w-auto dark:hidden block drop-shadow-2xl" />
+                <img src="/images/logo-dark.png" alt="Sponsora Logo" className="h-16 md:h-20 w-auto hidden dark:block drop-shadow-2xl" />
+              </motion.div>
+              
+              {/* Premium Loading Bar */}
+              <div className="w-40 h-1.5 bg-white/5 rounded-full overflow-hidden mt-4 relative">
+                <motion.div 
+                  initial={{ x: "-100%" }}
+                  animate={{ x: "200%" }}
+                  transition={{ duration: 1, repeat: Infinity, ease: "easeInOut" }}
+                  className="absolute top-0 bottom-0 w-1/2 bg-gradient-to-r from-primary to-accent rounded-full"
+                />
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 }
