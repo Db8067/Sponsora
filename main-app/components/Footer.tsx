@@ -80,10 +80,6 @@ export default function Footer() {
           <a href="#" className="text-foreground/40 hover:text-foreground transition-colors">
             <Mail className="w-5 h-5" />
           </a>
-          <div className="h-4 w-px bg-foreground/10 mx-2" />
-          <Link href="/app" className="text-sm font-medium border border-white/10 px-4 py-2 rounded-full hover:bg-white/5 transition-colors">
-            Get the App
-          </Link>
         </div>
       </div>
     </footer>

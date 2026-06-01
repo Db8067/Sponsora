@@ -3,12 +3,29 @@
 @tailwind utilities;
 
 :root {
-  --background: 220 20% 97%; /* Soothing, premium soft-slate neutral background (eye-comfort) */
+  --background: 0 0% 99%; /* Extremely clean, soft pearl white for the best animated glow effect */
   --foreground: 222 47% 11%;
-  --primary: 243 75% 59%; /* Sophisticated, rich indigo-blue, premium and highly readable */
-  --primary-dark: 271 80% 60%;
-  --accent: 16 85% 56%; /* Calming, warm sunset coral */
+  --primary: 250 100% 75%; /* Luma-style vibrant but soft purple glow */
+  --primary-dark: 290 100% 75%; /* Luma-style vibrant magenta/pink glow */
+  --accent: 30 100% 70%; /* Warm vibrant orange glow */
   --success: 160 80% 36%;
+}
+
+@keyframes blob {
+  0% { transform: translate(0px, 0px) scale(1); }
+  33% { transform: translate(40px, -60px) scale(1.1); }
+  66% { transform: translate(-30px, 30px) scale(0.9); }
+  100% { transform: translate(0px, 0px) scale(1); }
+}
+
+.animate-blob {
+  animation: blob 8s infinite alternate ease-in-out;
+}
+.animation-delay-2000 {
+  animation-delay: 2s;
+}
+.animation-delay-4000 {
+  animation-delay: 4s;
 }
 
 .dark {
