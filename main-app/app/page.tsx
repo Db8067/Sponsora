@@ -40,13 +40,13 @@ export default function Home() {
 
         {/* Right Graphic */}
         <div className="flex w-full md:w-[50%] relative justify-center md:justify-end mt-4 md:mt-0 flex-1 min-h-[350px] md:min-h-0 pb-12 md:pb-0">
-          <div className="relative w-full h-full max-w-sm sm:max-w-md md:max-w-2xl lg:max-w-3xl flex items-center justify-center">
+          <div className="relative w-full h-full max-w-sm sm:max-w-md md:max-w-xl flex items-center justify-center">
             {/* The generated high quality doodle art image */}
             <div className="absolute inset-0 bg-gradient-to-tr from-primary/30 to-accent/30 rounded-[2rem] md:rounded-[3rem] blur-2xl md:blur-3xl opacity-50 max-h-[100%] md:max-h-[80%] my-auto mx-auto max-w-[100%] md:max-w-full"></div>
             <img 
               src="/images/hero-art.png" 
               alt="Sponsora Event Art" 
-              className="relative z-10 w-full h-full object-contain md:scale-125 transform shadow-2xl border border-white/5 my-auto"
+              className="relative z-10 w-full h-full md:h-auto object-contain md:rounded-[3rem] shadow-2xl border border-white/5 my-auto"
             />
           </div>
         </div>
