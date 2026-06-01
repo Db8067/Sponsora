@@ -45,7 +45,7 @@ export default function EventsPage() {
 
   return (
     <>
-      <div className="relative min-h-[100dvh] w-full flex flex-col overflow-x-hidden bg-background pt-24 md:pt-32 pb-12 md:pb-24 selection:bg-primary/30">
+      <div className="relative min-h-[100dvh] w-full flex flex-col overflow-x-hidden pt-24 md:pt-32 pb-12 md:pb-24 selection:bg-primary/30">
         
         {/* Background ambient lighting */}
         <div className="absolute inset-0 z-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/10 via-background to-background pointer-events-none hidden dark:block"></div>
@@ -70,7 +70,7 @@ export default function EventsPage() {
               <div className="h-[1px] flex-1 bg-gradient-to-r from-white/10 to-transparent"></div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 w-full">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 w-full">
               {upcomingCategories.map((category, index) => (
                 <button
                   key={index}

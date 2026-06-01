@@ -40,7 +40,7 @@ const mockSeminars = [
 
 export default function SeminarsPage() {
   return (
-    <div className="min-h-screen bg-background pt-28 pb-20 px-6 lg:px-12 selection:bg-primary/30">
+    <div className="min-h-screen pt-28 pb-20 px-4 md:px-6 lg:px-12 selection:bg-primary/30">
       
       {/* Background ambient lighting */}
       <div className="absolute inset-0 z-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-purple-500/10 via-background to-background pointer-events-none hidden dark:block"></div>
@@ -59,7 +59,7 @@ export default function SeminarsPage() {
             <span className="text-foreground">Seminars</span>
           </nav>
 
-          <div className="bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-md">
+          <div className="hidden lg:block bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-md">
             <h3 className="text-lg font-bold text-foreground mb-4">Categories</h3>
             <div className="flex flex-col gap-3">
               <Link href="/events/tech" className="text-foreground/60 hover:text-foreground transition-colors">Tech Events</Link>
@@ -101,7 +101,7 @@ export default function SeminarsPage() {
             <span className="text-sm font-medium text-foreground/50">{mockSeminars.length} Events</span>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-20">
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-20">
             {mockSeminars.map((event) => (
               <div key={event.id} className="group relative bg-[#1A1A1D] dark:bg-white/5 border border-white/10 rounded-3xl overflow-hidden hover:border-purple-500/50 hover:shadow-2xl hover:shadow-purple-500/10 transition-all duration-300 flex flex-col">
                 <div className="w-full h-48 relative overflow-hidden bg-black/50">
