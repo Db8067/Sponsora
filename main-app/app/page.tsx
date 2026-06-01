@@ -45,7 +45,7 @@ export default function Home() {
             Organize events, manage QR ticketing, secure sponsors, and book venues. Discover hackathons, fests, and internships—all in one place.
           </p>
           <div className="mt-4 md:mt-12 flex flex-col sm:flex-row items-start justify-start gap-4 md:gap-6 w-full">
-            <Link href="/events" className="w-auto flex justify-start">
+            <Link href="/get-started" className="w-auto flex justify-start">
               <button className="w-auto bg-foreground text-background px-6 md:px-8 py-3 md:py-4 rounded-full font-bold text-sm md:text-lg hover:scale-105 transition-transform flex items-center justify-center gap-2">
                 Explore now
               </button>
