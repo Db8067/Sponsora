@@ -64,7 +64,7 @@ export default function GetStartedPage() {
               <button
                 key={index}
                 onClick={() => handleNavigation(option.href)}
-                className="group relative flex flex-col justify-end w-full h-full rounded-2xl md:rounded-3xl overflow-hidden glass hover:scale-100 md:hover:scale-[1.02] transition-transform duration-300 ease-out text-left bg-black/90 dark:bg-transparent"
+                className="group relative flex flex-col justify-end w-full h-full rounded-2xl md:rounded-3xl overflow-hidden glass hover:scale-100 md:hover:scale-[1.02] active:scale-[0.96] transition-transform duration-300 ease-out text-left bg-black/90 dark:bg-transparent"
               >
                 {/* Doodle Art Background Image */}
                 <div 

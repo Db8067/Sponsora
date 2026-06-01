@@ -64,15 +64,15 @@ html {
     z-index: -1;
     opacity: 0.6;
     background-image: 
-      radial-gradient(4px 4px at 100px 50px, #cbd5e1, transparent),
-      radial-gradient(6px 6px at 200px 150px, #94a3b8, transparent),
-      radial-gradient(3px 3px at 300px 250px, #e2e8f0, transparent),
-      radial-gradient(4px 4px at 400px 350px, #cbd5e1, transparent),
-      radial-gradient(6px 6px at 500px 100px, #94a3b8, transparent),
-      radial-gradient(3px 3px at 50px 200px, #e2e8f0, transparent),
-      radial-gradient(4px 4px at 150px 300px, #cbd5e1, transparent),
-      radial-gradient(6px 6px at 250px 400px, #94a3b8, transparent),
-      radial-gradient(3px 3px at 350px 500px, #e2e8f0, transparent);
+      radial-gradient(8px 8px at 100px 50px, #cbd5e1, transparent),
+      radial-gradient(12px 12px at 200px 150px, #94a3b8, transparent),
+      radial-gradient(6px 6px at 300px 250px, #e2e8f0, transparent),
+      radial-gradient(8px 8px at 400px 350px, #cbd5e1, transparent),
+      radial-gradient(12px 12px at 500px 100px, #94a3b8, transparent),
+      radial-gradient(6px 6px at 50px 200px, #e2e8f0, transparent),
+      radial-gradient(8px 8px at 150px 300px, #cbd5e1, transparent),
+      radial-gradient(12px 12px at 250px 400px, #94a3b8, transparent),
+      radial-gradient(6px 6px at 350px 500px, #e2e8f0, transparent);
     background-size: 600px 600px;
     animation: snow 15s linear infinite;
   }
@@ -88,9 +88,9 @@ html {
     z-index: -1;
     opacity: 0.4;
     background-image: 
-      radial-gradient(3px 3px at 100px 50px, #94a3b8, transparent),
-      radial-gradient(5px 5px at 200px 150px, #cbd5e1, transparent),
-      radial-gradient(2px 2px at 300px 250px, #e2e8f0, transparent);
+      radial-gradient(6px 6px at 100px 50px, #94a3b8, transparent),
+      radial-gradient(10px 10px at 200px 150px, #cbd5e1, transparent),
+      radial-gradient(4px 4px at 300px 250px, #e2e8f0, transparent);
     background-size: 400px 400px;
     animation: snow 10s linear infinite;
   }
