@@ -5,9 +5,9 @@
 :root {
   --background: 0 0% 99%; /* Extremely clean, soft pearl white for the best animated glow effect */
   --foreground: 222 47% 11%;
-  --primary: 250 100% 75%; /* Luma-style vibrant but soft purple glow */
-  --primary-dark: 290 100% 75%; /* Luma-style vibrant magenta/pink glow */
-  --accent: 30 100% 70%; /* Warm vibrant orange glow */
+  --primary: 250 100% 65%; /* Luma-style vibrant but soft purple glow, optimized for contrast */
+  --primary-dark: 290 100% 65%; /* Luma-style vibrant magenta/pink glow, optimized for contrast */
+  --accent: 30 100% 62%; /* Warm vibrant orange glow, optimized for contrast */
   --success: 160 80% 36%;
 }
 

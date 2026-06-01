@@ -3,21 +3,21 @@ import { ArrowRight } from "lucide-react";
 
 export default function Home() {
   return (
-    <div className="flex flex-col min-h-[100dvh] md:h-[100dvh] overflow-hidden bg-background relative selection:bg-primary/30">
+    <div className="flex flex-col h-[100dvh] overflow-hidden bg-background relative selection:bg-primary/30">
       
       {/* Animated Luma-like Background */}
       <div className="absolute inset-0 -z-10 overflow-hidden">
-        <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-primary/30 dark:bg-primary/10 blur-[100px] animate-blob"></div>
-        <div className="absolute top-[20%] right-[-10%] w-[60%] h-[60%] rounded-full bg-accent/20 dark:bg-accent/10 blur-[120px] animate-blob animation-delay-2000"></div>
-        <div className="absolute bottom-[-20%] left-[10%] w-[50%] h-[50%] rounded-full bg-primary-dark/20 dark:bg-primary-dark/10 blur-[120px] animate-blob animation-delay-4000"></div>
-        <div className="absolute inset-0 bg-background/50 dark:bg-background/80 backdrop-blur-[80px]"></div>
+        <div className="absolute top-[-15%] left-[-15%] w-[65%] h-[65%] rounded-full bg-primary/45 dark:bg-primary/15 blur-[100px] animate-blob"></div>
+        <div className="absolute top-[15%] right-[-15%] w-[75%] h-[75%] rounded-full bg-accent/35 dark:bg-accent/12 blur-[120px] animate-blob animation-delay-2000"></div>
+        <div className="absolute bottom-[-25%] left-[5%] w-[65%] h-[65%] rounded-full bg-primary-dark/35 dark:bg-primary-dark/12 blur-[120px] animate-blob animation-delay-4000"></div>
+        <div className="absolute inset-0 bg-background/30 dark:bg-background/75 backdrop-blur-[60px]"></div>
       </div>
       
       {/* Hero Section */}
-      <section className="relative px-6 lg:px-12 max-w-[1400px] mx-auto w-full flex-1 flex flex-col md:flex-row items-center justify-between pt-28 md:pt-20 pb-8 md:pb-10 overflow-y-auto md:overflow-visible">
+      <section className="relative px-6 lg:px-12 max-w-[1400px] mx-auto w-full flex-1 flex flex-col md:flex-row items-center justify-between pt-24 md:pt-20 pb-6 md:pb-10 overflow-y-auto md:overflow-visible">
         
         {/* Left Content */}
-        <div className="w-full md:w-[45%] z-10 shrink-0 flex flex-col justify-center items-start text-left">
+        <div className="w-full md:w-[45%] z-10 flex-1 md:flex-none flex flex-col justify-evenly md:justify-center items-start text-left py-4 md:py-0">
           
           {/* Mobile Top Row: Heading + Image */}
           <div className="flex flex-row items-center justify-between w-full md:block">
@@ -41,10 +41,10 @@ export default function Home() {
             </div>
           </div>
 
-          <p className="mt-5 md:mt-8 text-sm md:text-lg lg:text-xl leading-relaxed text-foreground/60 font-medium max-w-lg text-left">
+          <p className="mt-3 md:mt-8 text-sm md:text-lg lg:text-xl leading-relaxed text-foreground/60 font-medium max-w-lg text-left">
             Organize events, manage QR ticketing, secure sponsors, and book venues. Discover hackathons, fests, and internships—all in one place.
           </p>
-          <div className="mt-6 md:mt-12 flex flex-col sm:flex-row items-start justify-start gap-4 md:gap-6 w-full">
+          <div className="mt-4 md:mt-12 flex flex-col sm:flex-row items-start justify-start gap-4 md:gap-6 w-full">
             <Link href="/events" className="w-auto flex justify-start">
               <button className="w-auto bg-foreground text-background px-6 md:px-8 py-3 md:py-4 rounded-full font-bold text-sm md:text-lg hover:scale-105 transition-transform flex items-center justify-center gap-2">
                 Explore now

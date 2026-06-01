@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 function Instagram(props: React.SVGProps<SVGSVGElement>) {
   return (
@@ -61,6 +64,12 @@ function Mail(props: React.SVGProps<SVGSVGElement>) {
 }
 
 export default function Footer() {
+  const pathname = usePathname();
+
+  if (pathname === "/get-started") {
+    return null;
+  }
+
   return (
     <footer className="bg-background border-t border-white/5 py-8 mt-24">
       <div className="max-w-[1400px] mx-auto px-6 lg:px-12 flex flex-col md:flex-row items-center justify-between gap-6">
