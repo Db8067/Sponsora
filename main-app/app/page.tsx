@@ -12,11 +12,11 @@ export default function Home() {
         {/* Left Content */}
         <div className="w-full md:w-[45%] z-10 shrink-0 flex flex-col justify-center">
           <h1 className="font-heading font-black tracking-tighter text-foreground text-4xl sm:text-5xl lg:text-6xl leading-[0.95] text-balance">
-            Incredible <br /> events <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">start here.</span>
+            Everything <br /> under one <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">roof.</span>
           </h1>
           <p className="mt-4 md:mt-8 text-base md:text-lg lg:text-xl leading-relaxed text-foreground/60 font-medium max-w-lg">
-            Sponsora is the ultimate platform to host hackathons, cultural fests, and workshops. Manage your attendees and find the best sponsors, all in one place.
+            Organize events, manage QR ticketing, secure sponsors, and book venues. Discover hackathons, fests, and internships—all in one place.
           </p>
           <div className="mt-8 md:mt-12 flex flex-col sm:flex-row items-center gap-4 md:gap-6">
             <Link href="/dashboard/organizer" className="w-full sm:w-auto">
