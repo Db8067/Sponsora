@@ -2,14 +2,22 @@
 
 import React from "react";
 import { Calendar, MapPin, Users, Trophy, ExternalLink } from "lucide-react";
-import { format } from "date-fns";
 
 export default function LiveEventPreview({ data }: { data: any }) {
   // Safe parsing for date
   let dateDisplay = "Date TBD";
   if (data.start_at) {
     try {
-      dateDisplay = format(new Date(data.start_at), "MMM d, yyyy");
+      const dateObj = new Date(data.start_at);
+      if (!isNaN(dateObj.getTime())) {
+        dateDisplay = dateObj.toLocaleDateString("en-US", {
+          month: "short",
+          day: "numeric",
+          year: "numeric",
+        });
+      } else {
+        dateDisplay = "Invalid Date";
+      }
     } catch (e) {
       dateDisplay = "Invalid Date";
     }
