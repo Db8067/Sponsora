@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import Link from "next/link";
 import { ChevronRight, Calendar, Code, CalendarX } from "lucide-react";
+import AnimatedEmptyState from "@/components/AnimatedEmptyState";
 import BackToTop from "@/components/BackToTop";
 import { supabase } from "@/lib/supabase";
 
@@ -95,13 +96,7 @@ export default async function TechEventsPage() {
           </div>
 
           {techEvents.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-20 text-center">
-              <div className="w-24 h-24 bg-black/5 dark:bg-white/5 rounded-full flex items-center justify-center mb-6">
-                <CalendarX className="w-10 h-10 text-foreground/30" />
-              </div>
-              <h3 className="text-2xl font-bold text-foreground mb-2">No Events Found</h3>
-              <p className="text-foreground/60 max-w-md">There are currently no published events in this category. Check back later for upcoming tech events!</p>
-            </div>
+            <AnimatedEmptyState category="Tech Events" />
           ) : (
             <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6 mb-20">
               {techEvents.map((event: any) => (

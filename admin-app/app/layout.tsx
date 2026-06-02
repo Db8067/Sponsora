@@ -38,9 +38,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             enableSystem
             disableTransitionOnChange
           >
-            {/* Background ambient lighting */}
-            <div className="absolute inset-0 z-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/20 via-background to-background pointer-events-none hidden dark:block"></div>
-          
+            {/* Background is pure black in dark mode as requested */}
           {/* Mobile Overlay */}
           {isMobileMenuOpen && (
             <div className="fixed inset-0 bg-black/50 z-40 md:hidden" onClick={() => setIsMobileMenuOpen(false)}></div>

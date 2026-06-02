@@ -39,11 +39,60 @@ export default function CreateEventWorkflow({ formData, setFormData, onSuccess }
 
   const handleSubmit = async () => {
     setIsSubmitting(true);
-    // Simulating API call for now, since we need to fetch the category ID first
-    setTimeout(() => {
-      setIsSubmitting(false);
+    
+    try {
+      // Create slug from title
+      const eventSlug = formData.title
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/(^-|-$)+/g, '');
+
+      // Get category ID
+      const { data: categoryData } = await supabase
+        .from('categories')
+        .select('id')
+        .eq('slug', formData.category_slug)
+        .single();
+
+      const category_id = categoryData?.id;
+
+      // Insert event
+      const { error } = await supabase.from('events').insert([
+        {
+          title: formData.title,
+          slug: eventSlug,
+          short_summary: formData.short_summary,
+          description: formData.description,
+          category_slug: formData.category_slug,
+          category_id: category_id,
+          start_at: formData.start_at || null,
+          registration_deadline: formData.registration_deadline || null,
+          venue_type: formData.venue_type,
+          venue_address: formData.venue_address,
+          virtual_platform: formData.virtual_platform,
+          venue_link: formData.venue_link,
+          banner_url: formData.banner_url,
+          gallery_urls: formData.gallery_urls || [],
+          is_paid: formData.is_paid,
+          entry_fee: formData.entry_fee || 0,
+          prize_pool: formData.prize_pool,
+          max_team: formData.max_team,
+          team_allowed: formData.team_allowed,
+          registration_link: formData.registration_link,
+          is_featured: formData.is_featured,
+          status: formData.status
+        }
+      ]);
+
+      if (error) throw error;
+      
       onSuccess();
-    }, 1500);
+    } catch (err) {
+      console.error("Error creating event:", err);
+      alert("Failed to create event. Check console.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleAddressSearch = (query: string) => {
@@ -56,7 +105,7 @@ export default function CreateEventWorkflow({ formData, setFormData, onSuccess }
     }
     
     setIsSearchingAddress(true);
-    fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}`)
+    fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&countrycodes=in`)
       .then(res => res.json())
       .then(data => {
         setAddressResults(data.slice(0, 5));
@@ -128,7 +177,7 @@ export default function CreateEventWorkflow({ formData, setFormData, onSuccess }
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-foreground/80 mb-1.5">Full Description (HTML Supported) *</label>
+              <label className="block text-sm font-medium text-foreground/80 mb-1.5">Full Description *</label>
               <textarea 
                 value={formData.description} 
                 onChange={(e) => updateForm("description", e.target.value)}
@@ -140,9 +189,9 @@ export default function CreateEventWorkflow({ formData, setFormData, onSuccess }
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <div>
-                <label className="block text-sm font-medium text-foreground/80 mb-1.5">Start Date & Time *</label>
+                <label className="block text-sm font-medium text-foreground/80 mb-1.5">Start Date *</label>
                 <input 
-                  type="datetime-local" 
+                  type="date" 
                   value={formData.start_at} 
                   onChange={(e) => updateForm("start_at", e.target.value)}
                   className="w-full bg-white/5 border border-black/10 dark:border-white/10 rounded-xl px-4 py-3 text-foreground focus:ring-2 focus:ring-primary/50 outline-none [color-scheme:light] dark:[color-scheme:dark]"
@@ -151,7 +200,7 @@ export default function CreateEventWorkflow({ formData, setFormData, onSuccess }
               <div>
                 <label className="block text-sm font-medium text-foreground/80 mb-1.5">Registration Deadline</label>
                 <input 
-                  type="datetime-local" 
+                  type="date" 
                   value={formData.registration_deadline} 
                   onChange={(e) => updateForm("registration_deadline", e.target.value)}
                   className="w-full bg-white/5 border border-black/10 dark:border-white/10 rounded-xl px-4 py-3 text-foreground focus:ring-2 focus:ring-primary/50 outline-none [color-scheme:light] dark:[color-scheme:dark]"
@@ -220,8 +269,11 @@ export default function CreateEventWorkflow({ formData, setFormData, onSuccess }
                       key={plat} 
                       type="button" 
                       onClick={() => updateForm("virtual_platform", plat)}
-                      className={`px-4 py-2 rounded-lg border text-sm font-medium transition-colors ${formData.virtual_platform === plat ? 'border-primary bg-primary/10 text-primary' : 'border-black/10 dark:border-white/10 bg-background hover:bg-black/5 dark:hover:bg-white/10'}`}
+                      className={`flex items-center gap-2 px-4 py-2 rounded-lg border text-sm font-medium transition-colors ${formData.virtual_platform === plat ? 'border-primary bg-primary/10 text-primary' : 'border-black/10 dark:border-white/10 bg-background hover:bg-black/5 dark:hover:bg-white/10'}`}
                     >
+                      {plat === 'Zoom' && <img src="https://st1.zoom.us/static/6.3.26760/image/new/ZoomLogo.png" alt="Zoom" className="h-4 object-contain" />}
+                      {plat === 'Google Meet' && <img src="https://www.gstatic.com/meet/app_icon_192_2024q2_6c0032b4b47eb59cd3eef1ec896c15b1.png" alt="Meet" className="h-4 object-contain" />}
+                      {plat === 'Microsoft Teams' && <img src="https://upload.wikimedia.org/wikipedia/commons/c/c9/Microsoft_Office_Teams_%282018%E2%80%93present%29.svg" alt="Teams" className="h-4 object-contain" />}
                       {plat}
                     </button>
                   ))}
@@ -257,7 +309,7 @@ export default function CreateEventWorkflow({ formData, setFormData, onSuccess }
               <label className="block text-sm font-medium text-foreground/80 mb-2">Event Banner *</label>
               
               <CldUploadWidget 
-                uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || "ml_default"} 
+                uploadPreset="sponsora_uploads" 
                 onSuccess={(result: any) => updateForm("banner_url", result.info.secure_url)}
               >
                 {({ open }) => (
@@ -285,7 +337,7 @@ export default function CreateEventWorkflow({ formData, setFormData, onSuccess }
               <label className="block text-sm font-medium text-foreground/80 mb-2">Gallery Images (Max 10)</label>
               
               <CldUploadWidget 
-                uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || "ml_default"} 
+                uploadPreset="sponsora_uploads" 
                 options={{ multiple: true, maxFiles: 10 }}
                 onSuccess={(result: any) => {
                   const newUrl = result.info.secure_url;
