@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronRight, ChevronLeft, Calendar, Image as ImageIcon, MapPin, Tag, Video, Ticket, Link as LinkIcon, Upload, Users } from "lucide-react";
+import { ChevronRight, ChevronLeft, Calendar, Image as ImageIcon, MapPin, Tag, Video, Ticket, Link as LinkIcon, Upload, Users, Save, CheckCircle } from "lucide-react";
 import { supabase } from "@/lib/supabase";
+import { CldUploadWidget } from "next-cloudinary";
 
 const categories = [
   { id: 'tech', name: 'Tech Events', desc: 'Hackathons & coding competitions', icon: '💻', color: 'bg-blue-500/10 text-blue-500 border-blue-500/20' },
@@ -16,6 +17,18 @@ const categories = [
 export default function CreateEventWorkflow({ formData, setFormData, onSuccess }: any) {
   const [step, setStep] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  // Autocomplete state
+  const [addressSearch, setAddressSearch] = useState("");
+  const [addressResults, setAddressResults] = useState<any[]>([]);
+  const [isSearchingAddress, setIsSearchingAddress] = useState(false);
+  const [linkSaved, setLinkSaved] = useState(false);
+
+  useEffect(() => {
+    if (formData.venue_address) {
+      setAddressSearch(formData.venue_address);
+    }
+  }, []);
 
   const updateForm = (key: string, value: any) => {
     setFormData((prev: any) => ({ ...prev, [key]: value }));
@@ -27,13 +40,38 @@ export default function CreateEventWorkflow({ formData, setFormData, onSuccess }
   const handleSubmit = async () => {
     setIsSubmitting(true);
     // Simulating API call for now, since we need to fetch the category ID first
-    // In real implementation:
-    // 1. Fetch category ID using formData.category_slug
-    // 2. Insert into supabase
     setTimeout(() => {
       setIsSubmitting(false);
       onSuccess();
     }, 1500);
+  };
+
+  const handleAddressSearch = (query: string) => {
+    setAddressSearch(query);
+    updateForm("venue_address", query);
+    
+    if (query.length < 3) {
+      setAddressResults([]);
+      return;
+    }
+    
+    setIsSearchingAddress(true);
+    fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}`)
+      .then(res => res.json())
+      .then(data => {
+        setAddressResults(data.slice(0, 5));
+        setIsSearchingAddress(false);
+      })
+      .catch(() => {
+        setIsSearchingAddress(false);
+      });
+  };
+
+  const selectAddress = (addr: any) => {
+    const displayName = addr.display_name;
+    setAddressSearch(displayName);
+    updateForm("venue_address", displayName);
+    setAddressResults([]);
   };
 
   const renderStepContent = () => {
@@ -144,16 +182,30 @@ export default function CreateEventWorkflow({ formData, setFormData, onSuccess }
             {(formData.venue_type === 'in_person' || formData.venue_type === 'hybrid') && (
               <div className="space-y-4 p-5 bg-black/5 dark:bg-white/5 rounded-xl border border-black/5 dark:border-white/10">
                 <h4 className="font-semibold flex items-center gap-2"><MapPin className="w-4 h-4 text-orange-500" /> Physical Location</h4>
-                <div>
-                  <label className="block text-sm text-foreground/70 mb-1.5">Search Address (Powered by OpenStreetMap)</label>
+                <div className="relative">
+                  <label className="block text-sm text-foreground/70 mb-1.5">Search Address</label>
                   <input 
                     type="text" 
-                    value={formData.venue_address} 
-                    onChange={(e) => updateForm("venue_address", e.target.value)}
+                    value={addressSearch} 
+                    onChange={(e) => handleAddressSearch(e.target.value)}
                     className="w-full bg-background border border-black/10 dark:border-white/10 rounded-xl px-4 py-2.5 text-foreground focus:ring-2 focus:ring-primary/50 outline-none"
                     placeholder="Start typing an address..."
                   />
-                  <p className="text-xs text-foreground/50 mt-2">In production, this will show an interactive dropdown list of addresses.</p>
+                  {isSearchingAddress && <p className="text-xs text-foreground/50 mt-2">Searching...</p>}
+                  
+                  {addressResults.length > 0 && (
+                    <ul className="absolute z-10 w-full mt-1 bg-white dark:bg-slate-800 border border-black/10 dark:border-white/10 rounded-xl shadow-lg max-h-60 overflow-y-auto">
+                      {addressResults.map((result: any, index: number) => (
+                        <li 
+                          key={index} 
+                          className="px-4 py-3 hover:bg-black/5 dark:hover:bg-white/5 cursor-pointer text-sm border-b last:border-0 border-black/5 dark:border-white/5"
+                          onClick={() => selectAddress(result)}
+                        >
+                          {result.display_name}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
               </div>
             )}
@@ -164,7 +216,12 @@ export default function CreateEventWorkflow({ formData, setFormData, onSuccess }
                 
                 <div className="flex flex-wrap gap-3 mb-4">
                   {['Zoom', 'Google Meet', 'Microsoft Teams', 'Custom'].map((plat) => (
-                    <button key={plat} type="button" className="px-4 py-2 rounded-lg border border-black/10 dark:border-white/10 bg-background text-sm font-medium hover:bg-black/5 dark:hover:bg-white/10 transition-colors">
+                    <button 
+                      key={plat} 
+                      type="button" 
+                      onClick={() => updateForm("virtual_platform", plat)}
+                      className={`px-4 py-2 rounded-lg border text-sm font-medium transition-colors ${formData.virtual_platform === plat ? 'border-primary bg-primary/10 text-primary' : 'border-black/10 dark:border-white/10 bg-background hover:bg-black/5 dark:hover:bg-white/10'}`}
+                    >
                       {plat}
                     </button>
                   ))}
@@ -179,7 +236,12 @@ export default function CreateEventWorkflow({ formData, setFormData, onSuccess }
                       value={formData.venue_link} 
                       onChange={(e) => updateForm("venue_link", e.target.value)}
                       className="w-full bg-background border border-black/10 dark:border-white/10 rounded-xl pl-9 pr-4 py-2.5 text-foreground focus:ring-2 focus:ring-primary/50 outline-none"
-                      placeholder="https://zoom.us/j/123456789"
+                      placeholder={
+                        formData.virtual_platform === "Zoom" ? "https://zoom.us/j/123456789" :
+                        formData.virtual_platform === "Google Meet" ? "https://meet.google.com/abc-defg-hij" :
+                        formData.virtual_platform === "Microsoft Teams" ? "https://teams.microsoft.com/l/meetup-join/..." :
+                        "https://..."
+                      }
                     />
                   </div>
                 </div>
@@ -193,28 +255,59 @@ export default function CreateEventWorkflow({ formData, setFormData, onSuccess }
           <div className="space-y-6">
             <div>
               <label className="block text-sm font-medium text-foreground/80 mb-2">Event Banner *</label>
-              <div className="border-2 border-dashed border-black/20 dark:border-white/20 rounded-2xl p-8 text-center hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer group">
-                <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
-                  <ImageIcon className="w-8 h-8 text-primary" />
-                </div>
-                <p className="font-medium text-foreground mb-1">Click to upload banner image</p>
-                <p className="text-xs text-foreground/50">PNG, JPG or WEBP (Max 5MB)</p>
-                <input 
-                  type="text" 
-                  value={formData.banner_url}
-                  onChange={(e) => updateForm("banner_url", e.target.value)}
-                  className="mt-4 w-full bg-background border border-black/10 dark:border-white/10 rounded-lg px-3 py-2 text-sm text-foreground"
-                  placeholder="Or paste Cloudinary URL for preview"
-                />
-              </div>
+              
+              <CldUploadWidget 
+                uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || "ml_default"} 
+                onSuccess={(result: any) => updateForm("banner_url", result.info.secure_url)}
+              >
+                {({ open }) => (
+                  <div 
+                    onClick={() => open()} 
+                    className="border-2 border-dashed border-black/20 dark:border-white/20 rounded-2xl p-8 text-center hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer group"
+                  >
+                    <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                      <ImageIcon className="w-8 h-8 text-primary" />
+                    </div>
+                    <p className="font-medium text-foreground mb-1">Click to upload banner image</p>
+                    <p className="text-xs text-foreground/50 mb-4">PNG, JPG or WEBP (Max 5MB)</p>
+                    
+                    {formData.banner_url && (
+                      <p className="text-sm text-green-500 font-medium truncate px-4">
+                        Banner Selected: {formData.banner_url.split('/').pop()}
+                      </p>
+                    )}
+                  </div>
+                )}
+              </CldUploadWidget>
             </div>
             
             <div>
               <label className="block text-sm font-medium text-foreground/80 mb-2">Gallery Images (Max 10)</label>
-              <div className="border-2 border-dashed border-black/20 dark:border-white/20 rounded-2xl p-6 text-center hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer">
-                <Upload className="w-6 h-6 text-foreground/40 mx-auto mb-2" />
-                <p className="text-sm font-medium text-foreground">Upload additional photos</p>
-              </div>
+              
+              <CldUploadWidget 
+                uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || "ml_default"} 
+                options={{ multiple: true, maxFiles: 10 }}
+                onSuccess={(result: any) => {
+                  const newUrl = result.info.secure_url;
+                  updateForm("gallery_urls", [...(formData.gallery_urls || []), newUrl]);
+                }}
+              >
+                {({ open }) => (
+                  <div 
+                    onClick={() => open()}
+                    className="border-2 border-dashed border-black/20 dark:border-white/20 rounded-2xl p-6 text-center hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer"
+                  >
+                    <Upload className="w-6 h-6 text-foreground/40 mx-auto mb-2" />
+                    <p className="text-sm font-medium text-foreground">Upload additional photos</p>
+                    
+                    {formData.gallery_urls?.length > 0 && (
+                      <p className="text-xs text-primary mt-2">
+                        {formData.gallery_urls.length} images uploaded
+                      </p>
+                    )}
+                  </div>
+                )}
+              </CldUploadWidget>
             </div>
           </div>
         );
@@ -280,43 +373,77 @@ export default function CreateEventWorkflow({ formData, setFormData, onSuccess }
 
             <div>
               <label className="block text-sm font-medium text-foreground/80 mb-1.5">External Registration Link (CTA)</label>
-              <div className="relative">
-                <LinkIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-foreground/40" />
-                <input 
-                  type="url" 
-                  value={formData.registration_link} 
-                  onChange={(e) => updateForm("registration_link", e.target.value)}
-                  className="w-full bg-white/5 border border-black/10 dark:border-white/10 rounded-xl pl-9 pr-4 py-3 text-foreground focus:ring-2 focus:ring-primary/50 outline-none"
-                  placeholder="Link to external registration (e.g., Google Form, Luma)"
-                />
+              <div className="flex gap-2">
+                <div className="relative flex-1">
+                  <LinkIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-foreground/40" />
+                  <input 
+                    type="url" 
+                    value={formData.registration_link} 
+                    onChange={(e) => {
+                      updateForm("registration_link", e.target.value);
+                      setLinkSaved(false);
+                    }}
+                    className="w-full bg-white/5 border border-black/10 dark:border-white/10 rounded-xl pl-9 pr-4 py-3 text-foreground focus:ring-2 focus:ring-primary/50 outline-none"
+                    placeholder="Link to external registration (e.g., Google Form, Luma)"
+                  />
+                </div>
+                <button 
+                  onClick={() => setLinkSaved(true)}
+                  className="bg-primary/10 hover:bg-primary/20 text-primary border border-primary/20 rounded-xl px-4 font-medium transition-colors flex items-center gap-2"
+                >
+                  {linkSaved ? <><CheckCircle className="w-4 h-4"/> Saved</> : <><Save className="w-4 h-4"/> Save Link</>}
+                </button>
               </div>
               <p className="text-xs text-foreground/50 mt-1.5">Users will be redirected here when they click "Register Now".</p>
             </div>
 
-            <div className="flex items-center justify-between p-4 bg-accent/5 rounded-xl border border-accent/20">
-              <div className="flex items-center gap-3">
-                <Tag className="w-5 h-5 text-accent" />
-                <div>
-                  <h4 className="font-semibold text-accent">Feature this event</h4>
-                  <p className="text-xs text-accent/80">Featured events appear prominently on the homepage.</p>
+            {/* Premium Featured Toggle */}
+            <div className="relative overflow-hidden p-6 rounded-2xl border border-black/5 dark:border-white/10 bg-gradient-to-r from-background to-black/5 dark:to-white/5 group transition-colors">
+              <div className="relative z-10 flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <div className={`w-12 h-12 rounded-xl flex items-center justify-center transition-colors ${formData.is_featured ? 'bg-primary text-white shadow-[0_0_15px_rgba(var(--primary),0.5)]' : 'bg-black/5 dark:bg-white/10 text-foreground/50'}`}>
+                    <Tag className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <h4 className={`font-bold text-lg transition-colors ${formData.is_featured ? 'text-primary' : 'text-foreground'}`}>Feature on Homepage</h4>
+                    <p className="text-sm text-foreground/60">Boost visibility and attract more registrations.</p>
+                  </div>
                 </div>
+                
+                <label className="relative inline-flex items-center cursor-pointer">
+                  <input type="checkbox" className="sr-only peer" checked={formData.is_featured} onChange={(e) => updateForm("is_featured", e.target.checked)} />
+                  <div className="w-14 h-7 bg-gray-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all dark:bg-gray-700 peer-checked:bg-primary"></div>
+                </label>
               </div>
-              <label className="relative inline-flex items-center cursor-pointer">
-                <input type="checkbox" className="sr-only peer" checked={formData.is_featured} onChange={(e) => updateForm("is_featured", e.target.checked)} />
-                <div className="w-11 h-6 bg-accent/30 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-accent"></div>
-              </label>
             </div>
 
+            {/* Premium Publish Status */}
             <div>
-              <label className="block text-sm font-medium text-foreground/80 mb-1.5">Publish Status</label>
-              <select 
-                value={formData.status}
-                onChange={(e) => updateForm("status", e.target.value)}
-                className="w-full bg-white/5 border border-black/10 dark:border-white/10 rounded-xl px-4 py-3 text-foreground focus:ring-2 focus:ring-primary/50 outline-none appearance-none"
-              >
-                <option value="draft" className="bg-background text-foreground">Draft (Hidden)</option>
-                <option value="published" className="bg-background text-foreground">Published (Public)</option>
-              </select>
+              <label className="block text-sm font-bold text-foreground mb-3">Publish Status</label>
+              <div className="flex p-1 bg-black/5 dark:bg-white/5 rounded-xl border border-black/5 dark:border-white/10">
+                <button
+                  type="button"
+                  onClick={() => updateForm("status", "draft")}
+                  className={`flex-1 py-2.5 rounded-lg text-sm font-medium transition-all ${
+                    formData.status === "draft" 
+                      ? "bg-white dark:bg-slate-800 text-foreground shadow-sm" 
+                      : "text-foreground/50 hover:text-foreground"
+                  }`}
+                >
+                  Draft (Hidden)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => updateForm("status", "published")}
+                  className={`flex-1 py-2.5 rounded-lg text-sm font-medium transition-all ${
+                    formData.status === "published" 
+                      ? "bg-green-500 text-white shadow-sm" 
+                      : "text-foreground/50 hover:text-foreground"
+                  }`}
+                >
+                  Published (Live)
+                </button>
+              </div>
             </div>
           </div>
         );
@@ -326,7 +453,7 @@ export default function CreateEventWorkflow({ formData, setFormData, onSuccess }
   const steps = ["Category", "Basic Info", "Venue", "Media", "Details"];
 
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 p-6 md:p-8">
+    <div className="bg-white dark:bg-black rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 p-6 md:p-8">
       {/* Header */}
       <div className="mb-8">
         <h2 className="text-2xl font-heading font-bold text-foreground">

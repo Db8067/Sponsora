@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Plus, Search, Filter, MoreVertical, Edit, Trash2, Eye } from "lucide-react";
+import { Plus, Search, Filter, MoreVertical, Edit, Trash2, Eye, Calendar as CalendarIcon, MapPin } from "lucide-react";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 
@@ -10,12 +10,26 @@ export default function AdminEventsPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setEvents([]);
-    setLoading(false);
+    async function fetchEvents() {
+      try {
+        const { data, error } = await supabase
+          .from("events")
+          .select("*, organizer_profiles(org_name)")
+          .order("created_at", { ascending: false });
+        
+        if (data) setEvents(data);
+      } catch (err) {
+        console.error("Error fetching events:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    
+    fetchEvents();
   }, []);
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 pb-10">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h1 className="font-heading text-3xl font-bold text-foreground">Admin Events</h1>
@@ -40,7 +54,55 @@ export default function AdminEventsPage() {
           </div>
         </div>
 
-        <div className="overflow-x-auto min-h-[300px]">
+        {/* Mobile View - Cards */}
+        <div className="md:hidden divide-y divide-black/5 dark:divide-white/5">
+          {loading ? (
+            <div className="p-8 text-center text-foreground/50">Loading events...</div>
+          ) : events.length === 0 ? (
+            <div className="p-8 text-center text-foreground/50">No events found.</div>
+          ) : (
+            events.map((event) => (
+              <div key={event.id} className="p-4 flex flex-col gap-3 hover:bg-black/5 dark:hover:bg-white/5 transition-colors">
+                <div className="flex justify-between items-start">
+                  <div className="flex flex-col gap-1">
+                    <span className="font-semibold text-foreground text-base line-clamp-1">{event.title}</span>
+                    <span className="text-xs text-foreground/60">{event.organizer_profiles?.org_name || "Admin"}</span>
+                  </div>
+                  <span className={`px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-wide ${
+                    event.status === 'published' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' : 'bg-black/5 text-foreground/70 dark:bg-white/10 dark:text-foreground/70'
+                  }`}>
+                    {event.status || "Draft"}
+                  </span>
+                </div>
+                
+                <div className="grid grid-cols-2 gap-2 text-xs text-foreground/70">
+                  <div className="flex items-center gap-1.5">
+                    <CalendarIcon className="w-3.5 h-3.5 text-primary" />
+                    {event.start_at ? new Date(event.start_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : "-"}
+                  </div>
+                  <div className="flex items-center gap-1.5 line-clamp-1">
+                    <MapPin className="w-3.5 h-3.5 text-orange-500" />
+                    {event.venue_type === "online" ? "Online" : "In-Person"}
+                  </div>
+                </div>
+                
+                <div className="flex items-center justify-between mt-2 pt-2 border-t border-black/5 dark:border-white/5">
+                  <div className="flex gap-2">
+                    {event.is_featured && <span className="bg-accent/10 text-accent text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Featured</span>}
+                  </div>
+                  <div className="flex gap-3 text-foreground/50">
+                    <button className="hover:text-primary transition-colors"><Eye className="w-4 h-4" /></button>
+                    <button className="hover:text-blue-600 transition-colors"><Edit className="w-4 h-4" /></button>
+                    <button className="hover:text-red-600 transition-colors"><Trash2 className="w-4 h-4" /></button>
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+
+        {/* Desktop View - Table */}
+        <div className="hidden md:block overflow-x-auto min-h-[300px]">
           <table className="w-full text-left text-sm whitespace-nowrap">
             <thead className="bg-black/5 dark:bg-white/5 text-foreground/60">
               <tr>
@@ -48,25 +110,24 @@ export default function AdminEventsPage() {
                 <th className="px-6 py-3 font-medium">Organizer</th>
                 <th className="px-6 py-3 font-medium">Status</th>
                 <th className="px-6 py-3 font-medium">Date</th>
-                <th className="px-6 py-3 font-medium">Registrations</th>
                 <th className="px-6 py-3 font-medium text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-black/5 dark:divide-white/5">
               {loading ? (
                 <tr>
-                  <td colSpan={6} className="text-center py-8 text-foreground/50">Loading events...</td>
+                  <td colSpan={5} className="text-center py-8 text-foreground/50">Loading events...</td>
                 </tr>
               ) : events.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="text-center py-8 text-foreground/50">No events found.</td>
+                  <td colSpan={5} className="text-center py-8 text-foreground/50">No events found.</td>
                 </tr>
               ) : (
                 events.map((event) => (
                   <tr key={event.id} className="hover:bg-black/5 dark:hover:bg-white/5 transition-colors">
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-2">
-                        <span className="font-semibold text-foreground max-w-[200px] truncate" title={event.title}>{event.title}</span>
+                        <span className="font-semibold text-foreground max-w-[250px] truncate" title={event.title}>{event.title}</span>
                         {event.is_featured && <span className="bg-accent/10 text-accent text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Featured</span>}
                       </div>
                     </td>
@@ -83,7 +144,6 @@ export default function AdminEventsPage() {
                     <td className="px-6 py-4 text-foreground/70">
                       {event.start_at ? new Date(event.start_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : "-"}
                     </td>
-                    <td className="px-6 py-4 font-medium">0</td>
                     <td className="px-6 py-4 text-right">
                       <div className="flex justify-end gap-2 text-foreground/50">
                         <button className="p-1.5 hover:text-primary hover:bg-primary/10 rounded-md transition-colors"><Eye className="w-4 h-4" /></button>

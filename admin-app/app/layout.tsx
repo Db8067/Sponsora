@@ -31,7 +31,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   return (
     /* <ClerkProvider> */
       <html lang="en" className={`${jakarta.variable} ${inter.variable} antialiased`} suppressHydrationWarning>
-        <body className="flex min-h-screen bg-background text-foreground font-sans transition-colors bg-gradient-to-b from-primary/10 to-background relative overflow-x-hidden">
+        <body className="flex min-h-screen bg-background dark:bg-black text-foreground font-sans transition-colors relative overflow-x-hidden">
           <ThemeProvider
             attribute="class"
             defaultTheme="system"
@@ -49,7 +49,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           {/* Sidebar */}
           <aside className={cn(
             "fixed md:sticky top-0 right-0 md:right-auto md:left-0 h-screen w-64 z-50 transition-all duration-300 ease-in-out shrink-0 flex flex-col",
-            "bg-white/95 dark:bg-slate-950/95 md:bg-white/10 md:dark:bg-black/40 backdrop-blur-lg md:backdrop-blur-md border-l border-gray-200 dark:border-gray-800/50 md:border-r md:border-l-0 md:border-white/20 md:dark:border-white/5 shadow-2xl md:shadow-xl",
+            "bg-white/95 dark:bg-black/95 md:bg-white/10 md:dark:bg-black/80 backdrop-blur-lg md:backdrop-blur-md border-l border-gray-200 dark:border-gray-800/50 md:border-r md:border-l-0 md:border-white/20 md:dark:border-white/5 shadow-2xl md:shadow-xl",
             isMobileMenuOpen ? "translate-x-0" : "translate-x-full md:translate-x-0"
           )}>
             <div className="h-16 flex items-center justify-between px-6 border-b border-gray-200 dark:border-gray-800 shrink-0">
@@ -104,7 +104,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           {/* Main Content Area */}
           <div className="flex-1 flex flex-col min-w-0">
             {/* Topbar for mobile */}
-            <div className="h-16 bg-white/70 dark:bg-black/40 backdrop-blur-md border-b border-gray-200/50 dark:border-gray-800/50 flex items-center justify-between px-4 md:hidden shrink-0">
+            <div className="h-16 bg-white/70 dark:bg-black/80 backdrop-blur-md border-b border-gray-200/50 dark:border-gray-800/50 flex items-center justify-between px-4 md:hidden shrink-0">
               <div className="flex items-center gap-2">
                 <img src="/images/logo-light.png" alt="Sponsora Logo" className="h-8 w-auto dark:hidden block" />
                 <img src="/images/logo-dark.png" alt="Sponsora Logo" className="h-8 w-auto hidden dark:block" />

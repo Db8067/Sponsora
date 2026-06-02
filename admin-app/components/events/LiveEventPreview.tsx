@@ -1,30 +1,51 @@
 "use client";
 
 import React from "react";
-import { Calendar, MapPin, Users, Trophy, ExternalLink } from "lucide-react";
+import { Calendar, MapPin, Users, Trophy, ExternalLink, Video } from "lucide-react";
+import Link from "next/link";
+
+const categoryMap: Record<string, string> = {
+  tech: "Tech Events",
+  cultural: "Cultural Fests",
+  workshops: "Workshops",
+  seminars: "Seminars",
+  past: "Past Events"
+};
 
 export default function LiveEventPreview({ data }: { data: any }) {
-  // Safe parsing for date
-  let dateDisplay = "Date TBD";
-  if (data.start_at) {
+  // Safe parsing for dates
+  const formatDate = (dateStr: string) => {
+    if (!dateStr) return null;
     try {
-      const dateObj = new Date(data.start_at);
+      const dateObj = new Date(dateStr);
       if (!isNaN(dateObj.getTime())) {
-        dateDisplay = dateObj.toLocaleDateString("en-US", {
+        return dateObj.toLocaleDateString("en-US", {
           month: "short",
           day: "numeric",
           year: "numeric",
+          hour: "numeric",
+          minute: "2-digit"
         });
-      } else {
-        dateDisplay = "Invalid Date";
       }
-    } catch (e) {
-      dateDisplay = "Invalid Date";
-    }
-  }
+    } catch (e) {}
+    return "Invalid Date";
+  };
+
+  const dateDisplay = formatDate(data.start_at) || "Date TBD";
+  const deadlineDisplay = formatDate(data.registration_deadline);
+
+  const getPlatformIcon = () => {
+    if (data.venue_type === "in_person") return null;
+    if (data.virtual_platform === "Google Meet") return "https://www.gstatic.com/meet/app_icon_192_2024q2_6c0032b4b47eb59cd3eef1ec896c15b1.png";
+    if (data.virtual_platform === "Zoom") return "https://st1.zoom.us/static/6.3.26760/image/new/ZoomLogo.png";
+    if (data.virtual_platform === "Microsoft Teams") return "https://upload.wikimedia.org/wikipedia/commons/c/c9/Microsoft_Office_Teams_%282018%E2%80%93present%29.svg";
+    return null;
+  };
+
+  const platformLogo = getPlatformIcon();
 
   return (
-    <div className="flex flex-col h-[600px] overflow-y-auto bg-white dark:bg-slate-900 rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(255,255,255,0.02)] border border-gray-100 dark:border-gray-800 pointer-events-none custom-scrollbar">
+    <div className="flex flex-col h-full bg-white dark:bg-black rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(255,255,255,0.02)] border border-gray-100 dark:border-gray-800 pointer-events-auto custom-scrollbar overflow-y-auto">
       {/* Banner */}
       <div className="w-full h-48 bg-gray-100 dark:bg-slate-800 relative shrink-0">
         {data.banner_url ? (
@@ -34,6 +55,15 @@ export default function LiveEventPreview({ data }: { data: any }) {
             No Banner Uploaded
           </div>
         )}
+        
+        <div className="absolute top-4 left-4 flex gap-2 flex-wrap">
+          {data.category_slug && categoryMap[data.category_slug] && (
+            <div className="bg-black/50 backdrop-blur-md text-white text-xs font-bold px-3 py-1 rounded-full border border-white/20">
+              {categoryMap[data.category_slug]}
+            </div>
+          )}
+        </div>
+
         {data.is_featured && (
           <div className="absolute top-4 right-4 bg-accent text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-lg">
             Featured
@@ -59,18 +89,29 @@ export default function LiveEventPreview({ data }: { data: any }) {
             <div>
               <p className="text-xs font-medium text-foreground/50 uppercase tracking-wider">Date</p>
               <p className="font-semibold text-foreground text-sm">{dateDisplay}</p>
+              {deadlineDisplay && (
+                <p className="text-xs text-red-500 mt-1 font-medium">Deadline: {deadlineDisplay}</p>
+              )}
             </div>
           </div>
           
           <div className="flex items-start gap-3">
             <div className="w-10 h-10 rounded-xl bg-orange-500/10 flex items-center justify-center shrink-0">
-              <MapPin className="w-5 h-5 text-orange-500" />
+              {data.venue_type === "online" ? <Video className="w-5 h-5 text-orange-500" /> : <MapPin className="w-5 h-5 text-orange-500" />}
             </div>
             <div>
               <p className="text-xs font-medium text-foreground/50 uppercase tracking-wider">Location</p>
-              <p className="font-semibold text-foreground text-sm line-clamp-1">
-                {data.venue_type === "online" ? "Online Event" : (data.venue_address || "TBD")}
-              </p>
+              <div className="flex flex-col gap-1">
+                <p className="font-semibold text-foreground text-sm line-clamp-1">
+                  {data.venue_type === "online" ? "Online Event" : (data.venue_address || "TBD")}
+                </p>
+                {platformLogo && (
+                  <div className="flex items-center gap-1.5 mt-0.5">
+                    <img src={platformLogo} alt="Platform" className="h-4 object-contain" />
+                    <span className="text-xs font-medium text-foreground/70">{data.virtual_platform}</span>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
 
@@ -114,9 +155,20 @@ export default function LiveEventPreview({ data }: { data: any }) {
             <span className="font-bold text-lg text-foreground">
               {data.is_paid && data.entry_fee > 0 ? `₹${data.entry_fee}` : "Free Entry"}
             </span>
-            <button className="bg-primary text-white px-6 py-2.5 rounded-xl font-medium shadow-lg flex items-center gap-2">
-              Register Now <ExternalLink className="w-4 h-4" />
-            </button>
+            {data.registration_link ? (
+              <a 
+                href={data.registration_link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-primary text-white px-6 py-2.5 rounded-xl font-medium shadow-lg flex items-center gap-2 hover:bg-primary/90 transition-colors"
+              >
+                Register Now <ExternalLink className="w-4 h-4" />
+              </a>
+            ) : (
+              <button disabled className="bg-primary/50 text-white px-6 py-2.5 rounded-xl font-medium shadow-lg flex items-center gap-2 cursor-not-allowed">
+                Register Now <ExternalLink className="w-4 h-4" />
+              </button>
+            )}
           </div>
         </div>
       </div>
