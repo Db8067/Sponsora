@@ -86,6 +86,7 @@ CREATE TABLE events (
   max_team INTEGER DEFAULT 1,
   status TEXT DEFAULT 'draft', -- Organizers can draft, admin publishes
   is_featured BOOLEAN DEFAULT FALSE,
+  registration_link TEXT,
   organizer_id UUID REFERENCES organizer_profiles(id) ON DELETE SET NULL,
   created_by_admin UUID REFERENCES users(id) ON DELETE SET NULL,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now())

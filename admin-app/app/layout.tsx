@@ -5,7 +5,7 @@ import { Plus_Jakarta_Sans, Inter } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, CalendarDays, Users, ShieldCheck, MessageSquare, Award, Settings, Menu, X, Rocket } from "lucide-react";
+import { LayoutDashboard, CalendarDays, Users, ShieldCheck, MessageSquare, Award, Settings, Menu, X, Rocket, PlusCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { ThemeProvider } from "@/components/ThemeProvider";
@@ -15,6 +15,7 @@ const jakarta = Plus_Jakarta_Sans({ variable: "--font-jakarta", subsets: ["latin
 const inter = Inter({ variable: "--font-inter", subsets: ["latin"] });
 
 const sidebarLinks = [
+  { name: "Create Event", href: "/admincreateevent", icon: PlusCircle },
   { name: "Events", href: "/adminevent", icon: CalendarDays },
   { name: "Organizers", href: "/organizers", icon: ShieldCheck },
   { name: "Sponsors", href: "/sponsors", icon: Users },

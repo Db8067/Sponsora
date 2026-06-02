@@ -1,44 +1,26 @@
 import { Metadata } from "next";
 import Link from "next/link";
-import { ChevronRight, Calendar, MapPin, ArrowUp, Zap, Users, Code } from "lucide-react";
+import { ChevronRight, Calendar, Code, CalendarX } from "lucide-react";
 import BackToTop from "@/components/BackToTop";
+import { supabase } from "@/lib/supabase";
+
+export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
   title: "Tech Events & Hackathons | Sponsora",
   description: "Discover upcoming hackathons, coding competitions, and AI summits. Find sponsorships or participate in the biggest tech events on Sponsora.",
 };
 
-const mockTechEvents = [
-  {
-    id: 1,
-    title: "Global AI Hackathon 2026",
-    date: "Oct 15 - 17, 2026",
-    location: "Online",
-    participants: "10,000+",
-    sponsorship: true,
-    image: "/images/tech_events_doodle.png"
-  },
-  {
-    id: 2,
-    title: "DevRel Con India",
-    date: "Nov 5, 2026",
-    location: "Bengaluru, India",
-    participants: "2,500+",
-    sponsorship: true,
-    image: "/images/tech_events_doodle.png"
-  },
-  {
-    id: 3,
-    title: "Web3 Builders Summit",
-    date: "Dec 12, 2026",
-    location: "Dubai, UAE",
-    participants: "5,000+",
-    sponsorship: false,
-    image: "/images/tech_events_doodle.png"
-  }
-];
+export default async function TechEventsPage() {
+  const { data: events, error } = await supabase
+    .from('events')
+    .select('*, categories!inner(*)')
+    .eq('categories.slug', 'tech')
+    .eq('status', 'published')
+    .order('start_at', { ascending: true });
 
-export default function TechEventsPage() {
+  const techEvents = events || [];
+
   return (
     <div className="relative min-h-screen pt-28 pb-20 px-4 md:px-6 lg:px-12 selection:bg-primary/30 bg-gradient-to-b from-primary/10 to-background">
       
@@ -109,32 +91,45 @@ export default function TechEventsPage() {
           {/* Event Listings */}
           <div className="flex items-center justify-between mb-8">
             <h2 className="text-2xl font-bold text-foreground">Featured Upcoming</h2>
-            <span className="text-sm font-medium text-foreground/50">{mockTechEvents.length} Events</span>
+            <span className="text-sm font-medium text-foreground/50">{techEvents.length} Events</span>
           </div>
 
-          <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6 mb-20">
-            {mockTechEvents.map((event) => (
-              <div key={event.id} className="group relative bg-white dark:bg-[#1A1A1D] border border-black/5 dark:border-white/10 rounded-2xl md:rounded-3xl overflow-hidden hover:border-primary/50 dark:hover:border-primary/50 shadow-md hover:shadow-2xl transition-all duration-300 flex flex-row md:flex-col">
-                <div className="w-16 sm:w-20 md:w-full h-auto min-h-[80px] md:h-48 relative overflow-hidden shrink-0">
-                  <div 
-                    className="absolute inset-0 bg-cover bg-center group-hover:scale-110 transition-transform duration-500"
-                    style={{ backgroundImage: `url(${event.image})` }}
-                  />
-                </div>
-                <div className="p-3 md:p-6 flex flex-col flex-1 justify-center overflow-hidden">
-                  <h3 className="text-[13px] sm:text-sm md:text-xl font-bold text-foreground mb-1 md:mb-3 line-clamp-2 leading-tight">{event.title}</h3>
-                  <div className="flex flex-col gap-1 md:gap-2">
-                    <div className="flex items-center gap-1.5 text-foreground/60 text-[10px] sm:text-[11px] md:text-sm">
-                      <Calendar className="w-3 h-3 md:w-4 md:h-4 shrink-0" /> <span className="truncate">{event.date}</span>
-                    </div>
-                  </div>
-                  <button className="hidden md:block w-full mt-6 py-3 rounded-xl bg-black/5 dark:bg-white/5 hover:bg-primary hover:text-white text-foreground font-semibold border border-black/10 dark:border-white/10 hover:border-primary transition-all duration-300">
-                    View Details
-                  </button>
-                </div>
+          {techEvents.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-20 text-center">
+              <div className="w-24 h-24 bg-black/5 dark:bg-white/5 rounded-full flex items-center justify-center mb-6">
+                <CalendarX className="w-10 h-10 text-foreground/30" />
               </div>
-            ))}
-          </div>
+              <h3 className="text-2xl font-bold text-foreground mb-2">No Events Found</h3>
+              <p className="text-foreground/60 max-w-md">There are currently no published events in this category. Check back later for upcoming tech events!</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6 mb-20">
+              {techEvents.map((event: any) => (
+                <div key={event.id} className="group relative bg-white dark:bg-[#1A1A1D] border border-black/5 dark:border-white/10 rounded-2xl md:rounded-3xl overflow-hidden hover:border-primary/50 dark:hover:border-primary/50 shadow-md hover:shadow-2xl transition-all duration-300 flex flex-row md:flex-col">
+                  <div className="w-16 sm:w-20 md:w-full h-auto min-h-[80px] md:h-48 relative overflow-hidden shrink-0">
+                    <div 
+                      className="absolute inset-0 bg-cover bg-center group-hover:scale-110 transition-transform duration-500"
+                      style={{ backgroundImage: `url(${event.banner_url || '/images/tech_events_doodle.png'})` }}
+                    />
+                  </div>
+                  <div className="p-3 md:p-6 flex flex-col flex-1 justify-center overflow-hidden">
+                    <h3 className="text-[13px] sm:text-sm md:text-xl font-bold text-foreground mb-1 md:mb-3 line-clamp-2 leading-tight">{event.title}</h3>
+                    <div className="flex flex-col gap-1 md:gap-2">
+                      <div className="flex items-center gap-1.5 text-foreground/60 text-[10px] sm:text-[11px] md:text-sm">
+                        <Calendar className="w-3 h-3 md:w-4 md:h-4 shrink-0" /> 
+                        <span className="truncate">
+                          {event.start_at ? new Date(event.start_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'TBD'}
+                        </span>
+                      </div>
+                    </div>
+                    <Link href={`/events/${event.slug || event.id}`} className="hidden md:flex items-center justify-center w-full mt-6 py-3 rounded-xl bg-black/5 dark:bg-white/5 hover:bg-primary hover:text-white text-foreground font-semibold border border-black/10 dark:border-white/10 hover:border-primary transition-all duration-300">
+                      View Details
+                    </Link>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </main>
       </div>
 
