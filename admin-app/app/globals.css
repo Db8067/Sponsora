@@ -3,12 +3,12 @@
 @tailwind utilities;
 
 :root {
-  --background: 225 35% 98%;
+  --background: 0 0% 99%; /* Extremely clean, soft pearl white for the best animated glow effect */
   --foreground: 222 47% 11%;
-  --primary: 243 100% 69%;
-  --primary-dark: 271 91% 65%;
-  --accent: 16 100% 60%;
-  --success: 160 84% 39%;
+  --primary: 250 100% 65%; /* Luma-style vibrant but soft purple glow, optimized for contrast */
+  --primary-dark: 290 100% 65%; /* Luma-style vibrant magenta/pink glow, optimized for contrast */
+  --accent: 30 100% 62%; /* Warm vibrant orange glow, optimized for contrast */
+  --success: 160 80% 36%;
 }
 
 .dark {
@@ -18,6 +18,53 @@
 
 html {
   scroll-behavior: smooth;
+}
+
+@keyframes snow {
+  0% { transform: translateY(-100vh); }
+  100% { transform: translateY(100vh); }
+}
+
+html:not(.dark) body::before {
+  content: '';
+  position: fixed;
+  top: -100vh;
+  left: 0;
+  width: 100vw;
+  height: 200vh;
+  pointer-events: none;
+  z-index: -1;
+  opacity: 0.6;
+  background-image: 
+    radial-gradient(8px 8px at 100px 50px, #cbd5e1, transparent),
+    radial-gradient(12px 12px at 200px 150px, #94a3b8, transparent),
+    radial-gradient(6px 6px at 300px 250px, #e2e8f0, transparent),
+    radial-gradient(8px 8px at 400px 350px, #cbd5e1, transparent),
+    radial-gradient(12px 12px at 500px 100px, #94a3b8, transparent),
+    radial-gradient(6px 6px at 50px 200px, #e2e8f0, transparent),
+    radial-gradient(8px 8px at 150px 300px, #cbd5e1, transparent),
+    radial-gradient(12px 12px at 250px 400px, #94a3b8, transparent),
+    radial-gradient(6px 6px at 350px 500px, #e2e8f0, transparent);
+  background-size: 600px 600px;
+  animation: snow 15s linear infinite;
+}
+
+html:not(.dark) body::after {
+  content: '';
+  position: fixed;
+  top: -100vh;
+  left: 0;
+  width: 100vw;
+  height: 200vh;
+  pointer-events: none;
+  z-index: -1;
+  opacity: 0.4;
+  background-image: 
+    radial-gradient(6px 6px at 100px 50px, #94a3b8, transparent),
+    radial-gradient(10px 10px at 200px 150px, #cbd5e1, transparent),
+    radial-gradient(4px 4px at 300px 250px, #e2e8f0, transparent);
+  background-size: 400px 400px;
+  animation: snow 10s linear infinite;
 }
 
 body {

@@ -93,7 +93,7 @@ export default function EventUploadForm() {
       if (submitError) throw submitError;
 
       localStorage.removeItem("event_draft");
-      router.push("/events?success=true");
+      router.push("/adminevent?success=true");
     } catch (err: any) {
       setError(err.message || "Failed to create event.");
     } finally {

@@ -15,8 +15,7 @@ const jakarta = Plus_Jakarta_Sans({ variable: "--font-jakarta", subsets: ["latin
 const inter = Inter({ variable: "--font-inter", subsets: ["latin"] });
 
 const sidebarLinks = [
-  { name: "Overview", href: "/", icon: LayoutDashboard },
-  { name: "Events", href: "/events", icon: CalendarDays },
+  { name: "Events", href: "/adminevent", icon: CalendarDays },
   { name: "Organizers", href: "/organizers", icon: ShieldCheck },
   { name: "Sponsors", href: "/sponsors", icon: Users },
   { name: "Chats", href: "/chat", icon: MessageSquare },
@@ -31,13 +30,15 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   return (
     /* <ClerkProvider> */
       <html lang="en" className={`${jakarta.variable} ${inter.variable} antialiased`} suppressHydrationWarning>
-        <body className="flex min-h-screen bg-background text-foreground font-sans transition-colors">
+        <body className="flex min-h-screen bg-background text-foreground font-sans transition-colors bg-gradient-to-b from-primary/10 to-background relative overflow-x-hidden">
           <ThemeProvider
             attribute="class"
             defaultTheme="system"
             enableSystem
             disableTransitionOnChange
           >
+            {/* Background ambient lighting */}
+            <div className="absolute inset-0 z-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/20 via-background to-background pointer-events-none hidden dark:block"></div>
           
           {/* Mobile Overlay */}
           {isMobileMenuOpen && (
@@ -98,7 +99,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           {/* Main Content Area */}
           <div className="flex-1 flex flex-col min-w-0">
             {/* Topbar for mobile */}
-            <div className="h-16 bg-white dark:bg-slate-900 border-b border-gray-200 dark:border-gray-800 flex items-center justify-between px-4 md:hidden shrink-0">
+            <div className="h-16 bg-white/70 dark:bg-black/40 backdrop-blur-md border-b border-gray-200/50 dark:border-gray-800/50 flex items-center justify-between px-4 md:hidden shrink-0">
               <div className="flex items-center gap-2">
                 <img src="/images/logo-light.png" alt="Sponsora Logo" className="h-8 w-auto dark:hidden block" />
                 <img src="/images/logo-dark.png" alt="Sponsora Logo" className="h-8 w-auto hidden dark:block" />

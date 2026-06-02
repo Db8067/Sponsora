@@ -10,50 +10,18 @@ export default function AdminEventsPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchEvents = async () => {
-      const { data, error } = await supabase
-        .from("events")
-        .select(`
-          id,
-          title,
-          status,
-          start_at,
-          is_featured,
-          organizer_id,
-          organizer_profiles ( org_name )
-        `)
-        .order("created_at", { ascending: false });
-
-      if (data) setEvents(data);
-      setLoading(false);
-    };
-
-    fetchEvents();
-
-    const channel = supabase
-      .channel("public:events_admin")
-      .on(
-        "postgres_changes",
-        { event: "*", schema: "public", table: "events" },
-        (payload) => {
-          fetchEvents(); // Re-fetch to get relations if needed, or update locally
-        }
-      )
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
+    setEvents([]);
+    setLoading(false);
   }, []);
 
   return (
     <div className="space-y-8">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="font-heading text-3xl font-bold text-foreground">Events</h1>
+          <h1 className="font-heading text-3xl font-bold text-foreground">Admin Events</h1>
           <p className="text-foreground/70 mt-1">Manage all events across the platform.</p>
         </div>
-        <Link href="/events/create" className="bg-primary text-white px-4 py-2 rounded-xl font-medium shadow-sm hover:bg-primary-dark transition-all flex items-center gap-2">
+        <Link href="/adminevent/create" className="bg-primary text-white px-4 py-2 rounded-xl font-medium shadow-sm hover:bg-primary-dark transition-all flex items-center gap-2">
           <Plus className="w-4 h-4" /> Create Event
         </Link>
       </div>
@@ -133,7 +101,7 @@ export default function AdminEventsPage() {
           </table>
         </div>
         
-        <div className="p-4 border-t border-gray-100 dark:border-gray-800 flex items-center justify-between text-sm text-foreground/60">
+        <div className="p-4 border-t border-gray-100 dark:border-gray-800 flex flex-col sm:flex-row gap-4 items-center justify-between text-sm text-foreground/60">
           <span>Showing {events.length > 0 ? 1 : 0} to {events.length} of {events.length} events</span>
           <div className="flex gap-1">
             <button className="px-3 py-1 rounded-md border border-gray-200 dark:border-gray-700 disabled:opacity-50" disabled>Prev</button>
