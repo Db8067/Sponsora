@@ -47,14 +47,18 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
           {/* Sidebar */}
           <aside className={cn(
-            "fixed md:sticky top-0 h-screen w-64 glass border-r border-white/20 dark:border-white/5 z-50 transition-all duration-300 ease-in-out shrink-0 flex flex-col",
-            isMobileMenuOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
+            "fixed md:sticky top-0 right-0 md:right-auto md:left-0 h-screen w-64 z-50 transition-all duration-300 ease-in-out shrink-0 flex flex-col",
+            "bg-white/95 dark:bg-slate-950/95 md:bg-white/10 md:dark:bg-black/40 backdrop-blur-lg md:backdrop-blur-md border-l border-gray-200 dark:border-gray-800/50 md:border-r md:border-l-0 md:border-white/20 md:dark:border-white/5 shadow-2xl md:shadow-xl",
+            isMobileMenuOpen ? "translate-x-0" : "translate-x-full md:translate-x-0"
           )}>
-            <div className="h-16 flex items-center px-6 border-b border-gray-200 dark:border-gray-800 shrink-0">
+            <div className="h-16 flex items-center justify-between px-6 border-b border-gray-200 dark:border-gray-800 shrink-0">
               <Link href="/" className="flex items-center gap-2">
                 <img src="/images/logo-light.png" alt="Sponsora Logo" className="h-9 md:h-10 w-auto dark:hidden block" />
                 <img src="/images/logo-dark.png" alt="Sponsora Logo" className="h-9 md:h-10 w-auto hidden dark:block" />
               </Link>
+              <button onClick={() => setIsMobileMenuOpen(false)} className="p-1 md:hidden text-foreground/70 hover:text-foreground" title="Close Menu">
+                <X className="w-5 h-5" />
+              </button>
             </div>
             
             <nav className="flex-1 overflow-y-auto p-4 space-y-1">
@@ -104,9 +108,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 <img src="/images/logo-light.png" alt="Sponsora Logo" className="h-8 w-auto dark:hidden block" />
                 <img src="/images/logo-dark.png" alt="Sponsora Logo" className="h-8 w-auto hidden dark:block" />
               </div>
-              <button onClick={() => setIsMobileMenuOpen(true)} className="p-2 -mr-2 text-foreground/70 hover:text-foreground">
-                <Menu className="w-6 h-6" />
-              </button>
+              <div className="flex items-center gap-2">
+                <ThemeToggle />
+                <button onClick={() => setIsMobileMenuOpen(true)} className="p-2 -mr-2 text-foreground/70 hover:text-foreground" title="Open Menu">
+                  <Menu className="w-6 h-6" />
+                </button>
+              </div>
             </div>
 
             {/* Page Content */}

@@ -11,9 +11,9 @@
   --success: 160 80% 36%;
 }
 
-.dark {
-  --background: 0 0% 0%;
-  --foreground: 225 35% 98%;
+.dark, html.dark, body.dark, :root.dark {
+  --background: 0 0% 0% !important;
+  --foreground: 225 35% 98% !important;
 }
 
 html {
