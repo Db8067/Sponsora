@@ -30,6 +30,12 @@ const upcomingCategories = [
     href: "/events/seminars",
     bgImage: "/images/seminars_doodle.png",
   },
+  {
+    title: "Past Events",
+    description: "Relive the magic of our concluded events & sponsors",
+    href: "/events/past",
+    bgImage: "/images/past_events_doodle.png",
+  },
 ];
 
 export default function EventsPage() {
@@ -50,7 +56,7 @@ export default function EventsPage() {
         {/* Background ambient lighting */}
         <div className="absolute inset-0 z-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/10 via-background to-background pointer-events-none hidden dark:block"></div>
 
-        <div className="relative z-10 flex flex-col w-full max-w-[1400px] px-6 lg:px-12 mx-auto">
+        <div className="relative z-10 flex flex-col w-full max-w-[1400px] px-4 md:px-6 lg:px-12 mx-auto">
           
           {/* Header - Centered */}
           <div className="mb-12 md:mb-16 text-center max-w-3xl mx-auto flex flex-col items-center mt-8 md:mt-0">
@@ -59,93 +65,48 @@ export default function EventsPage() {
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">Events</span>
             </h1>
             <p className="text-foreground/70 text-lg md:text-xl font-medium max-w-2xl text-balance leading-relaxed">
-              Explore upcoming hackathons, college fests, hands-on workshops, and insightful seminars. Or take a trip down memory lane with our past event highlights.
+              Explore upcoming hackathons, college fests, hands-on workshops, and insightful seminars.
             </p>
           </div>
 
-          {/* Upcoming Events Section (4-column grid) */}
+          {/* Upcoming Events Section */}
           <div className="mb-16">
             <div className="flex items-center gap-4 mb-8">
-              <h2 className="text-2xl md:text-3xl font-bold text-foreground tracking-tight">Upcoming Events</h2>
+              <h2 className="text-2xl md:text-3xl font-bold text-foreground tracking-tight">Browse Categories</h2>
               <div className="h-[1px] flex-1 bg-gradient-to-r from-white/10 to-transparent"></div>
             </div>
 
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 w-full">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6 w-full">
               {upcomingCategories.map((category, index) => (
                 <button
                   key={index}
                   onClick={() => handleNavigation(category.href)}
-                  className="group relative flex flex-col justify-end w-full h-[280px] md:h-[350px] rounded-[2rem] overflow-hidden glass md:hover:-translate-y-2 active:scale-[0.98] transition-all duration-300 ease-out text-left bg-[#1A1A1D] dark:bg-black/40 border border-white/10 hover:border-white/20 shadow-xl md:hover:shadow-2xl md:hover:shadow-primary/20"
+                  className="group relative flex flex-row items-center md:flex-col md:justify-end w-full h-auto p-3 md:p-0 md:h-[350px] rounded-2xl md:rounded-[2rem] overflow-hidden glass md:hover:-translate-y-2 active:scale-[0.98] transition-all duration-300 ease-out text-left bg-white dark:bg-white/5 border border-black/5 dark:border-white/10 hover:border-primary/20 dark:hover:border-white/20 shadow-lg md:shadow-xl hover:shadow-xl md:hover:shadow-primary/20"
                 >
-                  {/* Doodle Art Background Image */}
-                  <div 
-                    className="absolute inset-0 z-0 opacity-60 md:group-hover:opacity-100 transition-all duration-500 md:group-hover:scale-110 ease-out bg-cover bg-center mix-blend-screen"
-                    style={{ backgroundImage: `url('${category.bgImage}')` }}
-                  />
+                  {/* Image container: Square on mobile (left side), background on desktop */}
+                  <div className="w-12 h-12 sm:w-16 sm:h-16 shrink-0 md:absolute md:inset-0 md:w-full md:h-full opacity-100 md:opacity-60 md:group-hover:opacity-100 transition-all duration-500 md:group-hover:scale-110 ease-out bg-cover bg-center rounded-xl md:rounded-none dark:opacity-60 md:opacity-80"
+                       style={{ backgroundImage: `url('${category.bgImage}')` }} />
                   
-                  {/* Dark Gradient Overlay for text contrast */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/60 to-black/20 z-10 transition-opacity duration-300 group-hover:opacity-80" />
-                  
-                  {/* Premium Neon Hover Glow */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-primary/30 to-transparent opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 z-10 mix-blend-screen" />
+                  {/* Desktop overlays (hidden on mobile) */}
+                  <div className="hidden md:block absolute inset-0 bg-gradient-to-t from-black/95 via-black/60 to-black/20 z-10 transition-opacity duration-300 group-hover:opacity-80" />
+                  <div className="hidden md:block absolute inset-0 bg-gradient-to-t from-primary/30 to-transparent opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 z-10 " />
 
-                  {/* Content */}
-                  <div className="relative z-20 p-6 flex flex-col gap-2 md:gap-3">
-                    <h3 className="text-xl md:text-2xl font-bold text-white transition-colors leading-tight">
+                  {/* Content: text on right for mobile, bottom for desktop */}
+                  <div className="relative z-20 flex-1 ml-3 md:ml-0 md:p-6 flex flex-col gap-1 md:gap-3">
+                    <h3 className="text-sm sm:text-base md:text-2xl font-bold text-foreground md:text-white transition-colors leading-tight">
                       {category.title}
                     </h3>
-                    <p className="text-white/70 text-sm font-medium line-clamp-2">
+                    {/* Description is hidden on mobile */}
+                    <p className="hidden md:block text-white/70 text-sm font-medium line-clamp-2">
                       {category.description}
                     </p>
-                    <div className="mt-4 w-10 h-10 rounded-full bg-white/10 flex items-center justify-center backdrop-blur-md border border-white/20 md:group-hover:bg-primary md:group-hover:border-primary transition-all duration-300">
+                    <div className="hidden md:flex mt-4 w-10 h-10 rounded-full bg-white/10 items-center justify-center backdrop-blur-md border border-white/20 group-hover:bg-primary group-hover:border-primary transition-all duration-300">
                       <ArrowRight className="w-5 h-5 text-white" />
                     </div>
                   </div>
                 </button>
               ))}
             </div>
-          </div>
-
-          {/* Past Events Section (Equal Visual Weight - Large Full Width Card) */}
-          <div className="mb-12">
-            <div className="flex items-center gap-4 mb-8">
-              <h2 className="text-2xl md:text-3xl font-bold text-foreground tracking-tight">Past Highlights</h2>
-              <div className="h-[1px] flex-1 bg-gradient-to-r from-white/10 to-transparent"></div>
-            </div>
-
-            <button
-              onClick={() => handleNavigation("/events/past")}
-              className="group relative flex flex-col md:flex-row items-center w-full min-h-[300px] md:min-h-[350px] rounded-[2rem] overflow-hidden glass md:hover:-translate-y-2 active:scale-[0.98] transition-all duration-300 ease-out text-left bg-[#1A1A1D] dark:bg-black/40 border border-white/10 hover:border-white/20 shadow-xl md:hover:shadow-2xl md:hover:shadow-accent/20"
-            >
-              {/* Image Side (Left on Desktop, Top on Mobile) */}
-              <div className="absolute inset-0 z-0 md:relative md:w-1/2 h-full min-h-[200px] md:min-h-full">
-                 <div 
-                  className="absolute inset-0 w-full h-full opacity-50 md:opacity-80 md:group-hover:opacity-100 transition-all duration-500 md:group-hover:scale-105 ease-out bg-cover bg-center mix-blend-screen"
-                  style={{ backgroundImage: `url('/images/past_events_doodle.png')` }}
-                />
-                <div className="absolute inset-0 bg-gradient-to-r from-black/20 via-black/60 to-black/95 hidden md:block z-10" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/60 to-black/20 md:hidden z-10" />
-              </div>
-
-              {/* Text Side */}
-              <div className="relative z-20 w-full md:w-1/2 p-8 md:p-12 flex flex-col justify-center h-full mt-auto md:mt-0">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/20 text-accent text-sm font-bold w-fit mb-4">
-                  <Calendar className="w-4 h-4" /> Archive
-                </div>
-                <h3 className="text-3xl md:text-5xl font-black text-white mb-4 tracking-tight leading-tight">
-                  Relive the <br className="hidden md:block"/> Magic.
-                </h3>
-                <p className="text-white/70 text-base md:text-lg font-medium mb-8 max-w-md">
-                  Browse our gallery of concluded events, check out past sponsors, and see what you missed.
-                </p>
-                <div className="flex items-center gap-3 text-white font-bold md:group-hover:text-accent transition-colors">
-                  View Past Events
-                  <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center backdrop-blur-md border border-white/20 md:group-hover:bg-accent md:group-hover:border-accent transition-all duration-300">
-                    <ArrowRight className="w-5 h-5 text-white" />
-                  </div>
-                </div>
-              </div>
-            </button>
           </div>
 
         </div>

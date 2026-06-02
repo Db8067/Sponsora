@@ -78,18 +78,21 @@ export default function WorkshopsPage() {
         <main className="flex-1 flex flex-col">
           
           {/* Hero Section */}
-          <div className="relative w-full h-[250px] md:h-[300px] rounded-[2rem] overflow-hidden mb-12 border border-white/10 glass shadow-2xl">
-            <div 
-              className="absolute inset-0 bg-cover bg-center opacity-40 mix-blend-screen"
-              style={{ backgroundImage: "url('/images/workshops_doodle.png')" }}
-            />
-            <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/50 to-transparent" />
-            <div className="relative z-10 h-full flex flex-col justify-center p-8 md:p-12">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-pink-500/20 text-pink-400 text-sm font-bold w-fit mb-4 border border-pink-500/20">
+          <div className="flex flex-col md:block relative w-full rounded-[2rem] md:h-[300px] md:overflow-hidden mb-12 md:border md:border-white/10 md:glass md:shadow-2xl">
+            <div className="w-full h-[150px] md:absolute md:inset-0 md:h-full rounded-[2rem] md:rounded-none overflow-hidden relative">
+              <div 
+                className="absolute inset-0 bg-cover bg-center opacity-100 dark:opacity-60 opacity-90"
+                style={{ backgroundImage: "url('/images/workshops_doodle.png')" }}
+              />
+              <div className="hidden md:block absolute inset-0 bg-gradient-to-r from-black/90 via-black/50 to-transparent" />
+            </div>
+            
+            <div className="relative z-10 flex flex-col justify-center mt-6 md:mt-0 p-0 md:p-12 md:h-full">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-pink-500/10 dark:bg-pink-500/20 text-pink-400 text-sm font-bold w-fit mb-4 border border-pink-500/20">
                 <PenTool className="w-4 h-4" /> Learning
               </div>
-              <h1 className="text-4xl md:text-5xl font-black text-white mb-4 tracking-tight">Workshops</h1>
-              <p className="text-white/70 max-w-xl text-lg font-medium">
+              <h1 className="text-4xl md:text-5xl font-black text-foreground md:text-white mb-4 tracking-tight">Workshops</h1>
+              <p className="hidden md:block text-foreground/70 md:text-white/70 max-w-xl text-lg font-medium">
                 Get hands-on experience and build your skills. Join interactive sessions led by industry experts and creators.
               </p>
             </div>
@@ -101,41 +104,29 @@ export default function WorkshopsPage() {
             <span className="text-sm font-medium text-foreground/50">{mockWorkshops.length} Events</span>
           </div>
 
-          <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-20">
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6 mb-20">
             {mockWorkshops.map((event) => (
-              <div key={event.id} className="group relative bg-[#1A1A1D] dark:bg-white/5 border border-white/10 rounded-3xl overflow-hidden hover:border-pink-500/50 hover:shadow-2xl hover:shadow-pink-500/10 transition-all duration-300 flex flex-col">
-                <div className="w-full h-48 relative overflow-hidden bg-black/50">
+              <div key={event.id} className="group relative bg-white dark:bg-[#1A1A1D] border border-black/5 dark:border-white/10 rounded-2xl md:rounded-3xl overflow-hidden hover:border-pink-500/50 dark:hover:border-pink-500/50 shadow-md hover:shadow-2xl transition-all duration-300 flex flex-row md:flex-col">
+                <div className="w-16 sm:w-20 md:w-full h-auto min-h-[80px] md:h-48 relative overflow-hidden shrink-0">
                   <div 
-                    className="absolute inset-0 bg-cover bg-center opacity-60 group-hover:scale-110 transition-transform duration-500"
-                    style={{ backgroundImage: `url('${event.image}')` }}
+                    className="absolute inset-0 bg-cover bg-center group-hover:scale-110 transition-transform duration-500"
+                    style={{ backgroundImage: `url(`${event.image}`)` }}
                   />
-                  {event.sponsorship && (
-                    <div className="absolute top-4 left-4 z-10 px-3 py-1.5 rounded-full bg-pink-500 text-white text-xs font-bold flex items-center gap-1.5 shadow-lg">
-                      <Zap className="w-3 h-3" /> Sponsorships Available
-                    </div>
-                  )}
                 </div>
-                <div className="p-6 flex flex-col flex-1">
-                  <h3 className="text-xl font-bold text-foreground mb-3 line-clamp-2">{event.title}</h3>
-                  <div className="flex flex-col gap-2 mt-auto">
-                    <div className="flex items-center gap-2 text-foreground/60 text-sm">
-                      <Calendar className="w-4 h-4" /> {event.date}
-                    </div>
-                    <div className="flex items-center gap-2 text-foreground/60 text-sm">
-                      <MapPin className="w-4 h-4" /> {event.location}
-                    </div>
-                    <div className="flex items-center gap-2 text-foreground/60 text-sm">
-                      <Users className="w-4 h-4" /> {event.participants} Expected
+                <div className="p-3 md:p-6 flex flex-col flex-1 justify-center overflow-hidden">
+                  <h3 className="text-[13px] sm:text-sm md:text-xl font-bold text-foreground mb-1 md:mb-3 line-clamp-2 leading-tight">{event.title}</h3>
+                  <div className="flex flex-col gap-1 md:gap-2">
+                    <div className="flex items-center gap-1.5 text-foreground/60 text-[10px] sm:text-[11px] md:text-sm">
+                      <Calendar className="w-3 h-3 md:w-4 md:h-4 shrink-0" /> <span className="truncate">{event.date}</span>
                     </div>
                   </div>
-                  <button className="w-full mt-6 py-3 rounded-xl bg-white/5 hover:bg-pink-500 hover:text-white text-foreground font-semibold border border-white/10 hover:border-pink-500 transition-all duration-300">
+                  <button className="hidden md:block w-full mt-6 py-3 rounded-xl bg-black/5 dark:bg-white/5 hover:bg-pink-500 hover:text-white text-foreground font-semibold border border-black/10 dark:border-white/10 hover:border-pink-500 transition-all duration-300">
                     View Details
                   </button>
                 </div>
               </div>
             ))}
           </div>
-
         </main>
       </div>
 
