@@ -51,7 +51,7 @@ export default function EventsPage() {
 
   return (
     <>
-      <div className="relative min-h-[100dvh] w-full flex flex-col overflow-x-hidden pt-24 md:pt-32 pb-12 md:pb-24 selection:bg-primary/30 bg-gradient-to-b from-primary/10 to-background">
+      <div className="relative min-h-[100dvh] w-full flex flex-col overflow-x-hidden pt-24 md:pt-20 lg:pt-24 pb-12 md:pb-16 selection:bg-primary/30 bg-gradient-to-b from-primary/10 to-background">
         
         {/* Background ambient lighting */}
         <div className="absolute inset-0 z-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/20 via-background to-background pointer-events-none hidden dark:block"></div>
@@ -59,20 +59,20 @@ export default function EventsPage() {
         <div className="relative z-10 flex flex-col w-full max-w-[1400px] px-4 md:px-6 lg:px-12 mx-auto">
           
           {/* Header - Centered */}
-          <div className="mb-12 md:mb-16 text-center max-w-3xl mx-auto flex flex-col items-center mt-8 md:mt-0">
-            <h1 className="font-heading font-black tracking-tighter text-foreground text-4xl sm:text-5xl lg:text-6xl text-balance drop-shadow-md mb-6">
-              Discover <br className="hidden md:block" />
+          <div className="mb-12 md:mb-6 lg:mb-8 text-center max-w-3xl mx-auto flex flex-col items-center mt-8 md:mt-0">
+            <h1 className="font-heading font-black tracking-tighter text-foreground text-4xl sm:text-5xl md:text-3xl lg:text-4xl xl:text-5xl text-balance drop-shadow-md mb-6 md:mb-3 lg:mb-4">
+              Discover <br className="hidden md:block lg:hidden" />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">Events</span>
             </h1>
-            <p className="text-foreground/70 text-lg md:text-xl font-medium max-w-2xl text-balance leading-relaxed">
+            <p className="text-foreground/70 text-lg md:text-sm lg:text-base xl:text-lg font-medium max-w-2xl text-balance leading-relaxed">
               Explore upcoming hackathons, college fests, hands-on workshops, and insightful seminars.
             </p>
           </div>
 
           {/* Upcoming Events Section */}
           <div className="mb-16">
-            <div className="flex items-center gap-4 mb-8">
-              <h2 className="text-2xl md:text-3xl font-bold text-foreground tracking-tight">Browse Categories</h2>
+            <div className="flex items-center gap-4 mb-8 md:mb-4 lg:mb-6">
+              <h2 className="text-2xl md:text-xl lg:text-2xl font-bold text-foreground tracking-tight">Browse Categories</h2>
               <div className="h-[1px] flex-1 bg-gradient-to-r from-white/10 to-transparent"></div>
             </div>
 
@@ -81,7 +81,7 @@ export default function EventsPage() {
                 <button
                   key={index}
                   onClick={() => handleNavigation(category.href)}
-                  className="group relative flex flex-row items-center md:flex-col md:justify-end w-full h-auto p-4 sm:p-5 md:p-0 md:h-[350px] rounded-2xl md:rounded-[2rem] overflow-hidden glass md:hover:-translate-y-2 active:scale-[0.98] transition-all duration-300 ease-out text-left bg-white dark:bg-white/5 border border-black/5 dark:border-white/10 hover:border-primary/20 dark:hover:border-white/20 shadow-lg md:shadow-xl hover:shadow-xl md:hover:shadow-primary/20"
+                  className="group relative flex flex-row items-center md:flex-col md:justify-end w-full h-auto p-4 sm:p-5 md:p-0 md:h-[280px] lg:h-[300px] xl:h-[320px] rounded-2xl md:rounded-[2rem] overflow-hidden glass md:hover:-translate-y-2 active:scale-[0.98] transition-all duration-300 ease-out text-left bg-white dark:bg-white/5 border border-black/5 dark:border-white/10 hover:border-primary/20 dark:hover:border-white/20 shadow-lg md:shadow-xl hover:shadow-xl md:hover:shadow-primary/20"
                 >
                   {/* Image container: Square on mobile (left side), background on desktop */}
                   <div className="w-16 h-16 sm:w-20 sm:h-20 shrink-0 md:absolute md:inset-0 md:w-full md:h-full opacity-100 md:opacity-60 md:group-hover:opacity-100 transition-all duration-500 md:group-hover:scale-110 ease-out bg-cover bg-center rounded-xl md:rounded-none dark:opacity-60 md:opacity-80"
