@@ -51,10 +51,10 @@ export default function EventsPage() {
 
   return (
     <>
-      <div className="relative min-h-[100dvh] w-full flex flex-col overflow-x-hidden pt-24 md:pt-32 pb-12 md:pb-24 selection:bg-primary/30">
+      <div className="relative min-h-[100dvh] w-full flex flex-col overflow-x-hidden pt-24 md:pt-32 pb-12 md:pb-24 selection:bg-primary/30 bg-gradient-to-b from-primary/10 to-background">
         
         {/* Background ambient lighting */}
-        <div className="absolute inset-0 z-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/10 via-background to-background pointer-events-none hidden dark:block"></div>
+        <div className="absolute inset-0 z-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/20 via-background to-background pointer-events-none hidden dark:block"></div>
 
         <div className="relative z-10 flex flex-col w-full max-w-[1400px] px-4 md:px-6 lg:px-12 mx-auto">
           
@@ -76,7 +76,7 @@ export default function EventsPage() {
               <div className="h-[1px] flex-1 bg-gradient-to-r from-white/10 to-transparent"></div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 w-full">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 lg:gap-3 xl:gap-6 w-full">
               {upcomingCategories.map((category, index) => (
                 <button
                   key={index}
@@ -92,12 +92,12 @@ export default function EventsPage() {
                   <div className="hidden md:block absolute inset-0 bg-gradient-to-t from-primary/30 to-transparent opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 z-10 " />
 
                   {/* Content: text on right for mobile, bottom for desktop */}
-                  <div className="relative z-20 flex-1 md:flex-none md:w-full ml-4 md:ml-0 md:p-6 flex flex-col gap-1 md:gap-3">
-                    <h3 className="text-base sm:text-lg md:text-2xl font-bold text-foreground md:text-white transition-colors leading-tight">
+                  <div className="relative z-20 flex-1 md:flex-none md:w-full ml-4 md:ml-0 md:p-6 lg:p-4 xl:p-6 flex flex-col gap-1 md:gap-3">
+                    <h3 className="text-base sm:text-lg lg:text-lg xl:text-2xl font-bold text-foreground md:text-white transition-colors leading-tight">
                       {category.title}
                     </h3>
                     {/* Description is hidden on mobile */}
-                    <p className="hidden md:block text-white/70 text-sm font-medium line-clamp-2">
+                    <p className="hidden md:block text-white/70 text-sm font-medium lg:line-clamp-1 xl:line-clamp-2">
                       {category.description}
                     </p>
                     <div className="hidden md:flex mt-4 w-10 h-10 rounded-full bg-white/10 items-center justify-center backdrop-blur-md border border-white/20 group-hover:bg-primary group-hover:border-primary transition-all duration-300">

@@ -40,10 +40,10 @@ const mockWorkshops = [
 
 export default function WorkshopsPage() {
   return (
-    <div className="min-h-screen pt-28 pb-20 px-4 md:px-6 lg:px-12 selection:bg-primary/30">
+    <div className="relative min-h-screen pt-28 pb-20 px-4 md:px-6 lg:px-12 selection:bg-primary/30 bg-gradient-to-b from-primary/10 to-background">
       
       {/* Background ambient lighting */}
-      <div className="absolute inset-0 z-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-pink-500/10 via-background to-background pointer-events-none hidden dark:block"></div>
+      <div className="absolute inset-0 z-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/20 via-background to-background pointer-events-none hidden dark:block"></div>
 
       <div className="relative z-10 max-w-[1400px] mx-auto flex flex-col lg:flex-row gap-12">
         
