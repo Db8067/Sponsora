@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+/* CSS Variables optimized for theme contrast and Tailwind CSS opacity modifiers */
 :root {
   --background: 0 0% 99%; /* Extremely clean, soft pearl white for the best animated glow effect */
   --foreground: 222 47% 11%;
