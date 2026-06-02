@@ -110,7 +110,7 @@ export default function CulturalEventsPage() {
                 <div className="w-16 sm:w-20 md:w-full h-auto min-h-[80px] md:h-48 relative overflow-hidden shrink-0">
                   <div 
                     className="absolute inset-0 bg-cover bg-center group-hover:scale-110 transition-transform duration-500"
-                    style={{ backgroundImage: `url(`${event.image}`)` }}
+                    style={{ backgroundImage: `url(${event.image})` }}
                   />
                 </div>
                 <div className="p-3 md:p-6 flex flex-col flex-1 justify-center overflow-hidden">
