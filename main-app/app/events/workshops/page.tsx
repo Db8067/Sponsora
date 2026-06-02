@@ -77,8 +77,16 @@ export default function WorkshopsPage() {
         {/* Main Content */}
         <main className="flex-1 flex flex-col">
           
+          {/* Mobile Only Header (Heading on left, badge on right) */}
+          <div className="flex md:hidden items-center justify-between gap-4 mb-6">
+            <h1 className="text-3xl font-black text-foreground tracking-tight">Workshops</h1>
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-pink-500/10 dark:bg-pink-500/20 text-pink-400 text-xs font-bold border border-pink-500/20 shrink-0">
+              <PenTool className="w-3.5 h-3.5" /> Learning
+            </div>
+          </div>
+
           {/* Hero Section */}
-          <div className="flex flex-col md:block relative w-full rounded-[2rem] md:h-[300px] md:overflow-hidden mb-12 md:border md:border-white/10 md:glass md:shadow-2xl">
+          <div className="relative w-full rounded-[2rem] md:h-[300px] md:overflow-hidden mb-8 md:mb-12 md:border md:border-white/10 md:glass md:shadow-2xl">
             <div className="w-full h-[150px] md:absolute md:inset-0 md:h-full rounded-[2rem] md:rounded-none overflow-hidden relative">
               <div 
                 className="absolute inset-0 bg-cover bg-center opacity-100 dark:opacity-60 opacity-90"
@@ -87,7 +95,7 @@ export default function WorkshopsPage() {
               <div className="hidden md:block absolute inset-0 bg-gradient-to-r from-black/90 via-black/50 to-transparent" />
             </div>
             
-            <div className="relative z-10 flex flex-col justify-center mt-6 md:mt-0 p-0 md:p-12 md:h-full">
+            <div className="hidden md:flex relative z-10 flex-col justify-center md:p-12 md:h-full">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-pink-500/10 dark:bg-pink-500/20 text-pink-400 text-sm font-bold w-fit mb-4 border border-pink-500/20">
                 <PenTool className="w-4 h-4" /> Learning
               </div>

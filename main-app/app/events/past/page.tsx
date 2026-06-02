@@ -77,8 +77,16 @@ export default function PastEventsPage() {
         {/* Main Content */}
         <main className="flex-1 flex flex-col">
           
+          {/* Mobile Only Header (Heading on left, badge on right) */}
+          <div className="flex md:hidden items-center justify-between gap-4 mb-6">
+            <h1 className="text-3xl font-black text-foreground tracking-tight">Past Highlights</h1>
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 dark:bg-primary/20 text-primary text-xs font-bold border border-primary/20 shrink-0">
+              <History className="w-3.5 h-3.5" /> Hall of Fame
+            </div>
+          </div>
+
           {/* Hero Section */}
-          <div className="flex flex-col md:block relative w-full rounded-[2rem] md:h-[300px] md:overflow-hidden mb-12 md:border md:border-white/10 md:glass md:shadow-2xl">
+          <div className="relative w-full rounded-[2rem] md:h-[300px] md:overflow-hidden mb-8 md:mb-12 md:border md:border-white/10 md:glass md:shadow-2xl">
             <div className="w-full h-[150px] md:absolute md:inset-0 md:h-full rounded-[2rem] md:rounded-none overflow-hidden relative">
               <div 
                 className="absolute inset-0 bg-cover bg-center opacity-100 dark:opacity-60 opacity-90"
@@ -87,7 +95,7 @@ export default function PastEventsPage() {
               <div className="hidden md:block absolute inset-0 bg-gradient-to-r from-black/90 via-black/50 to-transparent" />
             </div>
             
-            <div className="relative z-10 flex flex-col justify-center mt-6 md:mt-0 p-0 md:p-12 md:h-full">
+            <div className="hidden md:flex relative z-10 flex-col justify-center md:p-12 md:h-full">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 dark:bg-primary/20 text-primary text-sm font-bold w-fit mb-4 border border-primary/20">
                 <History className="w-4 h-4" /> Hall of Fame
               </div>

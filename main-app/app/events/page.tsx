@@ -76,15 +76,15 @@ export default function EventsPage() {
               <div className="h-[1px] flex-1 bg-gradient-to-r from-white/10 to-transparent"></div>
             </div>
 
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6 w-full">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 w-full">
               {upcomingCategories.map((category, index) => (
                 <button
                   key={index}
                   onClick={() => handleNavigation(category.href)}
-                  className="group relative flex flex-row items-center md:flex-col md:justify-end w-full h-auto p-3 md:p-0 md:h-[350px] rounded-2xl md:rounded-[2rem] overflow-hidden glass md:hover:-translate-y-2 active:scale-[0.98] transition-all duration-300 ease-out text-left bg-white dark:bg-white/5 border border-black/5 dark:border-white/10 hover:border-primary/20 dark:hover:border-white/20 shadow-lg md:shadow-xl hover:shadow-xl md:hover:shadow-primary/20"
+                  className="group relative flex flex-row items-center md:flex-col md:justify-end w-full h-auto p-4 sm:p-5 md:p-0 md:h-[350px] rounded-2xl md:rounded-[2rem] overflow-hidden glass md:hover:-translate-y-2 active:scale-[0.98] transition-all duration-300 ease-out text-left bg-white dark:bg-white/5 border border-black/5 dark:border-white/10 hover:border-primary/20 dark:hover:border-white/20 shadow-lg md:shadow-xl hover:shadow-xl md:hover:shadow-primary/20"
                 >
                   {/* Image container: Square on mobile (left side), background on desktop */}
-                  <div className="w-12 h-12 sm:w-16 sm:h-16 shrink-0 md:absolute md:inset-0 md:w-full md:h-full opacity-100 md:opacity-60 md:group-hover:opacity-100 transition-all duration-500 md:group-hover:scale-110 ease-out bg-cover bg-center rounded-xl md:rounded-none dark:opacity-60 md:opacity-80"
+                  <div className="w-16 h-16 sm:w-20 sm:h-20 shrink-0 md:absolute md:inset-0 md:w-full md:h-full opacity-100 md:opacity-60 md:group-hover:opacity-100 transition-all duration-500 md:group-hover:scale-110 ease-out bg-cover bg-center rounded-xl md:rounded-none dark:opacity-60 md:opacity-80"
                        style={{ backgroundImage: `url('${category.bgImage}')` }} />
                   
                   {/* Desktop overlays (hidden on mobile) */}
@@ -92,8 +92,8 @@ export default function EventsPage() {
                   <div className="hidden md:block absolute inset-0 bg-gradient-to-t from-primary/30 to-transparent opacity-0 md:group-hover:opacity-100 transition-opacity duration-300 z-10 " />
 
                   {/* Content: text on right for mobile, bottom for desktop */}
-                  <div className="relative z-20 flex-1 ml-3 md:ml-0 md:p-6 flex flex-col gap-1 md:gap-3">
-                    <h3 className="text-sm sm:text-base md:text-2xl font-bold text-foreground md:text-white transition-colors leading-tight">
+                  <div className="relative z-20 flex-1 md:flex-none md:w-full ml-4 md:ml-0 md:p-6 flex flex-col gap-1 md:gap-3">
+                    <h3 className="text-base sm:text-lg md:text-2xl font-bold text-foreground md:text-white transition-colors leading-tight">
                       {category.title}
                     </h3>
                     {/* Description is hidden on mobile */}
