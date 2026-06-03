@@ -1,5 +1,12 @@
 import { NextResponse } from 'next/server';
-import cloudinary from '@/lib/cloudinary';
+import { v2 as cloudinary } from 'cloudinary';
+
+// Configure Cloudinary server-side
+cloudinary.config({
+  cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || 'placeholder',
+  api_key: process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY || 'placeholder',
+  api_secret: process.env.CLOUDINARY_API_SECRET || 'placeholder',
+});
 
 export async function POST(request: Request) {
   try {
@@ -24,3 +31,4 @@ export async function POST(request: Request) {
     );
   }
 }
+

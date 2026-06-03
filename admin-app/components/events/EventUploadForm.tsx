@@ -279,6 +279,7 @@ export default function EventUploadForm() {
               ) : (
                 <CldUploadWidget
                   signatureEndpoint="/api/cloudinary/sign"
+                  uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || "ml_default"}
                   onSuccess={(result: any) => {
                     setFormData({ ...formData, banner_url: result.info.secure_url });
                   }}
@@ -321,6 +322,7 @@ export default function EventUploadForm() {
                 ) : (
                   <CldUploadWidget
                     signatureEndpoint="/api/cloudinary/sign"
+                    uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || "ml_default"}
                     onSuccess={(result: any) => {
                       setFormData({ ...formData, gallery_urls: [...formData.gallery_urls, result.info.secure_url] });
                     }}

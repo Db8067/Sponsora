@@ -309,7 +309,7 @@ export default function CreateEventWorkflow({ formData, setFormData, onSuccess }
               <label className="block text-sm font-medium text-foreground/80 mb-2">Event Banner *</label>
               
               <CldUploadWidget 
-                uploadPreset="sponsora_uploads" 
+                uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || "ml_default"} 
                 onSuccess={(result: any) => updateForm("banner_url", result.info.secure_url)}
               >
                 {({ open }) => (
@@ -337,7 +337,7 @@ export default function CreateEventWorkflow({ formData, setFormData, onSuccess }
               <label className="block text-sm font-medium text-foreground/80 mb-2">Gallery Images (Max 10)</label>
               
               <CldUploadWidget 
-                uploadPreset="sponsora_uploads" 
+                uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || "ml_default"} 
                 options={{ multiple: true, maxFiles: 10 }}
                 onSuccess={(result: any) => {
                   const newUrl = result.info.secure_url;
