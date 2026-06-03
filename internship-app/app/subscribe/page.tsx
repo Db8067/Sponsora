@@ -33,7 +33,7 @@ export default function SubscribePage() {
           </p>
         </div>
 
-        <div className="flex flex-row md:grid md:grid-cols-3 gap-6 w-full max-w-3xl overflow-x-auto snap-x snap-mandatory pb-8 md:pb-0 hide-scrollbar -mx-4 px-4 md:mx-0 md:px-0">
+        <div className="flex flex-row md:grid md:grid-cols-3 gap-6 w-full max-w-3xl overflow-x-auto snap-x snap-mandatory pt-6 pb-8 md:pt-6 md:pb-0 hide-scrollbar -mx-4 px-4 md:mx-0 md:px-0">
           
           {/* Daily Plan */}
           <div 
