@@ -34,6 +34,7 @@ export default function InternshipDetailPage() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     setIsLoading(true);
     setTimeout(() => {
       setInternship(getMockInternship(slug as string));
@@ -72,10 +73,10 @@ export default function InternshipDetailPage() {
           <ArrowLeft className="w-4 h-4" /> Back to listings
         </button>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+        <div className="flex flex-col lg:grid lg:grid-cols-3 gap-8 items-start">
           
           {/* Main Content (Left / Top) */}
-          <div className="lg:col-span-2 flex flex-col gap-8">
+          <div className="lg:col-span-2 flex flex-col gap-8 w-full">
             
             {/* Header Card */}
             <div className="p-6 md:p-8 rounded-3xl glass border border-white/10 dark:border-white/5 relative overflow-hidden">
@@ -102,6 +103,41 @@ export default function InternshipDetailPage() {
                     {internship.company_name}
                   </p>
                 </div>
+              </div>
+            </div>
+
+            {/* Mobile Only Quick Details */}
+            <div className="lg:hidden p-6 rounded-3xl glass border border-white/10 dark:border-white/5 w-full">
+              <div className="flex flex-col gap-5">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="flex items-start gap-3">
+                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+                      <IndianRupee className="w-5 h-5 text-primary" />
+                    </div>
+                    <div>
+                      <p className="text-xs text-foreground/50 font-medium">Stipend</p>
+                      <p className="font-bold text-sm text-foreground">₹{internship.stipend_min.toLocaleString()} - ₹{internship.stipend_max.toLocaleString()}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <div className="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center shrink-0">
+                      <MapPin className="w-5 h-5 text-accent" />
+                    </div>
+                    <div>
+                      <p className="text-xs text-foreground/50 font-medium">Location</p>
+                      <p className="font-bold text-sm text-foreground capitalize">{internship.location_type}</p>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="w-full h-[1px] bg-white/10 my-2" />
+
+                <button 
+                  onClick={handleApplyClick}
+                  className="w-full py-4 rounded-xl bg-gradient-to-r from-primary to-primary-dark text-white font-bold text-lg hover:shadow-xl hover:shadow-primary/30 active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+                >
+                  Apply Now <ShieldCheck className="w-5 h-5" />
+                </button>
               </div>
             </div>
 
@@ -135,7 +171,7 @@ export default function InternshipDetailPage() {
           </div>
 
           {/* Sidebar (Right) */}
-          <div className="lg:col-span-1 flex flex-col gap-6 sticky top-24">
+          <div className="hidden lg:flex lg:col-span-1 flex-col gap-6 sticky top-24">
             
             {/* Quick Details Card */}
             <div className="p-6 rounded-3xl glass border border-white/10 dark:border-white/5">

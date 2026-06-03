@@ -10,6 +10,7 @@ import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { PageTransition } from "@/components/PageTransition";
 
 const jakarta = Plus_Jakarta_Sans({ variable: "--font-jakarta", subsets: ["latin"] });
 const inter = Inter({ variable: "--font-inter", subsets: ["latin"] });
@@ -117,11 +118,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               </div>
             </div>
 
-            {/* Page Content */}
-            <main className="flex-1 overflow-y-auto p-4 md:p-8">
-              <div className="max-w-6xl mx-auto">
-                {children}
-              </div>
+            {/* Main Content */}
+            <main className="flex-1 overflow-y-auto p-4 md:p-8 relative">
+              <PageTransition>
+                <div className="max-w-6xl mx-auto w-full">
+                  {children}
+                </div>
+              </PageTransition>
             </main>
           </div>
           </ThemeProvider>

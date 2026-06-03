@@ -53,6 +53,7 @@ export default function CategoryPage() {
   const [filterDuration, setFilterDuration] = useState("all");
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     // In a real app, fetch from Supabase. For now using dummy data filtered by category.
     setIsLoading(true);
     setTimeout(() => {

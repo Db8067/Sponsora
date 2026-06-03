@@ -33,14 +33,14 @@ export default function SubscribePage() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-3xl">
+        <div className="flex flex-row md:grid md:grid-cols-3 gap-6 w-full max-w-3xl overflow-x-auto snap-x snap-mandatory pb-8 md:pb-0 hide-scrollbar -mx-4 px-4 md:mx-0 md:px-0">
           
           {/* Daily Plan */}
           <div 
             onClick={() => setSelectedPlan('daily')}
-            className={`cursor-pointer relative p-6 rounded-3xl border-2 transition-all duration-300 ${
+            className={`cursor-pointer relative p-6 rounded-3xl border-2 transition-all duration-300 min-w-[280px] md:min-w-0 snap-center ${
               selectedPlan === 'daily' 
-                ? 'border-primary bg-primary/5 shadow-xl shadow-primary/10 scale-[1.02]' 
+                ? 'border-primary bg-primary/5 shadow-xl shadow-primary/10 md:scale-[1.02]' 
                 : 'border-white/10 glass hover:border-white/20'
             }`}
           >
@@ -58,9 +58,9 @@ export default function SubscribePage() {
           {/* Monthly Plan */}
           <div 
             onClick={() => setSelectedPlan('monthly')}
-            className={`cursor-pointer relative p-6 rounded-3xl border-2 transition-all duration-300 ${
+            className={`cursor-pointer relative p-6 rounded-3xl border-2 transition-all duration-300 min-w-[280px] md:min-w-0 snap-center ${
               selectedPlan === 'monthly' 
-                ? 'border-primary bg-primary/5 shadow-xl shadow-primary/20 scale-[1.05] z-10' 
+                ? 'border-primary bg-primary/5 shadow-xl shadow-primary/20 md:scale-[1.05] z-10' 
                 : 'border-white/10 glass hover:border-white/20'
             }`}
           >
@@ -82,9 +82,9 @@ export default function SubscribePage() {
           {/* Annual Plan */}
           <div 
             onClick={() => setSelectedPlan('annual')}
-            className={`cursor-pointer relative p-6 rounded-3xl border-2 transition-all duration-300 ${
+            className={`cursor-pointer relative p-6 rounded-3xl border-2 transition-all duration-300 min-w-[280px] md:min-w-0 snap-center ${
               selectedPlan === 'annual' 
-                ? 'border-primary bg-primary/5 shadow-xl shadow-primary/10 scale-[1.02]' 
+                ? 'border-primary bg-primary/5 shadow-xl shadow-primary/10 md:scale-[1.02]' 
                 : 'border-white/10 glass hover:border-white/20'
             }`}
           >

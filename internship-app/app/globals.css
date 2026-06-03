@@ -125,6 +125,13 @@ h3 { font-size: clamp(1.25rem, 3vw + 0.25rem, 1.75rem); }
   .text-balance {
     text-wrap: balance;
   }
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
 }
 
 /* Theme Switch Component Styles from Uiverse.io by Galahhad */

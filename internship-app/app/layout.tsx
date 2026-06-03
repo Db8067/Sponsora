@@ -33,8 +33,8 @@ export default function RootLayout({
         <body className="flex min-h-screen flex-col font-sans bg-background text-foreground transition-colors">
           <ThemeProvider
             attribute="class"
-            defaultTheme="system"
-            enableSystem
+            defaultTheme="light"
+            enableSystem={false}
             disableTransitionOnChange
           >
             <Navbar />
