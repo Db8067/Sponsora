@@ -17,6 +17,8 @@ const inter = Inter({ variable: "--font-inter", subsets: ["latin"] });
 const sidebarLinks = [
   { name: "Create Event", href: "/admincreateevent", icon: PlusCircle },
   { name: "Events", href: "/adminevent", icon: CalendarDays },
+  { name: "Create Internship", href: "/admincreateinternship", icon: Rocket },
+  { name: "Internships", href: "/admininternship", icon: ShieldCheck },
   { name: "Organizers", href: "/organizers", icon: ShieldCheck },
   { name: "Sponsors", href: "/sponsors", icon: Users },
   { name: "Chats", href: "/chat", icon: MessageSquare },
