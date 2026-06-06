@@ -33,7 +33,7 @@ export default function SubscribePage() {
           </p>
         </div>
 
-        <div className="flex flex-row md:grid md:grid-cols-3 gap-6 w-full max-w-3xl overflow-x-auto snap-x snap-mandatory pt-6 pb-8 md:pt-6 md:pb-0 hide-scrollbar -mx-4 px-4 md:mx-0 md:px-0">
+        <div className="flex flex-row md:grid md:grid-cols-3 gap-6 w-full max-w-3xl overflow-x-auto snap-x snap-mandatory pt-10 pb-8 md:pt-6 md:pb-0 hide-scrollbar -mx-4 px-4 md:mx-0 md:px-0">
           
           {/* Daily Plan */}
           <div 
@@ -58,13 +58,13 @@ export default function SubscribePage() {
           {/* Monthly Plan */}
           <div 
             onClick={() => setSelectedPlan('monthly')}
-            className={`cursor-pointer relative p-6 rounded-3xl border-2 transition-all duration-300 min-w-[280px] md:min-w-0 snap-center ${
+            className={`cursor-pointer relative p-6 rounded-3xl border-2 transition-all duration-300 min-w-[280px] md:min-w-0 snap-center mt-2 md:mt-0 ${
               selectedPlan === 'monthly' 
                 ? 'border-primary bg-primary/5 shadow-xl shadow-primary/20 md:scale-[1.05] z-10' 
                 : 'border-white/10 glass hover:border-white/20'
             }`}
           >
-            <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-gradient-to-r from-primary to-primary-dark text-white text-xs font-bold rounded-full shadow-lg">
+            <div className="absolute -top-4 md:-top-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-gradient-to-r from-primary to-primary-dark text-white text-xs font-bold rounded-full shadow-lg whitespace-nowrap">
               MOST POPULAR
             </div>
             <h3 className="text-xl font-bold mb-2">Monthly</h3>
@@ -82,14 +82,14 @@ export default function SubscribePage() {
           {/* Annual Plan */}
           <div 
             onClick={() => setSelectedPlan('annual')}
-            className={`cursor-pointer relative p-6 rounded-3xl border-2 transition-all duration-300 min-w-[280px] md:min-w-0 snap-center ${
+            className={`cursor-pointer relative p-6 rounded-3xl border-2 transition-all duration-300 min-w-[280px] md:min-w-0 snap-center mt-2 md:mt-0 ${
               selectedPlan === 'annual' 
                 ? 'border-primary bg-primary/5 shadow-xl shadow-primary/10 md:scale-[1.02]' 
                 : 'border-white/10 glass hover:border-white/20'
             }`}
           >
-            <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-green-500 text-white text-xs font-bold rounded-full shadow-lg">
-              SAVE 66%
+            <div className="absolute -top-4 md:-top-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-green-500 text-white text-xs font-bold rounded-full shadow-lg whitespace-nowrap">
+              SAVE 80%
             </div>
             <h3 className="text-xl font-bold mb-2">Annual</h3>
             <div className="flex items-end gap-1 mb-4">

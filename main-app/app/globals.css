@@ -5,9 +5,9 @@
 :root {
   --background: 0 0% 99%; /* Extremely clean, soft pearl white for the best animated glow effect */
   --foreground: 222 47% 11%;
-  --primary: 250 100% 65%; /* Luma-style vibrant but soft purple glow, optimized for contrast */
-  --primary-dark: 290 100% 65%; /* Luma-style vibrant magenta/pink glow, optimized for contrast */
-  --accent: 30 100% 62%; /* Warm vibrant orange glow, optimized for contrast */
+  --primary: 199 89% 48%; /* Professional Blue glow, optimized for contrast */
+  --primary-dark: 180 100% 40%; /* Teal glow, optimized for contrast */
+  --accent: 43 100% 52%; /* Amber/Yellow glow, optimized for contrast */
   --success: 160 80% 36%;
 }
 
@@ -124,6 +124,13 @@ h3 { font-size: clamp(1.25rem, 3vw + 0.25rem, 1.75rem); }
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
 }
 

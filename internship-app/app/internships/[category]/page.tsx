@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { Search, Filter, SlidersHorizontal, MapPin, Clock, IndianRupee } from "lucide-react";
 import { InternshipCard, Internship } from "@/components/InternshipCard";
-import { createClient } from "@supabase/supabase-js";
+import { supabase } from "@/lib/supabase";
 
 // Dummy data fallback if Supabase is empty
 const DUMMY_INTERNSHIPS: Internship[] = [
@@ -54,15 +54,46 @@ export default function CategoryPage() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    // In a real app, fetch from Supabase. For now using dummy data filtered by category.
-    setIsLoading(true);
-    setTimeout(() => {
-      const filtered = DUMMY_INTERNSHIPS.filter(i => 
-        category === 'all' ? true : i.category_slug === category
-      );
-      setInternships(filtered.length > 0 ? filtered : []);
-      setIsLoading(false);
-    }, 800);
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        const { data, error } = await supabase
+          .from('sponsora_internships')
+          .select('*, internship:internships(*), category:sponsora_categories(*)')
+          .eq('is_published', true);
+
+        if (error) {
+          console.error("Error fetching internships:", error);
+          setInternships([]);
+        } else if (data) {
+          // Map to standard Internship format or use raw data
+          // Here we filter by category if needed
+          const filtered = data.map(item => ({
+            id: item.id,
+            title: item.internship?.title || item.title || "Untitled",
+            slug: item.slug || item.internship?.id || item.id,
+            company_name: item.internship?.company_name || "Unknown Company",
+            location_type: item.internship?.location_type || "remote",
+            city: item.internship?.city,
+            stipend_min: item.stipend_min || item.internship?.stipend_min,
+            stipend_max: item.stipend_max || item.internship?.stipend_max,
+            duration_months: item.internship?.duration_months || item.duration_months,
+            skills_required: item.internship?.skills_required || item.skills_required || [],
+            is_featured: item.is_featured,
+            category_slug: item.category?.slug || item.category_slug || "software-engineering",
+            deadline: item.internship?.deadline || item.deadline || "2099-12-31"
+          })).filter(i => category === 'all' ? true : i.category_slug === category);
+          
+          setInternships(filtered);
+        }
+      } catch (err) {
+        console.error("Exception fetching data", err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
+    fetchData();
   }, [category]);
 
   // Apply filters

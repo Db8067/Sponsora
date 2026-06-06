@@ -11,6 +11,6 @@ if (supabaseUrl && !supabaseUrl.startsWith('http')) {
   supabaseUrl = `https://${supabaseUrl}`;
 }
 
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim() || 'placeholder_anon_key';
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim() || process.env.NEXT_PUBLIC_SUPABASE_KEY?.trim() || 'placeholder_anon_key';
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);

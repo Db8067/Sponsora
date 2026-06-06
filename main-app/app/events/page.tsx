@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
-import { ArrowRight, Calendar } from "lucide-react";
+import { useState, useEffect } from "react";
+import { ArrowRight, Calendar, MapPin, Users, Sparkles, Bookmark } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
 
 const upcomingCategories = [
   {
@@ -41,6 +42,29 @@ const upcomingCategories = [
 export default function EventsPage() {
   const router = useRouter();
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [categories, setCategories] = useState<any[]>(upcomingCategories);
+  const [events, setEvents] = useState<any[]>([]);
+
+  useEffect(() => {
+    async function fetchData() {
+      const { supabase } = await import("@/lib/supabase");
+      const { data: cats } = await supabase.from('sponsora_categories').select('*').eq('type', 'event');
+      if (cats && cats.length > 0) {
+        setCategories(cats.map((c: any, index: number) => ({
+          title: c.name || c.title,
+          description: c.description,
+          href: `/events/category/${c.slug || c.id}`,
+          bgImage: c.image_url || upcomingCategories[index % upcomingCategories.length].bgImage
+        })));
+      }
+      
+      const { data: evs } = await supabase.from('sponsora_events').select('*, hackathon:hackathons(*), category:sponsora_categories(*)').eq('is_published', true);
+      if (evs) {
+        setEvents(evs);
+      }
+    }
+    fetchData();
+  }, []);
 
   const handleNavigation = (href: string) => {
     setIsTransitioning(true);
@@ -69,7 +93,7 @@ export default function EventsPage() {
             </p>
           </div>
 
-          {/* Upcoming Events Section */}
+          {/* Upcoming Categories Section */}
           <div className="mb-16">
             <div className="flex items-center gap-4 mb-8 md:mb-4 lg:mb-6">
               <h2 className="text-2xl md:text-xl lg:text-2xl font-bold text-foreground tracking-tight">Browse Categories</h2>
@@ -77,7 +101,7 @@ export default function EventsPage() {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 lg:gap-3 xl:gap-6 w-full">
-              {upcomingCategories.map((category, index) => (
+              {categories.map((category, index) => (
                 <button
                   key={index}
                   onClick={() => handleNavigation(category.href)}
@@ -107,6 +131,66 @@ export default function EventsPage() {
                 </button>
               ))}
             </div>
+          </div>
+
+          {/* Live Events Section */}
+          <div className="mb-16">
+            <div className="flex items-center gap-4 mb-8 md:mb-4 lg:mb-6">
+              <h2 className="text-2xl md:text-xl lg:text-2xl font-bold text-foreground tracking-tight">Live Events</h2>
+              <div className="h-[1px] flex-1 bg-gradient-to-r from-white/10 to-transparent"></div>
+            </div>
+            
+            {events.length === 0 ? (
+              <p className="text-foreground/70">No live events at the moment.</p>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {events.map((event, i) => (
+                  <motion.div 
+                    key={event.id || i}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: i * 0.1 }}
+                    className="glass rounded-2xl overflow-hidden flex flex-col group"
+                  >
+                    <div className="h-32 bg-gradient-to-br from-primary/20 to-accent/20 relative p-4 flex flex-col justify-between">
+                      <div className="flex justify-between items-start">
+                        <span className="bg-black/50 backdrop-blur-md text-white text-xs font-bold px-2.5 py-1 rounded-full flex items-center gap-1">
+                          <Sparkles className="w-3 h-3 text-yellow-400" /> {event.category?.name || "Event"}
+                        </span>
+                        <button className="w-8 h-8 rounded-full bg-black/50 backdrop-blur-md flex items-center justify-center text-white/70 hover:text-white hover:bg-black/70 transition-colors">
+                          <Bookmark className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
+                    
+                    <div className="p-5 flex-1 flex flex-col">
+                      <div className="mb-4">
+                        <p className="text-xs text-primary font-bold mb-1">{event.hackathon?.organization_name || event.org || "Organizer"}</p>
+                        <h3 className="font-bold text-lg text-foreground line-clamp-1">{event.title || event.name || event.hackathon?.name || "Event Title"}</h3>
+                      </div>
+                      
+                      <div className="space-y-2 mb-6 text-sm text-foreground/70">
+                        <div className="flex items-center gap-2">
+                          <MapPin className="w-4 h-4 text-foreground/40" /> {event.location || event.hackathon?.location || "TBA"}
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Users className="w-4 h-4 text-foreground/40" /> {event.expected_attendees || event.attendees || "TBA"} attendees
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Calendar className="w-4 h-4 text-foreground/40" /> {event.start_date || event.date ? new Date(event.start_date || event.date).toLocaleDateString() : "TBA"}
+                        </div>
+                      </div>
+
+                      <div className="pt-4 border-t border-black/5 dark:border-white/10 flex justify-between items-center mt-auto">
+                        <Link href={`/events/${event.slug || event.id}`} className="bg-primary/10 hover:bg-primary hover:text-white text-primary px-4 py-2 rounded-xl text-sm font-medium transition-all flex items-center gap-2 w-full justify-center">
+                          View Details <ArrowRight className="w-4 h-4" />
+                        </Link>
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            )}
           </div>
 
         </div>

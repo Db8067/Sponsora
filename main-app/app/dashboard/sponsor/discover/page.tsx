@@ -1,18 +1,24 @@
 "use client";
 
-import { useState } from "react";
-import { Search, Filter, MapPin, Users, Calendar, ArrowRight, Sparkles } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Search, Filter, MapPin, Users, Calendar, ArrowRight, Sparkles, Bookmark } from "lucide-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 
-const events = [
-  { id: 1, name: "Global AI Hackathon 2026", org: "TechFlow", location: "San Francisco, CA", attendees: "5k+", date: "Oct 15-17", match: "98%", ask: "₹50k - ₹2L", tags: ["AI", "Web3", "Developers"] },
-  { id: 2, name: "React India Conf", org: "ReactDevs", location: "Bangalore, India", attendees: "2k+", date: "Sep 10", match: "92%", ask: "₹1L - ₹5L", tags: ["Frontend", "React"] },
-  { id: 3, name: "Designers Summit", org: "CreativeHub", location: "Online", attendees: "10k+", date: "Dec 01-05", match: "75%", ask: "In-kind", tags: ["Design", "UI/UX"] },
-];
-
 export default function DiscoverEventsPage() {
   const [filterMode, setFilterMode] = useState("all");
+  const [events, setEvents] = useState<any[]>([]);
+
+  useEffect(() => {
+    async function fetchData() {
+      const { supabase } = await import("@/lib/supabase");
+      const { data: evs } = await supabase.from('sponsora_events').select('*, hackathon:hackathons(*), category:sponsora_categories(*)').eq('is_published', true);
+      if (evs) {
+        setEvents(evs);
+      }
+    }
+    fetchData();
+  }, []);
 
   return (
     <div className="space-y-8">
@@ -46,67 +52,73 @@ export default function DiscoverEventsPage() {
         ))}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-        {events.map((event, i) => (
-          <motion.div 
-            key={event.id}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.1 }}
-            className="glass rounded-2xl overflow-hidden flex flex-col group"
-          >
-            <div className="h-32 bg-gradient-to-br from-primary/20 to-accent/20 relative p-4 flex flex-col justify-between">
-              <div className="flex justify-between items-start">
-                <span className="bg-black/50 backdrop-blur-md text-white text-xs font-bold px-2.5 py-1 rounded-full flex items-center gap-1">
-                  <Sparkles className="w-3 h-3 text-yellow-400" /> {event.match} Match
-                </span>
-                <button className="w-8 h-8 rounded-full bg-black/50 backdrop-blur-md flex items-center justify-center text-white/70 hover:text-white hover:bg-black/70 transition-colors">
-                  <Bookmark className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
-            
-            <div className="p-5 flex-1 flex flex-col">
-              <div className="mb-4">
-                <p className="text-xs text-primary font-bold mb-1">{event.org}</p>
-                <h3 className="font-bold text-lg text-foreground line-clamp-1">{event.name}</h3>
+      {events.length === 0 ? (
+        <p className="text-foreground/70">No live events available.</p>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+          {events.map((event, i) => (
+            <motion.div 
+              key={event.id || i}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.1 }}
+              className="glass rounded-2xl overflow-hidden flex flex-col group"
+            >
+              <div className="h-32 bg-gradient-to-br from-primary/20 to-accent/20 relative p-4 flex flex-col justify-between">
+                <div className="flex justify-between items-start">
+                  <span className="bg-black/50 backdrop-blur-md text-white text-xs font-bold px-2.5 py-1 rounded-full flex items-center gap-1">
+                    <Sparkles className="w-3 h-3 text-yellow-400" /> {event.match || "High"} Match
+                  </span>
+                  <button className="w-8 h-8 rounded-full bg-black/50 backdrop-blur-md flex items-center justify-center text-white/70 hover:text-white hover:bg-black/70 transition-colors">
+                    <Bookmark className="w-4 h-4" />
+                  </button>
+                </div>
               </div>
               
-              <div className="space-y-2 mb-6 text-sm text-foreground/70">
-                <div className="flex items-center gap-2">
-                  <MapPin className="w-4 h-4 text-foreground/40" /> {event.location}
+              <div className="p-5 flex-1 flex flex-col">
+                <div className="mb-4">
+                  <p className="text-xs text-primary font-bold mb-1">{event.hackathon?.organization_name || event.org || "Organizer"}</p>
+                  <h3 className="font-bold text-lg text-foreground line-clamp-1">{event.title || event.name || event.hackathon?.name || "Event Title"}</h3>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Users className="w-4 h-4 text-foreground/40" /> {event.attendees} attendees
+                
+                <div className="space-y-2 mb-6 text-sm text-foreground/70">
+                  <div className="flex items-center gap-2">
+                    <MapPin className="w-4 h-4 text-foreground/40" /> {event.location || event.hackathon?.location || "TBA"}
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Users className="w-4 h-4 text-foreground/40" /> {event.expected_attendees || event.attendees || "TBA"} attendees
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Calendar className="w-4 h-4 text-foreground/40" /> {event.start_date || event.date ? new Date(event.start_date || event.date).toLocaleDateString() : "TBA"}
+                  </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Calendar className="w-4 h-4 text-foreground/40" /> {event.date}
-                </div>
-              </div>
 
-              <div className="flex flex-wrap gap-2 mb-6 mt-auto">
-                {event.tags.map(tag => (
-                  <span key={tag} className="text-xs bg-white/5 border border-white/10 px-2 py-1 rounded-md text-foreground/70">
-                    {tag}
-                  </span>
-                ))}
-              </div>
-
-              <div className="pt-4 border-t border-white/10 flex justify-between items-center mt-auto">
-                <div>
-                  <p className="text-xs text-foreground/50">Sponsorship Ask</p>
-                  <p className="font-bold text-foreground">{event.ask}</p>
+                <div className="flex flex-wrap gap-2 mb-6 mt-auto">
+                  {event.tags ? event.tags.map((tag: string) => (
+                    <span key={tag} className="text-xs bg-white/5 border border-white/10 px-2 py-1 rounded-md text-foreground/70">
+                      {tag}
+                    </span>
+                  )) : (
+                    <span className="text-xs bg-white/5 border border-white/10 px-2 py-1 rounded-md text-foreground/70">
+                      {event.category?.name || "General"}
+                    </span>
+                  )}
                 </div>
-                <Link href={`/events/${event.id}`} className="bg-white/10 hover:bg-primary hover:text-white text-foreground px-4 py-2 rounded-xl text-sm font-medium transition-all flex items-center gap-2">
-                  View <ArrowRight className="w-4 h-4" />
-                </Link>
+
+                <div className="pt-4 border-t border-black/5 dark:border-white/10 flex justify-between items-center mt-auto">
+                  <div>
+                    <p className="text-xs text-foreground/50">Sponsorship Ask</p>
+                    <p className="font-bold text-foreground">{event.ask || "In-kind"}</p>
+                  </div>
+                  <Link href={`/events/${event.slug || event.id}`} className="bg-primary/10 hover:bg-primary hover:text-white text-primary px-4 py-2 rounded-xl text-sm font-medium transition-all flex items-center gap-2">
+                    View <ArrowRight className="w-4 h-4" />
+                  </Link>
+                </div>
               </div>
-            </div>
-          </motion.div>
-        ))}
-      </div>
+            </motion.div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
-
-import { Bookmark } from "lucide-react";
