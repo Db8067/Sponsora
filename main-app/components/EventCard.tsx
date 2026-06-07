@@ -10,6 +10,7 @@ export interface EventPost {
   image_url?: string;
   date_info?: string;
   category_slug?: string;
+  created_at?: string;
   metadata: {
     venue_type: string;
     venue_address?: string;

@@ -9,6 +9,7 @@ export interface InternshipPost {
   title: string;
   category_slug?: string;
   slug?: string; // used for URL mapping
+  created_at?: string;
   metadata: {
     company_name: string;
     company_logo_url?: string;
