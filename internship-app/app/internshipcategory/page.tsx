@@ -1,34 +1,46 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { ArrowRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { supabase } from "@/lib/supabase";
+
+const internshipCategories = [
+  {
+    title: "Software Engineering",
+    description: "Frontend, Backend, Fullstack, AI & DevOps",
+    href: "/internships/software-engineering",
+    bgImage: "/images/se_internship_doodle.png",
+  },
+  {
+    title: "Design & UI/UX",
+    description: "Product Design, Graphic Design, Web Design",
+    href: "/internships/design",
+    bgImage: "/images/design_internship_doodle.png",
+  },
+  {
+    title: "Marketing & Growth",
+    description: "Digital Marketing, SEO, Social Media & Content",
+    href: "/internships/marketing",
+    bgImage: "/images/marketing_internship_doodle.png",
+  },
+  {
+    title: "Finance & Accounting",
+    description: "Financial Analysis, Accounting, Investment Banking",
+    href: "/internships/finance",
+    bgImage: "/images/finance_internship_doodle.png",
+  },
+  {
+    title: "Operations & HR",
+    description: "Human Resources, Business Ops & Management",
+    href: "/internships/operations",
+    bgImage: "/images/hr_internship_doodle.png",
+  },
+];
 
 export default function InternshipCategoryPage() {
   const router = useRouter();
   const [isTransitioning, setIsTransitioning] = useState(false);
-  const [internshipCategories, setInternshipCategories] = useState<any[]>([]);
-
-  useEffect(() => {
-    const fetchCategories = async () => {
-      const { data, error } = await supabase
-        .from('sponsora_categories')
-        .select('*')
-        .eq('type', 'internship');
-      
-      if (!error && data) {
-        setInternshipCategories(data.map(cat => ({
-          title: cat.name,
-          description: cat.description || "Explore opportunities",
-          href: `/internships/${cat.slug}`,
-          bgImage: cat.image_url || "/images/se_internship_doodle.png",
-        })));
-      }
-    };
-    fetchCategories();
-  }, []);
 
   const handleNavigation = (href: string) => {
     setIsTransitioning(true);
@@ -39,7 +51,7 @@ export default function InternshipCategoryPage() {
 
   return (
     <>
-      <div className="relative min-h-[100dvh] w-full flex flex-col overflow-x-hidden pt-24 md:pt-20 lg:pt-24 pb-12 md:pb-16 selection:bg-primary/30 bg-white dark:bg-transparent">
+      <div className="relative min-h-[100dvh] w-full flex flex-col overflow-x-hidden pt-24 md:pt-20 lg:pt-24 pb-12 md:pb-16 selection:bg-primary/30">
         
         {/* Snow Animation for Light & Dark Theme */}
         <div className="absolute inset-0 z-[1] pointer-events-none overflow-hidden">
@@ -48,7 +60,7 @@ export default function InternshipCategoryPage() {
             <div className="absolute top-[-100vh] left-0 w-[100vw] h-[200vh] opacity-60 animate-snow" style={{ backgroundImage: 'radial-gradient(8px 8px at 100px 50px, #cbd5e1, transparent), radial-gradient(12px 12px at 200px 150px, #94a3b8, transparent), radial-gradient(6px 6px at 300px 250px, #e2e8f0, transparent), radial-gradient(8px 8px at 400px 350px, #cbd5e1, transparent), radial-gradient(12px 12px at 500px 100px, #94a3b8, transparent), radial-gradient(6px 6px at 50px 200px, #e2e8f0, transparent), radial-gradient(8px 8px at 150px 300px, #cbd5e1, transparent), radial-gradient(12px 12px at 250px 400px, #94a3b8, transparent), radial-gradient(6px 6px at 350px 500px, #e2e8f0, transparent)', backgroundSize: '600px 600px' }} />
             <div className="absolute top-[-100vh] left-0 w-[100vw] h-[200vh] opacity-40 animate-snow" style={{ animationDuration: '10s', backgroundImage: 'radial-gradient(6px 6px at 100px 50px, #94a3b8, transparent), radial-gradient(10px 10px at 200px 150px, #cbd5e1, transparent), radial-gradient(4px 4px at 300px 250px, #e2e8f0, transparent)', backgroundSize: '400px 400px' }} />
           </div>
-          {/* Dark Theme Snow (Optional, user said 'if applicable'. Let's add subtle dark snow) */}
+          {/* Dark Theme Snow */}
           <div className="absolute inset-0 hidden dark:block">
             <div className="absolute top-[-100vh] left-0 w-[100vw] h-[200vh] opacity-20 animate-snow" style={{ backgroundImage: 'radial-gradient(8px 8px at 100px 50px, #ffffff, transparent), radial-gradient(12px 12px at 200px 150px, #e2e8f0, transparent), radial-gradient(6px 6px at 300px 250px, #ffffff, transparent), radial-gradient(8px 8px at 400px 350px, #cbd5e1, transparent)', backgroundSize: '600px 600px' }} />
           </div>
