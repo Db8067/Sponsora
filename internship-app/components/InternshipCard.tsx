@@ -1,44 +1,49 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Building2, MapPin, IndianRupee, Clock, CalendarDays, ExternalLink, ArrowRight } from "lucide-react";
-import Link from "next/link";
+import { Building2, MapPin, IndianRupee, Clock, CalendarDays, ArrowRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 
-export interface Internship {
+export interface InternshipPost {
   id: string;
   title: string;
-  slug: string;
-  company_name: string;
-  company_logo_url?: string;
-  location_type: string;
-  city?: string;
-  stipend_min?: number;
-  stipend_max?: number;
-  duration_months?: number;
-  deadline?: string;
-  skills_required?: string[];
-  is_featured?: boolean;
-  category_slug: string;
+  category_slug?: string;
+  slug?: string; // used for URL mapping
+  metadata: {
+    company_name: string;
+    company_logo_url?: string;
+    location_type: string;
+    city?: string;
+    stipend_min?: number;
+    stipend_max?: number;
+    duration_months?: number;
+    deadline?: string;
+    skills?: string;
+    is_featured?: boolean;
+  };
 }
 
 interface InternshipCardProps {
-  internship: Internship;
+  internship: InternshipPost;
   index?: number;
+  categorySlug: string;
 }
 
-export function InternshipCard({ internship, index = 0 }: InternshipCardProps) {
+export function InternshipCard({ internship, index = 0, categorySlug }: InternshipCardProps) {
   const router = useRouter();
+  const meta = internship.metadata || {};
   
   const formatStipend = () => {
-    if (!internship.stipend_min && !internship.stipend_max) return "Unpaid";
-    if (internship.stipend_min && !internship.stipend_max) return `₹${internship.stipend_min.toLocaleString()}/mo`;
-    return `₹${internship.stipend_min?.toLocaleString()} - ₹${internship.stipend_max?.toLocaleString()}/mo`;
+    if (!meta.stipend_min && !meta.stipend_max) return "Unpaid";
+    if (meta.stipend_min && !meta.stipend_max) return `₹${Number(meta.stipend_min).toLocaleString()}/mo`;
+    return `₹${Number(meta.stipend_min).toLocaleString()} - ₹${Number(meta.stipend_max).toLocaleString()}/mo`;
   };
 
   const handleCardClick = () => {
-    router.push(`/internships/${internship.category_slug}/${internship.slug}`);
+    router.push(`/internships/category/${categorySlug}/${internship.id}`);
   };
+
+  const skillsList = meta.skills ? meta.skills.split(',').map(s => s.trim()).filter(Boolean) : [];
 
   return (
     <motion.div
@@ -46,16 +51,16 @@ export function InternshipCard({ internship, index = 0 }: InternshipCardProps) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: index * 0.1 }}
       onClick={handleCardClick}
-      className="group relative w-full cursor-pointer rounded-2xl glass p-5 sm:p-6 hover:-translate-y-1 hover:shadow-2xl hover:shadow-primary/20 hover:border-primary/30 transition-all duration-300"
+      className="group relative w-full cursor-pointer rounded-2xl glass bg-white dark:bg-white/5 border border-black/5 dark:border-white/10 p-5 sm:p-6 hover:-translate-y-1 hover:shadow-2xl hover:shadow-primary/20 hover:border-primary/30 transition-all duration-300"
     >
       <div className="flex flex-col sm:flex-row gap-5">
         
         {/* Company Logo */}
-        <div className="h-16 w-16 sm:h-20 sm:w-20 shrink-0 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center overflow-hidden">
-          {internship.company_logo_url ? (
+        <div className="h-16 w-16 sm:h-20 sm:w-20 shrink-0 rounded-xl bg-white/5 border border-black/5 dark:border-white/10 flex items-center justify-center overflow-hidden">
+          {meta.company_logo_url ? (
             <img 
-              src={internship.company_logo_url} 
-              alt={internship.company_name} 
+              src={meta.company_logo_url} 
+              alt={meta.company_name} 
               className="h-full w-full object-cover group-hover:scale-110 transition-transform duration-500"
             />
           ) : (
@@ -72,15 +77,15 @@ export function InternshipCard({ internship, index = 0 }: InternshipCardProps) {
               </h3>
               <p className="text-foreground/70 font-medium text-sm flex items-center gap-1.5 mt-1">
                 <Building2 className="w-4 h-4" />
-                {internship.company_name}
+                {meta.company_name || "Company Name"}
               </p>
             </div>
             
             {/* Badges */}
             <div className="flex flex-wrap gap-2">
-              {internship.is_featured && (
+              {meta.is_featured && (
                 <span className="px-2.5 py-1 text-xs font-semibold rounded-full bg-accent/20 text-accent border border-accent/20">
-                  Recommended
+                  Featured
                 </span>
               )}
             </div>
@@ -90,7 +95,7 @@ export function InternshipCard({ internship, index = 0 }: InternshipCardProps) {
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 my-4">
             <div className="flex items-center gap-2 text-sm text-foreground/80">
               <MapPin className="w-4 h-4 text-primary" />
-              <span className="truncate">{internship.location_type === 'remote' ? 'Remote' : (internship.city || 'Onsite')}</span>
+              <span className="truncate">{meta.location_type === 'Remote' ? 'Remote' : (meta.city || 'Onsite')}</span>
             </div>
             <div className="flex items-center gap-2 text-sm text-foreground/80">
               <IndianRupee className="w-4 h-4 text-green-500" />
@@ -98,25 +103,25 @@ export function InternshipCard({ internship, index = 0 }: InternshipCardProps) {
             </div>
             <div className="flex items-center gap-2 text-sm text-foreground/80">
               <Clock className="w-4 h-4 text-accent" />
-              <span>{internship.duration_months} Months</span>
+              <span>{meta.duration_months ? `${meta.duration_months} Months` : '-'}</span>
             </div>
             <div className="flex items-center gap-2 text-sm text-foreground/80">
               <CalendarDays className="w-4 h-4 text-foreground/50" />
-              <span>{internship.deadline ? new Date(internship.deadline).toLocaleDateString() : 'Rolling'}</span>
+              <span>{meta.deadline ? new Date(meta.deadline).toLocaleDateString() : 'Rolling'}</span>
             </div>
           </div>
 
           {/* Footer (Skills & CTA) */}
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mt-2 pt-4 border-t border-white/10 dark:border-white/5">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mt-2 pt-4 border-t border-black/5 dark:border-white/5">
             <div className="flex flex-wrap gap-2">
-              {internship.skills_required?.slice(0, 3).map((skill, i) => (
-                <span key={i} className="px-2.5 py-1 rounded-md bg-white/5 border border-white/10 text-xs text-foreground/80">
+              {skillsList.slice(0, 3).map((skill, i) => (
+                <span key={i} className="px-2.5 py-1 rounded-md bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10 text-xs text-foreground/80">
                   {skill}
                 </span>
               ))}
-              {internship.skills_required && internship.skills_required.length > 3 && (
+              {skillsList.length > 3 && (
                 <span className="px-2.5 py-1 rounded-md text-xs text-foreground/50">
-                  +{internship.skills_required.length - 3} more
+                  +{skillsList.length - 3} more
                 </span>
               )}
             </div>

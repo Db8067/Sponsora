@@ -2,170 +2,214 @@
 
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { ArrowLeft, Calendar, MapPin, ExternalLink, Activity } from "lucide-react";
-import { motion } from "framer-motion";
-import Link from "next/link";
+import { Search, Filter, SlidersHorizontal, ArrowLeft } from "lucide-react";
+import { EventCard, EventPost } from "@/components/EventCard";
 
 export default function CategoryEventsPage() {
-    const params = useParams();
-    const router = useRouter();
-    const slug = params.slug;
+  const params = useParams();
+  const router = useRouter();
+  const slug = params.slug as string;
 
-    const [category, setCategory] = useState<any>(null);
-    const [events, setEvents] = useState<any[]>([]);
-    const [loading, setLoading] = useState(true);
+  const [category, setCategory] = useState<any>(null);
+  const [events, setEvents] = useState<EventPost[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [sortBy, setSortBy] = useState("latest");
 
-    useEffect(() => {
-        if (!slug) return;
-        
-        async function fetchCategoryAndEvents() {
-            setLoading(true);
-            const { supabase } = await import("@/lib/supabase");
-            
-            // 1. Fetch Category
-            const { data: catData, error: catError } = await supabase
-                .from('sponsora_categories')
-                .select('*')
-                .eq('slug', slug)
-                .single();
-                
-            if (catError || !catData) {
-                console.error("Category not found", catError);
-                setLoading(false);
-                return;
-            }
-            setCategory(catData);
+  // Filters state
+  const [showFilters, setShowFilters] = useState(false);
+  const [filterVenue, setFilterVenue] = useState("all");
+  const [filterTeam, setFilterTeam] = useState("all");
 
-            // 2. Fetch Events for this Category
-            const { data: eventsData, error: eventsError } = await supabase
-                .from('sponsora_posts')
-                .select('*')
-                .eq('category_id', catData.id)
-                .order('sort_order', { ascending: true })
-                .order('created_at', { ascending: false });
-                
-            if (!eventsError && eventsData) {
-                setEvents(eventsData);
-            }
-            setLoading(false);
-        }
+  useEffect(() => {
+    if (!slug) return;
+    
+    async function fetchCategoryAndEvents() {
+      setLoading(true);
+      const { supabase } = await import("@/lib/supabase");
+      
+      // 1. Fetch Category
+      const { data: catData, error: catError } = await supabase
+        .from('sponsora_categories')
+        .select('*')
+        .eq('slug', slug)
+        .single();
+          
+      if (catError || !catData) {
+        setLoading(false);
+        return;
+      }
+      setCategory(catData);
 
-        fetchCategoryAndEvents();
-    }, [slug]);
-
-    if (loading) {
-        return (
-            <div className="min-h-screen flex items-center justify-center pt-20 bg-background">
-                <div className="size-10 border-4 border-primary border-t-transparent rounded-full animate-spin" />
-            </div>
-        );
+      // 2. Fetch Events
+      const { data: postsData, error: postsError } = await supabase
+        .from('sponsora_posts')
+        .select('*')
+        .eq('category_id', catData.id)
+        .order('sort_order', { ascending: true })
+        .order('created_at', { ascending: false });
+          
+      if (!postsError && postsData) {
+        const parsedPosts = postsData.map(post => ({
+          ...post,
+          metadata: post.metadata || {}
+        }));
+        setEvents(parsedPosts);
+      }
+      setLoading(false);
     }
 
-    if (!category) {
-        return (
-            <div className="min-h-screen flex flex-col items-center justify-center pt-20 bg-background text-center px-4">
-                <Activity size={48} className="text-muted-foreground mb-4 opacity-50" />
-                <h1 className="text-3xl font-black mb-2">Category Not Found</h1>
-                <p className="text-muted-foreground mb-8">This category doesn't exist or has been removed.</p>
-                <button onClick={() => router.push('/events')} className="px-6 py-3 bg-primary text-primary-foreground rounded-full font-bold hover:scale-105 transition-transform flex items-center gap-2">
-                    <ArrowLeft size={18} /> Back to Events
-                </button>
-            </div>
-        );
-    }
+    fetchCategoryAndEvents();
+  }, [slug]);
 
+  // Apply filters
+  const displayedEvents = events.filter(e => {
+    const meta = e.metadata || {};
+    
+    // Search
+    const matchesSearch = e.title.toLowerCase().includes(searchQuery.toLowerCase());
+    
+    // Filters
+    const matchesVenue = filterVenue === "all" ? true : meta.venue_type?.toLowerCase() === filterVenue;
+    const matchesTeam = filterTeam === "all" ? true : 
+                        (filterTeam === "solo" ? !meta.team_allowed : meta.team_allowed);
+                            
+    return matchesSearch && matchesVenue && matchesTeam;
+  }).sort((a, b) => {
+    if (sortBy === "latest") return new Date(b.created_at || 0).getTime() - new Date(a.created_at || 0).getTime();
+    // Assuming "featured" puts featured items first
+    if (sortBy === "featured") {
+        const aFeat = a.metadata?.is_featured ? 1 : 0;
+        const bFeat = b.metadata?.is_featured ? 1 : 0;
+        return bFeat - aFeat;
+    }
+    return 0;
+  });
+
+  if (loading) {
     return (
-        <div className="relative min-h-[100dvh] w-full flex flex-col overflow-x-hidden pt-24 pb-12 selection:bg-primary/30 bg-gradient-to-b from-primary/5 to-background">
-            <div className="absolute inset-0 z-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/10 via-background to-background pointer-events-none hidden dark:block"></div>
-
-            <div className="relative z-10 flex flex-col w-full max-w-[1400px] px-4 md:px-6 lg:px-12 mx-auto">
-                
-                {/* Back button */}
-                <button onClick={() => router.push('/events')} className="w-fit flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors mb-8 font-medium">
-                    <ArrowLeft size={16} /> Back to Categories
-                </button>
-
-                {/* Header */}
-                <div className="flex flex-col md:flex-row items-center md:items-start gap-6 md:gap-8 mb-16 text-center md:text-left">
-                    {category.image_url && (
-                        <div className="size-24 md:size-32 rounded-3xl overflow-hidden shrink-0 bg-white/5 border border-white/10 shadow-2xl">
-                            <img src={category.image_url} alt={category.name} className="w-full h-full object-cover" />
-                        </div>
-                    )}
-                    <div>
-                        <h1 className="font-heading font-black tracking-tighter text-foreground text-4xl sm:text-5xl drop-shadow-md mb-4">
-                            {category.name}
-                        </h1>
-                        <p className="text-foreground/70 text-lg max-w-2xl leading-relaxed">
-                            {category.description || `Explore the best ${category.name} events.`}
-                        </p>
-                    </div>
-                </div>
-
-                {/* Events Grid */}
-                {events.length === 0 ? (
-                    <div className="py-20 text-center border-2 border-dashed border-white/10 rounded-[2rem] bg-white/5 backdrop-blur-sm">
-                        <Calendar size={48} className="text-muted-foreground mx-auto mb-4 opacity-50" />
-                        <h3 className="text-xl font-bold text-foreground mb-2">No events available yet</h3>
-                        <p className="text-muted-foreground">Check back later for exciting upcoming events in {category.name}.</p>
-                    </div>
-                ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {events.map((event) => (
-                            <motion.div 
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                key={event.id}
-                                className="group flex flex-col bg-white dark:bg-white/5 border border-black/5 dark:border-white/10 rounded-3xl overflow-hidden hover:border-primary/30 transition-all hover:shadow-xl hover:-translate-y-1"
-                            >
-                                {event.image_url ? (
-                                    <div className="w-full h-48 overflow-hidden bg-white/5 border-b border-white/5">
-                                        <img src={event.image_url} alt={event.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                                    </div>
-                                ) : (
-                                    <div className="w-full h-32 bg-primary/10 flex items-center justify-center border-b border-white/5">
-                                        <Calendar size={32} className="text-primary/50" />
-                                    </div>
-                                )}
-                                
-                                <div className="p-6 flex-1 flex flex-col">
-                                    <h3 className="text-xl font-bold text-foreground mb-2 line-clamp-2">{event.title}</h3>
-                                    
-                                    <div className="flex flex-col gap-2 mb-4 mt-auto pt-4">
-                                        {event.date_info && (
-                                            <div className="flex items-center gap-2 text-sm text-muted-foreground font-medium">
-                                                <Calendar size={14} className="text-primary" /> {event.date_info}
-                                            </div>
-                                        )}
-                                        {event.location && (
-                                            <div className="flex items-center gap-2 text-sm text-muted-foreground font-medium">
-                                                <MapPin size={14} className="text-primary" /> {event.location}
-                                            </div>
-                                        )}
-                                    </div>
-                                    
-                                    {event.description && (
-                                        <p className="text-sm text-foreground/60 line-clamp-3 mb-6">
-                                            {event.description}
-                                        </p>
-                                    )}
-
-                                    {event.apply_link && (
-                                        <a 
-                                            href={event.apply_link} 
-                                            target="_blank" 
-                                            rel="noreferrer"
-                                            className="mt-auto w-full py-3 rounded-xl bg-foreground text-background font-bold text-sm flex items-center justify-center gap-2 hover:bg-primary hover:text-primary-foreground transition-colors"
-                                        >
-                                            Register Now <ExternalLink size={14} />
-                                        </a>
-                                    )}
-                                </div>
-                            </motion.div>
-                        ))}
-                    </div>
-                )}
-            </div>
-        </div>
+      <div className="min-h-screen flex items-center justify-center pt-20 bg-background">
+        <div className="size-10 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+      </div>
     );
+  }
+
+  if (!category) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center pt-20 bg-background text-center px-4">
+        <h1 className="text-3xl font-black mb-2">Category Not Found</h1>
+        <button onClick={() => router.push('/events')} className="px-6 py-3 bg-primary text-primary-foreground rounded-full font-bold mt-4 flex items-center gap-2 mx-auto">
+          <ArrowLeft size={18} /> Back to Events
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <div className="relative min-h-[100dvh] w-full flex flex-col overflow-x-hidden pt-24 pb-12 selection:bg-primary/30 bg-gradient-to-b from-primary/5 to-background">
+      <div className="relative z-10 flex flex-col w-full max-w-[1200px] px-4 md:px-6 mx-auto">
+        
+        <button onClick={() => router.push('/events')} className="w-fit flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors mb-6 font-medium">
+          <ArrowLeft size={16} /> Back to Events
+        </button>
+
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
+          <div>
+            <h1 className="text-3xl md:text-4xl font-bold text-foreground tracking-tight">
+              {category.name} Events
+            </h1>
+            <p className="text-foreground/70 mt-2">{category.description || "Discover exciting events and competitions."}</p>
+          </div>
+          
+          <div className="flex items-center gap-3">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-foreground/50" />
+              <input 
+                type="text" 
+                placeholder="Search events..." 
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-9 pr-4 py-2.5 rounded-full bg-white dark:bg-[#1A1A1D] border border-black/5 dark:border-white/10 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary w-full md:w-64 text-sm"
+              />
+            </div>
+            <button 
+              onClick={() => setShowFilters(!showFilters)}
+              className={`p-2.5 rounded-full border transition-colors ${showFilters ? 'bg-primary border-primary text-primary-foreground' : 'bg-white dark:bg-[#1A1A1D] border-black/5 dark:border-white/10 hover:bg-black/5 dark:hover:bg-white/10'}`}
+            >
+              <SlidersHorizontal className="w-5 h-5" />
+            </button>
+          </div>
+        </div>
+
+        {showFilters && (
+          <div className="mb-8 p-4 rounded-2xl bg-white dark:bg-[#1A1A1D] border border-black/5 dark:border-white/10 flex flex-wrap gap-4 items-center text-sm shadow-sm">
+            <div className="flex items-center gap-2 mr-4">
+              <Filter className="w-4 h-4 text-primary" />
+              <span className="font-semibold text-foreground">Filters:</span>
+            </div>
+            
+            <select 
+              value={filterVenue} 
+              onChange={(e) => setFilterVenue(e.target.value)}
+              className="bg-black/5 dark:bg-white/5 border border-transparent rounded-lg px-3 py-1.5 focus:outline-none focus:border-primary text-foreground"
+            >
+              <option value="all">All Venues</option>
+              <option value="online">Online</option>
+              <option value="in_person">In Person</option>
+              <option value="hybrid">Hybrid</option>
+            </select>
+
+            <select 
+              value={filterTeam} 
+              onChange={(e) => setFilterTeam(e.target.value)}
+              className="bg-black/5 dark:bg-white/5 border border-transparent rounded-lg px-3 py-1.5 focus:outline-none focus:border-primary text-foreground"
+            >
+              <option value="all">Team & Solo</option>
+              <option value="solo">Solo Only</option>
+              <option value="team">Team Only</option>
+            </select>
+
+            <div className="flex-1" />
+
+            <div className="flex items-center gap-2">
+              <span className="text-foreground/70">Sort by:</span>
+              <select 
+                value={sortBy} 
+                onChange={(e) => setSortBy(e.target.value)}
+                className="bg-black/5 dark:bg-white/5 border border-transparent rounded-lg px-3 py-1.5 focus:outline-none focus:border-primary font-medium text-foreground"
+              >
+                <option value="latest">Latest First</option>
+                <option value="featured">Featured First</option>
+              </select>
+            </div>
+          </div>
+        )}
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
+          {displayedEvents.length > 0 ? (
+            displayedEvents.map((event, i) => (
+              <EventCard key={event.id} event={event} index={i} categorySlug={slug} />
+            ))
+          ) : (
+            <div className="col-span-full py-20 flex flex-col items-center justify-center text-center bg-white dark:bg-[#1A1A1D] border border-black/5 dark:border-white/10 rounded-3xl">
+              <div className="w-16 h-16 rounded-full bg-black/5 dark:bg-white/5 flex items-center justify-center mb-4">
+                <Search className="w-8 h-8 text-foreground/30" />
+              </div>
+              <h3 className="text-xl font-bold mb-2">No Events Found</h3>
+              <p className="text-foreground/60 max-w-sm">
+                We couldn't find any events matching your filters. Try adjusting your search criteria.
+              </p>
+              <button 
+                onClick={() => {setSearchQuery(''); setFilterVenue('all'); setFilterTeam('all');}}
+                className="mt-6 px-6 py-2 rounded-full bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 transition-colors text-sm font-semibold"
+              >
+                Clear Filters
+              </button>
+            </div>
+          )}
+        </div>
+
+      </div>
+    </div>
+  );
 }
