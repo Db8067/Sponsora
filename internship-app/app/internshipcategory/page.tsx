@@ -1,46 +1,30 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ArrowRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 
-const internshipCategories = [
-  {
-    title: "Software Engineering",
-    description: "Frontend, Backend, Fullstack, AI & DevOps",
-    href: "/internships/software-engineering",
-    bgImage: "/images/se_internship_doodle.png",
-  },
-  {
-    title: "Design & UI/UX",
-    description: "Product Design, Graphic Design, Web Design",
-    href: "/internships/design",
-    bgImage: "/images/design_internship_doodle.png",
-  },
-  {
-    title: "Marketing & Growth",
-    description: "Digital Marketing, SEO, Social Media & Content",
-    href: "/internships/marketing",
-    bgImage: "/images/marketing_internship_doodle.png",
-  },
-  {
-    title: "Finance & Accounting",
-    description: "Financial Analysis, Accounting, Investment Banking",
-    href: "/internships/finance",
-    bgImage: "/images/finance_internship_doodle.png",
-  },
-  {
-    title: "Operations & HR",
-    description: "Human Resources, Business Ops & Management",
-    href: "/internships/operations",
-    bgImage: "/images/hr_internship_doodle.png",
-  },
-];
-
 export default function InternshipCategoryPage() {
   const router = useRouter();
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [categories, setCategories] = useState<any[]>([]);
+
+  useEffect(() => {
+    async function fetchData() {
+      const { supabase } = await import("@/lib/supabase");
+      const { data: cats } = await supabase.from('sponsora_categories').select('*').eq('type', 'internship').order('sort_order', { ascending: true });
+      if (cats && cats.length > 0) {
+        setCategories(cats.map((c: any) => ({
+          title: c.name || c.title,
+          description: c.description,
+          href: `/internships/category/${c.slug || c.id}`,
+          bgImage: c.image_url || "/images/se_internship_doodle.png"
+        })));
+      }
+    }
+    fetchData();
+  }, []);
 
   const handleNavigation = (href: string) => {
     setIsTransitioning(true);
@@ -90,7 +74,7 @@ export default function InternshipCategoryPage() {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 lg:gap-3 xl:gap-6 w-full">
-              {internshipCategories.map((category, index) => (
+              {categories.map((category, index) => (
                 <button
                   key={index}
                   onClick={() => handleNavigation(category.href)}
