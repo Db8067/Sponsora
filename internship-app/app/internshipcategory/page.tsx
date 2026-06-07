@@ -37,18 +37,6 @@ export default function InternshipCategoryPage() {
     <>
       <div className="relative min-h-[100dvh] w-full flex flex-col overflow-x-hidden pt-24 md:pt-20 lg:pt-24 pb-12 md:pb-16 selection:bg-primary/30">
         
-        {/* Snow Animation for Light & Dark Theme */}
-        <div className="absolute inset-0 z-[1] pointer-events-none overflow-hidden">
-          {/* Light Theme Snow */}
-          <div className="absolute inset-0 block dark:hidden">
-            <div className="absolute top-[-100vh] left-0 w-[100vw] h-[200vh] opacity-60 animate-snow" style={{ backgroundImage: 'radial-gradient(8px 8px at 100px 50px, #cbd5e1, transparent), radial-gradient(12px 12px at 200px 150px, #94a3b8, transparent), radial-gradient(6px 6px at 300px 250px, #e2e8f0, transparent), radial-gradient(8px 8px at 400px 350px, #cbd5e1, transparent), radial-gradient(12px 12px at 500px 100px, #94a3b8, transparent), radial-gradient(6px 6px at 50px 200px, #e2e8f0, transparent), radial-gradient(8px 8px at 150px 300px, #cbd5e1, transparent), radial-gradient(12px 12px at 250px 400px, #94a3b8, transparent), radial-gradient(6px 6px at 350px 500px, #e2e8f0, transparent)', backgroundSize: '600px 600px' }} />
-            <div className="absolute top-[-100vh] left-0 w-[100vw] h-[200vh] opacity-40 animate-snow" style={{ animationDuration: '10s', backgroundImage: 'radial-gradient(6px 6px at 100px 50px, #94a3b8, transparent), radial-gradient(10px 10px at 200px 150px, #cbd5e1, transparent), radial-gradient(4px 4px at 300px 250px, #e2e8f0, transparent)', backgroundSize: '400px 400px' }} />
-          </div>
-          {/* Dark Theme Snow */}
-          <div className="absolute inset-0 hidden dark:block">
-            <div className="absolute top-[-100vh] left-0 w-[100vw] h-[200vh] opacity-20 animate-snow" style={{ backgroundImage: 'radial-gradient(8px 8px at 100px 50px, #ffffff, transparent), radial-gradient(12px 12px at 200px 150px, #e2e8f0, transparent), radial-gradient(6px 6px at 300px 250px, #ffffff, transparent), radial-gradient(8px 8px at 400px 350px, #cbd5e1, transparent)', backgroundSize: '600px 600px' }} />
-          </div>
-        </div>
 
         {/* Background ambient lighting */}
         <div className="absolute inset-0 z-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/20 via-background to-background pointer-events-none hidden dark:block"></div>

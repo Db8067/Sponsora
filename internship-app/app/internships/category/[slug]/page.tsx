@@ -169,23 +169,7 @@ export default function CategoryInternshipsPage() {
         {/* Main Content */}
         <main className="flex-1 flex flex-col">
           
-          {/* Hero Section */}
-          <div className="relative w-full h-[250px] md:h-[300px] rounded-[2rem] overflow-hidden mb-12 border border-black/5 dark:border-white/10 shadow-xl bg-[#1A1A1D]">
-            <div 
-              className="absolute inset-0 bg-cover bg-center opacity-40 mix-blend-screen"
-              style={{ backgroundImage: `url('/images/${getDoodleImage(slug)}')` }}
-            />
-            <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/50 to-transparent" />
-            <div className="relative z-10 h-full flex flex-col justify-center p-8 md:p-12">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/20 text-primary-light text-sm font-bold w-fit mb-4 border border-primary/20 text-white">
-                {getCategoryIcon(slug)} {category.name}
-              </div>
-              <h1 className="text-4xl md:text-5xl font-black text-white mb-4 tracking-tight capitalize">{category.name}</h1>
-              <p className="text-white/70 max-w-xl text-lg font-medium line-clamp-2">
-                {category.description || `Find the best ${category.name} internships and launch your career.`}
-              </p>
-            </div>
-          </div>
+
 
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
             <div>

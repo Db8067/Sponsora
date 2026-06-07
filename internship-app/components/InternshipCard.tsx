@@ -96,7 +96,7 @@ export function InternshipCard({ internship, index = 0, categorySlug }: Internsh
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 my-4">
             <div className="flex items-center gap-2 text-sm text-foreground/80">
               <MapPin className="w-4 h-4 text-primary" />
-              <span className="truncate">{meta.location_type === 'Remote' ? 'Remote' : (meta.city || 'Onsite')}</span>
+              <span className="truncate">{meta.location_type || 'Online'}{meta.city ? `, ${meta.city}` : ''}</span>
             </div>
             <div className="flex items-center gap-2 text-sm text-foreground/80">
               <IndianRupee className="w-4 h-4 text-green-500" />
