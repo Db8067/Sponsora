@@ -15,8 +15,12 @@ export default clerkMiddleware(async (auth, req) => {
 });
 */
 
+import { NextResponse } from 'next/server';
+
 // Dummy middleware to completely disable Clerk handshake during frontend testing
-export default function middleware() {}
+export default function middleware() {
+  return NextResponse.next();
+}
 
 export const config = {
   matcher: ['/((?!.*\\..*|_next).*)', '/', '/(api|trpc)(.*)'],
