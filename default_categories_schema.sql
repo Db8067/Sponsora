@@ -7,18 +7,32 @@
 CREATE TABLE IF NOT EXISTS public.sponsora_categories (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     name TEXT NOT NULL,
-    slug TEXT NOT NULL UNIQUE
+    slug TEXT UNIQUE
 );
 
 -- 2. Add any missing columns (fixes the "column does not exist" error)
 ALTER TABLE public.sponsora_categories 
+    ADD COLUMN IF NOT EXISTS slug TEXT,
     ADD COLUMN IF NOT EXISTS description TEXT,
     ADD COLUMN IF NOT EXISTS image_url TEXT,
     ADD COLUMN IF NOT EXISTS type TEXT DEFAULT 'event',
     ADD COLUMN IF NOT EXISTS sort_order INTEGER DEFAULT 99,
     ADD COLUMN IF NOT EXISTS created_at TIMESTAMPTZ DEFAULT NOW();
 
--- 3. Insert or Update Event Categories
+-- 3. Ensure slug column has a unique constraint if we just added it
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM pg_constraint WHERE conname = 'sponsora_categories_slug_key'
+    ) THEN
+        ALTER TABLE public.sponsora_categories ADD CONSTRAINT sponsora_categories_slug_key UNIQUE (slug);
+    END IF;
+EXCEPTION
+    WHEN OTHERS THEN
+        NULL; -- Ignore if unique constraint already exists under a different name
+END $$;
+
+-- 4. Insert or Update Event Categories
 INSERT INTO public.sponsora_categories (name, description, slug, image_url, type, sort_order)
 VALUES 
     ('Tech Events', 'Hackathons, Coding Competitions & AI Summits', 'tech', '/images/tech_events_doodle.png', 'event', 1),
@@ -32,7 +46,7 @@ ON CONFLICT (slug) DO UPDATE SET
     type = EXCLUDED.type,
     sort_order = EXCLUDED.sort_order;
 
--- 4. Insert or Update Internship Categories
+-- 5. Insert or Update Internship Categories
 INSERT INTO public.sponsora_categories (name, description, slug, image_url, type, sort_order)
 VALUES 
     ('Software Engineering', 'Frontend, Backend, Fullstack, AI & DevOps', 'software-engineering', '/images/se_internship_doodle.png', 'internship', 1),
