@@ -1,11 +1,30 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { Building2, MapPin, IndianRupee, Clock, CalendarDays, ArrowLeft, Share2, ShieldCheck, CheckCircle2 } from "lucide-react";
+import { Internship } from "@/components/InternshipCard";
 
-import { supabase } from "@/lib/supabase";
+// Mock fetching single internship
+const getMockInternship = (slug: string): Internship & { description: string; perks: string[] } => ({
+  id: "1",
+  title: "Frontend Engineering Intern",
+  slug: slug,
+  company_name: "TechCorp Global",
+  location_type: "remote",
+  stipend_min: 15000,
+  stipend_max: 20000,
+  duration_months: 6,
+  skills_required: ["React", "TypeScript", "Tailwind CSS", "Next.js"],
+  is_featured: true,
+  category_slug: "software-engineering",
+  deadline: "2026-08-01",
+  description: `We are looking for a passionate Frontend Engineering Intern to join our core product team. You will be working directly with senior engineers to build and ship features that reach millions of users. 
+  
+As an intern, you will not just be fixing bugs ΓÇö you will own entire features from ideation to deployment. Our tech stack is heavily reliant on Next.js, React 19, and Tailwind CSS. We value performance, accessibility, and clean architecture.`,
+  perks: ["Flexible Working Hours", "Mentorship from Senior Devs", "Pre-Placement Offer (PPO) available", "Free Swag kit"]
+});
 
 export default function InternshipDetailPage() {
   const { slug } = useParams();
@@ -16,44 +35,11 @@ export default function InternshipDetailPage() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    const fetchInternship = async () => {
-      setIsLoading(true);
-      try {
-        const { data, error } = await supabase
-          .from('sponsora_internships')
-          .select('*, internship:internships(*), category:sponsora_categories(*)')
-          .eq('slug', slug)
-          .single();
-
-        if (error) {
-          console.error("Error fetching internship:", error);
-          setInternship(null);
-        } else if (data) {
-          setInternship({
-            id: data.id,
-            title: data.internship?.title || data.title || "Untitled",
-            slug: data.slug,
-            company_name: data.internship?.company_name || "Unknown Company",
-            location_type: data.internship?.location_type || "remote",
-            city: data.internship?.city,
-            stipend_min: data.stipend_min || data.internship?.stipend_min,
-            stipend_max: data.stipend_max || data.internship?.stipend_max,
-            duration_months: data.internship?.duration_months || data.duration_months,
-            skills_required: data.internship?.skills_required || data.skills_required || [],
-            is_featured: data.is_featured,
-            category_slug: data.category?.slug || data.category_slug,
-            deadline: data.internship?.deadline || data.deadline || "2099-12-31",
-            description: data.internship?.description || data.description || "No description provided.",
-            perks: data.internship?.perks || data.perks || []
-          });
-        }
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchInternship();
+    setIsLoading(true);
+    setTimeout(() => {
+      setInternship(getMockInternship(slug as string));
+      setIsLoading(false);
+    }, 600);
   }, [slug]);
 
   if (isLoading) {
@@ -130,7 +116,7 @@ export default function InternshipDetailPage() {
                     </div>
                     <div>
                       <p className="text-xs text-foreground/50 font-medium">Stipend</p>
-                      <p className="font-bold text-sm text-foreground">₹{internship.stipend_min.toLocaleString()} - ₹{internship.stipend_max.toLocaleString()}</p>
+                      <p className="font-bold text-sm text-foreground">Γé╣{internship.stipend_min.toLocaleString()} - Γé╣{internship.stipend_max.toLocaleString()}</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
@@ -196,7 +182,7 @@ export default function InternshipDetailPage() {
                   </div>
                   <div>
                     <p className="text-sm text-foreground/50 font-medium">Stipend</p>
-                    <p className="font-bold text-foreground">₹{internship.stipend_min.toLocaleString()} - ₹{internship.stipend_max.toLocaleString()}/mo</p>
+                    <p className="font-bold text-foreground">Γé╣{internship.stipend_min.toLocaleString()} - Γé╣{internship.stipend_max.toLocaleString()}/mo</p>
                   </div>
                 </div>
                 

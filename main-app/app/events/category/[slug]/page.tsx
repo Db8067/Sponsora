@@ -2,8 +2,32 @@
 
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { Search, Filter, SlidersHorizontal, ArrowLeft } from "lucide-react";
+import { Search, Filter, SlidersHorizontal, ArrowLeft, ChevronRight, Zap, Code, Palette, Presentation, Users, CalendarDays } from "lucide-react";
+import Link from "next/link";
 import { EventCard, EventPost } from "@/components/EventCard";
+import BackToTop from "@/components/BackToTop";
+import { supabase } from "@/lib/supabase";
+
+const getDoodleImage = (slug: string) => {
+  const map: Record<string, string> = {
+    'tech': 'tech_events_doodle.png',
+    'cultural': 'cultural_events_doodle.png',
+    'workshops': 'workshops_doodle.png',
+    'seminars': 'seminars_doodle.png',
+    'past': 'past_events_doodle.png'
+  };
+  return map[slug] || 'coming_soon_doodle.png';
+};
+
+const getCategoryIcon = (slug: string) => {
+  switch (slug) {
+    case 'tech': return <Code className="w-4 h-4" />;
+    case 'cultural': return <Palette className="w-4 h-4" />;
+    case 'workshops': return <Users className="w-4 h-4" />;
+    case 'seminars': return <Presentation className="w-4 h-4" />;
+    default: return <CalendarDays className="w-4 h-4" />;
+  }
+};
 
 export default function CategoryEventsPage() {
   const params = useParams();
@@ -11,6 +35,7 @@ export default function CategoryEventsPage() {
   const slug = params.slug as string;
 
   const [category, setCategory] = useState<any>(null);
+  const [allCategories, setAllCategories] = useState<any[]>([]);
   const [events, setEvents] = useState<EventPost[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
@@ -26,9 +51,12 @@ export default function CategoryEventsPage() {
     
     async function fetchCategoryAndEvents() {
       setLoading(true);
-      const { supabase } = await import("@/lib/supabase");
       
-      // 1. Fetch Category
+      // Fetch all categories for sidebar
+      const { data: allCats } = await supabase.from('sponsora_categories').select('*').eq('app_type', 'main');
+      if (allCats) setAllCategories(allCats);
+      
+      // Fetch Category
       const { data: catData, error: catError } = await supabase
         .from('sponsora_categories')
         .select('*')
@@ -41,7 +69,7 @@ export default function CategoryEventsPage() {
       }
       setCategory(catData);
 
-      // 2. Fetch Events
+      // Fetch Events
       const { data: postsData, error: postsError } = await supabase
         .from('sponsora_posts')
         .select('*')
@@ -65,19 +93,12 @@ export default function CategoryEventsPage() {
   // Apply filters
   const displayedEvents = events.filter(e => {
     const meta = e.metadata || {};
-    
-    // Search
     const matchesSearch = e.title.toLowerCase().includes(searchQuery.toLowerCase());
-    
-    // Filters
     const matchesVenue = filterVenue === "all" ? true : meta.venue_type?.toLowerCase() === filterVenue;
-    const matchesTeam = filterTeam === "all" ? true : 
-                        (filterTeam === "solo" ? !meta.team_allowed : meta.team_allowed);
-                            
+    const matchesTeam = filterTeam === "all" ? true : (filterTeam === "solo" ? !meta.team_allowed : meta.team_allowed);
     return matchesSearch && matchesVenue && matchesTeam;
   }).sort((a, b) => {
     if (sortBy === "latest") return new Date(b.created_at || 0).getTime() - new Date(a.created_at || 0).getTime();
-    // Assuming "featured" puts featured items first
     if (sortBy === "featured") {
         const aFeat = a.metadata?.is_featured ? 1 : 0;
         const bFeat = b.metadata?.is_featured ? 1 : 0;
@@ -106,110 +127,153 @@ export default function CategoryEventsPage() {
   }
 
   return (
-    <div className="relative min-h-[100dvh] w-full flex flex-col overflow-x-hidden pt-24 pb-12 selection:bg-primary/30 bg-gradient-to-b from-primary/5 to-background">
-      <div className="relative z-10 flex flex-col w-full max-w-[1200px] px-4 md:px-6 mx-auto">
+    <div className="min-h-screen bg-background pt-28 pb-20 px-4 md:px-6 lg:px-12 selection:bg-primary/30">
+      
+      {/* Background ambient lighting */}
+      <div className="absolute inset-0 z-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-500/10 via-background to-background pointer-events-none hidden dark:block"></div>
+
+      <div className="relative z-10 max-w-[1400px] mx-auto flex flex-col lg:flex-row gap-8 lg:gap-12">
         
-        <button onClick={() => router.push('/events')} className="w-fit flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors mb-6 font-medium">
-          <ArrowLeft size={16} /> Back to Events
-        </button>
-
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
-          <div>
-            <h1 className="text-3xl md:text-4xl font-bold text-foreground tracking-tight">
-              {category.name} Events
-            </h1>
-            <p className="text-foreground/70 mt-2">{category.description || "Discover exciting events and competitions."}</p>
-          </div>
+        {/* Left Sidebar: Quick Switch & Filters */}
+        <aside className="w-full lg:w-64 shrink-0 flex flex-col gap-8">
           
-          <div className="flex items-center gap-3">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-foreground/50" />
-              <input 
-                type="text" 
-                placeholder="Search events..." 
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-9 pr-4 py-2.5 rounded-full bg-white dark:bg-[#1A1A1D] border border-black/5 dark:border-white/10 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary w-full md:w-64 text-sm"
-              />
-            </div>
-            <button 
-              onClick={() => setShowFilters(!showFilters)}
-              className={`p-2.5 rounded-full border transition-colors ${showFilters ? 'bg-primary border-primary text-primary-foreground' : 'bg-white dark:bg-[#1A1A1D] border-black/5 dark:border-white/10 hover:bg-black/5 dark:hover:bg-white/10'}`}
-            >
-              <SlidersHorizontal className="w-5 h-5" />
-            </button>
-          </div>
-        </div>
+          {/* Breadcrumbs */}
+          <nav className="flex items-center gap-2 text-sm font-medium text-foreground/50">
+            <Link href="/" className="hover:text-primary transition-colors">Home</Link>
+            <ChevronRight className="w-4 h-4" />
+            <Link href="/events" className="hover:text-primary transition-colors">Events</Link>
+            <ChevronRight className="w-4 h-4" />
+            <span className="text-foreground capitalize">{category.name}</span>
+          </nav>
 
-        {showFilters && (
-          <div className="mb-8 p-4 rounded-2xl bg-white dark:bg-[#1A1A1D] border border-black/5 dark:border-white/10 flex flex-wrap gap-4 items-center text-sm shadow-sm">
-            <div className="flex items-center gap-2 mr-4">
-              <Filter className="w-4 h-4 text-primary" />
-              <span className="font-semibold text-foreground">Filters:</span>
+          <div className="bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-md hidden lg:block">
+            <h3 className="text-lg font-bold text-foreground mb-4">Categories</h3>
+            <div className="flex flex-col gap-3">
+              {allCategories.map(cat => {
+                const isActive = cat.slug === slug;
+                return (
+                  <Link 
+                    key={cat.id} 
+                    href={`/events/category/${cat.slug}`} 
+                    className={`flex items-center gap-2 transition-colors ${isActive ? 'text-primary font-bold' : 'text-foreground/60 hover:text-foreground'}`}
+                  >
+                    {isActive && <div className="w-1.5 h-1.5 rounded-full bg-primary" />} 
+                    {cat.name}
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        </aside>
+
+        {/* Main Content */}
+        <main className="flex-1 flex flex-col">
+          
+          {/* Hero Section */}
+          <div className="relative w-full h-[250px] md:h-[300px] rounded-[2rem] overflow-hidden mb-12 border border-black/5 dark:border-white/10 shadow-xl bg-[#1A1A1D]">
+            <div 
+              className="absolute inset-0 bg-cover bg-center opacity-40 mix-blend-screen"
+              style={{ backgroundImage: `url('/images/${getDoodleImage(slug)}')` }}
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/50 to-transparent" />
+            <div className="relative z-10 h-full flex flex-col justify-center p-8 md:p-12">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold w-fit mb-4 border border-blue-500/20">
+                {getCategoryIcon(slug)} {category.name}
+              </div>
+              <h1 className="text-4xl md:text-5xl font-black text-white mb-4 tracking-tight capitalize">{category.name} Events</h1>
+              <p className="text-white/70 max-w-xl text-lg font-medium line-clamp-2">
+                {category.description || `Discover the best ${category.name} opportunities happening near you.`}
+              </p>
+            </div>
+          </div>
+
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+            <div>
+                <h2 className="text-2xl font-bold text-foreground">Featured Upcoming</h2>
+                <span className="text-sm font-medium text-foreground/50">{events.length} Events</span>
             </div>
             
-            <select 
-              value={filterVenue} 
-              onChange={(e) => setFilterVenue(e.target.value)}
-              className="bg-black/5 dark:bg-white/5 border border-transparent rounded-lg px-3 py-1.5 focus:outline-none focus:border-primary text-foreground"
-            >
-              <option value="all">All Venues</option>
-              <option value="online">Online</option>
-              <option value="in_person">In Person</option>
-              <option value="hybrid">Hybrid</option>
-            </select>
-
-            <select 
-              value={filterTeam} 
-              onChange={(e) => setFilterTeam(e.target.value)}
-              className="bg-black/5 dark:bg-white/5 border border-transparent rounded-lg px-3 py-1.5 focus:outline-none focus:border-primary text-foreground"
-            >
-              <option value="all">Team & Solo</option>
-              <option value="solo">Solo Only</option>
-              <option value="team">Team Only</option>
-            </select>
-
-            <div className="flex-1" />
-
-            <div className="flex items-center gap-2">
-              <span className="text-foreground/70">Sort by:</span>
-              <select 
-                value={sortBy} 
-                onChange={(e) => setSortBy(e.target.value)}
-                className="bg-black/5 dark:bg-white/5 border border-transparent rounded-lg px-3 py-1.5 focus:outline-none focus:border-primary font-medium text-foreground"
-              >
-                <option value="latest">Latest First</option>
-                <option value="featured">Featured First</option>
-              </select>
-            </div>
-          </div>
-        )}
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
-          {displayedEvents.length > 0 ? (
-            displayedEvents.map((event, i) => (
-              <EventCard key={event.id} event={event} index={i} categorySlug={slug} />
-            ))
-          ) : (
-            <div className="col-span-full py-20 flex flex-col items-center justify-center text-center bg-white dark:bg-[#1A1A1D] border border-black/5 dark:border-white/10 rounded-3xl">
-              <div className="w-16 h-16 rounded-full bg-black/5 dark:bg-white/5 flex items-center justify-center mb-4">
-                <Search className="w-8 h-8 text-foreground/30" />
+            <div className="flex items-center gap-3">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-foreground/50" />
+                <input 
+                  type="text" 
+                  placeholder="Search events..." 
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-9 pr-4 py-2.5 rounded-full bg-white dark:bg-[#1A1A1D] border border-black/5 dark:border-white/10 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary w-full md:w-56 text-sm"
+                />
               </div>
-              <h3 className="text-xl font-bold mb-2">No Events Found</h3>
-              <p className="text-foreground/60 max-w-sm">
-                We couldn't find any events matching your filters. Try adjusting your search criteria.
-              </p>
               <button 
-                onClick={() => {setSearchQuery(''); setFilterVenue('all'); setFilterTeam('all');}}
-                className="mt-6 px-6 py-2 rounded-full bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 transition-colors text-sm font-semibold"
+                onClick={() => setShowFilters(!showFilters)}
+                className={`p-2.5 rounded-full border transition-colors ${showFilters ? 'bg-primary border-primary text-white' : 'bg-white dark:bg-[#1A1A1D] border-black/5 dark:border-white/10'}`}
               >
-                Clear Filters
+                <SlidersHorizontal className="w-5 h-5" />
               </button>
             </div>
-          )}
-        </div>
+          </div>
 
+          {showFilters && (
+            <div className="mb-8 p-4 rounded-2xl bg-white dark:bg-[#1A1A1D] border border-black/5 dark:border-white/10 flex flex-wrap gap-4 items-center text-sm shadow-sm">
+              <div className="flex items-center gap-2 mr-4">
+                <Filter className="w-4 h-4 text-primary" />
+                <span className="font-semibold text-foreground">Filters:</span>
+              </div>
+              
+              <select value={filterVenue} onChange={(e) => setFilterVenue(e.target.value)} className="bg-black/5 dark:bg-white/5 border border-transparent rounded-lg px-3 py-1.5 focus:outline-none focus:border-primary text-foreground">
+                <option value="all">All Venues</option>
+                <option value="online">Online</option>
+                <option value="in_person">In Person</option>
+                <option value="hybrid">Hybrid</option>
+              </select>
+
+              <select value={filterTeam} onChange={(e) => setFilterTeam(e.target.value)} className="bg-black/5 dark:bg-white/5 border border-transparent rounded-lg px-3 py-1.5 focus:outline-none focus:border-primary text-foreground">
+                <option value="all">Team & Solo</option>
+                <option value="solo">Solo Only</option>
+                <option value="team">Team Only</option>
+              </select>
+
+              <div className="flex-1" />
+
+              <div className="flex items-center gap-2">
+                <span className="text-foreground/70">Sort by:</span>
+                <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} className="bg-black/5 dark:bg-white/5 border border-transparent rounded-lg px-3 py-1.5 focus:outline-none focus:border-primary font-medium text-foreground">
+                  <option value="latest">Latest First</option>
+                  <option value="featured">Featured First</option>
+                </select>
+              </div>
+            </div>
+          )}
+
+          {/* Listings */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6 mb-20">
+            {displayedEvents.length > 0 ? (
+              displayedEvents.map((event, i) => (
+                <EventCard key={event.id} event={event} index={i} categorySlug={slug} />
+              ))
+            ) : (
+              <div className="col-span-full py-20 flex flex-col items-center justify-center text-center bg-white dark:bg-[#1A1A1D] border border-black/5 dark:border-white/10 rounded-3xl">
+                <div className="w-32 h-32 mb-6 opacity-80">
+                   <img src={`/images/${getDoodleImage(slug)}`} alt="No Events" className="w-full h-full object-contain drop-shadow-2xl" />
+                </div>
+                <h3 className="text-xl font-bold mb-2">No Events Found</h3>
+                <p className="text-foreground/60 max-w-sm">
+                  We couldn't find any events matching your criteria. Be the first to host one!
+                </p>
+                <button 
+                  onClick={() => {setSearchQuery(''); setFilterVenue('all'); setFilterTeam('all');}}
+                  className="mt-6 px-6 py-2 rounded-full bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 transition-colors text-sm font-semibold"
+                >
+                  Clear Filters
+                </button>
+              </div>
+            )}
+          </div>
+
+        </main>
       </div>
+
+      <BackToTop colorClass="bg-primary text-primary-foreground" />
     </div>
   );
 }
