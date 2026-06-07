@@ -66,10 +66,7 @@ export default function Navbar() {
                </>
              ) : (
                <>
-                 <Link href="/sign-in" className="text-sm font-medium text-foreground/60 hover:text-foreground transition-colors">Sign In</Link>
-                 <Link href="/sign-up" className="text-sm font-medium bg-foreground text-background px-4 py-2 rounded-full hover:scale-105 transition-transform">
-                   Get Started
-                 </Link>
+                 {/* Sign In/Up Temporarily Removed */}
                </>
              )}
              <ThemeToggle />
@@ -143,8 +140,7 @@ export default function Navbar() {
                    </>
                  ) : (
                    <div className="flex items-center gap-4">
-                     <Link href="/sign-in" className="flex-1 text-center py-3 rounded-full border border-white/10 font-medium">Sign In</Link>
-                     <Link href="/sign-up" className="flex-1 text-center py-3 rounded-full bg-foreground text-background font-medium">Get Started</Link>
+                     {/* Mobile Sign In/Up Temporarily Removed */}
                    </div>
                  )}
                </div>

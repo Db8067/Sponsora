@@ -75,8 +75,6 @@ export default function Footer() {
       <div className="max-w-[1400px] mx-auto px-6 lg:px-12 flex flex-col md:flex-row items-center justify-between gap-6">
         <div className="flex items-center gap-6 text-sm font-medium text-foreground/50">
           <Link href="/events" className="hover:text-foreground transition-colors">Discover</Link>
-          <Link href="/pricing" className="hover:text-foreground transition-colors">Pricing</Link>
-          <Link href="/help" className="hover:text-foreground transition-colors">Help</Link>
         </div>
         
         <div className="flex items-center gap-6">
