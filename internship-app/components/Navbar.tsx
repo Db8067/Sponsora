@@ -8,7 +8,6 @@ import { ThemeToggle } from "./ThemeToggle";
 import CustomButton from "./ui/CustomButton";
 import { motion, AnimatePresence } from "framer-motion";
 import UserProfile from "./UserProfile";
-import { supabase } from "@/lib/supabase";
 
 export default function Navbar() {
   const isLoaded = true;
@@ -17,22 +16,11 @@ export default function Navbar() {
   
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [categories, setCategories] = useState<any[]>([]);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  useEffect(() => {
-    async function fetchCategories() {
-      const { data } = await supabase.from('sponsora_categories').select('*').eq('type', 'internship').or('is_deleted.eq.false,is_deleted.is.null').order('sort_order', { ascending: true });
-      if (data) {
-        setCategories(data);
-      }
-    }
-    fetchCategories();
   }, []);
 
   const navLinks = [
@@ -125,23 +113,13 @@ export default function Navbar() {
                 </button>
               </div>
 
-              <div className="flex flex-col gap-6 mb-8 overflow-y-auto max-h-[60vh] pr-2">
-                {categories.map((cat) => (
-                  <Link 
-                    key={cat.id} 
-                    href={`/internships/category/${cat.slug || cat.id}`}
-                    onClick={() => setIsOpen(false)}
-                    className="text-2xl font-bold text-foreground hover:text-primary transition-colors capitalize"
-                  >
-                    {cat.name || cat.title}
-                  </Link>
-                ))}
+              <div className="flex flex-col gap-6 mb-8">
                 {navLinks.map((link) => (
                   <Link 
                     key={link.name} 
                     href={link.href}
                     onClick={() => setIsOpen(false)}
-                    className="text-2xl font-bold text-foreground hover:text-primary transition-colors pt-4 border-t border-white/5"
+                    className="text-2xl font-bold text-foreground hover:text-primary transition-colors"
                   >
                     {link.name}
                   </Link>

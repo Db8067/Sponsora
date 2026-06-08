@@ -51,7 +51,7 @@ export default function CategoryInternshipsPage() {
       setLoading(true);
       
       // Fetch all categories for sidebar
-      const { data: allCats } = await supabase.from('sponsora_categories').select('*').eq('type', 'internship').or('is_deleted.eq.false,is_deleted.is.null').order('sort_order', { ascending: true });
+      const { data: allCats } = await supabase.from('sponsora_categories').select('*').eq('app_type', 'internship').or('is_deleted.eq.false,is_deleted.is.null');
       if (allCats) setAllCategories(allCats);
       
       // Fetch Category
@@ -188,7 +188,7 @@ export default function CategoryInternshipsPage() {
                   placeholder="Search roles..." 
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-9 pr-4 py-2.5 rounded-full bg-white dark:bg-[#1A1A1D] border border-black/5 dark:border-white/10 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary w-full md:w-56 text-base md:text-sm"
+                  className="pl-9 pr-4 py-2.5 rounded-full bg-white dark:bg-[#1A1A1D] border border-black/5 dark:border-white/10 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary w-full md:w-56 text-sm"
                 />
               </div>
               <button 
@@ -243,13 +243,19 @@ export default function CategoryInternshipsPage() {
               ))
             ) : (
               <div className="w-full py-20 flex flex-col items-center justify-center text-center bg-white dark:bg-[#1A1A1D] border border-black/5 dark:border-white/10 rounded-3xl">
-                <div className="w-48 h-48 mb-6">
-                   <img src="/images/empty-state.png" alt="No Internships" className="w-full h-full object-contain drop-shadow-2xl" />
+                <div className="w-32 h-32 mb-6 opacity-80">
+                   <img src={`/images/${getDoodleImage(slug)}`} alt="No Internships" className="w-full h-full object-contain drop-shadow-2xl" />
                 </div>
                 <h3 className="text-xl font-bold mb-2">No Internships Found</h3>
                 <p className="text-foreground/60 max-w-sm">
-                  Check back later for new opportunities in this category.
+                  We couldn't find any opportunities matching your filters. Try adjusting your search criteria.
                 </p>
+                <button 
+                  onClick={() => {setSearchQuery(''); setFilterLocation('all'); setFilterDuration('all');}}
+                  className="mt-6 px-6 py-2 rounded-full bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 transition-colors text-sm font-semibold"
+                >
+                  Clear Filters
+                </button>
               </div>
             )}
           </div>
