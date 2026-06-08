@@ -41,7 +41,7 @@ export function InternshipCard({ internship, index = 0, categorySlug }: Internsh
   };
 
   const handleCardClick = () => {
-    router.push(`/internships/category/${categorySlug}/${internship.id}`);
+    router.push(`/internships/category/${categorySlug}/${internship.slug || internship.id}`);
   };
 
   const skillsList = meta.skills ? meta.skills.split(',').map(s => s.trim()).filter(Boolean) : [];
