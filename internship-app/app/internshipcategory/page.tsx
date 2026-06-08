@@ -13,7 +13,7 @@ export default function InternshipCategoryPage() {
   useEffect(() => {
     async function fetchData() {
       const { supabase } = await import("@/lib/supabase");
-      const { data: cats } = await supabase.from('sponsora_categories').select('*').eq('type', 'internship').order('sort_order', { ascending: true });
+      const { data: cats } = await supabase.from('sponsora_categories').select('*').eq('type', 'internship').or('is_deleted.eq.false,is_deleted.is.null').order('sort_order', { ascending: true });
       if (cats && cats.length > 0) {
         setCategories(cats.map((c: any) => ({
           title: c.name || c.title,

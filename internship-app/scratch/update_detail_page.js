@@ -1,4 +1,6 @@
-"use client";
+const fs = require('fs');
+
+const fileContent = `"use client";
 
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
@@ -81,7 +83,7 @@ export default function InternshipDetailPage() {
     const diffTime = new Date(meta.deadline).getTime() - new Date().getTime();
     if (diffTime > 0) {
         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-        daysLeftText = `${diffDays} Days Left`;
+        daysLeftText = \`\${diffDays} Days Left\`;
     } else {
         daysLeftText = "Expired";
     }
@@ -150,7 +152,7 @@ export default function InternshipDetailPage() {
                 <div className="w-12 h-12 flex items-center justify-center bg-green-50 dark:bg-green-500/10 rounded-xl text-green-600 shrink-0"><IndianRupee size={24} /></div>
                 <div>
                     <p className="font-bold text-foreground">Internship Type</p>
-                    <p className="text-sm text-foreground/60">{meta.is_unpaid ? 'Unpaid' : `Paid (₹${meta.stipend_min} - ₹${meta.stipend_max})`}</p>
+                    <p className="text-sm text-foreground/60">{meta.is_unpaid ? 'Unpaid' : \`Paid (₹\${meta.stipend_min} - ₹\${meta.stipend_max})\`}</p>
                 </div>
             </div>
 
@@ -299,3 +301,6 @@ export default function InternshipDetailPage() {
     </div>
   );
 }
+`;
+
+fs.writeFileSync('d:/Desktop/New folder/internship-app/app/internships/category/[slug]/[postSlug]/page.tsx', fileContent, 'utf8');

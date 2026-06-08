@@ -51,7 +51,7 @@ export default function CategoryInternshipsPage() {
       setLoading(true);
       
       // Fetch all categories for sidebar
-      const { data: allCats } = await supabase.from('sponsora_categories').select('*').eq('app_type', 'internship');
+      const { data: allCats } = await supabase.from('sponsora_categories').select('*').eq('app_type', 'internship').or('is_deleted.eq.false,is_deleted.is.null');
       if (allCats) setAllCategories(allCats);
       
       // Fetch Category
@@ -72,6 +72,7 @@ export default function CategoryInternshipsPage() {
         .from('sponsora_posts')
         .select('*')
         .eq('category_id', catData.id)
+        .or('is_deleted.eq.false,is_deleted.is.null')
         .order('sort_order', { ascending: true })
         .order('created_at', { ascending: false });
           
