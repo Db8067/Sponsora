@@ -3,11 +3,11 @@
 import { useState, useEffect } from "react";
 import { ArrowRight } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
+import { motion } from "framer-motion";
 
 export default function InternshipCategoryPage() {
   const router = useRouter();
-  const [isTransitioning, setIsTransitioning] = useState(false);
   const [categories, setCategories] = useState<any[]>([]);
 
   useEffect(() => {
@@ -25,13 +25,6 @@ export default function InternshipCategoryPage() {
     }
     fetchData();
   }, []);
-
-  const handleNavigation = (href: string) => {
-    setIsTransitioning(true);
-    setTimeout(() => {
-      router.push(href);
-    }, 1000);
-  };
 
   return (
     <>
@@ -63,9 +56,9 @@ export default function InternshipCategoryPage() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 lg:gap-3 xl:gap-6 w-full">
               {categories.map((category, index) => (
-                <button
+                <Link
                   key={index}
-                  onClick={() => handleNavigation(category.href)}
+                  href={category.href}
                   className="group relative flex flex-row items-center md:flex-col md:justify-end w-full h-auto p-4 sm:p-5 md:p-0 md:h-[280px] lg:h-[300px] xl:h-[320px] rounded-2xl md:rounded-[2rem] overflow-hidden glass md:hover:-translate-y-2 active:scale-[0.98] transition-all duration-300 ease-out text-left bg-white dark:bg-white/5 border border-black/5 dark:border-white/10 hover:border-primary/20 dark:hover:border-white/20 shadow-lg md:shadow-xl hover:shadow-xl md:hover:shadow-primary/20"
                 >
                   <div className="w-16 h-16 sm:w-20 sm:h-20 shrink-0 md:absolute md:inset-0 md:w-full md:h-full opacity-100 md:opacity-60 md:group-hover:opacity-100 transition-all duration-500 md:group-hover:scale-110 ease-out bg-cover bg-center rounded-xl md:rounded-none dark:opacity-60 md:opacity-80"
@@ -85,47 +78,13 @@ export default function InternshipCategoryPage() {
                       <ArrowRight className="w-5 h-5 text-white" />
                     </div>
                   </div>
-                </button>
+                </Link>
               ))}
             </div>
           </div>
 
         </div>
       </div>
-
-      <AnimatePresence>
-        {isTransitioning && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="fixed inset-0 z-[100] bg-background flex flex-col items-center justify-center backdrop-blur-lg"
-          >
-            <motion.div
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.5, ease: "easeOut" }}
-              className="flex flex-col items-center gap-6"
-            >
-              <motion.div
-                animate={{ scale: [1, 1.05, 1] }}
-                transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-              >
-                <img src="/images/logo-light.png" alt="Sponsora Logo" className="h-16 md:h-20 w-auto dark:hidden block drop-shadow-2xl" />
-                <img src="/images/logo-dark.png" alt="Sponsora Logo" className="h-16 md:h-20 w-auto hidden dark:block drop-shadow-2xl" />
-              </motion.div>
-              
-              <div className="w-40 h-1.5 bg-white/5 rounded-full overflow-hidden mt-4 relative">
-                <motion.div 
-                  initial={{ x: "-100%" }}
-                  animate={{ x: "200%" }}
-                  transition={{ duration: 1, repeat: Infinity, ease: "easeInOut" }}
-                  className="absolute top-0 bottom-0 w-1/2 bg-gradient-to-r from-primary to-accent rounded-full"
-                />
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </>
   );
 }

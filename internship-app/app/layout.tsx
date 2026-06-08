@@ -5,6 +5,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import BackToTop from "@/components/BackToTop";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import PageTransitionProvider from "@/components/PageTransitionProvider";
 import "./globals.css";
 
 const jakarta = Plus_Jakarta_Sans({
@@ -37,10 +38,12 @@ export default function RootLayout({
             enableSystem={false}
             disableTransitionOnChange
           >
-            <Navbar />
-            <main className="flex-1">{children}</main>
-            <Footer />
-            <BackToTop />
+            <PageTransitionProvider>
+              <Navbar />
+              <main className="flex-1">{children}</main>
+              <Footer />
+              <BackToTop />
+            </PageTransitionProvider>
           </ThemeProvider>
         </body>
       </html>

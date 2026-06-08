@@ -63,6 +63,7 @@ export default function CategoryInternshipsPage() {
           
       if (catError || !catData) {
         setLoading(false);
+        window.dispatchEvent(new Event("sponsora-page-loaded"));
         return;
       }
       setCategory(catData);
@@ -84,6 +85,7 @@ export default function CategoryInternshipsPage() {
         setInternships(parsedPosts);
       }
       setLoading(false);
+      window.dispatchEvent(new Event("sponsora-page-loaded"));
     }
 
     fetchCategoryAndInternships();
@@ -114,9 +116,7 @@ export default function CategoryInternshipsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center pt-20 bg-transparent">
-        <div className="size-10 border-4 border-primary border-t-transparent rounded-full animate-spin" />
-      </div>
+      <div className="min-h-screen bg-transparent" />
     );
   }
 
@@ -124,9 +124,9 @@ export default function CategoryInternshipsPage() {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center pt-20 bg-transparent text-center px-4">
         <h1 className="text-3xl font-black mb-2">Category Not Found</h1>
-        <button onClick={() => router.push('/internshipcategory')} className="px-6 py-3 bg-primary text-primary-foreground rounded-full font-bold mt-4 flex items-center gap-2 mx-auto">
+        <Link href="/internshipcategory" className="px-6 py-3 bg-primary text-primary-foreground rounded-full font-bold mt-4 flex items-center gap-2 mx-auto">
           <ArrowLeft size={18} /> Back to Categories
-        </button>
+        </Link>
       </div>
     );
   }

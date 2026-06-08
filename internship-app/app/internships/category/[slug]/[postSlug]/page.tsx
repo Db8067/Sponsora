@@ -33,6 +33,7 @@ export default function InternshipDetailPage() {
         });
       }
       setIsLoading(false);
+      window.dispatchEvent(new Event("sponsora-page-loaded"));
     }
     
     fetchInternship();
@@ -40,12 +41,7 @@ export default function InternshipDetailPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-[100dvh] pt-32 pb-12 flex justify-center items-center bg-transparent">
-        <div className="flex flex-col items-center gap-4">
-            <div className="w-12 h-12 rounded-full border-4 border-primary/20 border-t-primary animate-spin" />
-            <p className="text-foreground/50 font-medium animate-pulse">Loading opportunity...</p>
-        </div>
-      </div>
+      <div className="min-h-screen bg-transparent" />
     );
   }
 

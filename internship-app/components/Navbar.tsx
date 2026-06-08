@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Menu, X, Calendar, ChevronRight, Briefcase } from "lucide-react";
+import { Menu, X, Calendar, ChevronRight, Briefcase, Home } from "lucide-react";
 import { useState, useEffect } from "react";
 import { ThemeToggle } from "./ThemeToggle";
 import { motion, AnimatePresence } from "framer-motion";
@@ -108,6 +108,26 @@ export default function Navbar() {
                 <button onClick={() => setIsOpen(false)} className="p-2">
                   <X className="w-6 h-6" />
                 </button>
+              </div>
+
+              {/* Homepage Navigation */}
+              <div className="mb-6">
+                <p className="text-xs font-bold uppercase tracking-widest text-foreground/40 mb-4 flex items-center gap-2">
+                  <Home className="w-3.5 h-3.5" /> Navigation
+                </p>
+                <div className="flex flex-col gap-1">
+                  <Link
+                    href="/internshipcategory"
+                    onClick={() => setIsOpen(false)}
+                    className="flex items-center justify-between px-4 py-3 rounded-2xl text-foreground/80 hover:text-primary hover:bg-primary/5 transition-all font-semibold text-lg group"
+                  >
+                    <span className="flex items-center gap-3">
+                      <Home className="w-5 h-5 text-primary" />
+                      Homepage
+                    </span>
+                    <ChevronRight className="w-4 h-4 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
+                  </Link>
+                </div>
               </div>
 
               {/* Categories Section */}

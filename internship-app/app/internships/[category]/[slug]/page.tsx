@@ -51,6 +51,7 @@ export default function InternshipDetailPage() {
         console.error(err);
       } finally {
         setIsLoading(false);
+        window.dispatchEvent(new Event("sponsora-page-loaded"));
       }
     };
     fetchInternship();
@@ -58,9 +59,7 @@ export default function InternshipDetailPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen pt-32 pb-12 flex justify-center">
-        <div className="w-8 h-8 rounded-full border-2 border-primary border-t-transparent animate-spin" />
-      </div>
+      <div className="min-h-screen bg-transparent" />
     );
   }
 
