@@ -112,21 +112,8 @@ export function InternshipCard({ internship, index = 0, categorySlug }: Internsh
             </div>
           </div>
 
-          {/* Footer (Skills & CTA) */}
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mt-2 pt-4 border-t border-black/5 dark:border-white/5">
-            <div className="flex flex-wrap gap-2">
-              {skillsList.slice(0, 3).map((skill, i) => (
-                <span key={i} className="px-2.5 py-1 rounded-md bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10 text-xs text-foreground/80">
-                  {skill}
-                </span>
-              ))}
-              {skillsList.length > 3 && (
-                <span className="px-2.5 py-1 rounded-md text-xs text-foreground/50">
-                  +{skillsList.length - 3} more
-                </span>
-              )}
-            </div>
-
+          {/* Footer (CTA) */}
+          <div className="flex flex-col sm:flex-row items-end justify-end gap-4 mt-2 pt-4 border-t border-black/5 dark:border-white/5">
             <button 
               className="flex items-center gap-2 text-sm font-semibold text-primary group-hover:text-primary-dark transition-colors"
             >

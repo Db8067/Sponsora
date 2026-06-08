@@ -88,7 +88,7 @@ export default function InternshipDetailPage() {
   }
 
   return (
-    <div className="relative min-h-[100dvh] w-full flex flex-col pt-24 pb-24 bg-background text-foreground overflow-hidden">
+    <div className="relative min-h-[100dvh] w-full flex flex-col pt-24 pb-24 bg-transparent text-foreground overflow-hidden">
       {/* Background Ambient Glows */}
       <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
         <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-primary/5 blur-[120px] mix-blend-screen" />
@@ -185,6 +185,13 @@ export default function InternshipDetailPage() {
                 </div>
                 
                 <div className="space-y-10">
+                    {(meta.custom_sections || []).map((sec: any, idx: number) => (
+                        <div key={idx}>
+                            <h4 className="font-bold text-lg mb-3 text-foreground/90">{sec.title || 'Custom Section'}</h4>
+                            <div className="text-[15px] text-foreground/70 leading-relaxed whitespace-pre-line">{sec.content || ''}</div>
+                        </div>
+                    ))}
+
                     {meta.eligibility && (
                         <div>
                             <h4 className="font-bold text-lg mb-3 text-foreground/90">Eligibility</h4>
