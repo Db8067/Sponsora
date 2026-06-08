@@ -184,7 +184,14 @@ export default function InternshipDetailPage() {
     </div>
   );
 
-  const AboutInternshipCard = () => (
+  const AboutInternshipCard = () => {
+    const defaultOrder = [
+        ...(meta.custom_sections || []).map((_: any, i: number) => `custom_${i}`),
+        'eligibility', 'roles', 'responsibilities', 'preferred_skills', 'what_you_will_gain', 'internship_details', 'who_should_apply'
+    ];
+    const currentOrder = meta.section_order || defaultOrder;
+
+    return (
     <div className="p-6 md:p-8 rounded-[2rem] bg-white dark:bg-white/[0.02] border border-black/5 dark:border-white/5 shadow-sm">
         <div className="flex items-center gap-3 mb-8">
             <div className="w-1.5 h-6 bg-primary rounded-full" />
@@ -192,61 +199,34 @@ export default function InternshipDetailPage() {
         </div>
         
         <div className="space-y-10">
-            {(meta.custom_sections || []).map((sec: any, idx: number) => (
-                <div key={idx}>
-                    <h4 className="font-bold text-lg mb-3 text-foreground/90">{sec.title || 'Custom Section'}</h4>
-                    <div className="text-[15px] text-foreground/70 leading-relaxed whitespace-pre-line">{sec.content || ''}</div>
-                </div>
-            ))}
+            {currentOrder.map((secKey: string, idx: number) => {
+                const isCustom = secKey.startsWith('custom_');
+                const customIdx = isCustom ? parseInt(secKey.split('_')[1]) : -1;
+                
+                if (isCustom && !meta.custom_sections?.[customIdx]) return null;
 
-            {meta.eligibility && (
-                <div>
-                    <h4 className="font-bold text-lg mb-3 text-foreground/90">Eligibility</h4>
-                    <div className="text-[15px] text-foreground/70 leading-relaxed whitespace-pre-line">{meta.eligibility}</div>
-                </div>
-            )}
-            
-            {meta.roles && (
-                <div>
-                    <h4 className="font-bold text-lg mb-3 text-foreground/90">Roles</h4>
-                    <div className="text-[15px] text-foreground/70 leading-relaxed whitespace-pre-line">{meta.roles}</div>
-                </div>
-            )}
-
-            {meta.responsibilities && (
-                <div>
-                    <h4 className="font-bold text-lg mb-3 text-foreground/90">Responsibility</h4>
-                    <div className="text-[15px] text-foreground/70 leading-relaxed whitespace-pre-line">{meta.responsibilities}</div>
-                </div>
-            )}
-
-            {meta.preferred_skills && (
-                <div>
-                    <h4 className="font-bold text-lg mb-3 text-foreground/90">Preferred / Technical Skills</h4>
-                    <div className="text-[15px] text-foreground/70 leading-relaxed whitespace-pre-line">{meta.preferred_skills}</div>
-                </div>
-            )}
-
-            {meta.what_you_will_gain && (
-                <div>
-                    <h4 className="font-bold text-lg mb-3 text-foreground/90">What You Will Gain</h4>
-                    <div className="text-[15px] text-foreground/70 leading-relaxed whitespace-pre-line">{meta.what_you_will_gain}</div>
-                </div>
-            )}
-
-            {meta.internship_details && (
-                <div>
-                    <h4 className="font-bold text-lg mb-3 text-foreground/90">Internship Details</h4>
-                    <div className="text-[15px] text-foreground/70 leading-relaxed whitespace-pre-line">{meta.internship_details}</div>
-                </div>
-            )}
-
-            {meta.who_should_apply && (
-                <div>
-                    <h4 className="font-bold text-lg mb-3 text-foreground/90">Who Should Apply</h4>
-                    <div className="text-[15px] text-foreground/70 leading-relaxed whitespace-pre-line">{meta.who_should_apply}</div>
-                </div>
-            )}
+                const legacyTitles: Record<string, string> = {
+                    eligibility: 'Eligibility',
+                    roles: 'Roles',
+                    responsibilities: 'Responsibility',
+                    preferred_skills: 'Preferred / Technical Skills',
+                    what_you_will_gain: 'What You Will Gain',
+                    internship_details: 'Internship Details',
+                    who_should_apply: 'Who Should Apply'
+                };
+                
+                const title = isCustom ? (meta.custom_sections[customIdx]?.title || 'Custom Section') : (legacyTitles[secKey] || secKey);
+                const content = isCustom ? (meta.custom_sections[customIdx]?.content || '') : (meta[secKey] || '');
+                
+                if (!content) return null;
+                
+                return (
+                    <div key={idx}>
+                        <h4 className="font-bold text-lg mb-3 text-foreground/90">{title}</h4>
+                        <div className="text-[15px] text-foreground/70 leading-relaxed whitespace-pre-line">{content}</div>
+                    </div>
+                );
+            })}
 
             {internship.description && (
                 <div>
@@ -256,7 +236,7 @@ export default function InternshipDetailPage() {
             )}
         </div>
     </div>
-  );
+  )};
 
   return (
     <div className="relative min-h-[100dvh] w-full flex flex-col pt-24 pb-24 bg-transparent text-foreground overflow-x-hidden">
