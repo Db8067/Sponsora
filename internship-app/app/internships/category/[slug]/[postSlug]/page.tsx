@@ -5,6 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import { Building2, MapPin, IndianRupee, Clock, CalendarDays, ArrowLeft, ShieldCheck, Zap, Briefcase, Users, Star, Target, CheckCircle2, Award, FileText, MousePointerClick } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { motion } from "framer-motion";
+import LoadingScreen from "@/components/LoadingScreen";
 
 export default function InternshipDetailPage() {
   const params = useParams();
@@ -39,14 +40,7 @@ export default function InternshipDetailPage() {
   }, [postSlug]);
 
   if (isLoading) {
-    return (
-      <div className="min-h-[100dvh] pt-32 pb-12 flex justify-center items-center bg-transparent">
-        <div className="flex flex-col items-center gap-4">
-            <div className="w-12 h-12 rounded-full border-4 border-primary/20 border-t-primary animate-spin" />
-            <p className="text-foreground/50 font-medium animate-pulse">Loading opportunity...</p>
-        </div>
-      </div>
-    );
+    return <LoadingScreen />;
   }
 
   if (!internship || internship.is_deleted) {
@@ -114,15 +108,15 @@ export default function InternshipDetailPage() {
         </div>
         
         {/* Main Apply Card */}
-        <div className="bg-white dark:bg-[#111] rounded-[2rem] rounded-tl-none border-2 border-black/10 dark:border-white/10 p-6 md:p-8 shadow-2xl relative z-10 w-full">
+        <div className="bg-white dark:bg-[#111] rounded-[2rem] rounded-tl-none border-2 border-black/10 dark:border-white/10 p-4 md:p-8 shadow-2xl relative z-10 w-full">
             <button 
                 onClick={handleApplyClick}
-                className="w-full py-5 rounded-2xl bg-[#0066FF] hover:bg-[#0055DD] text-white font-black text-xl active:scale-95 transition-all shadow-xl shadow-blue-500/25"
+                className="w-full py-3 md:py-5 rounded-2xl bg-[#0066FF] hover:bg-[#0055DD] text-white font-black text-lg md:text-xl active:scale-95 transition-all shadow-xl shadow-blue-500/25"
             >
                 Apply Now
             </button>
             
-            <div className="mt-8 flex items-center justify-center gap-2 text-foreground/60 font-black text-lg cursor-default group">
+            <div className="mt-4 md:mt-8 flex items-center justify-center gap-2 text-foreground/60 font-black text-base md:text-lg cursor-default group">
                 <MousePointerClick size={20} className="group-hover:text-primary transition-colors" />
                 <span className="group-hover:text-primary transition-colors">{internship.applied_count || meta.applied_count || '0'} Applied</span>
             </div>

@@ -6,6 +6,7 @@ import { Search, Filter, SlidersHorizontal, ArrowLeft, ChevronRight, Briefcase, 
 import Link from "next/link";
 import { InternshipCard, InternshipPost } from "@/components/InternshipCard";
 import { supabase } from "@/lib/supabase";
+import LoadingScreen from "@/components/LoadingScreen";
 
 const getDoodleImage = (slug: string) => {
   const map: Record<string, string> = {
@@ -111,11 +112,7 @@ export default function CategoryInternshipsPage() {
   });
 
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center pt-20 bg-transparent">
-        <div className="size-10 border-4 border-primary border-t-transparent rounded-full animate-spin" />
-      </div>
-    );
+    return <LoadingScreen />;
   }
 
   if (!category) {
@@ -188,7 +185,7 @@ export default function CategoryInternshipsPage() {
                   placeholder="Search roles..." 
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-9 pr-4 py-2.5 rounded-full bg-white dark:bg-[#1A1A1D] border border-black/5 dark:border-white/10 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary w-full md:w-56 text-sm"
+                  className="pl-9 pr-4 py-2.5 rounded-full bg-white dark:bg-[#1A1A1D] border border-black/5 dark:border-white/10 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary w-full md:w-56 text-base md:text-sm"
                 />
               </div>
               <button 
@@ -241,6 +238,16 @@ export default function CategoryInternshipsPage() {
               displayedInternships.map((internship, i) => (
                 <InternshipCard key={internship.id} internship={internship} index={i} categorySlug={slug} />
               ))
+            ) : internships.length === 0 ? (
+              <div className="w-full py-20 flex flex-col items-center justify-center text-center bg-white dark:bg-[#1A1A1D] border border-black/5 dark:border-white/10 rounded-3xl">
+                <div className="w-48 h-48 mb-6">
+                   <img src={`/images/empty-state.png`} alt="Coming Soon" className="w-full h-full object-contain drop-shadow-2xl" />
+                </div>
+                <h3 className="text-2xl font-black mb-2">More Internships Coming Soon!</h3>
+                <p className="text-foreground/60 max-w-sm">
+                  We are actively partnering with companies to bring you the best opportunities. Stay tuned!
+                </p>
+              </div>
             ) : (
               <div className="w-full py-20 flex flex-col items-center justify-center text-center bg-white dark:bg-[#1A1A1D] border border-black/5 dark:border-white/10 rounded-3xl">
                 <div className="w-32 h-32 mb-6 opacity-80">

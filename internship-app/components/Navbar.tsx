@@ -8,6 +8,7 @@ import { ThemeToggle } from "./ThemeToggle";
 import CustomButton from "./ui/CustomButton";
 import { motion, AnimatePresence } from "framer-motion";
 import UserProfile from "./UserProfile";
+import { supabase } from "@/lib/supabase";
 
 export default function Navbar() {
   const isLoaded = true;
@@ -16,14 +17,29 @@ export default function Navbar() {
   
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [categories, setCategories] = useState<any[]>([]);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll);
+
+    const fetchCategories = async () => {
+      const { data } = await supabase.from('sponsora_categories').select('*').eq('app_type', 'internship').or('is_deleted.eq.false,is_deleted.is.null');
+      if (data) setCategories(data);
+    };
+    fetchCategories();
+
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const dynamicLinks = categories.map(c => ({
+    name: c.name,
+    href: `/internships/category/${c.slug}`,
+    icon: LayoutDashboard
+  }));
+
   const navLinks = [
+    ...dynamicLinks,
     { name: "Discover Events", href: "/events", icon: Calendar },
   ];
 

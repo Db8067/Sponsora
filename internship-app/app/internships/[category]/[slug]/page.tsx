@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { Building2, MapPin, IndianRupee, Clock, CalendarDays, ArrowLeft, Share2, ShieldCheck, CheckCircle2 } from "lucide-react";
+import LoadingScreen from "@/components/LoadingScreen";
 
 import { supabase } from "@/lib/supabase";
 
@@ -57,11 +58,7 @@ export default function InternshipDetailPage() {
   }, [slug]);
 
   if (isLoading) {
-    return (
-      <div className="min-h-screen pt-32 pb-12 flex justify-center">
-        <div className="w-8 h-8 rounded-full border-2 border-primary border-t-transparent animate-spin" />
-      </div>
-    );
+    return <LoadingScreen />;
   }
 
   if (!internship) return null;
@@ -121,7 +118,7 @@ export default function InternshipDetailPage() {
             </div>
 
             {/* Mobile Only Quick Details */}
-            <div className="lg:hidden p-6 rounded-3xl glass border border-white/10 dark:border-white/5 w-full">
+            <div className="lg:hidden p-4 rounded-3xl glass border border-white/10 dark:border-white/5 w-full">
               <div className="flex flex-col gap-5">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="flex items-start gap-3">
@@ -148,7 +145,7 @@ export default function InternshipDetailPage() {
 
                 <button 
                   onClick={handleApplyClick}
-                  className="w-full py-4 rounded-xl bg-gradient-to-r from-primary to-primary-dark text-white font-bold text-lg hover:shadow-xl hover:shadow-primary/30 active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+                  className="w-full py-3 rounded-xl bg-gradient-to-r from-primary to-primary-dark text-white font-bold text-base hover:shadow-xl hover:shadow-primary/30 active:scale-[0.98] transition-all flex items-center justify-center gap-2"
                 >
                   Apply Now <ShieldCheck className="w-5 h-5" />
                 </button>
