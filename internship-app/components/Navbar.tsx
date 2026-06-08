@@ -22,24 +22,20 @@ export default function Navbar() {
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll);
-
-    const fetchCategories = async () => {
-      const { data } = await supabase.from('sponsora_categories').select('*').eq('app_type', 'internship').or('is_deleted.eq.false,is_deleted.is.null');
-      if (data) setCategories(data);
-    };
-    fetchCategories();
-
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const dynamicLinks = categories.map(c => ({
-    name: c.name,
-    href: `/internships/category/${c.slug}`,
-    icon: LayoutDashboard
-  }));
+  useEffect(() => {
+    async function fetchCategories() {
+      const { data } = await supabase.from('sponsora_categories').select('*').eq('type', 'internship').or('is_deleted.eq.false,is_deleted.is.null').order('sort_order', { ascending: true });
+      if (data) {
+        setCategories(data);
+      }
+    }
+    fetchCategories();
+  }, []);
 
   const navLinks = [
-    ...dynamicLinks,
     { name: "Discover Events", href: "/events", icon: Calendar },
   ];
 
@@ -129,13 +125,23 @@ export default function Navbar() {
                 </button>
               </div>
 
-              <div className="flex flex-col gap-6 mb-8">
+              <div className="flex flex-col gap-6 mb-8 overflow-y-auto max-h-[60vh] pr-2">
+                {categories.map((cat) => (
+                  <Link 
+                    key={cat.id} 
+                    href={`/internships/category/${cat.slug || cat.id}`}
+                    onClick={() => setIsOpen(false)}
+                    className="text-2xl font-bold text-foreground hover:text-primary transition-colors capitalize"
+                  >
+                    {cat.name || cat.title}
+                  </Link>
+                ))}
                 {navLinks.map((link) => (
                   <Link 
                     key={link.name} 
                     href={link.href}
                     onClick={() => setIsOpen(false)}
-                    className="text-2xl font-bold text-foreground hover:text-primary transition-colors"
+                    className="text-2xl font-bold text-foreground hover:text-primary transition-colors pt-4 border-t border-white/5"
                   >
                     {link.name}
                   </Link>
