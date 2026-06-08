@@ -51,7 +51,7 @@ export default function CategoryInternshipsPage() {
       setLoading(true);
       
       // Fetch all categories for sidebar
-      const { data: allCats } = await supabase.from('sponsora_categories').select('*').eq('app_type', 'internship').or('is_deleted.eq.false,is_deleted.is.null');
+      const { data: allCats } = await supabase.from('sponsora_categories').select('*').eq('type', 'internship').or('is_deleted.eq.false,is_deleted.is.null');
       if (allCats) setAllCategories(allCats);
       
       // Fetch Category
@@ -93,7 +93,9 @@ export default function CategoryInternshipsPage() {
   const displayedInternships = internships.filter(i => {
     const meta = i.metadata || {};
     const matchesSearch = i.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                          (meta.company_name && meta.company_name.toLowerCase().includes(searchQuery.toLowerCase()));
+                          (meta.company_name && meta.company_name.toLowerCase().includes(searchQuery.toLowerCase())) ||
+                          (meta.skills && meta.skills.toLowerCase().includes(searchQuery.toLowerCase())) ||
+                          (meta.city && meta.city.toLowerCase().includes(searchQuery.toLowerCase()));
     
     const matchesLocation = filterLocation === "all" ? true : meta.location_type?.toLowerCase() === filterLocation;
     const matchesDuration = filterDuration === "all" ? true : 
@@ -177,7 +179,7 @@ export default function CategoryInternshipsPage() {
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
             <div>
                 <h2 className="text-2xl font-bold text-foreground">Open Roles</h2>
-                <span className="text-sm font-medium text-foreground/50">{internships.length} Internships</span>
+                <span className="text-sm font-medium text-foreground/50">{displayedInternships.length} Internships</span>
             </div>
             
             <div className="flex items-center gap-3">
@@ -188,7 +190,7 @@ export default function CategoryInternshipsPage() {
                   placeholder="Search roles..." 
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-9 pr-4 py-2.5 rounded-full bg-white dark:bg-[#1A1A1D] border border-black/5 dark:border-white/10 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary w-full md:w-56 text-sm"
+                  className="pl-9 pr-4 py-2.5 rounded-full bg-white dark:bg-[#1A1A1D] border border-black/5 dark:border-white/10 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary w-full md:w-56 text-[16px] md:text-sm"
                 />
               </div>
               <button 
@@ -207,7 +209,7 @@ export default function CategoryInternshipsPage() {
                 <span className="font-semibold text-foreground">Filters:</span>
               </div>
               
-              <select value={filterLocation} onChange={(e) => setFilterLocation(e.target.value)} className="bg-white dark:bg-[#1A1A1D] border border-black/10 dark:border-white/10 hover:border-primary/50 text-foreground font-medium text-sm rounded-xl px-4 py-2 cursor-pointer outline-none focus:ring-2 focus:ring-primary/20 transition-all shadow-sm">
+              <select value={filterLocation} onChange={(e) => setFilterLocation(e.target.value)} className="bg-white dark:bg-[#1A1A1D] border border-black/10 dark:border-white/10 hover:border-primary/50 text-foreground font-medium text-[16px] md:text-sm rounded-xl px-4 py-2 cursor-pointer outline-none focus:ring-2 focus:ring-primary/20 transition-all shadow-sm">
                 <option value="all">All Locations</option>
                 <option value="remote">Remote</option>
                 <option value="onsite">Onsite</option>
@@ -215,7 +217,7 @@ export default function CategoryInternshipsPage() {
                 <option value="in-office">In-Office</option>
               </select>
 
-              <select value={filterDuration} onChange={(e) => setFilterDuration(e.target.value)} className="bg-white dark:bg-[#1A1A1D] border border-black/10 dark:border-white/10 hover:border-primary/50 text-foreground font-medium text-sm rounded-xl px-4 py-2 cursor-pointer outline-none focus:ring-2 focus:ring-primary/20 transition-all shadow-sm">
+              <select value={filterDuration} onChange={(e) => setFilterDuration(e.target.value)} className="bg-white dark:bg-[#1A1A1D] border border-black/10 dark:border-white/10 hover:border-primary/50 text-foreground font-medium text-[16px] md:text-sm rounded-xl px-4 py-2 cursor-pointer outline-none focus:ring-2 focus:ring-primary/20 transition-all shadow-sm">
                 <option value="all">Any Duration</option>
                 <option value="short">1-3 Months</option>
                 <option value="medium">3-6 Months</option>
@@ -226,7 +228,7 @@ export default function CategoryInternshipsPage() {
 
               <div className="flex items-center gap-2">
                 <span className="text-foreground/70">Sort by:</span>
-                <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} className="bg-white dark:bg-[#1A1A1D] border border-black/10 dark:border-white/10 hover:border-primary/50 text-foreground font-medium text-sm rounded-xl px-4 py-2 cursor-pointer outline-none focus:ring-2 focus:ring-primary/20 transition-all shadow-sm">
+                <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} className="bg-white dark:bg-[#1A1A1D] border border-black/10 dark:border-white/10 hover:border-primary/50 text-foreground font-medium text-[16px] md:text-sm rounded-xl px-4 py-2 cursor-pointer outline-none focus:ring-2 focus:ring-primary/20 transition-all shadow-sm">
                   <option value="latest">Latest First</option>
                   <option value="stipend">Highest Stipend</option>
                   <option value="deadline">Ending Soon</option>
