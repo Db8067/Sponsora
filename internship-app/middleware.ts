@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 
 const isProtectedRoute = createRouteMatcher(['/profile(.*)', '/admin(.*)']);
 
-export default clerkMiddleware((auth, req) => {
+export default clerkMiddleware(async (auth, req) => {
   // Basic VPN / Proxy Detection Header Checks
   const headers = req.headers;
   const isProxy = 
@@ -19,7 +19,7 @@ export default clerkMiddleware((auth, req) => {
   }
 
   if (isProtectedRoute(req)) {
-    auth().protect();
+    (await auth()).protect();
   }
 
   return NextResponse.next();

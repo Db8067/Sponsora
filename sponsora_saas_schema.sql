@@ -28,7 +28,7 @@ CREATE TABLE public.applications_log (
 );
 
 -- Index for fast daily limit counting
-CREATE INDEX idx_applications_log_user_date ON public.applications_log (user_id, DATE(created_at));
+CREATE INDEX idx_applications_log_user_date ON public.applications_log (user_id, created_at);
 
 -- 3. Device Sessions Table
 -- Tracks active devices to enforce the 2-device limit and detect sharing (multiple cities)
