@@ -7,6 +7,8 @@ import Link from "next/link";
 import { InternshipCard, InternshipPost } from "@/components/InternshipCard";
 import { supabase } from "@/lib/supabase";
 
+import { useUser } from "@clerk/nextjs";
+
 const getDoodleImage = (slug: string) => {
   const map: Record<string, string> = {
     'software-engineering': 'se_internship_doodle.png',
@@ -31,6 +33,7 @@ export default function CategoryInternshipsPage() {
   const params = useParams();
   const router = useRouter();
   const slug = params.slug as string;
+  const { user } = useUser();
 
   const [category, setCategory] = useState<any>(null);
   const [allCategories, setAllCategories] = useState<any[]>([]);
@@ -50,46 +53,35 @@ export default function CategoryInternshipsPage() {
     async function fetchCategoryAndInternships() {
       setLoading(true);
       
-      // Fetch all categories for sidebar
-      const { data: allCats } = await supabase.from('sponsora_categories').select('*').eq('type', 'internship').or('is_deleted.eq.false,is_deleted.is.null');
-      if (allCats) setAllCategories(allCats);
-      
-      // Fetch Category
-      const { data: catData, error: catError } = await supabase
-        .from('sponsora_categories')
-        .select('*')
-        .eq('slug', slug)
-        .single();
-          
-      if (catError || !catData) {
+      try {
+        // Fetch all categories for sidebar
+        const { data: allCats } = await supabase.from('sponsora_categories').select('*').eq('type', 'internship').or('is_deleted.eq.false,is_deleted.is.null');
+        if (allCats) setAllCategories(allCats);
+        
+        // Fetch secure category and sanitized internships
+        const res = await fetch(`/api/internships/category/${slug}`, {
+          headers: user?.id ? { 'x-user-id': user.id } : {},
+        });
+        const data = await res.json();
+        
+        if (data.error || !data.category) {
+          setLoading(false);
+          window.dispatchEvent(new Event("sponsora-page-loaded"));
+          return;
+        }
+        
+        setCategory(data.category);
+        setInternships(data.internships || []);
+      } catch (err) {
+        console.error('Error fetching secure category data:', err);
+      } finally {
         setLoading(false);
         window.dispatchEvent(new Event("sponsora-page-loaded"));
-        return;
       }
-      setCategory(catData);
-
-      // Fetch Internships
-      const { data: postsData, error: postsError } = await supabase
-        .from('sponsora_posts')
-        .select('*')
-        .eq('category_id', catData.id)
-        .or('is_deleted.eq.false,is_deleted.is.null')
-        .order('sort_order', { ascending: true })
-        .order('created_at', { ascending: false });
-          
-      if (!postsError && postsData) {
-        const parsedPosts = postsData.map(post => ({
-          ...post,
-          metadata: post.metadata || {}
-        }));
-        setInternships(parsedPosts);
-      }
-      setLoading(false);
-      window.dispatchEvent(new Event("sponsora-page-loaded"));
     }
 
     fetchCategoryAndInternships();
-  }, [slug]);
+  }, [slug, user?.id]);
 
   // Apply filters
   const displayedInternships = internships.filter(i => {

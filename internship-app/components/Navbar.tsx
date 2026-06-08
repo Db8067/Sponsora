@@ -1,10 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { Menu, X, Calendar, ChevronRight, Briefcase, Home } from "lucide-react";
+import { Menu, X, Calendar, ChevronRight, Briefcase, Home, User, CreditCard } from "lucide-react";
 import { useState, useEffect } from "react";
 import { ThemeToggle } from "./ThemeToggle";
 import { motion, AnimatePresence } from "framer-motion";
+import { useUser, UserButton, SignInButton } from "@clerk/nextjs";
 
 interface Category {
   id: string;
@@ -14,9 +15,7 @@ interface Category {
 }
 
 export default function Navbar() {
-  const isLoaded = true;
-  const isSignedIn = false;
-  const user: any = { publicMetadata: { role: 'user' } };
+  const { isSignedIn, user, isLoaded } = useUser();
   
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -48,7 +47,7 @@ export default function Navbar() {
   }, []);
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? 'bg-background/80 backdrop-blur-xl py-4' : 'bg-transparent py-6'}`}>
+    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? 'bg-background/80 backdrop-blur-xl py-4 border-b border-foreground/[0.05]' : 'bg-transparent py-6'}`}>
       <div className="max-w-[1400px] mx-auto px-6 lg:px-12 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2 group">
           <img src="/images/logo-light.png" alt="Sponsora Logo" className="h-10 md:h-12 w-auto dark:hidden block" />
@@ -56,23 +55,46 @@ export default function Navbar() {
         </Link>
         
         {/* Desktop Nav */}
-        <div className="hidden md:flex items-center gap-8">
-          <div className="flex items-center gap-8">
-            <Link href="/events" className="text-sm font-medium text-foreground/60 hover:text-foreground transition-colors">
+        <div className="hidden md:flex items-center gap-6">
+          <div className="flex items-center gap-6">
+            <Link href="/events" className="text-sm font-semibold text-foreground/60 hover:text-foreground transition-colors">
               Discover Events
+            </Link>
+            <Link href="/internshipcategory" className="text-sm font-semibold text-foreground/60 hover:text-foreground transition-colors">
+              Internships
+            </Link>
+            <Link href="/subscribe" className="text-sm font-semibold text-foreground/60 hover:text-foreground transition-colors">
+              Pricing
             </Link>
           </div>
 
           <div className="h-4 w-px bg-foreground/10" />
 
-           <div className="flex items-center gap-6">
-             <ThemeToggle />
-           </div>
+          <div className="flex items-center gap-4">
+            <ThemeToggle />
+            {isLoaded ? (
+              isSignedIn ? (
+                <div className="flex items-center gap-4">
+                  <Link href="/profile" className="text-sm font-semibold text-foreground/60 hover:text-foreground transition-colors flex items-center gap-1.5">
+                    <User className="w-4 h-4" /> Profile
+                  </Link>
+                  <UserButton />
+                </div>
+              ) : (
+                <SignInButton mode="modal">
+                  <button className="px-5 py-2 text-sm font-bold bg-primary text-white rounded-full hover:shadow-lg transition-all">
+                    Sign In
+                  </button>
+                </SignInButton>
+              )
+            ) : null}
+          </div>
         </div>
 
         {/* Mobile Toggle */}
-        <div className="flex md:hidden items-center gap-4">
+        <div className="flex md:hidden items-center gap-3">
           <ThemeToggle />
+          {isLoaded && isSignedIn && <UserButton />}
           <button
             onClick={() => setIsOpen(!isOpen)}
             className="w-10 h-10 flex items-center justify-center text-foreground active:scale-90 transition-transform"
@@ -100,7 +122,7 @@ export default function Navbar() {
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
               className="fixed top-0 left-0 right-0 bg-background z-[60] md:hidden p-6 flex flex-col border-b border-white/5 max-h-[90dvh] overflow-y-auto"
             >
-              <div className="flex items-center justify-between mb-8">
+              <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-2">
                   <img src="/images/logo-light.png" alt="Sponsora Logo" className="h-10 w-auto dark:hidden block" />
                   <img src="/images/logo-dark.png" alt="Sponsora Logo" className="h-10 w-auto hidden dark:block" />
@@ -110,30 +132,67 @@ export default function Navbar() {
                 </button>
               </div>
 
-              {/* Homepage Navigation */}
+              {/* Account Actions */}
+              {isLoaded && !isSignedIn && (
+                <div className="mb-6">
+                  <SignInButton mode="modal">
+                    <button className="w-full py-3 bg-primary text-white font-bold rounded-2xl shadow-lg" onClick={() => setIsOpen(false)}>
+                      Sign In to Account
+                    </button>
+                  </SignInButton>
+                </div>
+              )}
+
+              {/* Navigation */}
               <div className="mb-6">
-                <p className="text-xs font-bold uppercase tracking-widest text-foreground/40 mb-4 flex items-center gap-2">
+                <p className="text-xs font-bold uppercase tracking-widest text-foreground/40 mb-3 flex items-center gap-2">
                   <Home className="w-3.5 h-3.5" /> Navigation
                 </p>
                 <div className="flex flex-col gap-1">
                   <Link
                     href="/internshipcategory"
                     onClick={() => setIsOpen(false)}
-                    className="flex items-center justify-between px-4 py-3 rounded-2xl text-foreground/80 hover:text-primary hover:bg-primary/5 transition-all font-semibold text-lg group"
+                    className="flex items-center justify-between px-4 py-2.5 rounded-2xl text-foreground/80 hover:text-primary hover:bg-primary/5 transition-all font-semibold text-base group"
                   >
                     <span className="flex items-center gap-3">
-                      <Home className="w-5 h-5 text-primary" />
-                      Homepage
+                      <Home className="w-4 h-4 text-primary" />
+                      Internships Homepage
                     </span>
                     <ChevronRight className="w-4 h-4 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
                   </Link>
+
+                  <Link
+                    href="/subscribe"
+                    onClick={() => setIsOpen(false)}
+                    className="flex items-center justify-between px-4 py-2.5 rounded-2xl text-foreground/80 hover:text-primary hover:bg-primary/5 transition-all font-semibold text-base group"
+                  >
+                    <span className="flex items-center gap-3">
+                      <CreditCard className="w-4 h-4 text-primary" />
+                      Premium Pricing
+                    </span>
+                    <ChevronRight className="w-4 h-4 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
+                  </Link>
+
+                  {isSignedIn && (
+                    <Link
+                      href="/profile"
+                      onClick={() => setIsOpen(false)}
+                      className="flex items-center justify-between px-4 py-2.5 rounded-2xl text-foreground/80 hover:text-primary hover:bg-primary/5 transition-all font-semibold text-base group"
+                    >
+                      <span className="flex items-center gap-3">
+                        <User className="w-4 h-4 text-primary" />
+                        My Profile & Devices
+                      </span>
+                      <ChevronRight className="w-4 h-4 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
+                    </Link>
+                  )}
                 </div>
               </div>
 
               {/* Categories Section */}
               {categories.length > 0 && (
                 <div className="mb-6">
-                  <p className="text-xs font-bold uppercase tracking-widest text-foreground/40 mb-4 flex items-center gap-2">
+                  <p className="text-xs font-bold uppercase tracking-widest text-foreground/40 mb-3 flex items-center gap-2">
                     <Briefcase className="w-3.5 h-3.5" /> Internship Categories
                   </p>
                   <div className="flex flex-col gap-1">
@@ -142,7 +201,7 @@ export default function Navbar() {
                         key={cat.id}
                         href={`/internships/category/${cat.slug}`}
                         onClick={() => setIsOpen(false)}
-                        className="flex items-center justify-between px-4 py-3 rounded-2xl text-foreground/80 hover:text-primary hover:bg-primary/5 transition-all font-semibold text-lg group"
+                        className="flex items-center justify-between px-4 py-2.5 rounded-2xl text-foreground/80 hover:text-primary hover:bg-primary/5 transition-all font-semibold text-base group"
                       >
                         <span>{cat.name}</span>
                         <ChevronRight className="w-4 h-4 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
@@ -159,10 +218,10 @@ export default function Navbar() {
               <Link 
                 href="/events"
                 onClick={() => setIsOpen(false)}
-                className="flex items-center justify-between px-4 py-3 rounded-2xl text-foreground/80 hover:text-primary hover:bg-primary/5 transition-all font-semibold text-lg group mb-4"
+                className="flex items-center justify-between px-4 py-2.5 rounded-2xl text-foreground/80 hover:text-primary hover:bg-primary/5 transition-all font-semibold text-base group mb-4"
               >
                 <span className="flex items-center gap-3">
-                  <Calendar className="w-5 h-5 text-primary" />
+                  <Calendar className="w-4 h-4 text-primary" />
                   Discover Events
                 </span>
                 <ChevronRight className="w-4 h-4 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />

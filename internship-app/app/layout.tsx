@@ -6,6 +6,8 @@ import Footer from "@/components/Footer";
 import BackToTop from "@/components/BackToTop";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import PageTransitionProvider from "@/components/PageTransitionProvider";
+import { SubscriptionProvider } from "@/components/SubscriptionContext";
+import CountdownBanner from "@/components/CountdownBanner";
 import "./globals.css";
 
 const jakarta = Plus_Jakarta_Sans({
@@ -29,7 +31,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    /* <ClerkProvider> */
+    <ClerkProvider>
       <html lang="en" className={`${jakarta.variable} ${inter.variable} antialiased`} suppressHydrationWarning>
         <body className="flex min-h-screen flex-col font-sans bg-background text-foreground transition-colors">
           <ThemeProvider
@@ -38,15 +40,18 @@ export default function RootLayout({
             enableSystem={false}
             disableTransitionOnChange
           >
-            <PageTransitionProvider>
-              <Navbar />
-              <main className="flex-1">{children}</main>
-              <Footer />
-              <BackToTop />
-            </PageTransitionProvider>
+            <SubscriptionProvider>
+              <PageTransitionProvider>
+                <CountdownBanner />
+                <Navbar />
+                <main className="flex-1">{children}</main>
+                <Footer />
+                <BackToTop />
+              </PageTransitionProvider>
+            </SubscriptionProvider>
           </ThemeProvider>
         </body>
       </html>
-    /* </ClerkProvider> */
+    </ClerkProvider>
   );
 }

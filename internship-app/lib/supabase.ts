@@ -14,3 +14,6 @@ if (supabaseUrl && !supabaseUrl.startsWith('http')) {
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim() || process.env.NEXT_PUBLIC_SUPABASE_KEY?.trim() || 'placeholder_anon_key';
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim() || '';
+export const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey || supabaseAnonKey);
