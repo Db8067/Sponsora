@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
+import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
 import { useSubscription } from "@/components/SubscriptionContext";
@@ -71,7 +71,7 @@ declare global {
   interface Window { Razorpay: any; }
 }
 
-function SubscribeContent() {
+export default function SubscribePage() {
   const [selectedPlan, setSelectedPlan] = useState("7_day");
   const [discountCode, setDiscountCode] = useState("");
   const [discountApplied, setDiscountApplied] = useState(false);
@@ -353,17 +353,5 @@ function SubscribeContent() {
         </div>
       </div>
     </div>
-  );
-}
-
-export default function SubscribePage() {
-  return (
-    <Suspense fallback={
-      <div className="min-h-screen flex items-center justify-center bg-transparent">
-        <Loader2 className="w-8 h-8 animate-spin text-primary" />
-      </div>
-    }>
-      <SubscribeContent />
-    </Suspense>
   );
 }
