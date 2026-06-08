@@ -96,7 +96,9 @@ export default function CategoryInternshipsPage() {
     
     const matchesLocation = filterLocation === "all" ? true : meta.location_type?.toLowerCase() === filterLocation;
     const matchesDuration = filterDuration === "all" ? true : 
-                            (filterDuration === "short" ? (meta.duration_months || 0) <= 3 : (meta.duration_months || 0) > 3);
+                            (filterDuration === "short" ? (meta.duration_months || 0) <= 3 : 
+                             filterDuration === "medium" ? ((meta.duration_months || 0) > 3 && (meta.duration_months || 0) <= 6) :
+                             (meta.duration_months || 0) > 6);
                             
     return matchesSearch && matchesLocation && matchesDuration;
   }).sort((a, b) => {
@@ -109,7 +111,7 @@ export default function CategoryInternshipsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center pt-20 bg-background">
+      <div className="min-h-screen flex items-center justify-center pt-20 bg-transparent">
         <div className="size-10 border-4 border-primary border-t-transparent rounded-full animate-spin" />
       </div>
     );
@@ -117,7 +119,7 @@ export default function CategoryInternshipsPage() {
 
   if (!category) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center pt-20 bg-background text-center px-4">
+      <div className="min-h-screen flex flex-col items-center justify-center pt-20 bg-transparent text-center px-4">
         <h1 className="text-3xl font-black mb-2">Category Not Found</h1>
         <button onClick={() => router.push('/internshipcategory')} className="px-6 py-3 bg-primary text-primary-foreground rounded-full font-bold mt-4 flex items-center gap-2 mx-auto">
           <ArrowLeft size={18} /> Back to Categories
@@ -127,7 +129,7 @@ export default function CategoryInternshipsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background pt-28 pb-20 px-4 md:px-6 lg:px-12 selection:bg-primary/30">
+    <div className="min-h-screen bg-transparent pt-28 pb-20 px-4 md:px-6 lg:px-12 selection:bg-primary/30">
       
       {/* Background ambient lighting */}
       <div className="absolute inset-0 z-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/10 via-background to-background pointer-events-none hidden dark:block"></div>
@@ -204,24 +206,26 @@ export default function CategoryInternshipsPage() {
                 <span className="font-semibold text-foreground">Filters:</span>
               </div>
               
-              <select value={filterLocation} onChange={(e) => setFilterLocation(e.target.value)} className="bg-black/5 dark:bg-white/5 border border-transparent rounded-lg px-3 py-1.5 focus:outline-none focus:border-primary text-foreground">
+              <select value={filterLocation} onChange={(e) => setFilterLocation(e.target.value)} className="bg-white dark:bg-[#1A1A1D] border border-black/10 dark:border-white/10 hover:border-primary/50 text-foreground font-medium text-sm rounded-xl px-4 py-2 cursor-pointer outline-none focus:ring-2 focus:ring-primary/20 transition-all shadow-sm">
                 <option value="all">All Locations</option>
                 <option value="remote">Remote</option>
                 <option value="onsite">Onsite</option>
                 <option value="hybrid">Hybrid</option>
+                <option value="in-office">In-Office</option>
               </select>
 
-              <select value={filterDuration} onChange={(e) => setFilterDuration(e.target.value)} className="bg-black/5 dark:bg-white/5 border border-transparent rounded-lg px-3 py-1.5 focus:outline-none focus:border-primary text-foreground">
+              <select value={filterDuration} onChange={(e) => setFilterDuration(e.target.value)} className="bg-white dark:bg-[#1A1A1D] border border-black/10 dark:border-white/10 hover:border-primary/50 text-foreground font-medium text-sm rounded-xl px-4 py-2 cursor-pointer outline-none focus:ring-2 focus:ring-primary/20 transition-all shadow-sm">
                 <option value="all">Any Duration</option>
                 <option value="short">1-3 Months</option>
-                <option value="long">3+ Months</option>
+                <option value="medium">3-6 Months</option>
+                <option value="long">6+ Months</option>
               </select>
 
               <div className="flex-1" />
 
               <div className="flex items-center gap-2">
                 <span className="text-foreground/70">Sort by:</span>
-                <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} className="bg-black/5 dark:bg-white/5 border border-transparent rounded-lg px-3 py-1.5 focus:outline-none focus:border-primary font-medium text-foreground">
+                <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} className="bg-white dark:bg-[#1A1A1D] border border-black/10 dark:border-white/10 hover:border-primary/50 text-foreground font-medium text-sm rounded-xl px-4 py-2 cursor-pointer outline-none focus:ring-2 focus:ring-primary/20 transition-all shadow-sm">
                   <option value="latest">Latest First</option>
                   <option value="stipend">Highest Stipend</option>
                   <option value="deadline">Ending Soon</option>
