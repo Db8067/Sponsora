@@ -1,13 +1,17 @@
 "use client";
 
 import Link from "next/link";
-import { UserButton, useUser } from "@clerk/nextjs";
-import { Menu, X, Rocket, LayoutDashboard, Calendar, BookText } from "lucide-react";
+import { Menu, X, Calendar, ChevronRight, Briefcase } from "lucide-react";
 import { useState, useEffect } from "react";
 import { ThemeToggle } from "./ThemeToggle";
-import CustomButton from "./ui/CustomButton";
 import { motion, AnimatePresence } from "framer-motion";
-import UserProfile from "./UserProfile";
+
+interface Category {
+  id: string;
+  name: string;
+  slug: string;
+  type: string;
+}
 
 export default function Navbar() {
   const isLoaded = true;
@@ -16,6 +20,7 @@ export default function Navbar() {
   
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [categories, setCategories] = useState<Category[]>([]);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -23,9 +28,24 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const navLinks = [
-    { name: "Discover Events", href: "/events", icon: Calendar },
-  ];
+  // Fetch internship categories for mobile nav
+  useEffect(() => {
+    async function fetchCategories() {
+      try {
+        const { supabase } = await import("@/lib/supabase");
+        const { data } = await supabase
+          .from('sponsora_categories')
+          .select('id, name, slug, type')
+          .eq('type', 'internship')
+          .or('is_deleted.eq.false,is_deleted.is.null')
+          .order('sort_order', { ascending: true });
+        if (data) setCategories(data);
+      } catch (e) {
+        console.error("Failed to fetch categories for nav", e);
+      }
+    }
+    fetchCategories();
+  }, []);
 
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? 'bg-background/80 backdrop-blur-xl py-4' : 'bg-transparent py-6'}`}>
@@ -38,37 +58,14 @@ export default function Navbar() {
         {/* Desktop Nav */}
         <div className="hidden md:flex items-center gap-8">
           <div className="flex items-center gap-8">
-            {navLinks.map((link) => (
-              <Link 
-                key={link.name} 
-                href={link.href} 
-                className="text-sm font-medium text-foreground/60 hover:text-foreground transition-colors"
-              >
-                {link.name}
-              </Link>
-            ))}
+            <Link href="/events" className="text-sm font-medium text-foreground/60 hover:text-foreground transition-colors">
+              Discover Events
+            </Link>
           </div>
 
           <div className="h-4 w-px bg-foreground/10" />
 
            <div className="flex items-center gap-6">
-             {!isLoaded ? (
-               <div className="w-8 h-8 rounded-full bg-white/5 animate-pulse" />
-             ) : isSignedIn ? (
-               <>
-                 <Link 
-                   href={`/dashboard/${user.publicMetadata.role || 'user'}`}
-                   className="text-sm font-medium hover:text-primary transition-colors"
-                 >
-                   Dashboard
-                 </Link>
-                 <UserProfile />
-               </>
-             ) : (
-               <>
-                 {/* Sign In/Up Temporarily Removed */}
-               </>
-             )}
              <ThemeToggle />
            </div>
         </div>
@@ -101,7 +98,7 @@ export default function Navbar() {
               animate={{ y: 0 }}
               exit={{ y: "-100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="fixed top-0 left-0 right-0 bg-background z-[60] md:hidden p-6 flex flex-col border-b border-white/5"
+              className="fixed top-0 left-0 right-0 bg-background z-[60] md:hidden p-6 flex flex-col border-b border-white/5 max-h-[90dvh] overflow-y-auto"
             >
               <div className="flex items-center justify-between mb-8">
                 <div className="flex items-center gap-2">
@@ -113,37 +110,43 @@ export default function Navbar() {
                 </button>
               </div>
 
-              <div className="flex flex-col gap-6 mb-8">
-                {navLinks.map((link) => (
-                  <Link 
-                    key={link.name} 
-                    href={link.href}
-                    onClick={() => setIsOpen(false)}
-                    className="text-2xl font-bold text-foreground hover:text-primary transition-colors"
-                  >
-                    {link.name}
-                  </Link>
-                ))}
-              </div>
+              {/* Categories Section */}
+              {categories.length > 0 && (
+                <div className="mb-6">
+                  <p className="text-xs font-bold uppercase tracking-widest text-foreground/40 mb-4 flex items-center gap-2">
+                    <Briefcase className="w-3.5 h-3.5" /> Internship Categories
+                  </p>
+                  <div className="flex flex-col gap-1">
+                    {categories.map((cat) => (
+                      <Link
+                        key={cat.id}
+                        href={`/internships/category/${cat.slug}`}
+                        onClick={() => setIsOpen(false)}
+                        className="flex items-center justify-between px-4 py-3 rounded-2xl text-foreground/80 hover:text-primary hover:bg-primary/5 transition-all font-semibold text-lg group"
+                      >
+                        <span>{cat.name}</span>
+                        <ChevronRight className="w-4 h-4 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
 
-               <div className="pt-8 border-t border-white/5 flex flex-col gap-4">
-                 {isSignedIn ? (
-                   <>
-                     <Link 
-                       href={`/dashboard/${user.publicMetadata.role || 'user'}`}
-                       onClick={() => setIsOpen(false)}
-                       className="text-lg font-bold"
-                     >
-                       Dashboard
-                     </Link>
-                     <UserProfile />
-                   </>
-                 ) : (
-                   <div className="flex items-center gap-4">
-                     {/* Mobile Sign In/Up Temporarily Removed */}
-                   </div>
-                 )}
-               </div>
+              {/* Divider */}
+              <div className="h-px bg-white/10 mb-6" />
+
+              {/* Discover Events - always last */}
+              <Link 
+                href="/events"
+                onClick={() => setIsOpen(false)}
+                className="flex items-center justify-between px-4 py-3 rounded-2xl text-foreground/80 hover:text-primary hover:bg-primary/5 transition-all font-semibold text-lg group mb-4"
+              >
+                <span className="flex items-center gap-3">
+                  <Calendar className="w-5 h-5 text-primary" />
+                  Discover Events
+                </span>
+                <ChevronRight className="w-4 h-4 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
+              </Link>
             </motion.div>
           </>
         )}

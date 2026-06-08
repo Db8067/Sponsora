@@ -244,20 +244,17 @@ export default function CategoryInternshipsPage() {
                 <InternshipCard key={internship.id} internship={internship} index={i} categorySlug={slug} />
               ))
             ) : (
-              <div className="w-full py-20 flex flex-col items-center justify-center text-center bg-white dark:bg-[#1A1A1D] border border-black/5 dark:border-white/10 rounded-3xl">
-                <div className="w-32 h-32 mb-6 opacity-80">
-                   <img src={`/images/${getDoodleImage(slug)}`} alt="No Internships" className="w-full h-full object-contain drop-shadow-2xl" />
+              <div className="w-full py-16 flex flex-col items-center justify-center text-center bg-white dark:bg-[#1A1A1D] border border-black/5 dark:border-white/10 rounded-3xl">
+                <div className="w-44 h-44 mb-6">
+                   <img src="/images/coming_soon_robot.png" alt="Coming Soon" className="w-full h-full object-contain drop-shadow-2xl" />
                 </div>
-                <h3 className="text-xl font-bold mb-2">No Internships Found</h3>
-                <p className="text-foreground/60 max-w-sm">
-                  We couldn't find any opportunities matching your filters. Try adjusting your search criteria.
+                <h3 className="text-2xl font-black mb-3 tracking-tight">We're Cooking Something Special! 🍳</h3>
+                <p className="text-foreground/60 max-w-sm leading-relaxed">
+                  No internships here yet — but our little robot is working hard to find the best opportunities for you. Check back soon!
                 </p>
-                <button 
-                  onClick={() => {setSearchQuery(''); setFilterLocation('all'); setFilterDuration('all');}}
-                  className="mt-6 px-6 py-2 rounded-full bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 transition-colors text-sm font-semibold"
-                >
-                  Clear Filters
-                </button>
+                <span className="mt-6 inline-flex items-center gap-2 text-xs font-bold text-primary/70 bg-primary/10 px-4 py-2 rounded-full">
+                  ✨ New opportunities added regularly
+                </span>
               </div>
             )}
           </div>
