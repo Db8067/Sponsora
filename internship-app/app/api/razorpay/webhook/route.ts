@@ -130,7 +130,7 @@ export async function POST(req: NextRequest) {
           body: JSON.stringify({
             userId,
             planType,
-            validUntil: validUntil.toISOString(),
+            validUntil: newValidUntil.toISOString(),
             amount: payment.amount / 100,
           }),
         });
