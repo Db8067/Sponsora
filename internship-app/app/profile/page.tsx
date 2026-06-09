@@ -147,6 +147,20 @@ export default function ProfilePage() {
               </Link>
             </div>
           </motion.div>
+
+          {/* Cute Message with Doodle */}
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="p-6 rounded-3xl glass border border-white/10 text-center flex flex-col items-center"
+          >
+            <img src="/images/apply_limit.png" alt="Use Limits Wisely" className="w-40 h-40 object-contain mb-4 drop-shadow-lg" />
+            <h3 className="text-lg font-bold text-primary mb-2">Use Your Limits Wisely! 🎯</h3>
+            <p className="text-sm text-foreground/70 leading-relaxed">
+              Every application is a step closer to your dream internship. Take your time to review the company details, tailor your resume, and apply to the roles that truly excite you. Quality always beats quantity!
+            </p>
+          </motion.div>
         </div>
 
         {/* Right Side: Clerk User Profile */}
