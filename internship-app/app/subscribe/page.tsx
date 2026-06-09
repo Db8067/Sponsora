@@ -71,7 +71,21 @@ declare global {
   interface Window { Razorpay: any; }
 }
 
+import { Suspense } from "react";
+
 export default function SubscribePage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+      </div>
+    }>
+      <SubscribeContent />
+    </Suspense>
+  );
+}
+
+function SubscribeContent() {
   const [selectedPlan, setSelectedPlan] = useState("7_day");
   const [discountCode, setDiscountCode] = useState("");
   const [discountApplied, setDiscountApplied] = useState(false);
