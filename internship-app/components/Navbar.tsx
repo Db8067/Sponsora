@@ -32,8 +32,7 @@ export default function Navbar() {
     async function fetchCategories() {
       try {
         const { supabase } = await import("@/lib/supabase");
-        const { data } = await supabase
-          .from('sponsora_categories')
+        const { data } = await (supabase.from('sponsora_categories') as any)
           .select('id, name, slug, type')
           .eq('type', 'internship')
           .or('is_deleted.eq.false,is_deleted.is.null')

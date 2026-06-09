@@ -25,8 +25,7 @@ export async function POST(req: NextRequest) {
     // Apply discount code if provided
     if (discountCode) {
       const { supabaseAdmin } = await import('@/lib/supabase');
-      const { data: code } = await supabaseAdmin
-        .from('discount_codes')
+      const { data: code } = await (supabaseAdmin.from('discount_codes') as any)
         .select('*')
         .eq('code', discountCode.toUpperCase())
         .eq('is_active', true)

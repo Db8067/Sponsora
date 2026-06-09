@@ -46,8 +46,7 @@ export async function POST(req: NextRequest) {
       validUntil.setDate(validUntil.getDate() + planConfig.days);
 
       // Upsert subscription (resets timer on new purchase)
-      await supabaseAdmin
-        .from('user_subscriptions')
+      await (supabaseAdmin.from('user_subscriptions') as any)
         .upsert({
           user_id: userId,
           plan_type: planType,
@@ -59,28 +58,24 @@ export async function POST(req: NextRequest) {
 
       // If discount code was used, increment uses_count & record it
       if (discountCode) {
-        const { data: codeData } = await supabaseAdmin
-          .from('discount_codes')
+        const { data: codeData } = await (supabaseAdmin.from('discount_codes') as any)
           .select('id, uses_count')
           .eq('code', discountCode.toUpperCase())
           .single();
 
         if (codeData) {
-          await supabaseAdmin
-            .from('discount_codes')
+          await (supabaseAdmin.from('discount_codes') as any)
             .update({ uses_count: (codeData.uses_count || 0) + 1 })
             .eq('id', codeData.id);
 
-          await supabaseAdmin
-            .from('used_discount_codes')
+          await (supabaseAdmin.from('used_discount_codes') as any)
             .upsert({ user_id: userId, code_id: codeData.id });
         }
       }
 
       // Send welcome email (fire and forget)
       try {
-        const { data: subData } = await supabaseAdmin
-          .from('user_subscriptions')
+        const { data: subData } = await (supabaseAdmin.from('user_subscriptions') as any)
           .select('*')
           .eq('user_id', userId)
           .single();

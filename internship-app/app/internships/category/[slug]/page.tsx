@@ -51,34 +51,32 @@ export default function CategoryInternshipsPage() {
       setLoading(true);
       
       // Fetch all categories for sidebar
-      const { data: allCats } = await supabase.from('sponsora_categories').select('*').eq('type', 'internship').or('is_deleted.eq.false,is_deleted.is.null');
+      const { data: allCats } = await (supabase.from('sponsora_categories') as any).select('*').eq('type', 'internship').or('is_deleted.eq.false,is_deleted.is.null');
       if (allCats) setAllCategories(allCats);
       
       // Fetch Category
-      const { data: catData, error: catError } = await supabase
-        .from('sponsora_categories')
+      const { data: cat, error: catError } = await (supabase.from('sponsora_categories') as any)
         .select('*')
         .eq('slug', slug)
         .single();
           
-      if (catError || !catData) {
+      if (catError || !cat) {
         setLoading(false);
         window.dispatchEvent(new Event("sponsora-page-loaded"));
         return;
       }
-      setCategory(catData);
+      setCategory(cat);
 
       // Fetch Internships
-      const { data: postsData, error: postsError } = await supabase
-        .from('sponsora_posts')
+      const { data: postsData, error: postsError } = await (supabase.from('sponsora_posts') as any)
         .select('*')
-        .eq('category_id', catData.id)
+        .eq('category_id', cat.id)
         .or('is_deleted.eq.false,is_deleted.is.null')
         .order('sort_order', { ascending: true })
         .order('created_at', { ascending: false });
           
       if (!postsError && postsData) {
-        const parsedPosts = postsData.map(post => ({
+        const parsedPosts = postsData.map((post: any) => ({
           ...post,
           metadata: post.metadata || {}
         }));

@@ -40,8 +40,7 @@ export async function grantAccess(userId: string, planType: string, days: number
   const validUntil = new Date();
   validUntil.setDate(validUntil.getDate() + days);
   
-  await supabaseAdmin
-    .from("user_subscriptions")
+  await (supabaseAdmin.from("user_subscriptions") as any)
     .upsert({
       user_id: userId,
       plan_type: planType,
@@ -64,8 +63,7 @@ export async function getDiscountCodes() {
 }
 
 export async function createDiscountCode(code: string, discount: number, maxUses: number, expiresAt: string | null) {
-  await supabaseAdmin
-    .from("discount_codes")
+  await (supabaseAdmin.from("discount_codes") as any)
     .insert({
       code: code.toUpperCase(),
       discount_percentage: discount,
@@ -87,6 +85,6 @@ export async function getAuditLogs() {
 }
 
 export async function toggleDiscountCode(id: string, isActive: boolean) {
-  await supabaseAdmin.from("discount_codes").update({ is_active: isActive }).eq("id", id);
+  await (supabaseAdmin.from("discount_codes") as any).update({ is_active: isActive }).eq("id", id);
   revalidatePath("/admin");
 }

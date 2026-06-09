@@ -26,8 +26,7 @@ export default function InternshipDetailPage() {
     
     async function fetchInternship() {
       setIsLoading(true);
-      const { data, error } = await supabase
-        .from('sponsora_posts')
+      const { data, error } = await (supabase.from('sponsora_posts') as any)
         .select('*')
         .eq('slug', postSlug)
         .single();

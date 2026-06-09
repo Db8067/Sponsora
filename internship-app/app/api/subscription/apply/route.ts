@@ -9,8 +9,7 @@ export async function POST(req: NextRequest) {
   if (!internshipId) return NextResponse.json({ error: 'Missing internshipId' }, { status: 400 });
 
   // Check active subscription
-  const { data: sub } = await supabaseAdmin
-    .from('user_subscriptions')
+  const { data: sub } = await (supabaseAdmin.from('user_subscriptions') as any)
     .select('*')
     .eq('user_id', userId)
     .single();
@@ -23,8 +22,7 @@ export async function POST(req: NextRequest) {
   const startOfDay = new Date();
   startOfDay.setHours(0, 0, 0, 0);
 
-  const { count } = await supabaseAdmin
-    .from('applications_log')
+  const { count } = await (supabaseAdmin.from('applications_log') as any)
     .select('*', { count: 'exact', head: true })
     .eq('user_id', userId)
     .gte('created_at', startOfDay.toISOString());
@@ -34,19 +32,18 @@ export async function POST(req: NextRequest) {
   }
 
   // Log this application
-  await supabaseAdmin.from('applications_log').insert({
+  await (supabaseAdmin.from('applications_log') as any).insert({
     user_id: userId,
     internship_id: internshipId,
   });
 
   // Fetch the real apply link
-  const { data: internship } = await supabaseAdmin
-    .from('sponsora_posts')
+  const { data: post } = await (supabaseAdmin.from('sponsora_posts') as any)
     .select('metadata')
     .eq('id', internshipId)
     .single();
 
-  const applyLink = internship?.metadata?.apply_link || null;
+  const applyLink = post?.metadata?.apply_link || null;
 
   return NextResponse.json({ success: true, applyLink, appliesToday: (count || 0) + 1, limit: sub.apply_limit_per_day });
 }

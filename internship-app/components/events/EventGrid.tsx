@@ -28,8 +28,7 @@ export default function EventGrid() {
   useEffect(() => {
     // 1. Initial Fetch
     const fetchEvents = async () => {
-      const { data, error } = await supabase
-        .from("events")
+      const { data, error } = await (supabase.from("events") as any)
         .select("*")
         .eq("status", "published")
         .order("created_at", { ascending: false })

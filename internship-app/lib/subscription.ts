@@ -15,8 +15,7 @@ export async function getUserSubscription(userId: string | null): Promise<Subscr
 
   try {
     // Check subscription
-    const { data: sub } = await supabaseAdmin
-      .from('user_subscriptions')
+    const { data: sub } = await (supabaseAdmin.from('user_subscriptions') as any)
       .select('*')
       .eq('user_id', userId)
       .single();
@@ -30,8 +29,7 @@ export async function getUserSubscription(userId: string | null): Promise<Subscr
     const validUntilDate = new Date(sub.valid_until);
     if (now > validUntilDate) {
       // Lazy expire
-      await supabaseAdmin
-        .from('user_subscriptions')
+      await (supabaseAdmin.from('user_subscriptions') as any)
         .update({ status: 'expired' })
         .eq('id', sub.id);
       
@@ -40,8 +38,7 @@ export async function getUserSubscription(userId: string | null): Promise<Subscr
 
     // Check apply limits today
     const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate()).toISOString();
-    const { count } = await supabaseAdmin
-      .from('applications_log')
+    const { count } = await (supabaseAdmin.from('applications_log') as any)
       .select('*', { count: 'exact', head: true })
       .eq('user_id', userId)
       .gte('created_at', startOfDay);
