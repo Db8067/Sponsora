@@ -13,22 +13,18 @@ export async function GET(req: NextRequest) {
   if (!sub || sub.status !== 'active') return NextResponse.json({ isPaid: false });
 
   const now = new Date();
-  if (new Date(sub.valid_until) < now) {
-    await (supabaseAdmin.from('user_subscriptions') as any).update({ status: 'expired' }).eq('id', sub.id);
+  if (new Date(sub.valid_until) < now || (sub.used_limit || 0) >= (sub.total_limit || 0)) {
+    if (new Date(sub.valid_until) < now) {
+      await (supabaseAdmin.from('user_subscriptions') as any).update({ status: 'expired' }).eq('id', sub.id);
+    }
     return NextResponse.json({ isPaid: false });
   }
-
-  const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate()).toISOString();
-  const { count } = await (supabaseAdmin.from('applications_log') as any)
-    .select('*', { count: 'exact', head: true })
-    .eq('user_id', userId)
-    .gte('created_at', startOfDay);
 
   return NextResponse.json({
     isPaid: true,
     planType: sub.plan_type,
     validUntil: sub.valid_until,
-    applyLimitPerDay: sub.apply_limit_per_day,
-    appliesToday: count || 0,
+    totalLimit: sub.total_limit || 0,
+    usedLimit: sub.used_limit || 0,
   });
 }

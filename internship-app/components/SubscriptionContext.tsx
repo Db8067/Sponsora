@@ -7,8 +7,8 @@ interface SubscriptionData {
   isPaid: boolean;
   planType: string | null;
   validUntil: string | null;
-  applyLimitPerDay: number;
-  appliesToday: number;
+  totalLimit: number;
+  usedLimit: number;
   isLoading: boolean;
   refetch: () => Promise<void>;
 }
@@ -17,8 +17,8 @@ const SubscriptionContext = createContext<SubscriptionData>({
   isPaid: false,
   planType: null,
   validUntil: null,
-  applyLimitPerDay: 0,
-  appliesToday: 0,
+  totalLimit: 0,
+  usedLimit: 0,
   isLoading: true,
   refetch: async () => {},
 });
@@ -29,14 +29,14 @@ export function SubscriptionProvider({ children }: { children: React.ReactNode }
     isPaid: false,
     planType: null,
     validUntil: null,
-    applyLimitPerDay: 0,
-    appliesToday: 0,
+    totalLimit: 0,
+    usedLimit: 0,
   });
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchStatus = useCallback(async () => {
     if (!user?.id) {
-      setData({ isPaid: false, planType: null, validUntil: null, applyLimitPerDay: 0, appliesToday: 0 });
+      setData({ isPaid: false, planType: null, validUntil: null, totalLimit: 0, usedLimit: 0 });
       setIsLoading(false);
       return;
     }
@@ -49,11 +49,11 @@ export function SubscriptionProvider({ children }: { children: React.ReactNode }
         isPaid: json.isPaid ?? false,
         planType: json.planType ?? null,
         validUntil: json.validUntil ?? null,
-        applyLimitPerDay: json.applyLimitPerDay ?? 0,
-        appliesToday: json.appliesToday ?? 0,
+        totalLimit: json.totalLimit ?? 0,
+        usedLimit: json.usedLimit ?? 0,
       });
     } catch (e) {
-      setData({ isPaid: false, planType: null, validUntil: null, applyLimitPerDay: 0, appliesToday: 0 });
+      setData({ isPaid: false, planType: null, validUntil: null, totalLimit: 0, usedLimit: 0 });
     } finally {
       setIsLoading(false);
     }

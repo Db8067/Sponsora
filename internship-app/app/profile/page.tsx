@@ -9,12 +9,21 @@ import { motion } from "framer-motion";
 
 export default function ProfilePage() {
   const { user, isLoaded, isSignedIn } = useUser();
-  const { isPaid, planType, validUntil, applyLimitPerDay, appliesToday, isLoading: isSubLoading, refetch } = useSubscription();
+  const { isPaid, planType, validUntil, totalLimit, usedLimit, isLoading: isSubLoading, refetch } = useSubscription();
   const [isRefreshing, setIsRefreshing] = useState(true);
+  const [transactions, setTransactions] = useState<any[]>([]);
+  const [isLoadingTx, setIsLoadingTx] = useState(true);
 
   useEffect(() => {
     if (isSignedIn) {
       refetch().then(() => setIsRefreshing(false));
+      fetch('/api/user/transactions')
+        .then(res => res.json())
+        .then(data => {
+           if (data.transactions) setTransactions(data.transactions);
+           setIsLoadingTx(false);
+        })
+        .catch(() => setIsLoadingTx(false));
     } else if (isLoaded) {
       setIsRefreshing(false);
     }
@@ -92,25 +101,25 @@ export default function ProfilePage() {
                 <div className="p-4 rounded-xl bg-white/5 border border-white/10">
                   <div className="flex justify-between items-end mb-2">
                     <p className="text-xs text-foreground/50 font-medium flex items-center gap-1.5">
-                      <Zap className="w-3.5 h-3.5" /> Applies Today
+                      <Zap className="w-3.5 h-3.5" /> Total Applies Used
                     </p>
                     <p className="font-bold text-sm">
-                      <span className={appliesToday >= applyLimitPerDay ? "text-red-500" : "text-primary"}>
-                        {appliesToday}
+                      <span className={usedLimit >= totalLimit ? "text-red-500" : "text-primary"}>
+                        {usedLimit}
                       </span>
-                      {" "} / {applyLimitPerDay}
+                      {" "} / {totalLimit}
                     </p>
                   </div>
                   {/* Progress bar */}
                   <div className="w-full h-2 bg-black/5 dark:bg-white/5 rounded-full overflow-hidden">
                     <div 
-                      className={`h-full rounded-full transition-all duration-500 ${appliesToday >= applyLimitPerDay ? "bg-red-500" : "bg-primary"}`}
-                      style={{ width: `${Math.min((appliesToday / applyLimitPerDay) * 100, 100)}%` }}
+                      className={`h-full rounded-full transition-all duration-500 ${usedLimit >= totalLimit ? "bg-red-500" : "bg-primary"}`}
+                      style={{ width: `${Math.min((usedLimit / (totalLimit || 1)) * 100, 100)}%` }}
                     />
                   </div>
-                  {appliesToday >= applyLimitPerDay && (
+                  {usedLimit >= totalLimit && (
                     <p className="text-xs text-red-500 mt-2 font-medium flex items-center gap-1">
-                      <AlertTriangle className="w-3 h-3" /> Limit reached for today.
+                      <AlertTriangle className="w-3 h-3" /> You have run out of apply limits.
                     </p>
                   )}
                 </div>
@@ -174,20 +183,72 @@ export default function ProfilePage() {
           </motion.div>
         </div>
 
-        {/* Right Side: Clerk User Profile */}
-        <div className="w-full lg:w-2/3 flex justify-center lg:justify-start">
-          <UserProfile 
-            appearance={{
-              elements: {
-                rootBox: "w-full shadow-none",
-                cardBox: "w-full shadow-none border border-black/5 dark:border-white/10 bg-white/50 dark:bg-black/20 backdrop-blur-xl rounded-3xl",
-                navbar: "hidden md:flex",
-                headerTitle: "text-foreground font-bold",
-                headerSubtitle: "text-foreground/60",
-                profileSectionTitleText: "text-foreground/80 font-bold border-b border-black/5 dark:border-white/10 pb-2",
-              }
-            }}
-          />
+        {/* Right Side: Profile & Transactions */}
+        <div className="w-full lg:w-2/3 flex flex-col gap-6">
+          <div className="flex justify-center lg:justify-start">
+            <UserProfile 
+              appearance={{
+                elements: {
+                  rootBox: "w-full shadow-none",
+                  cardBox: "w-full shadow-none border border-black/5 dark:border-white/10 bg-white/50 dark:bg-black/20 backdrop-blur-xl rounded-3xl",
+                  navbar: "hidden md:flex",
+                  headerTitle: "text-foreground font-bold",
+                  headerSubtitle: "text-foreground/60",
+                  profileSectionTitleText: "text-foreground/80 font-bold border-b border-black/5 dark:border-white/10 pb-2",
+                }
+              }}
+            />
+          </div>
+
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="p-6 md:p-8 rounded-3xl glass border border-white/10"
+          >
+            <h2 className="text-xl font-bold mb-6">Transaction History</h2>
+            {isLoadingTx ? (
+              <div className="flex justify-center py-8"><Loader2 className="w-6 h-6 animate-spin text-primary" /></div>
+            ) : transactions.length === 0 ? (
+              <p className="text-sm text-foreground/60 text-center py-8">No transaction history found.</p>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full text-left border-collapse">
+                  <thead>
+                    <tr className="border-b border-black/10 dark:border-white/10 text-xs uppercase text-foreground/50 tracking-wider">
+                      <th className="pb-3 pr-4 font-semibold">Date</th>
+                      <th className="pb-3 pr-4 font-semibold">Pass</th>
+                      <th className="pb-3 pr-4 font-semibold">Amount</th>
+                      <th className="pb-3 pr-4 font-semibold">Added Validity</th>
+                      <th className="pb-3 font-semibold text-right">Limits Bought</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {transactions.map((tx) => (
+                      <tr key={tx.id} className="border-b border-black/5 dark:border-white/5 last:border-0 hover:bg-black/5 dark:hover:bg-white/5 transition-colors">
+                        <td className="py-4 pr-4 whitespace-nowrap text-sm">
+                          {new Date(tx.created_at).toLocaleDateString()}
+                          <span className="text-xs text-foreground/50 ml-2">{new Date(tx.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                        </td>
+                        <td className="py-4 pr-4 whitespace-nowrap text-sm font-medium text-primary">
+                          {formatPlanName(tx.plan_type)} {tx.quantity > 1 ? `(x${tx.quantity})` : ''}
+                        </td>
+                        <td className="py-4 pr-4 whitespace-nowrap text-sm font-bold">
+                          {tx.currency === 'INR' ? '₹' : '$'}{tx.amount}
+                        </td>
+                        <td className="py-4 pr-4 whitespace-nowrap text-sm text-foreground/70">
+                          {tx.added_days ? `+${tx.added_days} days` : '-'}
+                        </td>
+                        <td className="py-4 whitespace-nowrap text-sm font-bold text-right text-green-500">
+                          {tx.added_limits ? `+${tx.added_limits} limits` : '-'}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </motion.div>
         </div>
 
       </div>

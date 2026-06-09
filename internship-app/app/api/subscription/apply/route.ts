@@ -35,17 +35,9 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ success: true, applyLink, alreadyApplied: true });
   }
 
-  // Check daily apply limit
-  const startOfDay = new Date();
-  startOfDay.setHours(0, 0, 0, 0);
-
-  const { count } = await (supabaseAdmin.from('applications_log') as any)
-    .select('*', { count: 'exact', head: true })
-    .eq('user_id', userId)
-    .gte('created_at', startOfDay.toISOString());
-
-  if ((count || 0) >= sub.apply_limit_per_day) {
-    return NextResponse.json({ error: 'daily_limit_exceeded', limit: sub.apply_limit_per_day }, { status: 429 });
+  // Check if they are completely out of limits
+  if ((sub.used_limit || 0) >= (sub.total_limit || 0)) {
+    return NextResponse.json({ error: 'limit_exceeded', limit: sub.total_limit }, { status: 429 });
   }
 
   // Log this application
@@ -53,6 +45,11 @@ export async function POST(req: NextRequest) {
     user_id: userId,
     internship_id: internshipId,
   });
+
+  // Increment the used limit
+  await (supabaseAdmin.from('user_subscriptions') as any)
+    .update({ used_limit: (sub.used_limit || 0) + 1 })
+    .eq('id', sub.id);
 
   // Fetch the real apply link
   const { data: post } = await (supabaseAdmin.from('sponsora_posts') as any)
@@ -62,5 +59,5 @@ export async function POST(req: NextRequest) {
 
   const applyLink = post?.apply_link || post?.metadata?.apply_link || null;
 
-  return NextResponse.json({ success: true, applyLink, appliesToday: (count || 0) + 1, limit: sub.apply_limit_per_day });
+  return NextResponse.json({ success: true, applyLink, appliesToday: (sub.used_limit || 0) + 1, limit: sub.total_limit });
 }

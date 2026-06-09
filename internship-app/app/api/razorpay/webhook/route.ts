@@ -44,21 +44,49 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ error: 'Invalid plan' }, { status: 400 });
       }
 
-      const validUntil = new Date();
-      validUntil.setDate(validUntil.getDate() + (planConfig.days * quantity));
+      const addedDays = planConfig.days * quantity;
+      const addedLimits = planConfig.applyLimit * addedDays; // e.g. 1 day = 10*1=10, 7 days = 12*7=84
 
-      // Upsert subscription (resets timer on new purchase)
+      // Check existing subscription to see if we should accumulate or reset
+      const { data: existingSub } = await (supabaseAdmin.from('user_subscriptions') as any)
+        .select('valid_until, total_limit, used_limit, status')
+        .eq('user_id', userId)
+        .single();
+
+      let newValidUntil = new Date();
+      let newTotalLimit = addedLimits;
+      let usedLimit = 0;
+
+      // If subscription is currently active AND has limits remaining, we ADD to it.
+      if (
+        existingSub && 
+        existingSub.status === 'active' && 
+        new Date(existingSub.valid_until) > new Date() && 
+        ((existingSub.total_limit || 0) > (existingSub.used_limit || 0))
+      ) {
+        newValidUntil = new Date(existingSub.valid_until);
+        newValidUntil.setDate(newValidUntil.getDate() + addedDays);
+        newTotalLimit = (existingSub.total_limit || 0) + addedLimits;
+        usedLimit = existingSub.used_limit || 0;
+      } else {
+        // If expired OR they ran out of limits, start fresh from right now!
+        newValidUntil.setDate(newValidUntil.getDate() + addedDays);
+      }
+
+      // Upsert subscription
       await (supabaseAdmin.from('user_subscriptions') as any)
         .upsert({
           user_id: userId,
           plan_type: planType,
           status: 'active',
-          valid_until: validUntil.toISOString(),
-          apply_limit_per_day: planConfig.applyLimit,
+          valid_until: newValidUntil.toISOString(),
+          total_limit: newTotalLimit,
+          used_limit: usedLimit,
+          apply_limit_per_day: planConfig.applyLimit, // keeping for legacy
           updated_at: new Date().toISOString(),
         }, { onConflict: 'user_id' });
 
-      // Log the payment
+      // Log the payment with history
       const amountPaid = payment.amount / 100; // Razorpay amount is in paise
       await (supabaseAdmin.from('payments') as any).insert({
         user_id: userId,
@@ -67,7 +95,9 @@ export async function POST(req: NextRequest) {
         currency: payment.currency || 'INR',
         razorpay_payment_id: payment.id,
         razorpay_order_id: payment.order_id,
-        quantity: quantity
+        quantity: quantity,
+        added_days: addedDays,
+        added_limits: addedLimits
       });
 
       // If discount code was used, increment uses_count & record it
