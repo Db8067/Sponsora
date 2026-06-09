@@ -110,7 +110,7 @@ export function InternshipCard({ internship, index = 0, categorySlug }: Internsh
                   <button
                     onClick={handleCompanyClick}
                     className="flex items-center gap-1.5 group/blur"
-                    title="See details to view company"
+                    title="Unlock to see company"
                   >
                     <span
                       className="font-medium text-sm select-none pointer-events-none"
@@ -126,7 +126,7 @@ export function InternshipCard({ internship, index = 0, categorySlug }: Internsh
                       {meta.company_name || "████████████"}
                     </span>
                     <span className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary/10 text-primary text-xs font-semibold group-hover/blur:bg-primary group-hover/blur:text-white transition-all ml-1">
-                      <Eye className="w-3 h-3" /> See details
+                      <Eye className="w-3 h-3" /> See Company details
                     </span>
                   </button>
                 ) : (
@@ -170,7 +170,7 @@ export function InternshipCard({ internship, index = 0, categorySlug }: Internsh
           {/* Footer (CTA) */}
           <div className="flex flex-col sm:flex-row items-end justify-end gap-4 mt-2 pt-4 border-t border-black/5 dark:border-white/5">
             <button className="flex items-center gap-2 text-sm font-semibold text-primary group-hover:text-primary-dark transition-colors">
-              View Details <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              View internship details <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </button>
           </div>
         </div>

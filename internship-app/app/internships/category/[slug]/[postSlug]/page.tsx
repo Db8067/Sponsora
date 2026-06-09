@@ -2,21 +2,23 @@
 
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { Building2, MapPin, IndianRupee, Clock, CalendarDays, ArrowLeft, ShieldCheck, Zap, Briefcase, Users, Star, Target, CheckCircle2, Award, FileText, MousePointerClick } from "lucide-react";
+import { Building2, MapPin, IndianRupee, Clock, CalendarDays, ArrowLeft, ShieldCheck, Zap, Briefcase, Users, Star, Target, CheckCircle2, Award, FileText, MousePointerClick, Eye } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { motion } from "framer-motion";
-import { useSubscription } from "@/components/SubscriptionContext";
 import { useUser } from "@clerk/nextjs";
+import { useSubscription } from "@/components/SubscriptionContext";
 
 export default function InternshipDetailPage() {
   const params = useParams();
   const router = useRouter();
   const postSlug = params.postSlug as string;
   
+  const { isSignedIn } = useUser();
+  const { isPaid } = useSubscription();
+  const isBlurred = !isPaid;
+  
   const [internship, setInternship] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const { isPaid } = useSubscription();
-  const { isSignedIn } = useUser();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -67,13 +69,28 @@ export default function InternshipDetailPage() {
   const meta = internship.metadata || {};
   const perksList = meta.perks ? meta.perks.split(',').map((s: string) => s.trim()).filter(Boolean) : [];
   
+  const handleCompanyClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!isSignedIn) {
+      router.push("/sign-in?redirect_url=" + encodeURIComponent(window.location.pathname));
+      return;
+    }
+    router.push("/subscribe");
+  };
+
   const handleApplyClick = () => {
     if (!isSignedIn) {
-      router.push("/sign-up?redirect_url=" + encodeURIComponent(window.location.pathname));
-    } else if (!isPaid) {
+      router.push("/sign-in?redirect_url=" + encodeURIComponent(window.location.pathname));
+      return;
+    }
+    if (!isPaid) {
       router.push("/subscribe");
-    } else if (internship.apply_link) {
+      return;
+    }
+    if (internship.apply_link) {
       window.open(internship.apply_link, "_blank");
+    } else {
+      router.push("/subscribe");
     }
   };
 
@@ -93,13 +110,13 @@ export default function InternshipDetailPage() {
   const TitleLogoCard = () => (
     <div className="p-6 md:p-8 rounded-[2rem] bg-white dark:bg-white/[0.02] border border-black/5 dark:border-white/5 shadow-sm flex flex-col sm:flex-row items-start sm:items-center gap-6">
         <div className="w-20 h-20 md:w-28 md:h-28 shrink-0 rounded-2xl bg-white dark:bg-black/50 border border-black/5 flex items-center justify-center overflow-hidden relative">
-            {!isPaid ? (
-                <>
-                  <div className="absolute inset-0 backdrop-blur-md bg-white/20 dark:bg-black/30 z-10 rounded-xl flex items-center justify-center">
-                    <Briefcase className="w-8 h-8 text-primary/70" />
-                  </div>
-                  <Building2 className="w-10 h-10 text-foreground/20" />
-                </>
+            {isBlurred ? (
+              <>
+                <div className="absolute inset-0 backdrop-blur-md bg-white/20 dark:bg-black/30 z-10 rounded-xl flex items-center justify-center">
+                  <Briefcase className="w-8 h-8 text-primary/70" />
+                </div>
+                <Building2 className="w-12 h-12 text-foreground/20" />
+              </>
             ) : meta.company_logo_url ? (
                 <img src={meta.company_logo_url} alt={meta.company_name} className="w-full h-full object-cover" />
             ) : (
@@ -108,24 +125,35 @@ export default function InternshipDetailPage() {
         </div>
         <div>
             <h1 className="text-2xl md:text-3xl lg:text-4xl font-black text-foreground mb-3 leading-tight tracking-tight">{internship.title}</h1>
-            <div className="flex items-center gap-2 text-foreground/70 font-bold text-lg">
-                <Building2 className="w-5 h-5" /> 
-                {!isPaid ? (
+            <div className="flex items-center gap-2 mt-1">
+                <Building2 className="w-5 h-5 text-foreground/70 shrink-0" /> 
+                {isBlurred ? (
+                  <button
+                    onClick={handleCompanyClick}
+                    className="flex items-center gap-2 group/blur"
+                    title="Unlock to see company"
+                  >
                     <span
-                      className="select-none pointer-events-none"
+                      className="font-bold text-lg text-foreground/70 select-none pointer-events-none"
                       style={{
-                        filter: "blur(6px)",
+                        filter: "blur(8px)",
                         userSelect: "none",
                         WebkitUserSelect: "none",
                         color: "transparent",
-                        textShadow: "0 0 10px rgba(108,99,255,0.5)",
-                        letterSpacing: "2px",
+                        textShadow: "0 0 12px rgba(108,99,255,0.6)",
+                        letterSpacing: "3px",
                       }}
                     >
                       {meta.company_name || "████████████"}
                     </span>
+                    <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-semibold group-hover/blur:bg-primary group-hover/blur:text-white transition-all ml-2 cursor-pointer">
+                      <Eye className="w-4 h-4" /> See Company details
+                    </span>
+                  </button>
                 ) : (
-                    meta.company_name
+                  <span className="text-foreground/70 font-bold text-lg">
+                    {meta.company_name}
+                  </span>
                 )}
             </div>
         </div>
