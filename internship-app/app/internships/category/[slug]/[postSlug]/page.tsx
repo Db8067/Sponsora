@@ -118,9 +118,6 @@ export default function InternshipDetailPage() {
     setIsApplying(true);
     setApplyError("");
     
-    // Open tab immediately to bypass popup blockers
-    const newTab = window.open("about:blank", "_blank");
-
     try {
       const res = await fetch("/api/subscription/apply", {
         method: "POST",
@@ -131,7 +128,6 @@ export default function InternshipDetailPage() {
       const data = await res.json();
 
       if (!res.ok) {
-        if (newTab) newTab.close();
         if (data.error === "daily_limit_exceeded") {
           setApplyError(`Daily limit of ${data.limit} reached. Please try again tomorrow!`);
         } else {
@@ -142,18 +138,15 @@ export default function InternshipDetailPage() {
       }
 
       if (data.applyLink) {
-        if (newTab) {
-          newTab.location.href = data.applyLink;
-        } else {
+        const newTab = window.open(data.applyLink, "_blank");
+        if (!newTab) {
           window.location.href = data.applyLink; // Fallback if popup blocked
         }
         setShowApplyModal(false);
       } else {
-        if (newTab) newTab.close();
         setApplyError("Apply link not found.");
       }
     } catch (err) {
-      if (newTab) newTab.close();
       setApplyError("Network error. Please try again.");
     } finally {
       setIsApplying(false);

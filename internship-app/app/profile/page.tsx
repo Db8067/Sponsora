@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { useUser, UserProfile } from "@clerk/nextjs";
 import { useSubscription } from "@/components/SubscriptionContext";
 import { ShieldCheck, CalendarDays, Zap, AlertTriangle, ArrowRight, Clock, Loader2 } from "lucide-react";
@@ -8,12 +9,22 @@ import { motion } from "framer-motion";
 
 export default function ProfilePage() {
   const { user, isLoaded, isSignedIn } = useUser();
-  const { isPaid, planType, validUntil, applyLimitPerDay, appliesToday, isLoading: isSubLoading } = useSubscription();
+  const { isPaid, planType, validUntil, applyLimitPerDay, appliesToday, isLoading: isSubLoading, refetch } = useSubscription();
+  const [isRefreshing, setIsRefreshing] = useState(true);
 
-  if (!isLoaded || isSubLoading) {
+  useEffect(() => {
+    if (isSignedIn) {
+      refetch().then(() => setIsRefreshing(false));
+    } else if (isLoaded) {
+      setIsRefreshing(false);
+    }
+  }, [isSignedIn, isLoaded, refetch]);
+
+  if (!isLoaded || isSubLoading || isRefreshing) {
     return (
-      <div className="min-h-screen flex items-center justify-center pt-24">
-        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+      <div className="min-h-[100dvh] flex flex-col items-center justify-center bg-transparent">
+        <Loader2 className="w-10 h-10 animate-spin text-primary mb-4" />
+        <p className="text-foreground/60 font-medium animate-pulse">Syncing your account...</p>
       </div>
     );
   }
