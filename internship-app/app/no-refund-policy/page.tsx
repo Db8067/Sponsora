@@ -18,7 +18,7 @@ export default function NoRefundPolicy() {
         <div className="prose prose-invert max-w-none text-foreground/80 leading-relaxed">
           <p className="text-lg text-foreground/70 mb-8 font-medium">
             Last Updated: June 2026<br />
-            Company: Tanvi Traders (Operating as Sponsora)
+            Company: Sponsora
           </p>
 
           <div className="p-6 rounded-2xl bg-red-500/10 border border-red-500/20 mb-8 flex items-start gap-4">
@@ -61,7 +61,7 @@ export default function NoRefundPolicy() {
           <p>
             If you have any questions regarding this policy or need assistance with your subscription, please reach out to us at:
             <br /><br />
-            <strong>Sponsora by Tanvi Traders</strong><br />
+            <strong>Sponsora</strong><br />
             Email: devanshb3456@gmail.com
           </p>
         </div>

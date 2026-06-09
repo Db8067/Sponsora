@@ -50,7 +50,7 @@ export async function POST(req: NextRequest) {
                   <tr><td style="padding:6px 0;color:#6B7280;font-size:14px;">Plan</td><td style="padding:6px 0;color:#111827;font-weight:600;text-align:right;">${planLabel}</td></tr>
                   <tr><td style="padding:6px 0;color:#6B7280;font-size:14px;">Amount Paid</td><td style="padding:6px 0;color:#111827;font-weight:600;text-align:right;">₹${amount}</td></tr>
                   <tr><td style="padding:6px 0;color:#6B7280;font-size:14px;">Valid Until</td><td style="padding:6px 0;color:#111827;font-weight:600;text-align:right;">${expiryDate}</td></tr>
-                  <tr><td style="padding:6px 0;color:#6B7280;font-size:14px;">Billing Company</td><td style="padding:6px 0;color:#111827;font-weight:600;text-align:right;">Tanvi Traders</td></tr>
+                  <tr><td style="padding:6px 0;color:#6B7280;font-size:14px;">Billing via</td><td style="padding:6px 0;color:#111827;font-weight:600;text-align:right;">Razorpay</td></tr>
                 </table>
               </div>
 
@@ -74,7 +74,7 @@ export async function POST(req: NextRequest) {
               </p>
             </div>
             <div style="background:#f9fafb;padding:20px 32px;text-align:center;border-top:1px solid #f0f0f0;">
-              <p style="margin:0;font-size:13px;color:#9CA3AF;">© 2025 Sponsora by Tanvi Traders. All rights reserved.</p>
+              <p style="margin:0;font-size:13px;color:#9CA3AF;">© 2025 Sponsora. All rights reserved.</p>
             </div>
           </div>
         </body>

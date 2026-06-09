@@ -298,7 +298,7 @@ function SubscribeContent() {
 
           <p className="text-center text-xs text-foreground/40 mt-3 flex items-center justify-center gap-1.5">
             <ShieldCheck className="w-3.5 h-3.5" />
-            Secured by Razorpay · Tanvi Traders ·
+            Secured by Razorpay ·
             <button onClick={() => router.push("/no-refund-policy")} className="underline hover:text-foreground/70">No Refund Policy</button>
           </p>
         </div>

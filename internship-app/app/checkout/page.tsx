@@ -92,7 +92,7 @@ function CheckoutContent() {
         key: order.keyId,
         amount: order.amount,
         currency: order.currency,
-        name: "Sponsora by Tanvi Traders",
+        name: "Pay on Razorpay",
         description: `${quantity}x ${order.planLabel}`,
         order_id: order.orderId,
         prefill: {
