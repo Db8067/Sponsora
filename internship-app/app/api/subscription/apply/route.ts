@@ -40,11 +40,11 @@ export async function POST(req: NextRequest) {
 
   // Fetch the real apply link
   const { data: post } = await (supabaseAdmin.from('sponsora_posts') as any)
-    .select('metadata')
+    .select('apply_link, metadata')
     .eq('id', internshipId)
     .single();
 
-  const applyLink = post?.metadata?.apply_link || null;
+  const applyLink = post?.apply_link || post?.metadata?.apply_link || null;
 
   return NextResponse.json({ success: true, applyLink, appliesToday: (count || 0) + 1, limit: sub.apply_limit_per_day });
 }
