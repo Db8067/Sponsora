@@ -33,6 +33,8 @@ export async function POST(req: NextRequest) {
       const userId = notes.userId as string;
       const discountCode = notes.discountCode as string | undefined;
 
+      const quantity = parseInt(notes.quantity as string || '1', 10);
+
       if (!planType || !userId) {
         return NextResponse.json({ error: 'Missing notes' }, { status: 400 });
       }
@@ -43,7 +45,7 @@ export async function POST(req: NextRequest) {
       }
 
       const validUntil = new Date();
-      validUntil.setDate(validUntil.getDate() + planConfig.days);
+      validUntil.setDate(validUntil.getDate() + (planConfig.days * quantity));
 
       // Upsert subscription (resets timer on new purchase)
       await (supabaseAdmin.from('user_subscriptions') as any)
@@ -64,7 +66,8 @@ export async function POST(req: NextRequest) {
         amount: amountPaid,
         currency: payment.currency || 'INR',
         razorpay_payment_id: payment.id,
-        razorpay_order_id: payment.order_id
+        razorpay_order_id: payment.order_id,
+        quantity: quantity
       });
 
       // If discount code was used, increment uses_count & record it

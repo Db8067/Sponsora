@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export default function NoRefundPolicy() {
   return (
-    <div className="min-h-screen bg-background text-foreground pt-24 pb-20 px-4 md:px-8 selection:bg-primary/30">
+    <div className="min-h-screen bg-transparent text-foreground pt-24 pb-20 px-4 md:px-8 selection:bg-primary/30">
       <div className="max-w-3xl mx-auto">
         <Link href="/" className="inline-flex items-center gap-2 text-sm font-medium text-foreground/60 hover:text-foreground mb-8 transition-colors">
           <ArrowLeft className="w-4 h-4" /> Back to Home

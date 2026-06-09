@@ -37,7 +37,7 @@ export default function ProfilePage() {
   };
 
   return (
-    <div className="min-h-[100dvh] pt-24 pb-20 px-4 md:px-8 bg-background selection:bg-primary/30">
+    <div className="min-h-[100dvh] pt-24 pb-20 px-4 md:px-8 bg-transparent selection:bg-primary/30">
       <div className="max-w-6xl mx-auto flex flex-col lg:flex-row gap-8 items-start">
         
         {/* Left Side: Subscription & Stats */}

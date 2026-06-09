@@ -77,6 +77,10 @@ export default function InternshipDetailPage() {
     router.push("/subscribe");
   };
 
+  const [showApplyModal, setShowApplyModal] = useState(false);
+  const [isApplying, setIsApplying] = useState(false);
+  const [applyError, setApplyError] = useState("");
+
   const handleApplyClick = () => {
     if (!isSignedIn) {
       router.push("/sign-in?redirect_url=" + encodeURIComponent(window.location.pathname));
@@ -87,9 +91,55 @@ export default function InternshipDetailPage() {
       return;
     }
     if (internship.apply_link) {
-      window.open(internship.apply_link, "_blank");
+      setShowApplyModal(true);
     } else {
       router.push("/subscribe");
+    }
+  };
+
+  const handleConfirmApply = async () => {
+    setIsApplying(true);
+    setApplyError("");
+    
+    // Open tab immediately to bypass popup blockers
+    const newTab = window.open("about:blank", "_blank");
+
+    try {
+      const res = await fetch("/api/subscription/apply", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ internshipId: internship.id }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        if (newTab) newTab.close();
+        if (data.error === "daily_limit_exceeded") {
+          setApplyError(`Daily limit of ${data.limit} reached. Please try again tomorrow!`);
+        } else {
+          setApplyError(data.error || "Something went wrong.");
+        }
+        setIsApplying(false);
+        return;
+      }
+
+      if (data.applyLink) {
+        if (newTab) {
+          newTab.location.href = data.applyLink;
+        } else {
+          window.location.href = data.applyLink; // Fallback if popup blocked
+        }
+        setShowApplyModal(false);
+      } else {
+        if (newTab) newTab.close();
+        setApplyError("Apply link not found.");
+      }
+    } catch (err) {
+      if (newTab) newTab.close();
+      setApplyError("Network error. Please try again.");
+    } finally {
+      setIsApplying(false);
     }
   };
 
@@ -328,7 +378,52 @@ export default function InternshipDetailPage() {
             </div>
         </div>
 
+        </div>
       </div>
+
+      {/* Apply Limits Modal */}
+      {showApplyModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="bg-background rounded-3xl p-6 md:p-8 max-w-md w-full shadow-2xl border border-white/10 relative text-center flex flex-col items-center"
+          >
+            <button 
+              onClick={() => setShowApplyModal(false)}
+              className="absolute top-4 right-4 text-foreground/50 hover:text-foreground transition-colors"
+            >
+              ✕
+            </button>
+            <img src="/images/apply_limit.png" alt="Use Limits Wisely" className="w-40 h-40 object-contain mb-4 drop-shadow-lg" />
+            <h3 className="text-xl font-black mb-2">Use Limit Wisely! 🎯</h3>
+            <p className="text-sm text-foreground/70 leading-relaxed mb-6">
+              Clicking continue will securely redirect you to the original application form and consume <strong className="text-primary">1 Apply Limit</strong> from your daily quota.
+            </p>
+            
+            {applyError && (
+              <div className="w-full p-3 mb-6 rounded-xl bg-red-500/10 text-red-500 text-sm font-bold">
+                {applyError}
+              </div>
+            )}
+
+            <button
+              onClick={handleConfirmApply}
+              disabled={isApplying}
+              className="w-full py-4 rounded-2xl bg-[#0066FF] hover:bg-[#0055DD] text-white font-black text-lg active:scale-95 transition-all shadow-xl shadow-blue-500/25 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center"
+            >
+              {isApplying ? "Processing..." : "Confirm & Apply"}
+            </button>
+            <button
+              onClick={() => setShowApplyModal(false)}
+              className="mt-4 text-sm font-bold text-foreground/50 hover:text-foreground transition-colors"
+            >
+              Cancel
+            </button>
+          </motion.div>
+        </div>
+      )}
+
     </div>
   );
 }

@@ -137,60 +137,11 @@ function SubscribeContent() {
       router.push("/sign-in?redirect_url=/subscribe");
       return;
     }
-
-    if (!razorpayLoaded) {
-      setMaintenanceMode(true);
-      return;
+    const qs = new URLSearchParams({ plan: selectedPlan });
+    if (discountApplied && discountCode) {
+      qs.set('code', discountCode.toUpperCase());
     }
-
-    setIsProcessing(true);
-    try {
-      const res = await fetch("/api/razorpay/create-order", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          planType: selectedPlan,
-          discountCode: discountApplied ? discountCode.toUpperCase() : undefined,
-          userId: user.id,
-        }),
-      });
-
-      if (!res.ok) { setMaintenanceMode(true); return; }
-      const order = await res.json();
-
-      const options = {
-        key: order.keyId,
-        amount: order.amount,
-        currency: order.currency,
-        name: "Sponsora by Tanvi Traders",
-        description: order.planLabel,
-        order_id: order.orderId,
-        prefill: {
-          name: user.fullName || "",
-          email: user.primaryEmailAddress?.emailAddress || "",
-        },
-        notes: {
-          planType: selectedPlan,
-          userId: user.id,
-          discountCode: discountApplied ? discountCode.toUpperCase() : "",
-        },
-        theme: { color: "#6C63FF" },
-        handler: async function() {
-          await refetch();
-          router.push("/internships/category/software-engineering?success=true");
-        },
-      };
-
-      const rzp = new window.Razorpay(options);
-      rzp.on("payment.failed", () => {
-        setIsProcessing(false);
-      });
-      rzp.open();
-    } catch (error) {
-      setMaintenanceMode(true);
-    } finally {
-      setIsProcessing(false);
-    }
+    router.push(`/checkout?${qs.toString()}`);
   };
 
   if (maintenanceMode) {
