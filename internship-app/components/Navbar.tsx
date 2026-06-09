@@ -62,7 +62,7 @@ export default function Navbar() {
               </Link>
             )}
             {isSignedIn && isLoaded && (
-              <UserButton />
+              <UserButton userProfileMode="navigation" userProfileUrl="/profile" />
             )}
             <Link href="/events" className="text-sm font-medium text-foreground/60 hover:text-foreground transition-colors">
               Discover Events
