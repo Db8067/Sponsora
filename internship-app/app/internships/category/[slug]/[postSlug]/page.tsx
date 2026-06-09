@@ -5,6 +5,8 @@ import { useParams, useRouter } from "next/navigation";
 import { Building2, MapPin, IndianRupee, Clock, CalendarDays, ArrowLeft, ShieldCheck, Zap, Briefcase, Users, Star, Target, CheckCircle2, Award, FileText, MousePointerClick } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { motion } from "framer-motion";
+import { useSubscription } from "@/components/SubscriptionContext";
+import { useUser } from "@clerk/nextjs";
 
 export default function InternshipDetailPage() {
   const params = useParams();
@@ -13,6 +15,8 @@ export default function InternshipDetailPage() {
   
   const [internship, setInternship] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const { isPaid } = useSubscription();
+  const { isSignedIn } = useUser();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -64,10 +68,12 @@ export default function InternshipDetailPage() {
   const perksList = meta.perks ? meta.perks.split(',').map((s: string) => s.trim()).filter(Boolean) : [];
   
   const handleApplyClick = () => {
-    if (internship.apply_link) {
-      window.open(internship.apply_link, "_blank");
-    } else {
+    if (!isSignedIn) {
+      router.push("/sign-up?redirect_url=" + encodeURIComponent(window.location.pathname));
+    } else if (!isPaid) {
       router.push("/subscribe");
+    } else if (internship.apply_link) {
+      window.open(internship.apply_link, "_blank");
     }
   };
 
@@ -86,8 +92,15 @@ export default function InternshipDetailPage() {
   // REUSABLE COMPONENTS FOR DIFFERENT LAYOUTS
   const TitleLogoCard = () => (
     <div className="p-6 md:p-8 rounded-[2rem] bg-white dark:bg-white/[0.02] border border-black/5 dark:border-white/5 shadow-sm flex flex-col sm:flex-row items-start sm:items-center gap-6">
-        <div className="w-20 h-20 md:w-28 md:h-28 shrink-0 rounded-2xl bg-white dark:bg-black/50 border border-black/5 flex items-center justify-center overflow-hidden">
-            {meta.company_logo_url ? (
+        <div className="w-20 h-20 md:w-28 md:h-28 shrink-0 rounded-2xl bg-white dark:bg-black/50 border border-black/5 flex items-center justify-center overflow-hidden relative">
+            {!isPaid ? (
+                <>
+                  <div className="absolute inset-0 backdrop-blur-md bg-white/20 dark:bg-black/30 z-10 rounded-xl flex items-center justify-center">
+                    <Briefcase className="w-8 h-8 text-primary/70" />
+                  </div>
+                  <Building2 className="w-10 h-10 text-foreground/20" />
+                </>
+            ) : meta.company_logo_url ? (
                 <img src={meta.company_logo_url} alt={meta.company_name} className="w-full h-full object-cover" />
             ) : (
                 <Building2 className="w-10 h-10 text-primary/40" />
@@ -96,7 +109,24 @@ export default function InternshipDetailPage() {
         <div>
             <h1 className="text-2xl md:text-3xl lg:text-4xl font-black text-foreground mb-3 leading-tight tracking-tight">{internship.title}</h1>
             <div className="flex items-center gap-2 text-foreground/70 font-bold text-lg">
-                <Building2 className="w-5 h-5" /> {meta.company_name}
+                <Building2 className="w-5 h-5" /> 
+                {!isPaid ? (
+                    <span
+                      className="select-none pointer-events-none"
+                      style={{
+                        filter: "blur(6px)",
+                        userSelect: "none",
+                        WebkitUserSelect: "none",
+                        color: "transparent",
+                        textShadow: "0 0 10px rgba(108,99,255,0.5)",
+                        letterSpacing: "2px",
+                      }}
+                    >
+                      {meta.company_name || "████████████"}
+                    </span>
+                ) : (
+                    meta.company_name
+                )}
             </div>
         </div>
     </div>

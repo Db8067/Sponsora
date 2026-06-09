@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Building2, MapPin, IndianRupee, Clock, CalendarDays, ArrowRight, Eye, LockKeyhole } from "lucide-react";
+import { Building2, MapPin, IndianRupee, Clock, CalendarDays, ArrowRight, Eye, Briefcase } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useSubscription } from "./SubscriptionContext";
 import { useUser } from "@clerk/nextjs";
@@ -80,7 +80,7 @@ export function InternshipCard({ internship, index = 0, categorySlug }: Internsh
           {isBlurred ? (
             <>
               <div className="absolute inset-0 backdrop-blur-md bg-white/20 dark:bg-black/30 z-10 rounded-xl flex items-center justify-center">
-                <LockKeyhole className="w-6 h-6 text-primary/70" />
+                <Briefcase className="w-6 h-6 text-primary/70" />
               </div>
               <Building2 className="w-8 h-8 text-foreground/20" />
             </>
@@ -110,7 +110,7 @@ export function InternshipCard({ internship, index = 0, categorySlug }: Internsh
                   <button
                     onClick={handleCompanyClick}
                     className="flex items-center gap-1.5 group/blur"
-                    title="Unlock to see company"
+                    title="See details to view company"
                   >
                     <span
                       className="font-medium text-sm select-none pointer-events-none"
@@ -126,7 +126,7 @@ export function InternshipCard({ internship, index = 0, categorySlug }: Internsh
                       {meta.company_name || "████████████"}
                     </span>
                     <span className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary/10 text-primary text-xs font-semibold group-hover/blur:bg-primary group-hover/blur:text-white transition-all ml-1">
-                      <Eye className="w-3 h-3" /> Unlock
+                      <Eye className="w-3 h-3" /> See details
                     </span>
                   </button>
                 ) : (
