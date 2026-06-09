@@ -56,6 +56,13 @@ export default function ProfilePage() {
     return "Unknown Plan";
   };
 
+  const getLegacyLimits = (plan: string, qty: number = 1) => {
+    if (plan === "1_day") return { days: 1 * qty, limits: 10 * qty };
+    if (plan === "7_day") return { days: 7 * qty, limits: 84 * qty };
+    if (plan === "monthly") return { days: 30 * qty, limits: 450 * qty };
+    return { days: 0, limits: 0 };
+  };
+
   return (
     <div className="min-h-[100dvh] pt-24 pb-20 px-4 md:px-8 bg-transparent selection:bg-primary/30">
       <div className="max-w-6xl mx-auto flex flex-col lg:flex-row gap-8 items-start">
@@ -224,7 +231,11 @@ export default function ProfilePage() {
                     </tr>
                   </thead>
                   <tbody>
-                    {transactions.map((tx) => (
+                    {transactions.map((tx) => {
+                      const addedDays = tx.added_days || getLegacyLimits(tx.plan_type, tx.quantity || 1).days;
+                      const addedLimits = tx.added_limits || getLegacyLimits(tx.plan_type, tx.quantity || 1).limits;
+                      
+                      return (
                       <tr key={tx.id} className="border-b border-black/5 dark:border-white/5 last:border-0 hover:bg-black/5 dark:hover:bg-white/5 transition-colors">
                         <td className="py-4 pr-4 whitespace-nowrap text-sm">
                           {new Date(tx.created_at).toLocaleDateString()}
@@ -237,13 +248,13 @@ export default function ProfilePage() {
                           {tx.currency === 'INR' ? '₹' : '$'}{tx.amount}
                         </td>
                         <td className="py-4 pr-4 whitespace-nowrap text-sm text-foreground/70">
-                          {tx.added_days ? `+${tx.added_days} days` : '-'}
+                          {addedDays ? `+${addedDays} days` : '-'}
                         </td>
                         <td className="py-4 whitespace-nowrap text-sm font-bold text-right text-green-500">
-                          {tx.added_limits ? `+${tx.added_limits} limits` : '-'}
+                          {addedLimits ? `+${addedLimits} limits` : '-'}
                         </td>
                       </tr>
-                    ))}
+                    )})}
                   </tbody>
                 </table>
               </div>

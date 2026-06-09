@@ -47,7 +47,7 @@ export async function POST(req: NextRequest) {
       const addedDays = planConfig.days * quantity;
       const addedLimits = planConfig.applyLimit * addedDays; // e.g. 1 day = 10*1=10, 7 days = 12*7=84
 
-      // Check existing subscription to see if we should accumulate or reset
+      // Check existing subscription
       const { data: existingSub } = await (supabaseAdmin.from('user_subscriptions') as any)
         .select('valid_until, total_limit, used_limit, status')
         .eq('user_id', userId)
@@ -57,19 +57,20 @@ export async function POST(req: NextRequest) {
       let newTotalLimit = addedLimits;
       let usedLimit = 0;
 
-      // If subscription is currently active AND has limits remaining, we ADD to it.
-      if (
-        existingSub && 
-        existingSub.status === 'active' && 
-        new Date(existingSub.valid_until) > new Date() && 
-        ((existingSub.total_limit || 0) > (existingSub.used_limit || 0))
-      ) {
-        newValidUntil = new Date(existingSub.valid_until);
-        newValidUntil.setDate(newValidUntil.getDate() + addedDays);
+      if (existingSub) {
+        // ALWAYS accumulate lifetime limits and used limits
         newTotalLimit = (existingSub.total_limit || 0) + addedLimits;
         usedLimit = existingSub.used_limit || 0;
+
+        // Only accumulate the DATE if the pass hasn't expired yet
+        if (existingSub.status === 'active' && new Date(existingSub.valid_until) > new Date()) {
+          newValidUntil = new Date(existingSub.valid_until);
+          newValidUntil.setDate(newValidUntil.getDate() + addedDays);
+        } else {
+          // If expired, the new days start from RIGHT NOW
+          newValidUntil.setDate(newValidUntil.getDate() + addedDays);
+        }
       } else {
-        // If expired OR they ran out of limits, start fresh from right now!
         newValidUntil.setDate(newValidUntil.getDate() + addedDays);
       }
 
