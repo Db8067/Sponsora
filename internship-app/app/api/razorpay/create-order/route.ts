@@ -1,11 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Razorpay from 'razorpay';
 
-const razorpay = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID!,
-  key_secret: process.env.RAZORPAY_KEY_SECRET!,
-});
-
 const PLAN_CONFIG: Record<string, { amount: number; label: string; applyLimit: number; days: number }> = {
   '1_day':   { amount: 2900,  label: '1 Day Pass',  applyLimit: 10, days: 1 },
   '7_day':   { amount: 9900,  label: '7 Day Pass',  applyLimit: 12, days: 7 },
@@ -14,6 +9,11 @@ const PLAN_CONFIG: Record<string, { amount: number; label: string; applyLimit: n
 
 export async function POST(req: NextRequest) {
   try {
+    const razorpay = new Razorpay({
+      key_id: process.env.RAZORPAY_KEY_ID || 'dummy_key',
+      key_secret: process.env.RAZORPAY_KEY_SECRET || 'dummy_secret',
+    });
+
     const { planType, discountCode } = await req.json();
     const plan = PLAN_CONFIG[planType];
     if (!plan) {
