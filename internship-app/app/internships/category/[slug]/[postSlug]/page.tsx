@@ -19,6 +19,9 @@ export default function InternshipDetailPage() {
   
   const [internship, setInternship] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [showApplyModal, setShowApplyModal] = useState(false);
+  const [isApplying, setIsApplying] = useState(false);
+  const [applyError, setApplyError] = useState("");
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -76,10 +79,6 @@ export default function InternshipDetailPage() {
     }
     router.push("/subscribe");
   };
-
-  const [showApplyModal, setShowApplyModal] = useState(false);
-  const [isApplying, setIsApplying] = useState(false);
-  const [applyError, setApplyError] = useState("");
 
   const handleApplyClick = () => {
     if (!isSignedIn) {
