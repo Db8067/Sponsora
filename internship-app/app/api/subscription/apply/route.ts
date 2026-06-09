@@ -19,6 +19,22 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'No active subscription' }, { status: 403 });
   }
 
+  // Check if already applied to this specific internship
+  const { count: alreadyAppliedCount } = await (supabaseAdmin.from('applications_log') as any)
+    .select('*', { count: 'exact', head: true })
+    .eq('user_id', userId)
+    .eq('internship_id', internshipId);
+
+  if ((alreadyAppliedCount || 0) > 0) {
+    // Fetch the real apply link and return success without deducting limit
+    const { data: post } = await (supabaseAdmin.from('sponsora_posts') as any)
+      .select('apply_link, metadata')
+      .eq('id', internshipId)
+      .single();
+    const applyLink = post?.apply_link || post?.metadata?.apply_link || null;
+    return NextResponse.json({ success: true, applyLink, alreadyApplied: true });
+  }
+
   // Check daily apply limit
   const startOfDay = new Date();
   startOfDay.setHours(0, 0, 0, 0);

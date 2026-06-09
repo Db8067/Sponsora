@@ -22,6 +22,18 @@ export default function InternshipDetailPage() {
   const [showApplyModal, setShowApplyModal] = useState(false);
   const [isApplying, setIsApplying] = useState(false);
   const [applyError, setApplyError] = useState("");
+  const [hasApplied, setHasApplied] = useState(false);
+
+  useEffect(() => {
+    if (isSignedIn && internship?.id) {
+      fetch(`/api/subscription/check-apply?internshipId=${internship.id}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.hasApplied) setHasApplied(true);
+        })
+        .catch(console.error);
+    }
+  }, [isSignedIn, internship?.id]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -89,6 +101,12 @@ export default function InternshipDetailPage() {
       router.push("/subscribe");
       return;
     }
+
+    if (hasApplied && internship.apply_link) {
+      window.open(internship.apply_link, "_blank");
+      return;
+    }
+
     if (internship.apply_link) {
       setShowApplyModal(true);
     } else {
