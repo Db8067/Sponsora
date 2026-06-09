@@ -12,8 +12,20 @@ if (supabaseUrl && !supabaseUrl.startsWith('http')) {
 }
 
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim() || process.env.NEXT_PUBLIC_SUPABASE_KEY?.trim() || 'placeholder_anon_key';
-
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
-
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim() || '';
-export const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey || supabaseAnonKey);
+
+const globalForSupabase = globalThis as unknown as {
+  supabase: ReturnType<typeof createClient> | undefined;
+  supabaseAdmin: ReturnType<typeof createClient> | undefined;
+};
+
+export const supabase =
+  globalForSupabase.supabase ?? createClient(supabaseUrl, supabaseAnonKey);
+
+export const supabaseAdmin =
+  globalForSupabase.supabaseAdmin ?? createClient(supabaseUrl, supabaseServiceKey || supabaseAnonKey);
+
+if (process.env.NODE_ENV !== "production") {
+  globalForSupabase.supabase = supabase;
+  globalForSupabase.supabaseAdmin = supabaseAdmin;
+}
