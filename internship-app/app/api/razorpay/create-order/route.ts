@@ -14,10 +14,13 @@ export async function POST(req: NextRequest) {
       key_secret: process.env.RAZORPAY_KEY_SECRET || 'dummy_secret',
     });
 
-    const { planType, discountCode } = await req.json();
+    const { planType, discountCode, userId } = await req.json();
     const plan = PLAN_CONFIG[planType];
     if (!plan) {
       return NextResponse.json({ error: 'Invalid plan' }, { status: 400 });
+    }
+    if (!userId) {
+      return NextResponse.json({ error: 'User ID is required' }, { status: 400 });
     }
 
     let finalAmount = plan.amount;
@@ -45,7 +48,7 @@ export async function POST(req: NextRequest) {
       amount: finalAmount,
       currency: 'INR',
       receipt: `order_${Date.now()}`,
-      notes: { planType, originalAmount: plan.amount, finalAmount },
+      notes: { planType, originalAmount: plan.amount, finalAmount, userId },
     });
 
     return NextResponse.json({

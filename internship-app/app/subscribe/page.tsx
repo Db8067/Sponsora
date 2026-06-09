@@ -151,6 +151,7 @@ function SubscribeContent() {
         body: JSON.stringify({
           planType: selectedPlan,
           discountCode: discountApplied ? discountCode.toUpperCase() : undefined,
+          userId: user.id,
         }),
       });
 
@@ -176,7 +177,7 @@ function SubscribeContent() {
         theme: { color: "#6C63FF" },
         handler: async function() {
           await refetch();
-          router.push("/internshipcategory?success=true");
+          router.push("/internships/category/software-engineering?success=true");
         },
       };
 
