@@ -48,11 +48,8 @@ export function InternshipCard({ internship, index = 0, categorySlug }: Internsh
     return `₹${Number(meta.stipend_min).toLocaleString()} - ₹${Number(meta.stipend_max).toLocaleString()}/mo`;
   };
 
-  const handleCardClick = () => {
-    router.push(`/internships/category/${categorySlug}/${internship.slug || internship.id}`);
-  };
-
   const handleCompanyClick = (e: React.MouseEvent) => {
+    e.preventDefault();
     e.stopPropagation();
     if (!isSignedIn) {
       // Not logged in — redirect to Clerk sign-in
@@ -66,12 +63,12 @@ export function InternshipCard({ internship, index = 0, categorySlug }: Internsh
   const skillsList = meta.skills ? meta.skills.split(",").map((s) => s.trim()).filter(Boolean) : [];
 
   return (
-    <motion.div
+    <motion.a
+      href={`/internships/category/${categorySlug}/${internship.slug || internship.id}`}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: index * 0.1 }}
-      onClick={handleCardClick}
-      className="group relative w-full cursor-pointer rounded-2xl glass bg-white dark:bg-white/5 border border-black/5 dark:border-white/10 p-5 sm:p-6 hover:-translate-y-1 hover:shadow-2xl hover:shadow-primary/20 hover:border-primary/30 transition-all duration-300"
+      className="group relative w-full cursor-pointer block rounded-2xl glass bg-white dark:bg-white/5 border border-black/5 dark:border-white/10 p-5 sm:p-6 hover:-translate-y-1 hover:shadow-2xl hover:shadow-primary/20 hover:border-primary/30 transition-all duration-300"
     >
       <div className="flex flex-col sm:flex-row gap-5">
 
@@ -175,6 +172,6 @@ export function InternshipCard({ internship, index = 0, categorySlug }: Internsh
           </div>
         </div>
       </div>
-    </motion.div>
+    </motion.a>
   );
 }
