@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { Menu, X, Calendar, ChevronRight, Briefcase, Home } from "lucide-react";
+import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import { useState, useEffect } from "react";
 import { ThemeToggle } from "./ThemeToggle";
 import { motion, AnimatePresence } from "framer-motion";
@@ -58,6 +59,14 @@ export default function Navbar() {
         {/* Desktop Nav */}
         <div className="hidden md:flex items-center gap-8">
           <div className="flex items-center gap-8">
+            <SignedOut>
+              <Link href="/sign-in" className="text-sm font-medium text-foreground/60 hover:text-foreground transition-colors">
+                Sign In
+              </Link>
+            </SignedOut>
+            <SignedIn>
+              <UserButton afterSignOutUrl="/" />
+            </SignedIn>
             <Link href="/events" className="text-sm font-medium text-foreground/60 hover:text-foreground transition-colors">
               Discover Events
             </Link>
