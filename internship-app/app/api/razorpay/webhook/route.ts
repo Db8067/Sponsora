@@ -56,6 +56,17 @@ export async function POST(req: NextRequest) {
           updated_at: new Date().toISOString(),
         }, { onConflict: 'user_id' });
 
+      // Log the payment
+      const amountPaid = payment.amount / 100; // Razorpay amount is in paise
+      await (supabaseAdmin.from('payments') as any).insert({
+        user_id: userId,
+        plan_type: planType,
+        amount: amountPaid,
+        currency: payment.currency || 'INR',
+        razorpay_payment_id: payment.id,
+        razorpay_order_id: payment.order_id
+      });
+
       // If discount code was used, increment uses_count & record it
       if (discountCode) {
         const { data: codeData } = await (supabaseAdmin.from('discount_codes') as any)

@@ -121,8 +121,20 @@ export default function AdminDashboard() {
               <h2 className="text-2xl font-normal text-[#202124]">Dashboard Overview</h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="bg-white p-6 rounded-lg border border-[#DADCE0] shadow-sm">
+                  <p className="text-sm font-medium text-[#5F6368] mb-2">Total Revenue Today</p>
+                  <p className="text-3xl font-normal text-[#1A73E8]">₹{stats?.revenueToday || 0}</p>
+                </div>
+                <div className="bg-white p-6 rounded-lg border border-[#DADCE0] shadow-sm">
                   <p className="text-sm font-medium text-[#5F6368] mb-2">Active Subscriptions</p>
                   <p className="text-3xl font-normal text-[#1A73E8]">{stats?.activeSubscriptions}</p>
+                </div>
+                <div className="bg-white p-6 rounded-lg border border-[#DADCE0] shadow-sm">
+                  <p className="text-sm font-medium text-[#5F6368] mb-2">Expiring Subscriptions</p>
+                  <p className="text-3xl font-normal text-[#C5221F]">{stats?.expiringSubs}</p>
+                </div>
+                <div className="bg-white p-6 rounded-lg border border-[#DADCE0] shadow-sm">
+                  <p className="text-sm font-medium text-[#5F6368] mb-2">Total Clerk Users</p>
+                  <p className="text-3xl font-normal text-[#34A853]">{stats?.totalUsers}</p>
                 </div>
                 <div className="bg-white p-6 rounded-lg border border-[#DADCE0] shadow-sm">
                   <p className="text-sm font-medium text-[#5F6368] mb-2">Applies Today</p>
