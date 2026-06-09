@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Menu, X, Calendar, ChevronRight, Briefcase, Home } from "lucide-react";
-import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+import { UserButton, useUser } from "@clerk/nextjs";
 import { useState, useEffect } from "react";
 import { ThemeToggle } from "./ThemeToggle";
 import { motion, AnimatePresence } from "framer-motion";
@@ -15,9 +15,7 @@ interface Category {
 }
 
 export default function Navbar() {
-  const isLoaded = true;
-  const isSignedIn = false;
-  const user: any = { publicMetadata: { role: 'user' } };
+  const { isSignedIn, isLoaded, user } = useUser();
   
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -59,14 +57,14 @@ export default function Navbar() {
         {/* Desktop Nav */}
         <div className="hidden md:flex items-center gap-8">
           <div className="flex items-center gap-8">
-            <SignedOut>
+            {!isSignedIn && isLoaded && (
               <Link href="/sign-in" className="text-sm font-medium text-foreground/60 hover:text-foreground transition-colors">
                 Sign In
               </Link>
-            </SignedOut>
-            <SignedIn>
-              <UserButton afterSignOutUrl="/" />
-            </SignedIn>
+            )}
+            {isSignedIn && isLoaded && (
+              <UserButton />
+            )}
             <Link href="/events" className="text-sm font-medium text-foreground/60 hover:text-foreground transition-colors">
               Discover Events
             </Link>
