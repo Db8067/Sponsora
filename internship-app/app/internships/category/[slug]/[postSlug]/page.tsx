@@ -377,9 +377,7 @@ export default function InternshipDetailPage() {
                 <AdditionalInfoCard />
             </div>
         </div>
-
         </div>
-      </div>
 
       {/* Apply Limits Modal */}
       {showApplyModal && (
