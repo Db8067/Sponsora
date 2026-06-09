@@ -392,7 +392,7 @@ export default function InternshipDetailPage() {
             >
               ✕
             </button>
-            <img src="/images/apply_limit.png" alt="Use Limits Wisely" className="w-40 h-40 object-contain mb-4 drop-shadow-lg" />
+            <img src="/images/warning_doodle.png" alt="Use Limits Wisely" className="w-40 h-40 object-contain mb-4 drop-shadow-lg" />
             <h3 className="text-xl font-black mb-2">Use Limit Wisely! 🎯</h3>
             <p className="text-sm text-foreground/70 leading-relaxed mb-6">
               Clicking continue will securely redirect you to the original application form and consume <strong className="text-primary">1 Apply Limit</strong> from your daily quota.
