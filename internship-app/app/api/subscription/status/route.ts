@@ -24,7 +24,7 @@ export async function GET(req: NextRequest) {
   let trueUsedLimit = sub.used_limit || 0;
 
   const { data: payments } = await (supabaseAdmin.from('payments') as any)
-    .select('plan_type, quantity, added_limits')
+    .select('plan_type, quantity, added_limits, added_days, created_at')
     .eq('user_id', userId);
 
   if (payments && payments.length > 0) {
@@ -56,7 +56,29 @@ export async function GET(req: NextRequest) {
   }
   // === END SELF-HEALING ===
 
+  // === DYNAMIC ACTIVE PLAN CALCULATION ===
+  let activePlanType = sub.plan_type;
   const now = new Date();
+
+  if (payments && payments.length > 0) {
+    // Sort payments chronologically
+    const sortedPayments = payments.sort((a: any, b: any) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
+    let currentEnd = new Date(0);
+    
+    for (const p of sortedPayments) {
+      if (!p.added_days) continue; // Skip if no added_days (e.g., legacy or bugged payments)
+      const paymentDate = new Date(p.created_at);
+      let start = paymentDate > currentEnd ? paymentDate : currentEnd;
+      let end = new Date(start.getTime() + p.added_days * 24 * 60 * 60 * 1000);
+      currentEnd = end;
+
+      // If current time is within this specific pass's window, this is the active plan!
+      if (now >= start && now <= end) {
+        activePlanType = p.plan_type;
+      }
+    }
+  }
+
   if (new Date(sub.valid_until) < now || trueUsedLimit >= trueTotalLimit) {
     if (new Date(sub.valid_until) < now) {
       await (supabaseAdmin.from('user_subscriptions') as any).update({ status: 'expired' }).eq('id', sub.id);
@@ -66,7 +88,7 @@ export async function GET(req: NextRequest) {
 
   return NextResponse.json({
     isPaid: true,
-    planType: sub.plan_type,
+    planType: activePlanType,
     validUntil: sub.valid_until,
     totalLimit: trueTotalLimit,
     usedLimit: trueUsedLimit,
