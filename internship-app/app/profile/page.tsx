@@ -209,7 +209,6 @@ export default function ProfilePage() {
               }}
             />
           </div>
-        </div>
 
         {/* Transaction History */}
         <div className="w-full lg:col-span-2 order-2 flex flex-col gap-6">
