@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { Building2, MapPin, IndianRupee, Clock, CalendarDays, ArrowLeft, ShieldCheck, Zap, Briefcase, Users, Star, Target, CheckCircle2, Award, FileText, MousePointerClick, Eye } from "lucide-react";
 import { supabase } from "@/lib/supabase";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useUser } from "@clerk/nextjs";
 import { useSubscription } from "@/components/SubscriptionContext";
 
@@ -23,6 +23,7 @@ export default function InternshipDetailPage() {
   const [isApplying, setIsApplying] = useState(false);
   const [applyError, setApplyError] = useState("");
   const [hasApplied, setHasApplied] = useState(false);
+  const [fullscreenImage, setFullscreenImage] = useState<string | null>(null);
 
   useEffect(() => {
     if (isSignedIn && internship?.id) {
@@ -112,6 +113,30 @@ export default function InternshipDetailPage() {
     } else {
       router.push("/subscribe");
     }
+  };
+
+  const handleEmailClick = () => {
+    if (!isSignedIn) {
+      router.push("/sign-in?redirect_url=" + encodeURIComponent(window.location.pathname));
+      return;
+    }
+    if (!isPaid) {
+      router.push("/subscribe");
+      return;
+    }
+    // Automatically handled by mailto: link for paid users, but we can log click if needed
+  };
+
+  const handleImageClick = () => {
+    if (!isSignedIn) {
+      router.push("/sign-in?redirect_url=" + encodeURIComponent(window.location.pathname));
+      return;
+    }
+    if (!isPaid) {
+      router.push("/subscribe");
+      return;
+    }
+    setFullscreenImage(meta.apply_image_url);
   };
 
   const handleConfirmApply = async () => {
@@ -227,15 +252,63 @@ export default function InternshipDetailPage() {
         </div>
         
         {/* Main Apply Card */}
-        <div className="bg-white dark:bg-[#111] rounded-[2rem] rounded-tl-none border-2 border-black/10 dark:border-white/10 p-6 md:p-8 shadow-2xl relative z-10 w-full">
-            <button 
-                onClick={handleApplyClick}
-                className="w-full py-5 rounded-2xl bg-[#0066FF] hover:bg-[#0055DD] text-white font-black text-xl active:scale-95 transition-all shadow-xl shadow-blue-500/25"
-            >
-                Apply Now
-            </button>
+        <div className="bg-white dark:bg-[#111] rounded-[2rem] rounded-tl-none border-2 border-black/10 dark:border-white/10 p-6 md:p-8 shadow-2xl relative z-10 w-full flex flex-col gap-6">
             
-            <div className="mt-8 flex items-center justify-center gap-2 text-foreground/60 font-black text-lg cursor-default group">
+            {!internship.apply_link && !meta.company_email && !meta.apply_image_url && (
+                <button 
+                    onClick={handleApplyClick}
+                    className="w-full py-5 rounded-2xl bg-[#0066FF] hover:bg-[#0055DD] text-white font-black text-xl active:scale-95 transition-all shadow-xl shadow-blue-500/25"
+                >
+                    Apply Now
+                </button>
+            )}
+
+            {internship.apply_link && (
+                <button 
+                    onClick={handleApplyClick}
+                    className="w-full py-5 rounded-2xl bg-[#0066FF] hover:bg-[#0055DD] text-white font-black text-xl active:scale-95 transition-all shadow-xl shadow-blue-500/25"
+                >
+                    Apply Now
+                </button>
+            )}
+
+            {meta.company_email && (
+                isPaid ? (
+                    <a 
+                        href={`mailto:${meta.company_email}`}
+                        className="w-full py-5 rounded-2xl bg-slate-800 hover:bg-slate-900 text-white font-black text-xl active:scale-95 transition-all shadow-xl shadow-slate-500/25 flex items-center justify-center break-all px-4 text-center"
+                    >
+                        {meta.company_email}
+                    </a>
+                ) : (
+                    <button 
+                        onClick={handleEmailClick}
+                        className="w-full py-5 rounded-2xl bg-slate-800 hover:bg-slate-900 text-white font-black text-xl active:scale-95 transition-all shadow-xl shadow-slate-500/25"
+                    >
+                        See Company email id
+                    </button>
+                )
+            )}
+
+            {meta.apply_image_url && (
+                <div className="relative w-full rounded-2xl overflow-hidden border-2 border-black/5 dark:border-white/5 bg-gray-50 dark:bg-black/20 group cursor-pointer" onClick={handleImageClick}>
+                    <img 
+                        src={meta.apply_image_url} 
+                        alt="Apply Info" 
+                        className={`w-full h-auto max-h-[300px] object-cover transition-all duration-300 ${!isPaid ? 'blur-md grayscale opacity-50' : 'group-hover:scale-105'}`} 
+                    />
+                    {!isPaid && (
+                        <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/30 backdrop-blur-sm gap-2">
+                            <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-md border border-white/30">
+                                <Eye className="w-6 h-6 text-white" />
+                            </div>
+                            <span className="font-bold text-white text-sm tracking-widest uppercase shadow-sm">See now</span>
+                        </div>
+                    )}
+                </div>
+            )}
+
+            <div className="mt-2 flex items-center justify-center gap-2 text-foreground/60 font-black text-lg cursor-default group">
                 <MousePointerClick size={20} className="group-hover:text-primary transition-colors" />
                 <span className="group-hover:text-primary transition-colors">{internship.applied_count || meta.applied_count || '0'} Applied</span>
             </div>
@@ -432,6 +505,27 @@ export default function InternshipDetailPage() {
         </div>
       )}
 
+      {/* Fullscreen Image Viewer Modal */}
+      <AnimatePresence>
+        {fullscreenImage && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-8 bg-black/90 backdrop-blur-md">
+            <button 
+              onClick={() => setFullscreenImage(null)}
+              className="absolute top-6 right-6 w-12 h-12 bg-white/10 hover:bg-white/20 text-white rounded-full flex items-center justify-center transition-colors backdrop-blur-md border border-white/10"
+            >
+              <ArrowLeft className="w-6 h-6 rotate-180" />
+            </button>
+            <motion.img 
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              src={fullscreenImage} 
+              alt="Fullscreen Apply Image" 
+              className="max-w-full max-h-full rounded-xl object-contain shadow-2xl"
+            />
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
