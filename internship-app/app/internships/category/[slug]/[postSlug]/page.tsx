@@ -24,6 +24,7 @@ export default function InternshipDetailPage() {
   const [applyError, setApplyError] = useState("");
   const [hasApplied, setHasApplied] = useState(false);
   const [fullscreenImage, setFullscreenImage] = useState<string | null>(null);
+  const [showEmailModal, setShowEmailModal] = useState(false);
 
   useEffect(() => {
     if (isSignedIn && internship?.id) {
@@ -274,12 +275,12 @@ export default function InternshipDetailPage() {
 
             {meta.company_email && (
                 isPaid ? (
-                    <a 
-                        href={`mailto:${meta.company_email}`}
-                        className="w-full py-5 rounded-2xl bg-slate-800 hover:bg-slate-900 text-white font-black text-xl active:scale-95 transition-all shadow-xl shadow-slate-500/25 flex items-center justify-center break-all px-4 text-center"
+                    <button 
+                        onClick={() => setShowEmailModal(true)}
+                        className="w-full py-5 rounded-2xl bg-slate-800 hover:bg-slate-900 text-white font-black text-xl active:scale-95 transition-all shadow-xl shadow-slate-500/25 flex items-center justify-center"
                     >
-                        {meta.company_email}
-                    </a>
+                        Click me to see Email
+                    </button>
                 ) : (
                     <button 
                         onClick={handleEmailClick}
@@ -450,12 +451,12 @@ export default function InternshipDetailPage() {
         </div>
 
         {/* --- LAPTOP VIEW --- */}
-        <div className="hidden lg:grid grid-cols-3 gap-12 items-start w-full">
-            <div className="col-span-2 flex flex-col gap-6 w-full">
+        <div className="hidden lg:grid grid-cols-5 gap-10 items-start w-full">
+            <div className="col-span-3 flex flex-col gap-6 w-full">
                 <TitleLogoCard />
                 <AboutInternshipCard />
             </div>
-            <div className="col-span-1 flex flex-col gap-6 sticky top-28">
+            <div className="col-span-2 flex flex-col gap-6 sticky top-28">
                 <ApplyCard />
                 <AdditionalInfoCard />
             </div>
@@ -523,6 +524,61 @@ export default function InternshipDetailPage() {
               alt="Fullscreen Apply Image" 
               className="max-w-full max-h-full rounded-xl object-contain shadow-2xl"
             />
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* Email Modal */}
+      <AnimatePresence>
+        {showEmailModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="bg-background rounded-3xl p-6 md:p-8 max-w-lg w-full shadow-2xl border border-white/10 relative text-center flex flex-col items-center overflow-hidden"
+            >
+              <button 
+                onClick={() => setShowEmailModal(false)}
+                className="absolute top-4 right-4 p-2 text-foreground/40 hover:text-foreground/80 bg-foreground/5 hover:bg-foreground/10 rounded-full transition-colors"
+              >
+                <ArrowLeft className="w-5 h-5 rotate-180" />
+              </button>
+
+              <div className="w-16 h-16 bg-slate-500/10 text-slate-600 dark:text-slate-400 rounded-full flex items-center justify-center mb-6">
+                <FileText size={32} />
+              </div>
+              
+              <h2 className="text-2xl font-black mb-2 text-foreground">Company Email ID</h2>
+              <p className="text-foreground/60 mb-8 max-w-sm">
+                You can send your application directly to the company using the email address below.
+              </p>
+
+              <div className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 mb-6 overflow-x-auto custom-scrollbar">
+                <span className="text-lg md:text-xl font-bold text-slate-800 dark:text-slate-200 whitespace-nowrap">
+                    {meta.company_email}
+                </span>
+              </div>
+
+              <div className="flex flex-col sm:flex-row w-full gap-3">
+                <button 
+                  onClick={() => {
+                      navigator.clipboard.writeText(meta.company_email);
+                      alert("Email copied to clipboard!");
+                  }}
+                  className="w-full py-4 rounded-xl font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 dark:text-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 transition-colors"
+                >
+                  Copy Email
+                </button>
+                <a 
+                  href={`mailto:${meta.company_email}`}
+                  onClick={() => setShowEmailModal(false)}
+                  className="w-full py-4 rounded-xl font-bold text-white bg-[#0066FF] hover:bg-[#0055DD] transition-colors flex items-center justify-center"
+                >
+                  Open Mail App
+                </a>
+              </div>
+            </motion.div>
           </div>
         )}
       </AnimatePresence>
