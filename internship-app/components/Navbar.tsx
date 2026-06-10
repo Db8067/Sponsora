@@ -64,6 +64,9 @@ export default function Navbar() {
             {isSignedIn && isLoaded && (
               <UserButton userProfileMode="navigation" userProfileUrl="/profile" />
             )}
+            
+            {(isLoaded) && <span className="text-foreground/20">|</span>}
+
             <Link href="/events" className="text-sm font-medium text-foreground/60 hover:text-foreground transition-colors">
               Discover Events
             </Link>
@@ -86,6 +89,9 @@ export default function Navbar() {
           {isSignedIn && isLoaded && (
             <UserButton userProfileMode="navigation" userProfileUrl="/profile" />
           )}
+
+          {(isLoaded) && <span className="text-foreground/20">|</span>}
+
           <ThemeToggle />
           <button
             onClick={() => setIsOpen(!isOpen)}
@@ -170,31 +176,38 @@ export default function Navbar() {
               <div className="h-px bg-white/10 mb-6" />
 
               {/* Manage Account & Discover Events */}
-              {isSignedIn && (
-                <Link 
-                  href="/profile"
-                  onClick={() => setIsOpen(false)}
-                  className="flex items-center justify-between px-4 py-3 rounded-2xl text-foreground/80 hover:text-primary hover:bg-primary/5 transition-all font-semibold text-lg group mb-2"
-                >
-                  <span className="flex items-center gap-3">
-                    <User className="w-5 h-5 text-primary" />
-                    Manage Account
-                  </span>
-                  <ChevronRight className="w-4 h-4 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
-                </Link>
-              )}
+              <div className="mb-6">
+                <p className="text-xs font-bold uppercase tracking-widest text-foreground/40 mb-4 flex items-center gap-2">
+                  <User className="w-3.5 h-3.5" /> Account & More
+                </p>
+                <div className="flex flex-col gap-1">
+                  {isSignedIn && (
+                    <Link 
+                      href="/profile"
+                      onClick={() => setIsOpen(false)}
+                      className="flex items-center justify-between px-4 py-3 rounded-2xl text-foreground/80 hover:text-primary hover:bg-primary/5 transition-all font-semibold text-lg group mb-2"
+                    >
+                      <span className="flex items-center gap-3">
+                        <User className="w-5 h-5 text-primary" />
+                        Manage Account
+                      </span>
+                      <ChevronRight className="w-4 h-4 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
+                    </Link>
+                  )}
 
-              <Link 
-                href="/events"
-                onClick={() => setIsOpen(false)}
-                className="flex items-center justify-between px-4 py-3 rounded-2xl text-foreground/80 hover:text-primary hover:bg-primary/5 transition-all font-semibold text-lg group mb-4"
-              >
-                <span className="flex items-center gap-3">
-                  <Calendar className="w-5 h-5 text-primary" />
-                  Discover Events
-                </span>
-                <ChevronRight className="w-4 h-4 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
-              </Link>
+                  <Link 
+                    href="/events"
+                    onClick={() => setIsOpen(false)}
+                    className="flex items-center justify-between px-4 py-3 rounded-2xl text-foreground/80 hover:text-primary hover:bg-primary/5 transition-all font-semibold text-lg group mb-4"
+                  >
+                    <span className="flex items-center gap-3">
+                      <Calendar className="w-5 h-5 text-primary" />
+                      Discover Events
+                    </span>
+                    <ChevronRight className="w-4 h-4 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
+                  </Link>
+                </div>
+              </div>
             </motion.div>
           </>
         )}

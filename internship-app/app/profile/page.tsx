@@ -65,10 +65,10 @@ export default function ProfilePage() {
 
   return (
     <div className="min-h-[100dvh] pt-24 pb-20 px-4 md:px-8 bg-transparent selection:bg-primary/30">
-      <div className="max-w-6xl mx-auto flex flex-col lg:flex-row gap-8 items-start">
+      <div className="max-w-6xl mx-auto flex flex-col lg:grid lg:grid-cols-3 gap-8 items-start">
         
-        {/* Left Side: Subscription & Stats */}
-        <div className="w-full lg:w-1/3 flex flex-col gap-6">
+        {/* Your Subscription */}
+        <div className="w-full lg:col-span-1 order-1 flex flex-col gap-6">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -156,8 +156,10 @@ export default function ProfilePage() {
               </div>
             )}
           </motion.div>
-          
-          {/* Quick Links */}
+        </div>
+        
+        {/* Account Links */}
+        <div className="w-full lg:col-span-1 order-5 flex flex-col gap-6">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -174,8 +176,10 @@ export default function ProfilePage() {
               </Link>
             </div>
           </motion.div>
+        </div>
 
-          {/* Cute Message with Doodle */}
+        {/* Cute Message with Doodle */}
+        <div className="w-full lg:col-span-1 order-4 lg:order-3 flex flex-col gap-6">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -190,9 +194,8 @@ export default function ProfilePage() {
           </motion.div>
         </div>
 
-        {/* Right Side: Profile & Transactions */}
-        <div className="w-full lg:w-2/3 flex flex-col gap-6">
-          <div className="flex justify-center lg:justify-start">
+        {/* Clerk Profile */}
+        <div className="w-full lg:col-span-2 order-3 lg:order-4 flex justify-center lg:justify-start">
             <UserProfile 
               appearance={{
                 elements: {
@@ -206,7 +209,10 @@ export default function ProfilePage() {
               }}
             />
           </div>
+        </div>
 
+        {/* Transaction History */}
+        <div className="w-full lg:col-span-2 order-2 flex flex-col gap-6">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -219,15 +225,15 @@ export default function ProfilePage() {
             ) : transactions.length === 0 ? (
               <p className="text-sm text-foreground/60 text-center py-8">No transaction history found.</p>
             ) : (
-              <div className="overflow-x-auto">
+              <div className="w-full">
                 <table className="w-full text-left border-collapse">
                   <thead>
-                    <tr className="border-b border-black/10 dark:border-white/10 text-xs uppercase text-foreground/50 tracking-wider">
-                      <th className="pb-3 pr-4 font-semibold">Date</th>
-                      <th className="pb-3 pr-4 font-semibold">Pass</th>
-                      <th className="pb-3 pr-4 font-semibold">Amount</th>
-                      <th className="pb-3 pr-4 font-semibold">Added Validity</th>
-                      <th className="pb-3 font-semibold text-right">Limits Bought</th>
+                    <tr className="border-b border-black/10 dark:border-white/10 text-[10px] md:text-xs uppercase text-foreground/50 tracking-wider">
+                      <th className="pb-3 pr-2 md:pr-4 font-semibold">Date</th>
+                      <th className="pb-3 pr-2 md:pr-4 font-semibold">Pass</th>
+                      <th className="pb-3 pr-2 md:pr-4 font-semibold">Amt</th>
+                      <th className="pb-3 pr-2 md:pr-4 font-semibold">Validity</th>
+                      <th className="pb-3 font-semibold text-right">Limits</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -237,21 +243,21 @@ export default function ProfilePage() {
                       
                       return (
                       <tr key={tx.id} className="border-b border-black/5 dark:border-white/5 last:border-0 hover:bg-black/5 dark:hover:bg-white/5 transition-colors">
-                        <td className="py-4 pr-4 whitespace-nowrap text-sm">
+                        <td className="py-3 md:py-4 pr-2 md:pr-4 text-[11px] md:text-sm whitespace-normal md:whitespace-nowrap">
                           {new Date(tx.created_at).toLocaleDateString()}
-                          <span className="text-xs text-foreground/50 ml-2">{new Date(tx.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                          <span className="block md:inline text-[9px] md:text-xs text-foreground/50 md:ml-2">{new Date(tx.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
                         </td>
-                        <td className="py-4 pr-4 whitespace-nowrap text-sm font-medium text-primary">
+                        <td className="py-3 md:py-4 pr-2 md:pr-4 text-[11px] md:text-sm whitespace-normal md:whitespace-nowrap font-medium text-primary">
                           {formatPlanName(tx.plan_type)} {tx.quantity > 1 ? `(x${tx.quantity})` : ''}
                         </td>
-                        <td className="py-4 pr-4 whitespace-nowrap text-sm font-bold">
+                        <td className="py-3 md:py-4 pr-2 md:pr-4 text-[11px] md:text-sm font-bold">
                           {tx.currency === 'INR' ? '₹' : '$'}{tx.amount}
                         </td>
-                        <td className="py-4 pr-4 whitespace-nowrap text-sm text-foreground/70">
-                          {addedDays ? `+${addedDays} days` : '-'}
+                        <td className="py-3 md:py-4 pr-2 md:pr-4 text-[11px] md:text-sm whitespace-normal md:whitespace-nowrap text-foreground/70">
+                          {addedDays ? `+${addedDays} d` : '-'}
                         </td>
-                        <td className="py-4 whitespace-nowrap text-sm font-bold text-right text-green-500">
-                          {addedLimits ? `+${addedLimits} limits` : '-'}
+                        <td className="py-3 md:py-4 text-[11px] md:text-sm whitespace-normal md:whitespace-nowrap font-bold text-right text-green-500">
+                          {addedLimits ? `+${addedLimits}` : '-'}
                         </td>
                       </tr>
                     )})}

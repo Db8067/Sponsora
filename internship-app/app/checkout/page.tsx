@@ -4,7 +4,7 @@ import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
 import { useSubscription } from "@/components/SubscriptionContext";
-import { CheckCircle2, ShieldCheck, ArrowLeft, Loader2, Plus, Minus, Info } from "lucide-react";
+import { CheckCircle2, ShieldCheck, ArrowLeft, Loader2, Plus, Minus, Info, Tag, X } from "lucide-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 
@@ -43,6 +43,30 @@ function CheckoutContent() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [razorpayLoaded, setRazorpayLoaded] = useState(false);
   const [maintenanceMode, setMaintenanceMode] = useState(false);
+  
+  const [discountCode, setDiscountCode] = useState(initialDiscountCode);
+  const [discountApplied, setDiscountApplied] = useState(!!initialDiscountCode);
+  const [discountError, setDiscountError] = useState("");
+  const [isValidating, setIsValidating] = useState(false);
+
+  const applyDiscount = async () => {
+    if (!discountCode.trim()) return;
+    setIsValidating(true);
+    setDiscountError("");
+    try {
+      const res = await fetch(`/api/subscription/validate-discount?code=${discountCode.trim().toUpperCase()}&userId=${user?.id || ""}`);
+      const data = await res.json();
+      if (data.valid) {
+        setDiscountApplied(true);
+      } else {
+        setDiscountError(data.reason || "Invalid or expired code.");
+      }
+    } catch {
+      setDiscountError("Could not validate code. Try again.");
+    } finally {
+      setIsValidating(false);
+    }
+  };
 
   useEffect(() => {
     if (isLoaded && !isSignedIn) {
@@ -79,7 +103,7 @@ function CheckoutContent() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           planType: planId,
-          discountCode: initialDiscountCode || undefined,
+          discountCode: discountApplied && discountCode ? discountCode : undefined,
           userId: user.id,
           quantity, // passing quantity to backend
         }),
@@ -102,7 +126,7 @@ function CheckoutContent() {
         notes: {
           planType: planId,
           userId: user.id,
-          discountCode: initialDiscountCode || "",
+          discountCode: discountApplied && discountCode ? discountCode : "",
           quantity: quantity.toString(),
         },
         theme: { color: "#6C63FF" },
@@ -140,7 +164,7 @@ function CheckoutContent() {
         
         <h1 className="text-3xl md:text-4xl font-black tracking-tight mb-8">Checkout</h1>
 
-        <div className="flex flex-col lg:flex-row gap-8 items-start">
+        <div className="flex flex-col-reverse lg:flex-row gap-8 items-start">
           
           {/* Left Column: Benefits */}
           <div className="w-full lg:w-1/2 flex flex-col gap-6">
@@ -213,12 +237,40 @@ function CheckoutContent() {
                 <p className="text-xs text-foreground/50 text-right">You are buying {quantity} {plan.unit}{quantity > 1 ? 's' : ''} ({totalDays} days)</p>
               </div>
 
-              {initialDiscountCode && (
-                <div className="flex justify-between items-center py-4 border-b border-black/5 dark:border-white/10 text-green-500">
-                  <span className="font-medium text-sm">Discount Applied ({initialDiscountCode})</span>
-                  <span className="font-bold text-sm">Calculated at checkout</span>
+              {/* Discount Code Section */}
+              <div className="py-6 border-b border-black/5 dark:border-white/10">
+                <div className="flex items-center gap-2 mb-3">
+                  <Tag className="w-4 h-4 text-primary" />
+                  <span className="text-sm font-semibold text-foreground/80">Have a discount code?</span>
                 </div>
-              )}
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    placeholder="Enter code..."
+                    value={discountCode}
+                    onChange={(e) => { setDiscountCode(e.target.value.toUpperCase()); setDiscountApplied(false); setDiscountError(""); }}
+                    disabled={discountApplied}
+                    className="flex-1 px-4 py-2.5 rounded-xl bg-background border border-black/10 dark:border-white/10 focus:border-primary focus:outline-none text-sm font-mono uppercase"
+                  />
+                  <button
+                    onClick={applyDiscount}
+                    disabled={isValidating || discountApplied || !discountCode.trim()}
+                    className="px-4 py-2.5 rounded-xl bg-primary text-white font-bold text-sm hover:bg-primary-dark transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {isValidating ? <Loader2 className="w-4 h-4 animate-spin" /> : discountApplied ? "✓ Applied" : "Apply"}
+                  </button>
+                </div>
+                {discountApplied && (
+                  <p className="text-green-500 text-sm mt-2 font-medium flex items-center gap-1.5">
+                    <CheckCircle2 className="w-4 h-4" /> Discount applied! Calculated at checkout.
+                  </p>
+                )}
+                {discountError && (
+                  <p className="text-red-500 text-sm mt-2 flex items-center gap-1.5">
+                    <X className="w-4 h-4" /> {discountError}
+                  </p>
+                )}
+              </div>
 
               <div className="flex justify-between items-center py-6">
                 <span className="text-lg font-bold">Total Amount</span>

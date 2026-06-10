@@ -86,61 +86,12 @@ export default function SubscribePage() {
 }
 
 function SubscribeContent() {
-  const [selectedPlan, setSelectedPlan] = useState("7_day");
-  const [discountCode, setDiscountCode] = useState("");
-  const [discountApplied, setDiscountApplied] = useState(false);
-  const [discountError, setDiscountError] = useState("");
-  const [isValidating, setIsValidating] = useState(false);
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [razorpayLoaded, setRazorpayLoaded] = useState(false);
-  const [maintenanceMode, setMaintenanceMode] = useState(false);
-
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const { user, isSignedIn } = useUser();
-  const { refetch } = useSubscription();
-  const isExpired = searchParams.get("expired") === "true";
-
-  // Load Razorpay script
-  useEffect(() => {
-    const script = document.createElement("script");
-    script.src = "https://checkout.razorpay.com/v1/checkout.js";
-    script.onload = () => setRazorpayLoaded(true);
-    script.onerror = () => setMaintenanceMode(true);
-    document.body.appendChild(script);
-    return () => { document.body.removeChild(script); };
-  }, []);
-
-  const selectedPlanData = PLANS.find((p) => p.id === selectedPlan)!;
-
-  const applyDiscount = async () => {
-    if (!discountCode.trim()) return;
-    setIsValidating(true);
-    setDiscountError("");
-    try {
-      const res = await fetch(`/api/subscription/validate-discount?code=${discountCode.trim().toUpperCase()}&userId=${user?.id || ""}`);
-      const data = await res.json();
-      if (data.valid) {
-        setDiscountApplied(true);
-      } else {
-        setDiscountError(data.reason || "Invalid or expired code.");
-      }
-    } catch {
-      setDiscountError("Could not validate code. Try again.");
-    } finally {
-      setIsValidating(false);
-    }
-  };
-
   const handleSubscribe = async () => {
     if (!isSignedIn) {
       router.push("/sign-in?redirect_url=/subscribe");
       return;
     }
     const qs = new URLSearchParams({ plan: selectedPlan });
-    if (discountApplied && discountCode) {
-      qs.set('code', discountCode.toUpperCase());
-    }
     router.push(`/checkout?${qs.toString()}`);
   };
 
@@ -197,7 +148,7 @@ function SubscribeContent() {
         </div>
 
         {/* Plans */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+        <div className="grid grid-cols-3 gap-2 md:gap-6 mb-10">
           {PLANS.map((plan, i) => (
             <motion.div
               key={plan.id}
@@ -217,20 +168,20 @@ function SubscribeContent() {
                 </div>
               )}
 
-              <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${plan.color} flex items-center justify-center text-white mb-4 shadow-lg`}>
+              <div className={`w-8 h-8 md:w-10 md:h-10 rounded-xl bg-gradient-to-br ${plan.color} flex items-center justify-center text-white mb-2 md:mb-4 shadow-lg`}>
                 {plan.icon}
               </div>
 
-              <h3 className="text-xl font-bold mb-1">{plan.label}</h3>
-              <p className="text-xs text-foreground/50 mb-4">{plan.applyLimit} applies per day</p>
+              <h3 className="text-sm md:text-xl font-bold mb-1">{plan.label}</h3>
+              <p className="text-[10px] md:text-xs text-foreground/50 mb-2 md:mb-4">{plan.applyLimit} applies per day</p>
 
-              <div className="flex items-end gap-1 mb-1">
-                <span className="text-4xl font-black">₹{plan.price}</span>
-                <span className="text-foreground/50 mb-1.5 text-sm">{plan.period}</span>
+              <div className="flex flex-col md:flex-row md:items-end gap-0 md:gap-1 mb-1">
+                <span className="text-xl md:text-4xl font-black">₹{plan.price}</span>
+                <span className="text-foreground/50 mb-0 md:mb-1.5 text-[10px] md:text-sm">{plan.period}</span>
               </div>
-              <p className="text-sm text-foreground/40 line-through mb-5">₹{plan.originalPrice}</p>
+              <p className="text-[10px] md:text-sm text-foreground/40 line-through mb-3 md:mb-5">₹{plan.originalPrice}</p>
 
-              <ul className="flex flex-col gap-2.5 text-sm">
+              <ul className="flex flex-col gap-1.5 md:gap-2.5 text-[10px] md:text-sm">
                 {plan.features.map((f, fi) => (
                   <li key={fi} className="flex items-center gap-2.5 text-foreground/80">
                     <CheckCircle2 className="w-4 h-4 text-green-500 shrink-0" />
@@ -248,52 +199,14 @@ function SubscribeContent() {
           ))}
         </div>
 
-        {/* Discount Code + CTA */}
+        {/* CTA */}
         <div className="max-w-md mx-auto">
-          {/* Discount Code */}
-          <div className="mb-6 p-4 rounded-2xl glass border border-white/10">
-            <div className="flex items-center gap-2 mb-3">
-              <Tag className="w-4 h-4 text-primary" />
-              <span className="text-sm font-semibold text-foreground/80">Have a discount code?</span>
-            </div>
-            <div className="flex gap-2">
-              <input
-                type="text"
-                placeholder="Enter code..."
-                value={discountCode}
-                onChange={(e) => { setDiscountCode(e.target.value.toUpperCase()); setDiscountApplied(false); setDiscountError(""); }}
-                disabled={discountApplied}
-                className="flex-1 px-4 py-2.5 rounded-xl bg-white dark:bg-black/20 border border-white/10 focus:border-primary focus:outline-none text-sm font-mono uppercase"
-              />
-              <button
-                onClick={applyDiscount}
-                disabled={isValidating || discountApplied || !discountCode.trim()}
-                className="px-4 py-2.5 rounded-xl bg-primary text-white font-bold text-sm hover:bg-primary-dark transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {isValidating ? <Loader2 className="w-4 h-4 animate-spin" /> : discountApplied ? "✓ Applied" : "Apply"}
-              </button>
-            </div>
-            {discountApplied && (
-              <p className="text-green-500 text-sm mt-2 font-medium flex items-center gap-1.5">
-                <CheckCircle2 className="w-4 h-4" /> Discount applied successfully!
-              </p>
-            )}
-            {discountError && (
-              <p className="text-red-500 text-sm mt-2 flex items-center gap-1.5">
-                <X className="w-4 h-4" /> {discountError}
-              </p>
-            )}
-          </div>
 
-          {/* Subscribe Button */}
           <button
             onClick={handleSubscribe}
-            disabled={isProcessing}
-            className="w-full py-4 rounded-2xl bg-gradient-to-r from-primary to-violet-600 text-white font-black text-lg hover:shadow-2xl hover:shadow-primary/30 active:scale-[0.98] transition-all flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+            className="w-full py-4 rounded-2xl bg-gradient-to-r from-primary to-violet-600 text-white font-black text-lg hover:shadow-2xl hover:shadow-primary/30 active:scale-[0.98] transition-all flex items-center justify-center gap-2"
           >
-            {isProcessing ? <Loader2 className="w-5 h-5 animate-spin" /> : null}
-            {isProcessing ? "Opening Checkout..." : `Pay ₹${selectedPlanData.price} with Razorpay`}
-            {!isProcessing && <ShieldCheck className="w-5 h-5" />}
+            Go to Checkout <ShieldCheck className="w-5 h-5" />
           </button>
 
           <p className="text-center text-xs text-foreground/40 mt-3 flex items-center justify-center gap-1.5">
