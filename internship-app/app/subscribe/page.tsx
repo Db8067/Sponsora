@@ -86,6 +86,16 @@ export default function SubscribePage() {
 }
 
 function SubscribeContent() {
+  const [selectedPlan, setSelectedPlan] = useState("7_day");
+  const [maintenanceMode, setMaintenanceMode] = useState(false);
+
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const { isSignedIn } = useUser();
+  const isExpired = searchParams.get("expired") === "true";
+
+  const selectedPlanData = PLANS.find((p) => p.id === selectedPlan)!;
+
   const handleSubscribe = async () => {
     if (!isSignedIn) {
       router.push("/sign-in?redirect_url=/subscribe");
