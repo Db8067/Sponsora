@@ -158,7 +158,7 @@ function SubscribeContent() {
         </div>
 
         {/* Plans */}
-        <div className="grid grid-cols-3 gap-2 md:gap-6 mb-10">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
           {PLANS.map((plan, i) => (
             <motion.div
               key={plan.id}
@@ -178,20 +178,20 @@ function SubscribeContent() {
                 </div>
               )}
 
-              <div className={`w-8 h-8 md:w-10 md:h-10 rounded-xl bg-gradient-to-br ${plan.color} flex items-center justify-center text-white mb-2 md:mb-4 shadow-lg`}>
+              <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${plan.color} flex items-center justify-center text-white mb-4 shadow-lg`}>
                 {plan.icon}
               </div>
 
-              <h3 className="text-sm md:text-xl font-bold mb-1">{plan.label}</h3>
-              <p className="text-[10px] md:text-xs text-foreground/50 mb-2 md:mb-4">{plan.applyLimit} applies per day</p>
+              <h3 className="text-xl font-bold mb-1">{plan.label}</h3>
+              <p className="text-xs text-foreground/50 mb-4">{plan.applyLimit} applies per day</p>
 
-              <div className="flex flex-col md:flex-row md:items-end gap-0 md:gap-1 mb-1">
-                <span className="text-xl md:text-4xl font-black">₹{plan.price}</span>
-                <span className="text-foreground/50 mb-0 md:mb-1.5 text-[10px] md:text-sm">{plan.period}</span>
+              <div className="flex items-end gap-1 mb-1">
+                <span className="text-4xl font-black">₹{plan.price}</span>
+                <span className="text-foreground/50 mb-1.5 text-sm">{plan.period}</span>
               </div>
-              <p className="text-[10px] md:text-sm text-foreground/40 line-through mb-3 md:mb-5">₹{plan.originalPrice}</p>
+              <p className="text-sm text-foreground/40 line-through mb-5">₹{plan.originalPrice}</p>
 
-              <ul className="flex flex-col gap-1.5 md:gap-2.5 text-[10px] md:text-sm">
+              <ul className="flex flex-col gap-2.5 text-sm">
                 {plan.features.map((f, fi) => (
                   <li key={fi} className="flex items-center gap-2.5 text-foreground/80">
                     <CheckCircle2 className="w-4 h-4 text-green-500 shrink-0" />

@@ -65,10 +65,13 @@ export default function ProfilePage() {
 
   return (
     <div className="min-h-[100dvh] pt-24 pb-20 px-4 md:px-8 bg-transparent selection:bg-primary/30">
-      <div className="max-w-6xl mx-auto flex flex-col lg:grid lg:grid-cols-3 gap-8 items-start">
+      <div className="max-w-6xl mx-auto flex flex-col lg:flex-row gap-6 lg:gap-8 items-start">
         
-        {/* Your Subscription */}
-        <div className="w-full lg:col-span-1 order-1 flex flex-col gap-6">
+        {/* Left Side */}
+        <div className="contents lg:flex lg:w-1/3 lg:flex-col lg:gap-6">
+          
+          {/* Your Subscription */}
+          <div className="w-full order-1 lg:order-none">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -156,10 +159,10 @@ export default function ProfilePage() {
               </div>
             )}
           </motion.div>
-        </div>
+          </div>
         
-        {/* Account Links */}
-        <div className="w-full lg:col-span-1 order-5 flex flex-col gap-6">
+          {/* Account Links */}
+          <div className="w-full order-5 lg:order-none">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -176,10 +179,10 @@ export default function ProfilePage() {
               </Link>
             </div>
           </motion.div>
-        </div>
+          </div>
 
-        {/* Cute Message with Doodle */}
-        <div className="w-full lg:col-span-1 order-4 lg:order-3 flex flex-col gap-6">
+          {/* Cute Message with Doodle */}
+          <div className="w-full order-4 lg:order-none">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -192,10 +195,15 @@ export default function ProfilePage() {
               Every application is a step closer to your dream internship. Take your time to review the company details, tailor your resume, and apply to the roles that truly excite you. Quality always beats quantity!
             </p>
           </motion.div>
+          </div>
+          
         </div>
 
-        {/* Clerk Profile */}
-        <div className="w-full lg:col-span-2 order-3 lg:order-4 flex justify-center lg:justify-start">
+        {/* Right Side */}
+        <div className="contents lg:flex lg:w-2/3 lg:flex-col lg:gap-6">
+
+          {/* Clerk Profile */}
+          <div className="w-full order-3 lg:order-none flex justify-center lg:justify-start">
             <UserProfile 
               appearance={{
                 elements: {
@@ -210,8 +218,8 @@ export default function ProfilePage() {
             />
           </div>
 
-        {/* Transaction History */}
-        <div className="w-full lg:col-span-2 order-2 flex flex-col gap-6">
+          {/* Transaction History */}
+          <div className="w-full order-2 lg:order-none">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -265,6 +273,8 @@ export default function ProfilePage() {
               </div>
             )}
           </motion.div>
+          </div>
+
         </div>
 
       </div>
