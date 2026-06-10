@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Menu, X, Calendar, ChevronRight, Briefcase, Home } from "lucide-react";
+import { Menu, X, Calendar, ChevronRight, Briefcase, Home, User } from "lucide-react";
 import { UserButton, useUser } from "@clerk/nextjs";
 import { useState, useEffect } from "react";
 import { ThemeToggle } from "./ThemeToggle";
@@ -78,6 +78,14 @@ export default function Navbar() {
 
         {/* Mobile Toggle */}
         <div className="flex md:hidden items-center gap-4">
+          {!isSignedIn && isLoaded && (
+            <Link href="/sign-in" className="text-sm font-medium text-foreground/60 hover:text-foreground transition-colors">
+              Sign In
+            </Link>
+          )}
+          {isSignedIn && isLoaded && (
+            <UserButton userProfileMode="navigation" userProfileUrl="/profile" />
+          )}
           <ThemeToggle />
           <button
             onClick={() => setIsOpen(!isOpen)}
@@ -161,7 +169,21 @@ export default function Navbar() {
               {/* Divider */}
               <div className="h-px bg-white/10 mb-6" />
 
-              {/* Discover Events - always last */}
+              {/* Manage Account & Discover Events */}
+              {isSignedIn && (
+                <Link 
+                  href="/profile"
+                  onClick={() => setIsOpen(false)}
+                  className="flex items-center justify-between px-4 py-3 rounded-2xl text-foreground/80 hover:text-primary hover:bg-primary/5 transition-all font-semibold text-lg group mb-2"
+                >
+                  <span className="flex items-center gap-3">
+                    <User className="w-5 h-5 text-primary" />
+                    Manage Account
+                  </span>
+                  <ChevronRight className="w-4 h-4 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
+                </Link>
+              )}
+
               <Link 
                 href="/events"
                 onClick={() => setIsOpen(false)}
