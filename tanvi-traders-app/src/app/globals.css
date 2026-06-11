@@ -1,0 +1,42 @@
+@import "tailwindcss";
+
+@theme {
+  --color-rose-50: #fff1f2;
+  --color-rose-100: #ffe4e6;
+  --color-rose-500: #f43f5e;
+  --color-rose-600: #e11d48;
+  --color-pink-50: #fdf2f8;
+  --color-pink-100: #fce7f3;
+  --color-pink-500: #ec4899;
+  --color-pink-600: #db2777;
+}
+
+body {
+  background-color: #fdf2f8;
+  color: #1f2937;
+  font-family: Arial, Helvetica, sans-serif;
+  overflow-x: hidden;
+}
+
+.snow-flake {
+    position: absolute;
+    top: -10px;
+    width: 8px;
+    height: 8px;
+    background: #fbcfe8; /* Soft pink snow */
+    border-radius: 50%;
+    opacity: 0.8;
+    pointer-events: none;
+    animation: fall linear infinite;
+}
+
+@keyframes fall {
+    0% {
+        transform: translateY(-10px) rotate(0deg);
+        opacity: 0.8;
+    }
+    100% {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+    }
+}
