@@ -1,12 +1,8 @@
 import React from 'react';
 import RequestForm from '@/components/RequestForm';
-import { UserButton, SignInButton } from '@clerk/nextjs';
-import { auth } from '@clerk/nextjs/server';
 import { Sparkles } from 'lucide-react';
 
-export default async function Home() {
-  const { userId } = await auth();
-
+export default function Home() {
   return (
     <div className="min-h-screen relative py-12 px-4 sm:px-6">
       
@@ -14,15 +10,6 @@ export default async function Home() {
         <div className="font-black text-2xl tracking-tighter text-pink-600 drop-shadow-sm flex items-center gap-2">
             <Sparkles className="w-6 h-6" /> Tanvi Traders
         </div>
-        {userId ? (
-            <UserButton />
-        ) : (
-            <SignInButton mode="modal">
-                <button className="px-5 py-2 bg-pink-50 text-pink-600 font-bold rounded-full hover:bg-pink-100 transition-colors shadow-sm">
-                    Log in
-                </button>
-            </SignInButton>
-        )}
       </header>
 
       <div className="max-w-3xl mx-auto pt-20 pb-10 text-center relative z-10">
@@ -35,20 +22,7 @@ export default async function Home() {
         </p>
       </div>
 
-      {userId ? (
-        <RequestForm />
-      ) : (
-        <div className="w-full max-w-lg mx-auto bg-white/60 backdrop-blur-xl border border-pink-100 p-8 rounded-3xl text-center shadow-xl relative z-10">
-            <Sparkles className="w-12 h-12 text-pink-400 mx-auto mb-4" />
-            <h2 className="text-2xl font-black text-gray-900 mb-2">Ready to save?</h2>
-            <p className="text-gray-500 mb-6 font-medium">Please sign in to request your products and secure your wholesale pricing.</p>
-            <SignInButton mode="modal">
-                <button className="w-full py-4 bg-gray-900 hover:bg-black text-white font-bold rounded-2xl shadow-lg transform hover:-translate-y-1 transition-all">
-                    Sign in to Continue
-                </button>
-            </SignInButton>
-        </div>
-      )}
+      <RequestForm />
     </div>
   );
 }
