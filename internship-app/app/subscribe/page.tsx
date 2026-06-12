@@ -13,7 +13,7 @@ const PLANS = [
   {
     id: "1_day",
     label: "1 Day Pass",
-    price: 1,
+    price: 29,
     originalPrice: 99,
     period: "/ day",
     applyLimit: 10,
