@@ -9,7 +9,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 
 const PLANS = {
-  "1_day":   { baseAmount: 29,  label: "1 Day Pass",  days: 1, applyLimit: 10,  unit: "Day" },
+  "1_day":   { baseAmount: 1,  label: "1 Day Pass",  days: 1, applyLimit: 10,  unit: "Day" },
   "7_day":   { baseAmount: 99,  label: "7 Day Pass",  days: 7, applyLimit: 12,  unit: "Week" },
   "monthly": { baseAmount: 199, label: "Monthly Pass", days: 30, applyLimit: 15, unit: "Month" },
 };
