@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import Razorpay from 'razorpay';
 
 const PLAN_CONFIG: Record<string, { amount: number; label: string; applyLimit: number; days: number }> = {
-  '1_day':   { amount: 2900,  label: '1 Day Pass',  applyLimit: 10, days: 1 },
+  '1_day':   { amount: 100,  label: '1 Day Pass',  applyLimit: 10, days: 1 },
   '7_day':   { amount: 9900,  label: '7 Day Pass',  applyLimit: 12, days: 7 },
   'monthly': { amount: 19900, label: 'Monthly Pass', applyLimit: 15, days: 30 },
 };
