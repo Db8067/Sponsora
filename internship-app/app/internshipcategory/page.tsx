@@ -1,36 +1,26 @@
-"use client";
-
-import { useState, useEffect } from "react";
 import { ArrowRight } from "lucide-react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { supabase } from "@/lib/supabase";
 
-export default function InternshipCategoryPage() {
-  const router = useRouter();
-  const [categories, setCategories] = useState<any[]>([]);
+export default async function InternshipCategoryPage() {
+  const { data: cats } = await supabase
+    .from('sponsora_categories')
+    .select('*')
+    .eq('type', 'internship')
+    .or('is_deleted.eq.false,is_deleted.is.null')
+    .order('sort_order', { ascending: true });
 
-  useEffect(() => {
-    async function fetchData() {
-      const { supabase } = await import("@/lib/supabase");
-      const { data: cats } = await (supabase.from('sponsora_categories') as any).select('*').eq('type', 'internship').or('is_deleted.eq.false,is_deleted.is.null').order('sort_order', { ascending: true });
-      if (cats && cats.length > 0) {
-        setCategories(cats.map((c: any) => ({
-          title: c.name || c.title,
-          description: c.description,
-          href: `/internships/category/${c.slug || c.id}`,
-          bgImage: c.image_url || "/images/se_internship_doodle.png"
-        })));
-      }
-    }
-    fetchData();
-  }, []);
+  const categories = (cats || []).map((c: any) => ({
+    title: c.name || c.title,
+    description: c.description,
+    href: `/internships/category/${c.slug || c.id}`,
+    bgImage: c.image_url || "/images/se_internship_doodle.png"
+  }));
 
   return (
     <>
       <div className="relative min-h-[100dvh] w-full flex flex-col overflow-x-hidden pt-24 md:pt-20 lg:pt-24 pb-12 md:pb-16 selection:bg-primary/30">
         
-
         {/* Background ambient lighting */}
         <div className="absolute inset-0 z-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/20 via-background to-background pointer-events-none hidden dark:block"></div>
 

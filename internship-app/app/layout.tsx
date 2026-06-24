@@ -21,8 +21,27 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Sponsora | Find and Sponsor The Best Events",
-  description: "The ultimate platform connecting event organizers with sponsors and participants.",
+  title: "Sponsora | Premium Internships",
+  description: "Discover and apply to top-tier internships. Launch your career with Sponsora today.",
+  openGraph: {
+    title: "Sponsora | Premium Internships",
+    description: "Discover and apply to top-tier internships. Launch your career with Sponsora today.",
+    url: "https://www.intersponsora.space",
+    siteName: "Sponsora",
+    images: [
+      {
+        url: "/images/logo-light.png",
+        width: 800,
+        height: 600,
+      },
+    ],
+    type: "website",
+  },
+  icons: {
+    icon: "/images/logo-light.png",
+    shortcut: "/images/logo-light.png",
+    apple: "/images/logo-light.png",
+  },
 };
 
 export default function RootLayout({
