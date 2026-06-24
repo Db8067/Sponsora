@@ -9,7 +9,7 @@ import { motion } from "framer-motion";
 
 export default function ProfilePage() {
   const { user, isLoaded, isSignedIn } = useUser();
-  const { isPaid, planType, validUntil, totalLimit, usedLimit, isLoading: isSubLoading, refetch } = useSubscription();
+  const { isPaid, planType, validUntil, totalLimit, usedLimit, adminGrantedDays, adminGrantedLimits, isLoading: isSubLoading, refetch } = useSubscription();
   const [isRefreshing, setIsRefreshing] = useState(true);
   const [transactions, setTransactions] = useState<any[]>([]);
   const [isLoadingTx, setIsLoadingTx] = useState(true);
@@ -133,6 +133,23 @@ export default function ProfilePage() {
                     </p>
                   )}
                 </div>
+
+                {(adminGrantedDays > 0 || adminGrantedLimits > 0) && (
+                  <div className="grid grid-cols-2 gap-4">
+                    {adminGrantedDays > 0 && (
+                      <div className="p-4 rounded-xl bg-primary/10 border border-primary/20 flex flex-col justify-center items-center text-center">
+                        <p className="text-[10px] text-primary uppercase font-bold tracking-widest mb-1">Admin Granted</p>
+                        <p className="text-xl font-black text-primary">+{adminGrantedDays} Days</p>
+                      </div>
+                    )}
+                    {adminGrantedLimits > 0 && (
+                      <div className="p-4 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex flex-col justify-center items-center text-center">
+                        <p className="text-[10px] text-indigo-500 uppercase font-bold tracking-widest mb-1">Admin Granted</p>
+                        <p className="text-xl font-black text-indigo-500">+{adminGrantedLimits} Limits</p>
+                      </div>
+                    )}
+                  </div>
+                )}
 
                 <Link 
                   href="/subscribe" 

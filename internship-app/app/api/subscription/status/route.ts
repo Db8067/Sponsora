@@ -16,7 +16,8 @@ export async function GET(req: NextRequest) {
     .eq('user_id', userId)
     .single();
 
-  if (!sub || sub.status !== 'active') return NextResponse.json({ isPaid: false });
+  if (!sub || sub.status !== 'active') return NextResponse.json({ isPaid: false, isBanned: sub?.is_banned || false });
+  if (sub.is_banned) return NextResponse.json({ isPaid: false, isBanned: true });
 
   // === SELF-HEALING LOGIC ===
   // Calculate true limits to ensure no data corruption exists from the legacy system
@@ -86,11 +87,27 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ isPaid: false });
   }
 
+  let adminGrantedDays = 0;
+  let adminGrantedLimits = 0;
+  if (payments && payments.length > 0) {
+    for (const p of payments) {
+      if (p.plan_type === 'admin_extension') {
+        adminGrantedDays += (p.added_days || 0);
+      }
+      if (p.plan_type === 'admin_limit_increase' || p.plan_type === 'admin_limit_decrease') {
+        adminGrantedLimits += (p.added_limits || 0);
+      }
+    }
+  }
+
   return NextResponse.json({
     isPaid: true,
+    isBanned: false,
     planType: activePlanType,
     validUntil: sub.valid_until,
     totalLimit: trueTotalLimit,
     usedLimit: trueUsedLimit,
+    adminGrantedDays,
+    adminGrantedLimits
   });
 }
