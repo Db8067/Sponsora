@@ -16,8 +16,8 @@ export async function GET(req: NextRequest) {
     .eq('user_id', userId)
     .single();
 
-  if (!sub || sub.status !== 'active') return NextResponse.json({ isPaid: false, isBanned: sub?.is_banned || false });
-  if (sub.is_banned) return NextResponse.json({ isPaid: false, isBanned: true });
+  if (!sub || sub.status !== 'active') return NextResponse.json({ isPaid: false, isBanned: sub?.is_banned || false, isCancelled: sub?.is_cancelled || false });
+  if (sub.is_banned) return NextResponse.json({ isPaid: false, isBanned: true, isCancelled: sub?.is_cancelled || false });
 
   // === SELF-HEALING LOGIC ===
   // Calculate true limits to ensure no data corruption exists from the legacy system
@@ -84,7 +84,7 @@ export async function GET(req: NextRequest) {
     if (new Date(sub.valid_until) < now) {
       await (supabaseAdmin.from('user_subscriptions') as any).update({ status: 'expired' }).eq('id', sub.id);
     }
-    return NextResponse.json({ isPaid: false });
+    return NextResponse.json({ isPaid: false, isBanned: sub.is_banned || false, isCancelled: sub.is_cancelled || false });
   }
 
   let adminGrantedDays = 0;
