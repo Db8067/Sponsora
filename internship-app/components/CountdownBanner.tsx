@@ -105,8 +105,8 @@ export default function CountdownBanner() {
 
   if (showExpiredModal) {
     return (
-      <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/40 backdrop-blur-sm px-4">
-        <div className="bg-white dark:bg-zinc-900 rounded-[2rem] p-6 md:p-8 max-w-sm w-full shadow-2xl relative flex flex-col items-center text-center animate-in fade-in zoom-in duration-300">
+      <div className="fixed bottom-6 right-6 md:bottom-10 md:right-10 z-[200] flex items-center justify-center px-4 w-full md:w-auto pointer-events-none">
+        <div className="bg-white dark:bg-zinc-900 rounded-[2rem] p-6 md:p-8 max-w-[340px] w-full shadow-2xl relative flex flex-col items-center text-center animate-in slide-in-from-bottom-10 fade-in duration-300 pointer-events-auto border border-orange-100 dark:border-orange-900/30">
           <button 
             onClick={handleCloseExpired}
             className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-black/5 hover:bg-black/10 dark:bg-white/10 dark:hover:bg-white/20 transition-colors text-foreground"
@@ -132,8 +132,8 @@ export default function CountdownBanner() {
   if (!shouldShow || !showPopup) return null;
 
   return (
-    <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/40 backdrop-blur-sm px-4">
-      <div className="bg-white dark:bg-zinc-900 rounded-[2rem] p-6 md:p-8 max-w-sm w-full shadow-2xl relative flex flex-col items-center text-center animate-in fade-in zoom-in duration-300">
+    <div className="fixed bottom-6 right-6 md:bottom-10 md:right-10 z-[200] flex items-center justify-center px-4 w-full md:w-auto pointer-events-none">
+      <div className="bg-white dark:bg-zinc-900 rounded-[2rem] p-6 md:p-8 max-w-[340px] w-full shadow-2xl relative flex flex-col items-center text-center animate-in slide-in-from-bottom-10 fade-in duration-300 pointer-events-auto border border-blue-100 dark:border-blue-900/30">
         <button 
           onClick={() => setShowPopup(false)}
           className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-black/5 hover:bg-black/10 dark:bg-white/10 dark:hover:bg-white/20 transition-colors"

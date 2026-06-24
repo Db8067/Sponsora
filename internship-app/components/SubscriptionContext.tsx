@@ -184,14 +184,15 @@ export function SubscriptionProvider({ children }: { children: React.ReactNode }
              <Link href="/profile" className="block w-full py-3 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-2xl font-bold transition-all text-center">
                 Visit Profile &amp; Settings
              </Link>
-             <Link href="/subscribe" className="block w-full py-3 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-2xl font-bold transition-all text-center">
-                Visit Subscriptions
-             </Link>
              <Link href="/chat" className="block w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl font-bold transition-all text-center shadow-[0_4px_14px_0_rgb(5,150,105,0.39)]">
                 Chat with Admin
              </Link>
              <button
-                onClick={() => signOut()}
+                onClick={() => {
+                   signOut().then(() => {
+                      window.location.href = '/sign-in';
+                   });
+                }}
                 className="w-full py-3 bg-red-600 hover:bg-red-700 text-white rounded-2xl font-bold transition-all shadow-[0_4px_14px_0_rgb(220,38,38,0.39)]"
              >
                 Sign in with a different account
