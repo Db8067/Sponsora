@@ -188,11 +188,7 @@ export function SubscriptionProvider({ children }: { children: React.ReactNode }
                 Chat with Admin
              </Link>
              <button
-                onClick={() => {
-                   signOut().then(() => {
-                      window.location.href = '/sign-in';
-                   });
-                }}
+                onClick={() => signOut({ redirectUrl: '/sign-in' })}
                 className="w-full py-3 bg-red-600 hover:bg-red-700 text-white rounded-2xl font-bold transition-all shadow-[0_4px_14px_0_rgb(220,38,38,0.39)]"
              >
                 Sign in with a different account

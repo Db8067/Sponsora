@@ -10,7 +10,7 @@ export default function UserChatSystem() {
   const { user } = useUser();
   const [messages, setMessages] = useState<any[]>([]);
   const [newMessage, setNewMessage] = useState("");
-  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const chatContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!user) return;
@@ -49,7 +49,12 @@ export default function UserChatSystem() {
 
   const scrollToBottom = () => {
     setTimeout(() => {
-      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+      if (chatContainerRef.current) {
+        chatContainerRef.current.scrollTo({
+          top: chatContainerRef.current.scrollHeight,
+          behavior: 'smooth'
+        });
+      }
     }, 100);
   };
 
@@ -96,7 +101,7 @@ export default function UserChatSystem() {
           </div>
         </div>
         
-        <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-5 pb-24">
+        <div ref={chatContainerRef} className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-5 pb-24">
           {messages.length === 0 ? (
             <div className="h-full flex flex-col items-center justify-center text-center opacity-60">
               <img src="/images/popup-doodle.png" alt="Chat" className="w-32 h-32 object-contain mb-4 opacity-50 grayscale" />
@@ -118,7 +123,6 @@ export default function UserChatSystem() {
               );
             })
           )}
-          <div ref={messagesEndRef} />
         </div>
 
         <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-xl border-t border-black/5 dark:border-white/10">
