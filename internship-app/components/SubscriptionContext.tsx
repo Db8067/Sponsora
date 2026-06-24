@@ -56,6 +56,7 @@ export function SubscriptionProvider({ children }: { children: React.ReactNode }
   const [systemLimits, setSystemLimits] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [showCancelPopup, setShowCancelPopup] = useState(true);
 
   const prevAdminGrantedLimitsRef = useRef(0);
   const prevAdminGrantedDaysRef = useRef(0);
@@ -199,24 +200,6 @@ export function SubscriptionProvider({ children }: { children: React.ReactNode }
     );
   }
 
-  if (isCancelled) {
-    return (
-      <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-gray-50/50">
-        <div className="w-full max-w-md bg-white rounded-3xl p-8 border border-orange-100 shadow-xl text-center space-y-4">
-          <img src="/sub_cancelled_doodle.png" alt="Cancelled Doodle" className="w-48 h-48 mx-auto object-contain mb-2 drop-shadow-sm" />
-          <h1 className="text-2xl font-black text-gray-900">Subscription Cancelled</h1>
-          <p className="text-gray-500 font-medium">Your subscription has been explicitly cancelled by the administrator. Please contact the admin for more information.</p>
-          <button
-             onClick={() => signOut()}
-             className="w-full py-4 mt-6 bg-orange-600 hover:bg-orange-700 text-white rounded-2xl font-bold transition-all shadow-[0_4px_14px_0_rgb(234,88,12,0.39)]"
-          >
-             Change Account / Sign Out
-          </button>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <SubscriptionContext.Provider value={{ ...data, isBanned, blockedReason, isCancelled, adminGrantedDays, adminGrantedLimits, systemLimits, isLoading, refetch: fetchStatus }}>
       {toastMessage && (
@@ -224,6 +207,38 @@ export function SubscriptionProvider({ children }: { children: React.ReactNode }
           <span>{toastMessage}</span>
         </div>
       )}
+      
+      {isCancelled && showCancelPopup && (
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm animate-in fade-in">
+          <div className="w-full max-w-md bg-white rounded-3xl p-6 md:p-8 shadow-2xl text-center space-y-4 relative animate-in zoom-in-95">
+            <button 
+              onClick={() => setShowCancelPopup(false)}
+              className="absolute top-4 right-4 p-2 text-gray-400 hover:text-gray-900 bg-gray-50 hover:bg-gray-100 rounded-full transition-colors"
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            </button>
+            <img src="/sub_cancelled_doodle.png" alt="Cancelled Doodle" className="w-32 h-32 md:w-48 md:h-48 mx-auto object-contain mb-2 drop-shadow-sm" />
+            <h1 className="text-xl md:text-2xl font-black text-gray-900">Subscription Cancelled</h1>
+            <p className="text-gray-500 font-medium text-sm md:text-base">Your subscription has been explicitly cancelled by the administrator. You will not be able to unlock any internships until you purchase a new pass.</p>
+            
+            <div className="space-y-3 pt-4">
+              <Link href="/subscribe" className="block w-full py-3 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-2xl font-bold transition-all text-center shadow-[0_4px_14px_0_rgb(234,88,12,0.39)]">
+                 Purchase New Subscription
+              </Link>
+              <Link href="/chat" className="block w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl font-bold transition-all text-center shadow-[0_4px_14px_0_rgb(5,150,105,0.39)]">
+                 Chat with Admin
+              </Link>
+              <button
+                 onClick={() => signOut({ redirectUrl: '/sign-in' })}
+                 className="w-full py-3 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-2xl font-bold transition-all"
+              >
+                 Change Account / Sign Out
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {children}
     </SubscriptionContext.Provider>
   );
