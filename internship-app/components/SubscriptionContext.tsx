@@ -41,7 +41,7 @@ const SubscriptionContext = createContext<SubscriptionData>({
 export function SubscriptionProvider({ children }: { children: React.ReactNode }) {
   const { user, isLoaded } = useUser();
   const { signOut } = useAuth();
-  const [data, setData] = useState<Omit<SubscriptionData, "isLoading" | "refetch" | "isBanned" | "isCancelled" | "adminGrantedDays" | "adminGrantedLimits" | "blockedReason">>({
+  const [data, setData] = useState<Omit<SubscriptionData, "isLoading" | "refetch" | "isBanned" | "isCancelled" | "adminGrantedDays" | "adminGrantedLimits" | "systemLimits" | "blockedReason">>({
     isPaid: false,
     planType: null,
     validUntil: null,

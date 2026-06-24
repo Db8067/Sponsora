@@ -31,10 +31,10 @@ export default function UserChatSystem() {
     fetchMessages();
 
     const channel = supabase
-      .channel(user-chat-${user.id})
+      .channel(`user-chat-${user.id}`)
       .on(
         'postgres_changes',
-        { event: 'INSERT', schema: 'public', table: 'chats', filter: user_id=eq.${user.id}` },
+        { event: 'INSERT', schema: 'public', table: 'chats', filter: `user_id=eq.${user.id}` },
         (payload) => {
           setMessages((prev) => [...prev, payload.new]);
           scrollToBottom();
@@ -64,7 +64,7 @@ export default function UserChatSystem() {
       user_id: user.id,
       message: msgText,
       sender_type: 'user'
-    });
+    } as any);
 
     if (error) {
       console.error("Failed to send message", error);
@@ -83,7 +83,7 @@ export default function UserChatSystem() {
           </div>
           <div className="ml-3 min-w-0">
             <h2 className="font-bold text-foreground text-sm sm:text-base">Support Admin</h2>
-            <p className="text-[10px] sm:text-xs text-emerald-500 font-bold tracking-widest uppercase">Online • Sponsora Team</p>
+            <p className="text-[10px] sm:text-xs text-emerald-500 font-bold tracking-widest uppercase">Online â€¢ Sponsora Team</p>
           </div>
         </div>
         <div className="flex-1 overflow-y-auto p-4 space-y-4 pb-20">
@@ -96,10 +96,10 @@ export default function UserChatSystem() {
             messages.map((msg) => {
               const isUser = msg.sender_type === 'user';
               return (
-                <div key={msg.id} className={lex }>
-                  <div className={max-w-[80%] sm:max-w-[70%] p-3 sm:px-4 sm:py-3 rounded-2xl }>
+                <div key={msg.id} className={`flex ${isUser ? 'justify-end' : 'justify-start'}`}>
+                  <div className={`max-w-[80%] sm:max-w-[70%] p-3 sm:px-4 sm:py-3 rounded-2xl ${isUser ? 'bg-primary text-primary-foreground rounded-br-sm shadow-[0_4px_14px_0_hsl(var(--primary)/0.3)]' : 'bg-white/10 text-foreground rounded-bl-sm border border-white/10'}`}>
                     <p className="text-[13px] sm:text-sm font-medium whitespace-pre-wrap leading-relaxed">{msg.message}</p>
-                    <p className={	ext-[9px] sm:text-[10px] mt-1.5 text-right font-medium }>
+                    <p className={`text-[9px] sm:text-[10px] mt-1.5 text-right font-medium ${isUser ? 'text-primary-foreground/70' : 'text-foreground/40'}`}>
                       {new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </p>
                   </div>
