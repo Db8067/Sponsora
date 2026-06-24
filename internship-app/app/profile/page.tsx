@@ -53,7 +53,7 @@ export default function ProfilePage() {
     if (plan === "1_day") return "1 Day Pass";
     if (plan === "7_day") return "7 Day Pass";
     if (plan === "monthly") return "Monthly Pass";
-    return "Unknown Plan";
+    return "Admin Special Plan";
   };
 
   const getLegacyLimits = (plan: string, qty: number = 1) => {
