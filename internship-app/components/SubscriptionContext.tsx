@@ -12,6 +12,7 @@ interface SubscriptionData {
   isCancelled: boolean;
   adminGrantedDays: number;
   adminGrantedLimits: number;
+  systemLimits: number;
   planType: string | null;
   validUntil: string | null;
   totalLimit: number;
@@ -27,6 +28,7 @@ const SubscriptionContext = createContext<SubscriptionData>({
   isCancelled: false,
   adminGrantedDays: 0,
   adminGrantedLimits: 0,
+  systemLimits: 0,
   planType: null,
   validUntil: null,
   totalLimit: 0,
@@ -51,7 +53,9 @@ export function SubscriptionProvider({ children }: { children: React.ReactNode }
   const [isCancelled, setIsCancelled] = useState(false);
   const [adminGrantedDays, setAdminGrantedDays] = useState(0);
   const [adminGrantedLimits, setAdminGrantedLimits] = useState(0);
+  const [systemLimits, setSystemLimits] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
   
   const pathname = usePathname();
 
@@ -69,11 +73,17 @@ export function SubscriptionProvider({ children }: { children: React.ReactNode }
       });
       const json = await res.json();
       
+      if (adminGrantedLimits > 0 && json.adminGrantedLimits > adminGrantedLimits) {
+        setToastMessage("Admin has increased your limits!");
+        setTimeout(() => setToastMessage(null), 5000);
+      }
+
       setIsBanned(json.isBanned ?? false);
       setBlockedReason(json.blockedReason ?? null);
       setIsCancelled(json.isCancelled ?? false);
       setAdminGrantedDays(json.adminGrantedDays ?? 0);
       setAdminGrantedLimits(json.adminGrantedLimits ?? 0);
+      setSystemLimits(json.systemLimits ?? 0);
 
       setData({
         isPaid: json.isPaid ?? false,
@@ -118,9 +128,9 @@ export function SubscriptionProvider({ children }: { children: React.ReactNode }
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [user?.id, fetchStatus]);
+  }, [user?.id, fetchStatus, adminGrantedLimits]);
 
-  if (isBanned && !pathname.startsWith('/profile')) {
+  if (isBanned && !pathname.startsWith('/profile') && !pathname.startsWith('/chat')) {
     return (
       <div className="fixed inset-0 z-[9999] flex flex-col items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
         <div className="w-full max-w-md bg-white rounded-3xl p-8 border border-red-100 shadow-2xl text-center space-y-4 max-h-[90vh] overflow-y-auto">
@@ -173,7 +183,12 @@ export function SubscriptionProvider({ children }: { children: React.ReactNode }
   }
 
   return (
-    <SubscriptionContext.Provider value={{ ...data, isBanned, blockedReason, isCancelled, adminGrantedDays, adminGrantedLimits, isLoading, refetch: fetchStatus }}>
+    <SubscriptionContext.Provider value={{ ...data, isBanned, blockedReason, isCancelled, adminGrantedDays, adminGrantedLimits, systemLimits, isLoading, refetch: fetchStatus }}>
+      {toastMessage && (
+        <div className="fixed top-6 left-1/2 -translate-x-1/2 z-[10000] bg-emerald-600 text-white px-6 py-3 rounded-2xl shadow-2xl font-bold flex items-center gap-3 animate-in slide-in-from-top-4 fade-in">
+          <span>{toastMessage}</span>
+        </div>
+      )}
       {children}
     </SubscriptionContext.Provider>
   );

@@ -28,15 +28,27 @@ export async function GET(req: NextRequest) {
     .select('plan_type, quantity, added_limits, added_days, created_at')
     .eq('user_id', userId);
 
+  let systemTotalLimit = 0;
+  let adminTotalLimit = 0;
+  let adminGrantedDays = 0;
+
   if (payments && payments.length > 0) {
     let calculatedTotal = 0;
     for (const payment of payments) {
+      if (payment.plan_type === 'admin_extension') {
+        adminGrantedDays += (payment.added_days || 0);
+      }
+      
+      let limitsAdded = 0;
       if (payment.added_limits) {
-        calculatedTotal += payment.added_limits;
+        limitsAdded = payment.added_limits;
+        adminTotalLimit += limitsAdded;
       } else {
         const limitPerPlan = PLAN_LIMITS[payment.plan_type] || 0;
-        calculatedTotal += limitPerPlan * (payment.quantity || 1);
+        limitsAdded = limitPerPlan * (payment.quantity || 1);
+        systemTotalLimit += limitsAdded;
       }
+      calculatedTotal += limitsAdded;
     }
     trueTotalLimit = calculatedTotal;
   }
@@ -80,23 +92,38 @@ export async function GET(req: NextRequest) {
     }
   }
 
-  if (new Date(sub.valid_until) < now || trueUsedLimit >= trueTotalLimit) {
+  // Calculate remaining admin limits
+  const systemUsed = Math.min(trueUsedLimit, systemTotalLimit);
+  const adminUsed = trueUsedLimit - systemUsed;
+  const adminLimitsLeft = Math.max(0, adminTotalLimit - adminUsed);
+
+  let isExpired = new Date(sub.valid_until) < now;
+  let isLimitsExhausted = trueUsedLimit >= trueTotalLimit;
+
+  // Admin limits override expiry
+  if (isExpired && adminLimitsLeft > 0) {
+    isExpired = false; 
+    // They are technically expired but admin limits allow them to apply, 
+    // so we treat them as active for the purpose of the application.
+  }
+
+  if (isExpired || isLimitsExhausted) {
     if (new Date(sub.valid_until) < now) {
       await (supabaseAdmin.from('user_subscriptions') as any).update({ status: 'expired' }).eq('id', sub.id);
     }
-    return NextResponse.json({ isPaid: false, isBanned: sub.is_banned || false, isCancelled: sub.is_cancelled || false, blockedReason: sub.blocked_reason || null });
-  }
-
-  let adminGrantedDays = 0;
-  let adminGrantedLimits = 0;
-  if (payments && payments.length > 0) {
-    for (const p of payments) {
-      if (p.plan_type === 'admin_extension') {
-        adminGrantedDays += (p.added_days || 0);
-      }
-      if (p.plan_type === 'admin_limit_increase' || p.plan_type === 'admin_limit_decrease') {
-        adminGrantedLimits += (p.added_limits || 0);
-      }
+    // Only return false if they truly have no admin limits left and are expired/exhausted
+    if (adminLimitsLeft <= 0 || isLimitsExhausted) {
+      return NextResponse.json({ 
+        isPaid: false, 
+        isBanned: sub.is_banned || false, 
+        isCancelled: sub.is_cancelled || false, 
+        blockedReason: sub.blocked_reason || null,
+        adminGrantedDays,
+        adminGrantedLimits: adminTotalLimit,
+        systemLimits: systemTotalLimit,
+        totalLimit: trueTotalLimit,
+        usedLimit: trueUsedLimit
+      });
     }
   }
 
@@ -109,6 +136,7 @@ export async function GET(req: NextRequest) {
     totalLimit: trueTotalLimit,
     usedLimit: trueUsedLimit,
     adminGrantedDays,
-    adminGrantedLimits
+    adminGrantedLimits: adminTotalLimit,
+    systemLimits: systemTotalLimit
   });
 }
