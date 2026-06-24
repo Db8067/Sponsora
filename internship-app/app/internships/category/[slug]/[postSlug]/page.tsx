@@ -14,7 +14,7 @@ export default function InternshipDetailPage() {
   const postSlug = params.postSlug as string;
   
   const { isSignedIn } = useUser();
-  const { isPaid } = useSubscription();
+  const { isPaid, refetch } = useSubscription();
   const isBlurred = !isPaid;
   
   const [internship, setInternship] = useState<any>(null);
@@ -25,6 +25,7 @@ export default function InternshipDetailPage() {
   const [hasApplied, setHasApplied] = useState(false);
   const [fullscreenImage, setFullscreenImage] = useState<string | null>(null);
   const [showEmailModal, setShowEmailModal] = useState(false);
+  const [applyActionType, setApplyActionType] = useState<"link" | "email">("link");
 
   useEffect(() => {
     if (isSignedIn && internship?.id) {
@@ -110,6 +111,7 @@ export default function InternshipDetailPage() {
     }
 
     if (internship.apply_link) {
+      setApplyActionType("link");
       setShowApplyModal(true);
     } else {
       router.push("/subscribe");
@@ -125,7 +127,14 @@ export default function InternshipDetailPage() {
       router.push("/subscribe");
       return;
     }
-    // Automatically handled by mailto: link for paid users, but we can log click if needed
+    
+    if (hasApplied) {
+      setShowEmailModal(true);
+      return;
+    }
+
+    setApplyActionType("email");
+    setShowApplyModal(true);
   };
 
   const handleImageClick = () => {
@@ -163,14 +172,25 @@ export default function InternshipDetailPage() {
         return;
       }
 
-      if (data.applyLink) {
-        const newTab = window.open(data.applyLink, "_blank");
-        if (!newTab) {
-          window.location.href = data.applyLink; // Fallback if popup blocked
-        }
+      setHasApplied(true);
+      refetch(); // Update subscription context realtime limits
+
+      // Optimistically update the applied count
+      setInternship((prev: any) => ({ ...prev, applied_count: (prev.applied_count || 0) + 1 }));
+
+      if (applyActionType === "email") {
         setShowApplyModal(false);
+        setShowEmailModal(true);
       } else {
-        setApplyError("Apply link not found.");
+        if (data.applyLink) {
+          const newTab = window.open(data.applyLink, "_blank");
+          if (!newTab) {
+            window.location.href = data.applyLink; // Fallback if popup blocked
+          }
+          setShowApplyModal(false);
+        } else {
+          setApplyError("Apply link not found.");
+        }
       }
     } catch (err) {
       setApplyError("Network error. Please try again.");
@@ -274,21 +294,12 @@ export default function InternshipDetailPage() {
             )}
 
             {meta.company_email && (
-                isPaid ? (
-                    <button 
-                        onClick={() => setShowEmailModal(true)}
-                        className="w-full py-5 rounded-2xl bg-slate-800 hover:bg-slate-900 text-white font-black text-xl active:scale-95 transition-all shadow-xl shadow-slate-500/25 flex items-center justify-center"
-                    >
-                        Click me to see Email
-                    </button>
-                ) : (
-                    <button 
-                        onClick={handleEmailClick}
-                        className="w-full py-5 rounded-2xl bg-slate-800 hover:bg-slate-900 text-white font-black text-xl active:scale-95 transition-all shadow-xl shadow-slate-500/25"
-                    >
-                        See Company email id
-                    </button>
-                )
+                <button 
+                    onClick={handleEmailClick}
+                    className="w-full py-5 rounded-2xl bg-slate-800 hover:bg-slate-900 text-white font-black text-xl active:scale-95 transition-all shadow-xl shadow-slate-500/25 flex items-center justify-center"
+                >
+                    {isPaid && hasApplied ? "Show Email ID" : "Click me to see Email"}
+                </button>
             )}
 
             {meta.apply_image_url && (
