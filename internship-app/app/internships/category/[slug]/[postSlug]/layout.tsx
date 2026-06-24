@@ -9,15 +9,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug, postSlug } = params;
 
   // Fetch post data for title
-  const { data: internship } = await supabase
-    .from('sponsora_posts')
+  const { data: internship } = await (supabase.from('sponsora_posts') as any)
     .select('title')
     .eq('slug', postSlug)
     .single();
 
   // Fetch category data for banner image
-  const { data: category } = await supabase
-    .from('sponsora_categories')
+  const { data: category } = await (supabase.from('sponsora_categories') as any)
     .select('image_url')
     .eq('slug', slug)
     .single();
