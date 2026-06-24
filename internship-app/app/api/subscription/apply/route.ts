@@ -60,7 +60,7 @@ export async function POST(req: NextRequest) {
       }
 
       if (!p.added_days) continue;
-      if (p.plan_type === 'admin_extension') {
+      if (p.plan_type === 'admin_extension' || p.plan_type === 'admin_granted') {
         adminGrantedDays += (p.added_days || 0);
       }
 
