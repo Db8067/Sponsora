@@ -1,7 +1,7 @@
 "use client";
 
 import { useSubscription } from "./SubscriptionContext";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 function formatTime(ms: number) {
@@ -14,8 +14,9 @@ function formatTime(ms: number) {
 }
 
 export default function CountdownBanner() {
-  const { isPaid, planType, validUntil } = useSubscription();
+  const { isPaid, isBanned, planType, validUntil } = useSubscription();
   const router = useRouter();
+  const pathname = usePathname();
   const [timeLeft, setTimeLeft] = useState<number>(0);
   const [expired, setExpired] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
@@ -39,14 +40,16 @@ export default function CountdownBanner() {
   }, [isPaid, validUntil]);
 
   // When expired while browsing, redirect after showing message
+  // But NEVER redirect if user is banned — ban popup takes priority
+  // Also DO NOT redirect if the user is already on the subscribe or checkout pages
   useEffect(() => {
-    if (expired) {
+    if (expired && !isBanned && pathname !== '/subscribe' && pathname !== '/checkout') {
       const timeout = setTimeout(() => {
         router.push("/subscribe?expired=true");
       }, 4000);
       return () => clearTimeout(timeout);
     }
-  }, [expired, router]);
+  }, [expired, isBanned, pathname, router]);
 
   // Only show for 1-day pass within 12 hours OR 7-day pass in last 2 hours
   const shouldShow = isPaid && validUntil && !expired && (() => {
@@ -71,7 +74,9 @@ export default function CountdownBanner() {
     };
   }, [shouldShow]);
 
-  if (expired) {
+  // Don't show expired popup if user is banned (ban popup takes priority)
+  // And DO NOT show it on the subscribe or checkout pages (let users pay/renew in peace)
+  if (expired && !isBanned && pathname !== '/subscribe' && pathname !== '/checkout') {
     return (
       <div className="fixed inset-0 z-[200] flex flex-col items-center justify-center bg-background/95 backdrop-blur-xl px-6 text-center">
         <img src="/images/subscription_expired.png" alt="Subscription Expired" className="w-52 h-52 object-contain mb-6" />
