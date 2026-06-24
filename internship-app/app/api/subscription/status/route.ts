@@ -16,8 +16,8 @@ export async function GET(req: NextRequest) {
     .eq('user_id', userId)
     .single();
 
-  if (!sub || sub.status !== 'active') return NextResponse.json({ isPaid: false, isBanned: sub?.is_banned || false, isCancelled: sub?.is_cancelled || false });
-  if (sub.is_banned) return NextResponse.json({ isPaid: false, isBanned: true, isCancelled: sub?.is_cancelled || false });
+  if (!sub || sub.status !== 'active') return NextResponse.json({ isPaid: false, isBanned: sub?.is_banned || false, isCancelled: sub?.is_cancelled || false, blockedReason: sub?.blocked_reason || null });
+  if (sub.is_banned) return NextResponse.json({ isPaid: false, isBanned: true, isCancelled: sub?.is_cancelled || false, blockedReason: sub?.blocked_reason || null });
 
   // === SELF-HEALING LOGIC ===
   // Calculate true limits to ensure no data corruption exists from the legacy system
@@ -84,7 +84,7 @@ export async function GET(req: NextRequest) {
     if (new Date(sub.valid_until) < now) {
       await (supabaseAdmin.from('user_subscriptions') as any).update({ status: 'expired' }).eq('id', sub.id);
     }
-    return NextResponse.json({ isPaid: false, isBanned: sub.is_banned || false, isCancelled: sub.is_cancelled || false });
+    return NextResponse.json({ isPaid: false, isBanned: sub.is_banned || false, isCancelled: sub.is_cancelled || false, blockedReason: sub.blocked_reason || null });
   }
 
   let adminGrantedDays = 0;
@@ -103,6 +103,7 @@ export async function GET(req: NextRequest) {
   return NextResponse.json({
     isPaid: true,
     isBanned: false,
+    blockedReason: null,
     planType: activePlanType,
     validUntil: sub.valid_until,
     totalLimit: trueTotalLimit,
