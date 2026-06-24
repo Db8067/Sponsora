@@ -46,13 +46,8 @@ export async function GET(req: NextRequest) {
     });
   }
 
-  // If no subscription record at all
-  if (!sub) {
-    return NextResponse.json({ isPaid: false, isBanned: false, isCancelled: false });
-  }
-
-  // If subscription is not active (expired/cancelled), still check if user has admin grants
-  if (sub.status !== 'active') {
+  // If subscription is not active (expired/cancelled) or doesn't exist, still check if user has admin grants
+  if (!sub || sub.status !== 'active') {
     // Check if there are any admin-granted limits/days in the payments table
     const { data: payments } = await (supabaseAdmin.from('payments') as any)
       .select('plan_type, quantity, added_limits, added_days, created_at')
@@ -103,10 +98,10 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({
         isPaid: true,
         isBanned: false,
-        isCancelled: sub.is_cancelled || false,
+        isCancelled: sub?.is_cancelled || false,
         blockedReason: null,
         planType: 'admin_granted',
-        validUntil: sub.valid_until,
+        validUntil: sub?.valid_until,
         totalLimit: adminTotalLimit,
         usedLimit,
         adminGrantedDays,
@@ -118,7 +113,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({
       isPaid: false,
       isBanned: false,
-      isCancelled: sub.is_cancelled || false,
+      isCancelled: sub?.is_cancelled || false,
       blockedReason: null,
       adminGrantedDays,
       adminGrantedLimits: adminTotalLimit,
