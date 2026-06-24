@@ -112,7 +112,7 @@ export async function POST(req: NextRequest) {
   }
 
   // Check if they are out of limits
-  if (trueTotalLimit > 0 && usedLimit >= trueTotalLimit) {
+  if (usedLimit >= trueTotalLimit) {
     return NextResponse.json({ error: 'limit_exceeded', limit: trueTotalLimit }, { status: 429 });
   }
 

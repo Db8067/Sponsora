@@ -222,14 +222,17 @@ export function SubscriptionProvider({ children }: { children: React.ReactNode }
             <p className="text-gray-500 font-medium text-sm md:text-base">Your subscription has been explicitly cancelled by the administrator. You will not be able to unlock any internships until you purchase a new pass.</p>
             
             <div className="space-y-3 pt-4">
-              <Link href="/subscribe" className="block w-full py-3 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-2xl font-bold transition-all text-center shadow-[0_4px_14px_0_rgb(234,88,12,0.39)]">
+              <Link onClick={() => setShowCancelPopup(false)} href="/subscribe" className="block w-full py-3 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-2xl font-bold transition-all text-center shadow-[0_4px_14px_0_rgb(234,88,12,0.39)]">
                  Purchase New Subscription
               </Link>
-              <Link href="/chat" className="block w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl font-bold transition-all text-center shadow-[0_4px_14px_0_rgb(5,150,105,0.39)]">
+              <Link onClick={() => setShowCancelPopup(false)} href="/chat" className="block w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl font-bold transition-all text-center shadow-[0_4px_14px_0_rgb(5,150,105,0.39)]">
                  Chat with Admin
               </Link>
               <button
-                 onClick={() => signOut({ redirectUrl: '/sign-in' })}
+                 onClick={() => {
+                   setShowCancelPopup(false);
+                   signOut({ redirectUrl: '/sign-in' });
+                 }}
                  className="w-full py-3 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-2xl font-bold transition-all"
               >
                  Change Account / Sign Out
