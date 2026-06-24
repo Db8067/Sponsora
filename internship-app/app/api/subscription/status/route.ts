@@ -63,7 +63,7 @@ export async function GET(req: NextRequest) {
 
     if (payments && payments.length > 0) {
       for (const payment of payments) {
-        if (payment.plan_type === 'admin_extension') {
+        if (payment.plan_type === 'admin_extension' || payment.plan_type === 'admin_granted') {
           adminGrantedDays += (payment.added_days || 0);
         }
         if (payment.added_limits && payment.added_limits > 0) {
@@ -143,7 +143,7 @@ export async function GET(req: NextRequest) {
   if (payments && payments.length > 0) {
     let calculatedTotal = 0;
     for (const payment of payments) {
-      if (payment.plan_type === 'admin_extension') {
+      if (payment.plan_type === 'admin_extension' || payment.plan_type === 'admin_granted') {
         adminGrantedDays += (payment.added_days || 0);
       }
 
