@@ -48,6 +48,7 @@ function CheckoutContent() {
   const [discountApplied, setDiscountApplied] = useState(!!initialDiscountCode);
   const [discountError, setDiscountError] = useState("");
   const [discountPercentage, setDiscountPercentage] = useState(0);
+  const [isValidating, setIsValidating] = useState(false);
 
   const applyDiscount = async () => {
     if (!discountCode.trim()) return;
