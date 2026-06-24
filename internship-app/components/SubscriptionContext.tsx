@@ -4,6 +4,7 @@ import React, { createContext, useContext, useState, useEffect, useCallback } fr
 import { useUser, useAuth } from "@clerk/nextjs";
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
+import { supabase } from '@/lib/supabase';
 
 interface SubscriptionData {
   isPaid: boolean;
@@ -93,6 +94,31 @@ export function SubscriptionProvider({ children }: { children: React.ReactNode }
       fetchStatus();
     }
   }, [isLoaded, fetchStatus]);
+
+  // Realtime updates
+  useEffect(() => {
+    if (!user?.id) return;
+
+    const channel = supabase
+      .channel('schema-db-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'user_subscriptions',
+          filter: `user_id=eq.${user.id}`,
+        },
+        () => {
+          fetchStatus();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [user?.id, fetchStatus]);
 
   if (isBanned && !pathname.startsWith('/profile')) {
     return (
