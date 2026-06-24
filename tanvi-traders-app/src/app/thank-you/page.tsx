@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { CheckCircle2, Sparkles, ArrowRight } from 'lucide-react';
+import { CheckCircle2, Sparkles, ArrowRight, MessageCircle } from 'lucide-react';
 
 export default function ThankYouPage() {
     return (
@@ -18,6 +18,18 @@ export default function ThankYouPage() {
                     We've got your cosmetic requirements. Our team at Tanvi Traders will calculate the best wholesale discount for you and contact you shortly on WhatsApp.
                 </p>
 
+                <div className="flex flex-col gap-4 max-w-md mx-auto mb-8">
+                    <a 
+                        href="https://chat.whatsapp.com/ImrwZpwQPENJ1PBR8EBODL?utm_source=igweb&utm_campaign=wa_communities_url_xma&source_surface=25" 
+                        target="_blank"
+                        rel="noreferrer"
+                        className="px-8 py-4 bg-emerald-50 hover:bg-emerald-100 text-emerald-600 border border-emerald-200 font-bold rounded-2xl transition-all shadow-sm flex items-center justify-center gap-2 group"
+                    >
+                        <MessageCircle className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                        Join WhatsApp Community for Updates
+                    </a>
+                </div>
+
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                     <Link href="/" className="px-8 py-4 bg-pink-50 hover:bg-pink-100 text-pink-600 font-bold rounded-2xl transition-colors w-full sm:w-auto">
                         Submit Another Request
@@ -29,7 +41,7 @@ export default function ThankYouPage() {
                         className="px-8 py-4 bg-gray-900 hover:bg-black text-white font-bold rounded-2xl transition-all shadow-xl shadow-gray-900/20 flex items-center justify-center gap-2 w-full sm:w-auto group"
                     >
                         <Sparkles className="w-5 h-5 text-pink-400 group-hover:scale-110 transition-transform" />
-                        Explore Sponsora
+                        Explore Internships
                         <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                     </a>
                 </div>

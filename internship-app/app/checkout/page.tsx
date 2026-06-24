@@ -47,19 +47,24 @@ function CheckoutContent() {
   const [discountCode, setDiscountCode] = useState(initialDiscountCode);
   const [discountApplied, setDiscountApplied] = useState(!!initialDiscountCode);
   const [discountError, setDiscountError] = useState("");
-  const [isValidating, setIsValidating] = useState(false);
+  const [discountPercentage, setDiscountPercentage] = useState(0);
 
   const applyDiscount = async () => {
     if (!discountCode.trim()) return;
     setIsValidating(true);
     setDiscountError("");
     try {
-      const res = await fetch(`/api/subscription/validate-discount?code=${discountCode.trim().toUpperCase()}&userId=${user?.id || ""}`);
+      const res = await fetch(`/api/subscription/validate-discount`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code: discountCode.trim().toUpperCase() })
+      });
       const data = await res.json();
-      if (data.valid) {
+      if (data.success) {
         setDiscountApplied(true);
+        setDiscountPercentage(data.discount_percentage);
       } else {
-        setDiscountError(data.reason || "Invalid or expired code.");
+        setDiscountError(data.error || "Invalid or expired code.");
       }
     } catch {
       setDiscountError("Could not validate code. Try again.");
@@ -88,7 +93,10 @@ function CheckoutContent() {
     return <div className="min-h-screen pt-32 text-center">Invalid Plan Selected.</div>;
   }
 
-  const finalAmount = plan.baseAmount * quantity;
+  let finalAmount = plan.baseAmount * quantity;
+  if (discountApplied && discountPercentage > 0) {
+    finalAmount = Math.round(finalAmount * (1 - discountPercentage / 100));
+  }
   const totalDays = plan.days * quantity;
   const totalApplies = plan.applyLimit * totalDays;
 
