@@ -149,8 +149,13 @@ export async function GET(req: NextRequest) {
 
       let limitsAdded = 0;
       if (payment.added_limits) {
-        limitsAdded = payment.added_limits;
-        adminTotalLimit += limitsAdded;
+        if (payment.plan_type === 'admin_limit_decrease') {
+          limitsAdded = -payment.added_limits;
+          adminTotalLimit += limitsAdded;
+        } else {
+          limitsAdded = payment.added_limits;
+          adminTotalLimit += limitsAdded;
+        }
       } else {
         const limitPerPlan = PLAN_LIMITS[payment.plan_type] || 0;
         limitsAdded = limitPerPlan * (payment.quantity || 1);
@@ -158,7 +163,7 @@ export async function GET(req: NextRequest) {
       }
       calculatedTotal += limitsAdded;
     }
-    trueTotalLimit = calculatedTotal;
+    trueTotalLimit = Math.max(0, calculatedTotal);
   }
 
   const { count: calculatedUsed } = await (supabaseAdmin.from('applications_log') as any)

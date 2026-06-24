@@ -26,6 +26,11 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'account_blocked', blockedReason: sub.blocked_reason }, { status: 403 });
   }
 
+  // Cancelled users cannot apply
+  if (sub?.is_cancelled) {
+    return NextResponse.json({ error: 'account_cancelled' }, { status: 403 });
+  }
+
   // Fetch all payments to calculate true limits
   const { data: payments } = await (supabaseAdmin.from('payments') as any)
     .select('plan_type, quantity, added_limits, added_days, created_at')
@@ -44,7 +49,11 @@ export async function POST(req: NextRequest) {
 
     for (const p of sortedPayments) {
       if (p.added_limits) {
-        adminTotalLimit += p.added_limits;
+        if (p.plan_type === 'admin_limit_decrease') {
+          adminTotalLimit -= Math.abs(p.added_limits);
+        } else {
+          adminTotalLimit += p.added_limits;
+        }
       } else {
         const limitPerPlan = PLAN_LIMITS[p.plan_type] || 0;
         systemTotalLimit += limitPerPlan * (p.quantity || 1);
