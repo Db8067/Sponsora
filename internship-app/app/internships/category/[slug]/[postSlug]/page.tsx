@@ -102,7 +102,7 @@ export default function InternshipDetailPage() {
       return;
     }
     if (!isPaid) {
-      router.push("/subscribe");
+      setShowRenewModal(true);
       return;
     }
 
@@ -115,7 +115,7 @@ export default function InternshipDetailPage() {
       setApplyActionType("link");
       setShowApplyModal(true);
     } else {
-      router.push("/subscribe");
+      setShowRenewModal(true);
     }
   };
 
@@ -125,7 +125,7 @@ export default function InternshipDetailPage() {
       return;
     }
     if (!isPaid) {
-      router.push("/subscribe");
+      setShowRenewModal(true);
       return;
     }
     
