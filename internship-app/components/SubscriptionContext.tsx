@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
+import React, { createContext, useContext, useState, useEffect, useCallback, useRef } from "react";
 import { useUser, useAuth } from "@clerk/nextjs";
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
@@ -56,7 +56,11 @@ export function SubscriptionProvider({ children }: { children: React.ReactNode }
   const [systemLimits, setSystemLimits] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
-  
+
+  const prevAdminGrantedLimitsRef = useRef(0);
+  const prevAdminGrantedDaysRef = useRef(0);
+  const hasInitiallyLoaded = useRef(false);
+
   const pathname = usePathname();
 
   const fetchStatus = useCallback(async () => {
@@ -70,13 +74,24 @@ export function SubscriptionProvider({ children }: { children: React.ReactNode }
     try {
       const res = await fetch("/api/subscription/status", {
         headers: { "x-user-id": user.id },
+        cache: 'no-store',
       });
       const json = await res.json();
-      
-      if (adminGrantedLimits > 0 && json.adminGrantedLimits > adminGrantedLimits) {
-        setToastMessage("Admin has increased your limits!");
-        setTimeout(() => setToastMessage(null), 5000);
+
+      if (hasInitiallyLoaded.current) {
+        if ((json.adminGrantedLimits ?? 0) > prevAdminGrantedLimitsRef.current) {
+          setToastMessage("Admin has increased your application limits!");
+          setTimeout(() => setToastMessage(null), 6000);
+        }
+        if ((json.adminGrantedDays ?? 0) > prevAdminGrantedDaysRef.current) {
+          setToastMessage("Admin has extended your subscription!");
+          setTimeout(() => setToastMessage(null), 6000);
+        }
       }
+
+      prevAdminGrantedLimitsRef.current = json.adminGrantedLimits ?? 0;
+      prevAdminGrantedDaysRef.current = json.adminGrantedDays ?? 0;
+      hasInitiallyLoaded.current = true;
 
       setIsBanned(json.isBanned ?? false);
       setBlockedReason(json.blockedReason ?? null);
@@ -105,30 +120,53 @@ export function SubscriptionProvider({ children }: { children: React.ReactNode }
     }
   }, [isLoaded, fetchStatus]);
 
-  // Realtime updates
+  // REALTIME: Listen to user_subscriptions, payments, and block_logs
   useEffect(() => {
     if (!user?.id) return;
 
-    const channel = supabase
-      .channel('schema-db-changes')
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'user_subscriptions',
-          filter: `user_id=eq.${user.id}`,
-        },
-        () => {
-          fetchStatus();
-        }
-      )
+    const subChannel = supabase
+      .channel(`sub-changes-${user.id}`)
+      .on('postgres_changes', {
+        event: '*',
+        schema: 'public',
+        table: 'user_subscriptions',
+        filter: `user_id=eq.${user.id}`,
+      }, () => { fetchStatus(); })
+      .subscribe();
+
+    const paymentsChannel = supabase
+      .channel(`payments-changes-${user.id}`)
+      .on('postgres_changes', {
+        event: 'INSERT',
+        schema: 'public',
+        table: 'payments',
+        filter: `user_id=eq.${user.id}`,
+      }, () => { fetchStatus(); })
+      .subscribe();
+
+    const blockChannel = supabase
+      .channel(`block-changes-${user.id}`)
+      .on('postgres_changes', {
+        event: 'INSERT',
+        schema: 'public',
+        table: 'block_logs',
+        filter: `user_id=eq.${user.id}`,
+      }, () => { fetchStatus(); })
       .subscribe();
 
     return () => {
-      supabase.removeChannel(channel);
+      supabase.removeChannel(subChannel);
+      supabase.removeChannel(paymentsChannel);
+      supabase.removeChannel(blockChannel);
     };
-  }, [user?.id, fetchStatus, adminGrantedLimits]);
+  }, [user?.id, fetchStatus]);
+
+  // POLLING FALLBACK: every 30 seconds
+  useEffect(() => {
+    if (!user?.id) return;
+    const intervalId = setInterval(() => { fetchStatus(); }, 30000);
+    return () => clearInterval(intervalId);
+  }, [user?.id, fetchStatus]);
 
   if (isBanned && !pathname.startsWith('/profile') && !pathname.startsWith('/chat')) {
     return (
@@ -144,7 +182,7 @@ export function SubscriptionProvider({ children }: { children: React.ReactNode }
           )}
           <div className="space-y-3 pt-4">
              <Link href="/profile" className="block w-full py-3 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-2xl font-bold transition-all text-center">
-                Visit Profile & Settings
+                Visit Profile &amp; Settings
              </Link>
              <Link href="/subscribe" className="block w-full py-3 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-2xl font-bold transition-all text-center">
                 Visit Subscriptions
@@ -152,8 +190,8 @@ export function SubscriptionProvider({ children }: { children: React.ReactNode }
              <Link href="/chat" className="block w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl font-bold transition-all text-center shadow-[0_4px_14px_0_rgb(5,150,105,0.39)]">
                 Chat with Admin
              </Link>
-             <button 
-                onClick={() => signOut()} 
+             <button
+                onClick={() => signOut()}
                 className="w-full py-3 bg-red-600 hover:bg-red-700 text-white rounded-2xl font-bold transition-all shadow-[0_4px_14px_0_rgb(220,38,38,0.39)]"
              >
                 Sign in with a different account
@@ -171,8 +209,8 @@ export function SubscriptionProvider({ children }: { children: React.ReactNode }
           <img src="/sub_cancelled_doodle.png" alt="Cancelled Doodle" className="w-48 h-48 mx-auto object-contain mb-2 drop-shadow-sm" />
           <h1 className="text-2xl font-black text-gray-900">Subscription Cancelled</h1>
           <p className="text-gray-500 font-medium">Your subscription has been explicitly cancelled by the administrator. Please contact the admin for more information.</p>
-          <button 
-             onClick={() => signOut()} 
+          <button
+             onClick={() => signOut()}
              className="w-full py-4 mt-6 bg-orange-600 hover:bg-orange-700 text-white rounded-2xl font-bold transition-all shadow-[0_4px_14px_0_rgb(234,88,12,0.39)]"
           >
              Change Account / Sign Out

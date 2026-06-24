@@ -2,6 +2,12 @@ import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
 import { auth } from '@clerk/nextjs/server';
 
+const PLAN_LIMITS: Record<string, number> = {
+  '1_day': 10,
+  '7_day': 84,
+  'monthly': 450,
+};
+
 export async function POST(req: NextRequest) {
   const { userId } = await auth();
   if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -9,15 +15,76 @@ export async function POST(req: NextRequest) {
   const { internshipId } = await req.json();
   if (!internshipId) return NextResponse.json({ error: 'Missing internshipId' }, { status: 400 });
 
-  // Check active subscription
+  // Check subscription + block status
   const { data: sub } = await (supabaseAdmin.from('user_subscriptions') as any)
     .select('*')
     .eq('user_id', userId)
     .single();
 
-  if (!sub || sub.status !== 'active' || new Date(sub.valid_until) < new Date()) {
+  // Block check comes FIRST — banned users can never apply
+  if (sub?.is_banned) {
+    return NextResponse.json({ error: 'account_blocked', blockedReason: sub.blocked_reason }, { status: 403 });
+  }
+
+  // Fetch all payments to calculate true limits
+  const { data: payments } = await (supabaseAdmin.from('payments') as any)
+    .select('plan_type, quantity, added_limits, added_days, created_at')
+    .eq('user_id', userId);
+
+  let systemTotalLimit = 0;
+  let adminTotalLimit = 0;
+  let adminGrantedDays = 0;
+  let hasActiveSystemSub = false;
+
+  const now = new Date();
+
+  if (payments && payments.length > 0) {
+    const sortedPayments = [...payments].sort((a: any, b: any) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
+    let currentEnd = new Date(0);
+
+    for (const p of sortedPayments) {
+      if (p.added_limits) {
+        adminTotalLimit += p.added_limits;
+      } else {
+        const limitPerPlan = PLAN_LIMITS[p.plan_type] || 0;
+        systemTotalLimit += limitPerPlan * (p.quantity || 1);
+      }
+
+      if (!p.added_days) continue;
+      if (p.plan_type === 'admin_extension') {
+        adminGrantedDays += (p.added_days || 0);
+      }
+
+      const paymentDate = new Date(p.created_at);
+      let start = paymentDate > currentEnd ? paymentDate : currentEnd;
+      let end = new Date(start.getTime() + p.added_days * 24 * 60 * 60 * 1000);
+      currentEnd = end;
+
+      if (now >= start && now <= end) {
+        hasActiveSystemSub = true;
+      }
+    }
+  }
+
+  const trueTotalLimit = systemTotalLimit + adminTotalLimit;
+
+  // Check subscription validity
+  const subIsActive = sub && sub.status === 'active' && new Date(sub.valid_until) > now;
+  const adminLimitsExist = adminTotalLimit > 0;
+
+  // User can apply if:
+  //   1. They have an active subscription (paid or admin-extended), OR
+  //   2. Admin has granted them limits (even if subscription expired)
+  if (!subIsActive && !adminLimitsExist && !hasActiveSystemSub) {
     return NextResponse.json({ error: 'No active subscription' }, { status: 403 });
   }
+
+  // Count used applications
+  const { count: usedCount } = await (supabaseAdmin.from('applications_log') as any)
+    .select('*', { count: 'exact', head: true })
+    .eq('user_id', userId);
+
+  const usedLimit = usedCount || 0;
 
   // Check if already applied to this specific internship
   const { count: alreadyAppliedCount } = await (supabaseAdmin.from('applications_log') as any)
@@ -35,9 +102,9 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ success: true, applyLink, alreadyApplied: true });
   }
 
-  // Check if they are completely out of limits
-  if ((sub.used_limit || 0) >= (sub.total_limit || 0)) {
-    return NextResponse.json({ error: 'limit_exceeded', limit: sub.total_limit }, { status: 429 });
+  // Check if they are out of limits
+  if (trueTotalLimit > 0 && usedLimit >= trueTotalLimit) {
+    return NextResponse.json({ error: 'limit_exceeded', limit: trueTotalLimit }, { status: 429 });
   }
 
   // Log this application
@@ -46,10 +113,12 @@ export async function POST(req: NextRequest) {
     internship_id: internshipId,
   });
 
-  // Increment the used limit
-  await (supabaseAdmin.from('user_subscriptions') as any)
-    .update({ used_limit: (sub.used_limit || 0) + 1 })
-    .eq('id', sub.id);
+  // Increment the used limit in user_subscriptions
+  if (sub) {
+    await (supabaseAdmin.from('user_subscriptions') as any)
+      .update({ used_limit: usedLimit + 1 })
+      .eq('id', sub.id);
+  }
 
   // Fetch the real apply link
   const { data: post } = await (supabaseAdmin.from('sponsora_posts') as any)
@@ -59,5 +128,10 @@ export async function POST(req: NextRequest) {
 
   const applyLink = post?.apply_link || post?.metadata?.apply_link || null;
 
-  return NextResponse.json({ success: true, applyLink, appliesToday: (sub.used_limit || 0) + 1, limit: sub.total_limit });
+  return NextResponse.json({ 
+    success: true, 
+    applyLink, 
+    appliesToday: usedLimit + 1, 
+    limit: trueTotalLimit 
+  });
 }
