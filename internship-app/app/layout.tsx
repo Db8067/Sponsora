@@ -21,26 +21,26 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Sponsora | Premium Internships",
-  description: "Discover and apply to top-tier internships. Launch your career with Sponsora today.",
+  title: "Sponsora | Elite Internships & PPOs",
+  description: "Land your dream role. Discover high-paying internships at top companies, fast-track your career, and secure pre-placement offers.",
   openGraph: {
-    title: "Sponsora | Premium Internships",
-    description: "Discover and apply to top-tier internships. Launch your career with Sponsora today.",
+    title: "Sponsora | Elite Internships & PPOs",
+    description: "Land your dream role. Discover high-paying internships at top companies, fast-track your career, and secure pre-placement offers.",
     url: "https://www.intersponsora.space",
     siteName: "Sponsora",
     images: [
       {
-        url: "/images/logo-light.png",
-        width: 800,
-        height: 600,
+        url: "/images/og-banner.png",
+        width: 1200,
+        height: 630,
       },
     ],
     type: "website",
   },
   icons: {
-    icon: "/images/logo-light.png",
-    shortcut: "/images/logo-light.png",
-    apple: "/images/logo-light.png",
+    icon: "/images/favicon-sponsora.png",
+    shortcut: "/images/favicon-sponsora.png",
+    apple: "/images/favicon-sponsora.png",
   },
 };
 
