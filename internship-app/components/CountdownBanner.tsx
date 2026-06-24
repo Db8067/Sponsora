@@ -18,6 +18,7 @@ export default function CountdownBanner() {
   const router = useRouter();
   const [timeLeft, setTimeLeft] = useState<number>(0);
   const [expired, setExpired] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
 
   useEffect(() => {
     if (!isPaid || !validUntil) return;
@@ -56,6 +57,20 @@ export default function CountdownBanner() {
     return false;
   })();
 
+  useEffect(() => {
+    if (!shouldShow) return;
+    
+    // Show initially after 5 seconds
+    const initialTimeout = setTimeout(() => setShowPopup(true), 5000);
+    // Then every 30 minutes
+    const interval = setInterval(() => setShowPopup(true), 30 * 60 * 1000);
+    
+    return () => {
+      clearTimeout(initialTimeout);
+      clearInterval(interval);
+    };
+  }, [shouldShow]);
+
   if (expired) {
     return (
       <div className="fixed inset-0 z-[200] flex flex-col items-center justify-center bg-background/95 backdrop-blur-xl px-6 text-center">
@@ -75,23 +90,34 @@ export default function CountdownBanner() {
     );
   }
 
-  if (!shouldShow) return null;
-
-  const urgency = timeLeft < 30 * 60 * 1000; // less than 30 min = red
+  if (!shouldShow || !showPopup) return null;
 
   return (
-    <div className={`fixed top-0 left-0 right-0 z-[100] py-2 px-4 flex items-center justify-center gap-3 text-sm font-semibold text-white transition-colors ${urgency ? "bg-red-500/90" : "bg-primary/90"} backdrop-blur-sm`}>
-      <span>⏳</span>
-      <span>
-        Your {planType === "1_day" ? "1 Day" : planType === "7_day" ? "7 Day" : "Monthly"} pass expires in&nbsp;
-        <span className="font-black tabular-nums">{formatTime(timeLeft)}</span>
-      </span>
-      <button
-        onClick={() => router.push("/subscribe")}
-        className="ml-2 underline underline-offset-2 font-bold hover:no-underline"
-      >
-        Renew
-      </button>
+    <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/40 backdrop-blur-sm px-4">
+      <div className="bg-white dark:bg-zinc-900 rounded-[2rem] p-6 md:p-8 max-w-sm w-full shadow-2xl relative flex flex-col items-center text-center animate-in fade-in zoom-in duration-300">
+        <button 
+          onClick={() => setShowPopup(false)}
+          className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-black/5 hover:bg-black/10 dark:bg-white/10 dark:hover:bg-white/20 transition-colors"
+        >
+          ✕
+        </button>
+        <img src="/images/popup-doodle.png" alt="Reminder" className="w-40 h-40 object-contain mb-4" />
+        <h3 className="text-xl font-bold text-foreground mb-2">
+          Your {planType === "1_day" ? "1 Day" : planType === "7_day" ? "7 Day" : "Monthly"} pass expires in
+        </h3>
+        <div className="text-3xl font-black text-primary tabular-nums tracking-tight mb-6">
+          {formatTime(timeLeft)}
+        </div>
+        <button
+          onClick={() => {
+            setShowPopup(false);
+            router.push("/subscribe");
+          }}
+          className="w-full py-3 bg-gradient-to-r from-primary to-accent text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-all active:scale-95"
+        >
+          Renew Now
+        </button>
+      </div>
     </div>
   );
 }
