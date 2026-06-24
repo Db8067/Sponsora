@@ -3,6 +3,7 @@
 import { useSubscription } from "./SubscriptionContext";
 import { useRouter, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useUser } from "@clerk/nextjs";
 
 function formatTime(ms: number) {
   if (ms <= 0) return "00:00:00";
@@ -15,11 +16,34 @@ function formatTime(ms: number) {
 
 export default function CountdownBanner() {
   const { isPaid, isBanned, planType, validUntil } = useSubscription();
+  const { user, isSignedIn } = useUser();
   const router = useRouter();
   const pathname = usePathname();
+  
   const [timeLeft, setTimeLeft] = useState<number>(0);
   const [expired, setExpired] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
+  const [dismissedExpired, setDismissedExpired] = useState(false);
+  const [hasSeenExpired, setHasSeenExpired] = useState(false);
+
+  // Sync hasSeenExpired status with localStorage
+  useEffect(() => {
+    if (user?.id && validUntil) {
+      const key = `hasSeenExpired_${user.id}_${validUntil}`;
+      setHasSeenExpired(localStorage.getItem(key) === "true");
+    } else {
+      setHasSeenExpired(false);
+    }
+  }, [user?.id, validUntil]);
+
+  // Reset state when signed out
+  useEffect(() => {
+    if (!isSignedIn) {
+      setExpired(false);
+      setDismissedExpired(false);
+      setShowPopup(false);
+    }
+  }, [isSignedIn]);
 
   useEffect(() => {
     if (!isPaid || !validUntil) return;
@@ -39,18 +63,6 @@ export default function CountdownBanner() {
     return () => clearInterval(interval);
   }, [isPaid, validUntil]);
 
-  // When expired while browsing, redirect after showing message
-  // But NEVER redirect if user is banned — ban popup takes priority
-  // Also DO NOT redirect if the user is already on the subscribe or checkout pages
-  useEffect(() => {
-    if (expired && !isBanned && pathname !== '/subscribe' && pathname !== '/checkout') {
-      const timeout = setTimeout(() => {
-        router.push("/subscribe?expired=true");
-      }, 4000);
-      return () => clearTimeout(timeout);
-    }
-  }, [expired, isBanned, pathname, router]);
-
   // Only show for 1-day pass within 12 hours OR 7-day pass in last 2 hours
   const shouldShow = isPaid && validUntil && !expired && (() => {
     const remaining = new Date(validUntil).getTime() - Date.now();
@@ -61,7 +73,7 @@ export default function CountdownBanner() {
   })();
 
   useEffect(() => {
-    if (!shouldShow) return;
+    if (!shouldShow || !isSignedIn) return;
     
     // Show initially after 5 seconds
     const initialTimeout = setTimeout(() => setShowPopup(true), 5000);
@@ -72,25 +84,47 @@ export default function CountdownBanner() {
       clearTimeout(initialTimeout);
       clearInterval(interval);
     };
-  }, [shouldShow]);
+  }, [shouldShow, isSignedIn]);
 
-  // Don't show expired popup if user is banned (ban popup takes priority)
-  // And DO NOT show it on the subscribe or checkout pages (let users pay/renew in peace)
-  if (expired && !isBanned && pathname !== '/subscribe' && pathname !== '/checkout') {
+  const handleCloseExpired = () => {
+    setDismissedExpired(true);
+    if (user?.id && validUntil) {
+      const key = `hasSeenExpired_${user.id}_${validUntil}`;
+      localStorage.setItem(key, "true");
+    }
+  };
+
+  const handleRenew = () => {
+    handleCloseExpired();
+    router.push("/subscribe");
+  };
+
+  // Determine if we should show the expired modal
+  const isExcludedPath = pathname === '/subscribe' || pathname === '/checkout' || pathname.startsWith('/sign-in') || pathname.startsWith('/sign-up');
+  const showExpiredModal = isSignedIn && expired && !isBanned && !hasSeenExpired && !dismissedExpired && !isExcludedPath;
+
+  if (showExpiredModal) {
     return (
-      <div className="fixed inset-0 z-[200] flex flex-col items-center justify-center bg-background/95 backdrop-blur-xl px-6 text-center">
-        <img src="/images/subscription_expired.png" alt="Subscription Expired" className="w-52 h-52 object-contain mb-6" />
-        <h2 className="text-2xl font-black text-foreground mb-2">Your Pass Has Expired! 😢</h2>
-        <p className="text-foreground/60 max-w-sm leading-relaxed mb-6">
-          Aww, looks like your time is up! Company names are locked again. Subscribe to keep exploring top internship opportunities.
-        </p>
-        <button
-          onClick={() => router.push("/subscribe")}
-          className="px-8 py-3 bg-gradient-to-r from-primary to-primary-dark text-white font-bold rounded-full hover:shadow-lg transition-all"
-        >
-          Renew My Pass 🔄
-        </button>
-        <p className="text-xs text-foreground/40 mt-4">Redirecting in a moment...</p>
+      <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/40 backdrop-blur-sm px-4">
+        <div className="bg-white dark:bg-zinc-900 rounded-[2rem] p-6 md:p-8 max-w-sm w-full shadow-2xl relative flex flex-col items-center text-center animate-in fade-in zoom-in duration-300">
+          <button 
+            onClick={handleCloseExpired}
+            className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-black/5 hover:bg-black/10 dark:bg-white/10 dark:hover:bg-white/20 transition-colors text-foreground"
+          >
+            ✕
+          </button>
+          <img src="/images/subscription_expired.png" alt="Subscription Expired" className="w-40 h-40 object-contain mb-4" />
+          <h2 className="text-2xl font-black text-foreground mb-2">Your Pass Has Expired! 😢</h2>
+          <p className="text-foreground/60 text-sm leading-relaxed mb-6">
+            Aww, looks like your time is up! Company names are locked again. Subscribe to keep exploring top internship opportunities.
+          </p>
+          <button
+            onClick={handleRenew}
+            className="w-full py-3 bg-gradient-to-r from-primary to-accent text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-all active:scale-95"
+          >
+            Renew My Pass 🔄
+          </button>
+        </div>
       </div>
     );
   }
