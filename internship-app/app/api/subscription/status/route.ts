@@ -31,6 +31,21 @@ export async function GET(req: NextRequest) {
     });
   }
 
+  // If user subscription is explicitly cancelled by admin, immediately return unpaid status
+  if (sub?.is_cancelled) {
+    return NextResponse.json({
+      isPaid: false,
+      isBanned: false,
+      blockedReason: null,
+      isCancelled: true,
+      adminGrantedDays: 0,
+      adminGrantedLimits: 0,
+      systemLimits: 0,
+      totalLimit: 0,
+      usedLimit: 0,
+    });
+  }
+
   // If no subscription record at all
   if (!sub) {
     return NextResponse.json({ isPaid: false, isBanned: false, isCancelled: false });
