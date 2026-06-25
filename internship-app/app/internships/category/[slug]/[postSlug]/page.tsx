@@ -26,6 +26,7 @@ export default function InternshipDetailPage() {
   const [fullscreenImage, setFullscreenImage] = useState<string | null>(null);
   const [showEmailModal, setShowEmailModal] = useState(false);
   const [showRenewModal, setShowRenewModal] = useState(false);
+  const [showSubscribeModal, setShowSubscribeModal] = useState(false);
   const [applyActionType, setApplyActionType] = useState<"link" | "email">("link");
 
   useEffect(() => {
@@ -95,6 +96,10 @@ export default function InternshipDetailPage() {
       router.push("/sign-in?redirect_url=" + encodeURIComponent(window.location.pathname));
       return;
     }
+    if (!isPaid) {
+      setShowSubscribeModal(true);
+      return;
+    }
     router.push("/subscribe");
   };
 
@@ -104,7 +109,7 @@ export default function InternshipDetailPage() {
       return;
     }
     if (!isPaid) {
-      setShowRenewModal(true);
+      setShowSubscribeModal(true);
       return;
     }
 
@@ -127,7 +132,7 @@ export default function InternshipDetailPage() {
       return;
     }
     if (!isPaid) {
-      setShowRenewModal(true);
+      setShowSubscribeModal(true);
       return;
     }
     
@@ -146,7 +151,7 @@ export default function InternshipDetailPage() {
       return;
     }
     if (!isPaid) {
-      router.push("/subscribe");
+      setShowSubscribeModal(true);
       return;
     }
     setFullscreenImage(meta.apply_image_url);
@@ -658,6 +663,43 @@ export default function InternshipDetailPage() {
                 className="w-full py-4 rounded-xl font-bold text-white bg-gradient-to-r from-[#0066FF] to-[#0055DD] hover:shadow-lg hover:shadow-[#0066FF]/30 transition-all flex items-center justify-center gap-2"
               >
                 Upgrade / Renew Pass <Zap className="w-5 h-5" />
+              </button>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* Subscribe Modal */}
+      <AnimatePresence>
+        {showSubscribeModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="bg-background rounded-3xl p-6 md:p-8 max-w-sm w-full shadow-2xl border border-white/10 relative text-center flex flex-col items-center"
+            >
+              <button 
+                onClick={() => setShowSubscribeModal(false)}
+                className="absolute top-4 right-4 p-2 text-foreground/40 hover:text-foreground/80 bg-foreground/5 hover:bg-foreground/10 rounded-full transition-colors"
+              >
+                <ArrowLeft className="w-5 h-5 rotate-180" />
+              </button>
+
+              <div className="w-32 h-32 bg-primary/10 rounded-full flex items-center justify-center mb-6 overflow-hidden">
+                <img src="/images/popup-doodle.png" alt="Cute doodle" className="w-full h-full object-cover" />
+              </div>
+              
+              <h2 className="text-2xl font-black mb-3 text-foreground">Unlock Access!</h2>
+              <p className="text-foreground/60 mb-8 px-2 text-sm leading-relaxed">
+                Hey there! To see company details, get the apply link, or view the email ID, you need to purchase a subscription pass.
+              </p>
+
+              <button 
+                onClick={() => router.push('/subscribe')}
+                className="w-full py-4 rounded-xl font-bold text-white bg-gradient-to-r from-primary to-accent hover:shadow-lg hover:shadow-primary/30 transition-all flex items-center justify-center gap-2"
+              >
+                View Plans <Star className="w-5 h-5" />
               </button>
             </motion.div>
           </div>

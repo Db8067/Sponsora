@@ -18,10 +18,9 @@ function SyncLogic() {
       // The page they return to will handle showing the subscribe prompt if they aren't paid.
       if (redirectUrl) {
         router.push(redirectUrl);
-      } else if (isPaid) {
-        router.push("/internships/category/software-engineering"); // Fallback home page
       } else {
-        router.push("/subscribe");
+        // Redirect all users (paid and unpaid) to the home page on login.
+        router.push("/");
       }
     }
   }, [isLoading, isPaid, router, searchParams]);
