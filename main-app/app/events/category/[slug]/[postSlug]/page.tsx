@@ -5,12 +5,13 @@ import { notFound } from "next/navigation";
 
 export const dynamic = 'force-dynamic';
 
-export async function generateMetadata({ params }: { params: { slug: string, postSlug: string } }): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Promise<{ slug: string, postSlug: string }> }): Promise<Metadata> {
+  const { postSlug } = await params;
   const { supabase } = await import("@/lib/supabase");
   const { data: post } = await supabase
     .from("sponsora_posts")
     .select("title, description")
-    .eq("id", params.postSlug)
+    .eq("id", postSlug)
     .single();
 
   return {
@@ -19,13 +20,14 @@ export async function generateMetadata({ params }: { params: { slug: string, pos
   };
 }
 
-export default async function EventDetailsPage({ params }: { params: { slug: string, postSlug: string } }) {
+export default async function EventDetailsPage({ params }: { params: Promise<{ slug: string, postSlug: string }> }) {
+  const { slug, postSlug } = await params;
   const { supabase } = await import("@/lib/supabase");
   
   const { data: post, error } = await supabase
     .from('sponsora_posts')
     .select('*')
-    .eq('id', params.postSlug)
+    .eq('id', postSlug)
     .single();
 
   if (error || !post) {
@@ -35,7 +37,7 @@ export default async function EventDetailsPage({ params }: { params: { slug: str
   const { data: category } = await supabase
     .from('sponsora_categories')
     .select('*')
-    .eq('slug', params.slug)
+    .eq('slug', slug)
     .single();
 
   const meta = post.metadata || {};
