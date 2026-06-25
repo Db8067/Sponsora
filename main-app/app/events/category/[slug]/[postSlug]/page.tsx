@@ -24,15 +24,20 @@ export default async function EventDetailsPage({ params }: { params: { slug: str
   
   const { data: post, error } = await supabase
     .from('sponsora_posts')
-    .select('*, sponsora_categories(*)')
+    .select('*')
     .eq('id', params.postSlug)
     .single();
 
   if (error || !post) {
-    notFound();
+    return <div>Error loading event: {error?.message || 'No post found'}</div>;
   }
 
-  const category = post.sponsora_categories;
+  const { data: category } = await supabase
+    .from('sponsora_categories')
+    .select('*')
+    .eq('slug', params.slug)
+    .single();
+
   const meta = post.metadata || {};
   const skillsList = meta.skills ? meta.skills.split(',').map((s: string) => s.trim()).filter(Boolean) : [];
 
