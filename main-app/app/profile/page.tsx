@@ -39,6 +39,7 @@ export default function ProfilePage() {
               headerTitle: "text-foreground font-bold",
               headerSubtitle: "text-foreground/60",
               profileSectionTitleText: "text-foreground/80 font-bold border-b border-black/5 dark:border-white/10 pb-2",
+              navbarItem__apiKeys: "hidden",
             }
           }}
         />
