@@ -45,10 +45,10 @@ export function EventCard({ event, index = 0, categorySlug }: EventCardProps) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: index * 0.1 }}
       onClick={handleCardClick}
-      className="group relative w-full cursor-pointer rounded-2xl bg-white dark:bg-[#1A1A1D] border border-black/5 dark:border-white/10 overflow-hidden hover:-translate-y-1 hover:shadow-2xl hover:shadow-primary/20 hover:border-primary/30 transition-all duration-300 flex flex-col sm:flex-row"
+      className="group relative w-full h-full cursor-pointer rounded-2xl bg-white dark:bg-[#1A1A1D] border border-black/5 dark:border-white/10 overflow-hidden hover:-translate-y-1 hover:shadow-2xl hover:shadow-primary/20 hover:border-primary/30 transition-all duration-300 flex flex-col"
     >
       {/* Event Image */}
-      <div className="w-full sm:w-48 h-48 sm:h-auto shrink-0 bg-black/5 dark:bg-white/5 relative overflow-hidden">
+      <div className="w-full h-48 shrink-0 bg-black/5 dark:bg-white/5 relative overflow-hidden">
         {event.image_url ? (
           <img 
             src={event.image_url} 
