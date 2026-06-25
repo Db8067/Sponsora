@@ -1,7 +1,9 @@
 import { Metadata } from "next";
 import Link from "next/link";
-import { ChevronRight, Calendar, MapPin, Trophy, Users, ExternalLink, CheckCircle2 } from "lucide-react";
+import { ChevronRight, Calendar, MapPin, Trophy, Users, ExternalLink } from "lucide-react";
 import { notFound } from "next/navigation";
+import ShareButtons from "@/components/ShareButtons";
+import EventImageCarousel from "@/components/EventImageCarousel";
 
 export const dynamic = 'force-dynamic';
 
@@ -10,13 +12,18 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { supabase } = await import("@/lib/supabase");
   const { data: post } = await supabase
     .from("sponsora_posts")
-    .select("title, description")
+    .select("title, description, image_url, metadata")
     .eq("id", postSlug)
     .single();
+
+  const previewImage = post?.image_url || "/images/event_doodle_preview.png";
 
   return {
     title: post ? `${post.title} | Sponsora` : "Event Not Found | Sponsora",
     description: post?.description?.slice(0, 150) || "Event details",
+    openGraph: {
+      images: [previewImage]
+    }
   };
 }
 
@@ -42,13 +49,18 @@ export default async function EventDetailsPage({ params }: { params: Promise<{ s
 
   const meta = post.metadata || {};
   const skillsList = meta.skills ? meta.skills.split(',').map((s: string) => s.trim()).filter(Boolean) : [];
+  
+  // Combine all images (fallback to main image_url if no event_images)
+  const allImages = meta.event_images && meta.event_images.length > 0 
+    ? meta.event_images 
+    : post.image_url ? [post.image_url] : [];
 
   return (
     <div className="relative min-h-[100dvh] w-full flex flex-col overflow-x-hidden pt-28 pb-12 selection:bg-primary/30 bg-background">
-      <div className="relative z-10 flex flex-col w-full max-w-[1200px] px-4 md:px-6 mx-auto">
+      <div className="relative z-10 flex flex-col w-full max-w-[1000px] px-4 md:px-6 mx-auto gap-8">
         
         {/* Breadcrumbs */}
-        <nav className="flex items-center gap-2 text-sm font-medium text-foreground/50 mb-8">
+        <nav className="flex items-center gap-2 text-sm font-medium text-foreground/50">
           <Link href="/" className="hover:text-primary transition-colors">Home</Link>
           <ChevronRight className="w-4 h-4" />
           <Link href="/events" className="hover:text-primary transition-colors">Events</Link>
@@ -62,61 +74,82 @@ export default async function EventDetailsPage({ params }: { params: Promise<{ s
           <span className="text-foreground truncate max-w-[200px]">{post.title}</span>
         </nav>
 
-        {/* Hero Section */}
-        <div className="w-full bg-white dark:bg-[#1A1A1D] rounded-[2rem] border border-black/5 dark:border-white/10 shadow-xl overflow-hidden mb-8">
-          <div className="w-full h-[250px] md:h-[350px] relative bg-primary/10 flex items-center justify-center">
-             {post.image_url ? (
-               <img src={post.image_url} alt={post.title} className="w-full h-full object-cover absolute inset-0" />
-             ) : (
-                <div className="w-full h-full bg-gradient-to-br from-indigo-500/20 to-purple-500/20 absolute inset-0" />
-             )}
-             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
-             
-             <div className="absolute bottom-0 left-0 w-full p-6 md:p-12 z-10">
-                {meta.is_featured && (
-                    <span className="inline-block px-3 py-1 mb-4 text-xs font-bold rounded-full bg-accent text-accent-foreground uppercase tracking-wider shadow-lg">
-                        Featured Event
-                    </span>
-                )}
-                <h1 className="text-3xl md:text-5xl font-black text-white tracking-tight mb-2">
-                    {post.title}
-                </h1>
-                <p className="text-lg text-white/80 font-medium">
-                    {category?.name || "Event"}
-                </p>
-             </div>
+        {/* Title and Share Row */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 bg-white dark:bg-[#1A1A1D] p-8 rounded-[2rem] border border-black/5 dark:border-white/10 shadow-lg">
+            <div>
+              {meta.is_featured && (
+                  <span className="inline-block px-3 py-1 mb-4 text-xs font-bold rounded-full bg-accent/10 text-accent uppercase tracking-wider shadow-sm border border-accent/20">
+                      Featured Event
+                  </span>
+              )}
+              <h1 className="text-3xl md:text-5xl font-black text-foreground tracking-tight mb-2">
+                  {post.title}
+              </h1>
+              <p className="text-lg text-foreground/60 font-medium">
+                  {category?.name || "Event"}
+              </p>
+            </div>
+            
+            <ShareButtons title={post.title} />
+        </div>
+
+        {/* Carousel Section */}
+        {allImages.length > 0 && (
+          <div className="w-full shadow-2xl rounded-[2rem]">
+            <EventImageCarousel images={allImages} />
+          </div>
+        )}
+
+        {/* Register CTA (Shifted above About section) */}
+        <div className="bg-gradient-to-r from-primary/10 to-accent/10 rounded-[2rem] border border-primary/20 p-8 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-6">
+          <div className="flex flex-col gap-2">
+            <h3 className="text-2xl font-black text-foreground">Ready to participate?</h3>
+            <p className="text-foreground/70 font-medium max-w-sm">Secure your spot before registrations close. Join thousands of other attendees!</p>
           </div>
 
-          {/* Quick Info Bar */}
-          <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-black/5 dark:divide-white/10 border-t border-black/5 dark:border-white/10 bg-black/5 dark:bg-white/5">
-            <div className="p-6 flex flex-col gap-1 items-center justify-center text-center">
-              <Calendar className="w-6 h-6 text-indigo-500 mb-1" />
-              <span className="text-xs font-bold text-foreground/50 uppercase tracking-wider">Date</span>
-              <span className="font-semibold text-foreground">{post.date_info || "TBD"}</span>
-            </div>
-            <div className="p-6 flex flex-col gap-1 items-center justify-center text-center">
-              <MapPin className="w-6 h-6 text-orange-500 mb-1" />
-              <span className="text-xs font-bold text-foreground/50 uppercase tracking-wider">Venue</span>
-              <span className="font-semibold text-foreground capitalize line-clamp-1">
-                {meta.venue_type || 'TBD'}
-              </span>
-            </div>
-            <div className="p-6 flex flex-col gap-1 items-center justify-center text-center">
-              <Trophy className="w-6 h-6 text-yellow-500 mb-1" />
-              <span className="text-xs font-bold text-foreground/50 uppercase tracking-wider">Prize Pool</span>
-              <span className="font-semibold text-foreground">{meta.prize_pool || "Glory"}</span>
-            </div>
-            <div className="p-6 flex flex-col gap-1 items-center justify-center text-center">
-              <Users className="w-6 h-6 text-blue-500 mb-1" />
-              <span className="text-xs font-bold text-foreground/50 uppercase tracking-wider">Team Size</span>
-              <span className="font-semibold text-foreground">{meta.team_allowed ? `${meta.min_team}-${meta.max_team}` : 'Solo'}</span>
-            </div>
+          {post.apply_link ? (
+            <Link 
+              href={post.apply_link} 
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full sm:w-auto min-w-[200px] bg-primary text-primary-foreground hover:bg-primary-dark transition-all hover:scale-105 active:scale-95 py-4 px-8 rounded-2xl font-black shadow-xl shadow-primary/25 flex items-center justify-center gap-2 group text-lg"
+            >
+              Register Now <ExternalLink className="w-5 h-5 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-transform" />
+            </Link>
+          ) : (
+            <button disabled className="w-full sm:w-auto min-w-[200px] bg-black/5 dark:bg-white/5 text-foreground/50 py-4 px-8 rounded-2xl font-black cursor-not-allowed text-lg">
+              Registrations Closed
+            </button>
+          )}
+        </div>
+
+        {/* Quick Info Grid */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="bg-white dark:bg-[#1A1A1D] rounded-2xl border border-black/5 dark:border-white/10 p-6 flex flex-col gap-2 items-center justify-center text-center shadow-sm">
+            <Calendar className="w-8 h-8 text-indigo-500 mb-2" />
+            <span className="text-xs font-bold text-foreground/50 uppercase tracking-wider">Date</span>
+            <span className="font-semibold text-foreground text-sm">{post.date_info || "TBD"}</span>
+          </div>
+          <div className="bg-white dark:bg-[#1A1A1D] rounded-2xl border border-black/5 dark:border-white/10 p-6 flex flex-col gap-2 items-center justify-center text-center shadow-sm">
+            <MapPin className="w-8 h-8 text-orange-500 mb-2" />
+            <span className="text-xs font-bold text-foreground/50 uppercase tracking-wider">Venue</span>
+            <span className="font-semibold text-foreground text-sm capitalize">{meta.venue_type || 'TBD'}</span>
+          </div>
+          <div className="bg-white dark:bg-[#1A1A1D] rounded-2xl border border-black/5 dark:border-white/10 p-6 flex flex-col gap-2 items-center justify-center text-center shadow-sm">
+            <Trophy className="w-8 h-8 text-yellow-500 mb-2" />
+            <span className="text-xs font-bold text-foreground/50 uppercase tracking-wider">Prize Pool</span>
+            <span className="font-semibold text-foreground text-sm">{meta.prize_pool || "Glory"}</span>
+          </div>
+          <div className="bg-white dark:bg-[#1A1A1D] rounded-2xl border border-black/5 dark:border-white/10 p-6 flex flex-col gap-2 items-center justify-center text-center shadow-sm">
+            <Users className="w-8 h-8 text-blue-500 mb-2" />
+            <span className="text-xs font-bold text-foreground/50 uppercase tracking-wider">Team Size</span>
+            <span className="font-semibold text-foreground text-sm">{meta.team_allowed ? `${meta.min_team}-${meta.max_team}` : 'Solo'}</span>
           </div>
         </div>
 
-        <div className="flex flex-col lg:flex-row gap-8">
+        <div className="flex flex-col lg:flex-row gap-8 mt-4">
           {/* Main Content */}
-          <div className="w-full lg:w-2/3 flex flex-col gap-8">
+          <div className="w-full flex flex-col gap-8">
             
             <div className="bg-white dark:bg-[#1A1A1D] rounded-[2rem] border border-black/5 dark:border-white/10 p-8 md:p-10 shadow-lg">
               <h2 className="text-2xl font-bold text-foreground mb-6">About the Event</h2>
@@ -140,7 +173,7 @@ export default async function EventDetailsPage({ params }: { params: Promise<{ s
             )}
 
             {skillsList.length > 0 && (
-              <div className="bg-white dark:bg-[#1A1A1D] rounded-[2rem] border border-black/5 dark:border-white/10 p-8 md:p-10 shadow-lg">
+              <div className="bg-white dark:bg-[#1A1A1D] rounded-[2rem] border border-black/5 dark:border-white/10 p-8 md:p-10 shadow-lg mb-8">
                 <h2 className="text-2xl font-bold text-foreground mb-6">Tags / Categories</h2>
                 <div className="flex flex-wrap gap-3">
                   {skillsList.map((skill: string, i: number) => (
@@ -152,48 +185,6 @@ export default async function EventDetailsPage({ params }: { params: Promise<{ s
               </div>
             )}
 
-          </div>
-
-          {/* Right Sidebar */}
-          <div className="w-full lg:w-1/3">
-            <div className="sticky top-28">
-              
-              <div className="bg-white dark:bg-[#1A1A1D] rounded-[2rem] border border-black/5 dark:border-white/10 p-8 shadow-xl relative overflow-hidden">
-                <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-indigo-500 to-purple-500" />
-                
-                <h3 className="text-xl font-bold text-foreground mb-2">Join the Event</h3>
-                <p className="text-foreground/60 text-sm mb-8">
-                  Register now to secure your spot in this event.
-                </p>
-
-                {post.apply_link ? (
-                  <Link 
-                    href={post.apply_link} 
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-full bg-primary text-primary-foreground hover:bg-primary-dark transition-colors py-4 rounded-xl font-bold shadow-lg flex items-center justify-center gap-2 group"
-                  >
-                    Register Now <ExternalLink className="w-5 h-5 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-transform" />
-                  </Link>
-                ) : (
-                  <button disabled className="w-full bg-black/5 dark:bg-white/5 text-foreground/50 py-4 rounded-xl font-bold cursor-not-allowed">
-                    Registrations Closed
-                  </button>
-                )}
-                
-                <div className="mt-6 flex flex-col gap-3 text-sm text-foreground/60 border-t border-black/5 dark:border-white/10 pt-6">
-                  <div className="flex justify-between items-center">
-                    <span>Posted On</span>
-                    <span className="font-semibold text-foreground">{new Date(post.created_at).toLocaleDateString()}</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span>Location</span>
-                    <span className="font-semibold text-foreground capitalize">{post.location || meta.venue_type || "TBD"}</span>
-                  </div>
-                </div>
-              </div>
-
-            </div>
           </div>
         </div>
 
