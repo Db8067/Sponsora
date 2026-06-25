@@ -35,6 +35,20 @@ export default function Navbar() {
         
         {/* Desktop Nav */}
         <div className="hidden md:flex items-center gap-8">
+          <div className="flex items-center gap-6">
+            {!isLoaded ? (
+              <div className="w-8 h-8 rounded-full bg-white/5 animate-pulse" />
+            ) : isSignedIn ? (
+              <UserButton userProfileMode="navigation" userProfileUrl="/profile" />
+            ) : (
+              <Link href="/sign-in" className="text-sm font-medium text-foreground/60 hover:text-foreground transition-colors">
+                Sign In
+              </Link>
+            )}
+          </div>
+
+          <div className="h-4 w-px bg-foreground/10" />
+
           <div className="flex items-center gap-8">
             {navLinks.map((link) => (
               <Link 
@@ -49,32 +63,24 @@ export default function Navbar() {
 
           <div className="h-4 w-px bg-foreground/10" />
 
-           <div className="flex items-center gap-6">
-             {!isLoaded ? (
-               <div className="w-8 h-8 rounded-full bg-white/5 animate-pulse" />
-             ) : isSignedIn ? (
-               <>
-                 <Link 
-                   href={`/dashboard/${(user?.publicMetadata?.role as string) || 'user'}`}
-                   className="text-sm font-medium hover:text-primary transition-colors"
-                 >
-                   Dashboard
-                 </Link>
-                 <UserButton userProfileMode="navigation" userProfileUrl="/profile" />
-               </>
-             ) : (
-               <>
-                 <Link href="/sign-in" className="text-sm font-medium text-foreground/60 hover:text-foreground transition-colors">
-                   Sign In
-                 </Link>
-               </>
-             )}
-             <ThemeToggle />
-           </div>
+          <div className="flex items-center gap-6">
+            <ThemeToggle />
+          </div>
         </div>
 
         {/* Mobile Toggle */}
         <div className="flex md:hidden items-center gap-4">
+          {!isLoaded ? (
+            <div className="w-8 h-8 rounded-full bg-white/5 animate-pulse" />
+          ) : isSignedIn ? (
+            <UserButton userProfileMode="navigation" userProfileUrl="/profile" />
+          ) : (
+            <Link href="/sign-in" className="text-sm font-medium text-foreground/60 hover:text-foreground transition-colors">
+              Sign In
+            </Link>
+          )}
+
+          {isLoaded && <span className="text-foreground/20">|</span>}
           <ThemeToggle />
           <button
             onClick={() => setIsOpen(!isOpen)}
@@ -128,16 +134,13 @@ export default function Navbar() {
 
                <div className="pt-8 border-t border-white/5 flex flex-col gap-4">
                  {isSignedIn ? (
-                   <>
-                     <Link 
-                       href={`/dashboard/${(user?.publicMetadata?.role as string) || 'user'}`}
-                       onClick={() => setIsOpen(false)}
-                       className="text-lg font-bold"
-                     >
-                       Dashboard
-                     </Link>
-                     <UserButton />
-                   </>
+                   <Link 
+                     href="/profile"
+                     onClick={() => setIsOpen(false)}
+                     className="text-lg font-bold text-foreground hover:text-primary transition-colors"
+                   >
+                     Manage Account
+                   </Link>
                  ) : (
                    <div className="flex items-center gap-4">
                      <Link href="/sign-in" className="text-lg font-medium text-foreground/60 hover:text-foreground transition-colors" onClick={() => setIsOpen(false)}>
