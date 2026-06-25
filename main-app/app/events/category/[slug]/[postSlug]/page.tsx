@@ -93,12 +93,7 @@ export default async function EventDetailsPage({ params }: { params: Promise<{ s
             <ShareButtons title={post.title} />
         </div>
 
-        {/* Carousel Section */}
-        {allImages.length > 0 && (
-          <div className="w-full shadow-2xl rounded-[2rem]">
-            <EventImageCarousel images={allImages} />
-          </div>
-        )}
+
 
         {/* Register CTA (Shifted above About section) */}
         <div className="bg-gradient-to-r from-primary/10 to-accent/10 rounded-[2rem] border border-primary/20 p-8 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-6">
@@ -182,6 +177,13 @@ export default async function EventDetailsPage({ params }: { params: Promise<{ s
                     </span>
                   ))}
                 </div>
+              </div>
+            )}
+
+            {/* Carousel Section (Moved to the end) */}
+            {allImages.length > 0 && (
+              <div className="w-full shadow-2xl rounded-[2rem] mt-4 overflow-hidden">
+                <EventImageCarousel images={allImages} />
               </div>
             )}
 

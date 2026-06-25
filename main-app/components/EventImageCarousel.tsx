@@ -12,7 +12,7 @@ export default function EventImageCarousel({ images }: { images: string[] }) {
   const prevImage = () => setCurrentIndex((prev) => (prev - 1 + images.length) % images.length);
 
   return (
-    <div className="relative w-full aspect-[4/5] sm:aspect-video md:aspect-[21/9] bg-black/5 dark:bg-white/5 rounded-[2rem] overflow-hidden group">
+    <div className="relative w-full max-w-lg mx-auto aspect-square bg-black/5 dark:bg-white/5 rounded-[2rem] overflow-hidden group shadow-xl">
       <img 
         src={images[currentIndex]} 
         alt={`Event image ${currentIndex + 1}`} 
