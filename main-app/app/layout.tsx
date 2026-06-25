@@ -28,7 +28,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    /* <ClerkProvider> */
+    <ClerkProvider>
       <html lang="en" className={`${jakarta.variable} ${inter.variable} antialiased`} suppressHydrationWarning>
         <body className="flex min-h-screen flex-col font-sans bg-background text-foreground transition-colors">
           <ThemeProvider
@@ -44,6 +44,6 @@ export default function RootLayout({
           </ThemeProvider>
         </body>
       </html>
-    /* </ClerkProvider> */
+    </ClerkProvider>
   );
 }

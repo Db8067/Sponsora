@@ -10,9 +10,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import UserProfile from "./UserProfile";
 
 export default function Navbar() {
-  const isLoaded = true;
-  const isSignedIn = false;
-  const user: any = { publicMetadata: { role: 'user' } };
+  const { isLoaded, isSignedIn, user } = useUser();
   
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -57,16 +55,18 @@ export default function Navbar() {
              ) : isSignedIn ? (
                <>
                  <Link 
-                   href={`/dashboard/${user.publicMetadata.role || 'user'}`}
+                   href={`/dashboard/${(user?.publicMetadata?.role as string) || 'user'}`}
                    className="text-sm font-medium hover:text-primary transition-colors"
                  >
                    Dashboard
                  </Link>
-                 <UserProfile />
+                 <UserButton userProfileMode="navigation" userProfileUrl="/profile" />
                </>
              ) : (
                <>
-                 {/* Sign In/Up Temporarily Removed */}
+                 <Link href="/sign-in" className="text-sm font-medium text-foreground/60 hover:text-foreground transition-colors">
+                   Sign In
+                 </Link>
                </>
              )}
              <ThemeToggle />
@@ -130,17 +130,19 @@ export default function Navbar() {
                  {isSignedIn ? (
                    <>
                      <Link 
-                       href={`/dashboard/${user.publicMetadata.role || 'user'}`}
+                       href={`/dashboard/${(user?.publicMetadata?.role as string) || 'user'}`}
                        onClick={() => setIsOpen(false)}
                        className="text-lg font-bold"
                      >
                        Dashboard
                      </Link>
-                     <UserProfile />
+                     <UserButton />
                    </>
                  ) : (
                    <div className="flex items-center gap-4">
-                     {/* Mobile Sign In/Up Temporarily Removed */}
+                     <Link href="/sign-in" className="text-lg font-medium text-foreground/60 hover:text-foreground transition-colors" onClick={() => setIsOpen(false)}>
+                       Sign In
+                     </Link>
                    </div>
                  )}
                </div>
