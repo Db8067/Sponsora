@@ -5,7 +5,7 @@ export default function SignUpPage({ searchParams }: { searchParams: { redirect_
 
   return (
     <div className="min-h-[100dvh] flex items-center justify-center pt-20 pb-10 bg-background">
-      <SignUp forceRedirectUrl={`/sync-user${redirectParams}`} signInUrl={`/sign-in${redirectParams}`} />
+      <SignUp forceRedirectUrl={searchParams.redirect_url || '/'} signInUrl={`/sign-in${redirectParams}`} />
     </div>
   );
 }
