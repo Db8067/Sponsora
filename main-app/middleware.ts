@@ -6,7 +6,8 @@ const isPublicRoute = createRouteMatcher([
   '/api/webhooks/clerk(.*)',
   '/sign-in(.*)',
   '/sign-up(.*)',
-  '/get-started(.*)'
+  '/get-started(.*)',
+  '/unauthorized(.*)'
 ]);
 
 const isOrganizerRoute = createRouteMatcher(['/dashboard/organizer(.*)', '/sponsorship/request(.*)']);
@@ -30,15 +31,15 @@ export default clerkMiddleware(async (auth, req) => {
       
       // Enforce RBAC
       if (isOrganizerRoute(req) && role !== 'organizer') {
-        return NextResponse.redirect(new URL('/get-started', req.url));
+        return NextResponse.redirect(new URL(`/unauthorized?role=${role}&attempted=organizer`, req.url));
       }
       
       if (isSponsorRoute(req) && role !== 'sponsor') {
-        return NextResponse.redirect(new URL('/get-started', req.url));
+        return NextResponse.redirect(new URL(`/unauthorized?role=${role}&attempted=sponsor`, req.url));
       }
       
       if (isParticipantRoute(req) && role !== 'participant') {
-        return NextResponse.redirect(new URL('/get-started', req.url));
+        return NextResponse.redirect(new URL(`/unauthorized?role=${role}&attempted=participant`, req.url));
       }
     } catch (e) {
       console.error("Error fetching user role in middleware", e);
