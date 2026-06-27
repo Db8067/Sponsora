@@ -1,6 +1,7 @@
 import { SignIn } from "@clerk/nextjs";
 
-export default function SignInPage({ searchParams }: { searchParams: { redirect_url?: string } }) {
+export default async function SignInPage(props: { searchParams: Promise<{ redirect_url?: string }> }) {
+  const searchParams = await props.searchParams;
   const redirectParams = searchParams.redirect_url ? `?redirect_url=${encodeURIComponent(searchParams.redirect_url)}` : '';
   
   return (
