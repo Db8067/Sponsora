@@ -10,11 +10,6 @@ export default async function SignUpPage(props: { searchParams: Promise<{ redire
 
   return (
     <div className="min-h-[100dvh] flex flex-col items-center justify-center pt-20 pb-10 bg-background gap-4">
-      {searchParams.role && (
-        <div className="bg-primary/10 text-primary border border-primary/20 px-4 py-2 rounded-lg text-sm font-medium">
-          Signing up as: <span className="capitalize">{searchParams.role}</span>
-        </div>
-      )}
       <SignUp 
         forceRedirectUrl={searchParams.redirect_url || '/'} 
         signInUrl={`/sign-in${queryString}`}
