@@ -27,27 +27,36 @@ export default clerkMiddleware(async (auth, req) => {
     try {
       const client = await clerkClient();
       const user = await client.users.getUser(authObj.userId);
-      const role = user.unsafeMetadata?.role || 'participant';
+      // Handle role as either string (legacy) or array
+      const rawRole = user.unsafeMetadata?.role;
+      let roles: string[] = [];
+      if (Array.isArray(rawRole)) {
+        roles = rawRole;
+      } else if (typeof rawRole === 'string') {
+        roles = [rawRole];
+      } else {
+        roles = ['participant'];
+      }
       
       // Enforce RBAC
       if (req.nextUrl.pathname.startsWith('/admin')) {
-        const isAdmin = role === 'admin' || 
+        const isAdmin = roles.includes('admin') || 
                         user.emailAddresses.some(e => e.emailAddress === 'devanshb3456@gmail.com' || e.emailAddress === 'devanshb680@gmail.com');
         if (!isAdmin) {
-          return NextResponse.redirect(new URL(`/unauthorized?role=${role}&attempted=admin`, req.url));
+          return NextResponse.redirect(new URL(`/unauthorized?role=${roles[0]}&attempted=admin`, req.url));
         }
       }
       
-      if (isOrganizerRoute(req) && role !== 'organizer') {
-        return NextResponse.redirect(new URL(`/unauthorized?role=${role}&attempted=organizer`, req.url));
+      if (isOrganizerRoute(req) && !roles.includes('organizer')) {
+        return NextResponse.redirect(new URL(`/unauthorized?role=${roles[0]}&attempted=organizer`, req.url));
       }
       
-      if (isSponsorRoute(req) && role !== 'sponsor') {
-        return NextResponse.redirect(new URL(`/unauthorized?role=${role}&attempted=sponsor`, req.url));
+      if (isSponsorRoute(req) && !roles.includes('sponsor')) {
+        return NextResponse.redirect(new URL(`/unauthorized?role=${roles[0]}&attempted=sponsor`, req.url));
       }
       
-      if (isParticipantRoute(req) && role !== 'participant') {
-        return NextResponse.redirect(new URL(`/unauthorized?role=${role}&attempted=participant`, req.url));
+      if (isParticipantRoute(req) && !roles.includes('participant')) {
+        return NextResponse.redirect(new URL(`/unauthorized?role=${roles[0]}&attempted=participant`, req.url));
       }
     } catch (e) {
       console.error("Error fetching user role in middleware", e);

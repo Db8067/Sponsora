@@ -1,10 +1,11 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { User, Trash2, X, CheckCircle, Search, ShieldAlert, UserCog } from 'lucide-react';
+import { User, Trash2, X, CheckCircle, Search, ShieldAlert, UserCog, Check } from 'lucide-react';
 import { getMainAppUsers, deleteMainAppUser, updateMainAppUserRole } from './actions';
 import { useUser } from '@clerk/nextjs';
 import { redirect } from 'next/navigation';
+import Image from 'next/image';
 
 export default function AdminDashboardPage() {
     const { user, isLoaded } = useUser();
@@ -13,6 +14,16 @@ export default function AdminDashboardPage() {
     const [activeTab, setActiveTab] = useState('participant');
     const [selectedUser, setSelectedUser] = useState<any | null>(null);
     const [searchQuery, setSearchQuery] = useState('');
+    const [selectedRoles, setSelectedRoles] = useState<string[]>([]);
+    
+    const [toast, setToast] = useState<{ message: string, type: 'success' | 'error' } | null>(null);
+
+    useEffect(() => {
+        if (toast) {
+            const timer = setTimeout(() => setToast(null), 3000);
+            return () => clearTimeout(timer);
+        }
+    }, [toast]);
 
     useEffect(() => {
         if (isLoaded && !user) {
@@ -39,14 +50,28 @@ export default function AdminDashboardPage() {
     }, [isLoaded, user]);
 
     if (!isLoaded || !user) {
-        return <div className="p-12 text-center">Loading...</div>;
+        return <div className="p-12 text-center font-semibold text-gray-500">Loading...</div>;
     }
 
     const filteredUsers = users.filter(u => 
-        u.role === activeTab && 
+        (u.roles?.includes(activeTab)) && 
         (u.email?.toLowerCase().includes(searchQuery.toLowerCase()) || 
          u.name?.toLowerCase().includes(searchQuery.toLowerCase()))
     );
+
+    const openProfile = (u: any) => {
+        setSelectedUser(u);
+        setSelectedRoles(u.roles || ['participant']);
+    };
+
+    const toggleRole = (role: string) => {
+        if (selectedRoles.includes(role)) {
+            if (selectedRoles.length === 1) return; // Must have at least one role
+            setSelectedRoles(selectedRoles.filter(r => r !== role));
+        } else {
+            setSelectedRoles([...selectedRoles, role]);
+        }
+    };
 
     const handleDeleteUser = async (userId: string) => {
         if (!confirm('Are you sure you want to permanently delete this user? This cannot be undone.')) return;
@@ -55,27 +80,37 @@ export default function AdminDashboardPage() {
             await deleteMainAppUser(userId);
             setUsers(users.filter(u => u.id !== userId));
             setSelectedUser(null);
-            alert('User deleted successfully.');
+            setToast({ message: 'User deleted successfully.', type: 'success' });
         } catch (err) {
             console.error('Error deleting user:', err);
-            alert('Failed to delete user.');
+            setToast({ message: 'Failed to delete user.', type: 'error' });
         }
     };
 
-    const handleChangeRole = async (userId: string, newRole: string) => {
+    const handleSaveRoles = async () => {
+        if (!selectedUser) return;
         try {
-            await updateMainAppUserRole(userId, newRole);
-            setUsers(users.map(u => u.id === userId ? { ...u, role: newRole } : u));
+            await updateMainAppUserRole(selectedUser.id, selectedRoles);
+            setUsers(users.map(u => u.id === selectedUser.id ? { ...u, roles: selectedRoles } : u));
             setSelectedUser(null);
-            alert(`User role updated to ${newRole}.`);
+            setToast({ message: `User roles updated successfully.`, type: 'success' });
         } catch (err) {
             console.error('Error updating user role:', err);
-            alert('Failed to update user role.');
+            setToast({ message: 'Failed to update user roles.', type: 'error' });
         }
     };
 
     return (
-        <div className="p-6 max-w-7xl mx-auto pt-24 min-h-screen">
+        <div className="p-6 max-w-7xl mx-auto pt-24 min-h-screen relative">
+            
+            {/* Custom Toast Notification */}
+            {toast && (
+                <div className={`fixed top-6 left-1/2 -translate-x-1/2 z-[200] flex items-center gap-3 px-6 py-3 rounded-full shadow-lg font-bold text-white transition-all animate-in fade-in slide-in-from-top-4 ${toast.type === 'success' ? 'bg-green-500' : 'bg-red-500'}`}>
+                    {toast.type === 'success' ? <CheckCircle size={20} /> : <ShieldAlert size={20} />}
+                    {toast.message}
+                </div>
+            )}
+
             <div className="mb-8">
                 <h1 className="text-3xl font-black text-gray-900 tracking-tight flex items-center gap-3">
                     <UserCog className="text-indigo-600" size={32} />
@@ -126,19 +161,25 @@ export default function AdminDashboardPage() {
                 </div>
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {filteredUsers.map(user => (
-                        <div key={user.id} className="bg-white p-5 rounded-3xl border border-gray-100 shadow-sm hover:shadow-md transition-all">
+                    {filteredUsers.map(u => (
+                        <div key={u.id} className="bg-white p-5 rounded-3xl border border-gray-100 shadow-sm hover:shadow-md transition-all">
                             <div className="flex items-center gap-4 mb-4">
-                                <div className="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center font-bold text-xl uppercase">
-                                    {user.name?.[0] || user.email[0]}
-                                </div>
+                                {u.imageUrl ? (
+                                    <div className="w-12 h-12 relative rounded-2xl overflow-hidden shrink-0">
+                                        <Image src={u.imageUrl} alt={u.name} fill className="object-cover" />
+                                    </div>
+                                ) : (
+                                    <div className="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center font-bold text-xl uppercase shrink-0">
+                                        {u.name?.[0] || u.email[0]}
+                                    </div>
+                                )}
                                 <div className="flex-1 min-w-0">
-                                    <h4 className="font-bold text-gray-900 truncate">{user.name || 'Unnamed User'}</h4>
-                                    <p className="text-sm text-gray-500 truncate">{user.email}</p>
+                                    <h4 className="font-bold text-gray-900 truncate">{u.name || 'Unnamed User'}</h4>
+                                    <p className="text-sm text-gray-500 truncate">{u.email}</p>
                                 </div>
                             </div>
                             <button 
-                                onClick={() => setSelectedUser(user)}
+                                onClick={() => openProfile(u)}
                                 className="w-full py-2 bg-gray-50 hover:bg-indigo-50 text-gray-700 hover:text-indigo-600 font-semibold rounded-xl transition-colors text-sm"
                             >
                                 View Profile
@@ -152,7 +193,7 @@ export default function AdminDashboardPage() {
             {selectedUser && (
                 <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
                     <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setSelectedUser(null)} />
-                    <div className="relative bg-white w-full max-w-md rounded-3xl shadow-2xl p-6 overflow-hidden">
+                    <div className="relative bg-white w-full max-w-md rounded-3xl shadow-2xl p-6 overflow-hidden animate-in zoom-in-95 duration-200">
                         <button 
                             onClick={() => setSelectedUser(null)}
                             className="absolute top-4 right-4 p-2 text-gray-400 hover:text-gray-900 bg-gray-50 hover:bg-gray-100 rounded-full transition-colors"
@@ -161,33 +202,54 @@ export default function AdminDashboardPage() {
                         </button>
                         
                         <div className="text-center mb-6">
-                            <div className="w-20 h-20 mx-auto bg-indigo-100 text-indigo-600 rounded-3xl flex items-center justify-center font-black text-3xl uppercase mb-4 shadow-inner">
-                                {selectedUser.name?.[0] || selectedUser.email[0]}
-                            </div>
+                            {selectedUser.imageUrl ? (
+                                <div className="w-20 h-20 relative rounded-3xl overflow-hidden mx-auto mb-4 shadow-md">
+                                    <Image src={selectedUser.imageUrl} alt={selectedUser.name} fill className="object-cover" />
+                                </div>
+                            ) : (
+                                <div className="w-20 h-20 mx-auto bg-indigo-100 text-indigo-600 rounded-3xl flex items-center justify-center font-black text-3xl uppercase mb-4 shadow-inner">
+                                    {selectedUser.name?.[0] || selectedUser.email[0]}
+                                </div>
+                            )}
+                            
                             <h2 className="text-xl font-bold text-gray-900">{selectedUser.name || 'Unnamed User'}</h2>
                             <p className="text-gray-500">{selectedUser.email}</p>
-                            <span className="inline-flex items-center gap-1 mt-2 px-3 py-1 bg-indigo-50 text-indigo-700 rounded-full text-xs font-bold uppercase tracking-wider">
-                                <CheckCircle size={14} /> {selectedUser.role}
-                            </span>
+                            
+                            <div className="flex flex-wrap items-center justify-center gap-2 mt-3">
+                                {selectedUser.roles?.map((r: string) => (
+                                    <span key={r} className="inline-flex items-center gap-1 px-3 py-1 bg-indigo-50 text-indigo-700 rounded-full text-[10px] font-black uppercase tracking-widest">
+                                        <CheckCircle size={12} /> {r}
+                                    </span>
+                                ))}
+                            </div>
                         </div>
 
                         <div className="space-y-4">
-                            <div className="p-4 bg-gray-50 rounded-2xl border border-gray-100">
-                                <h3 className="text-sm font-bold text-gray-900 mb-2">Override Permissions</h3>
-                                <p className="text-xs text-gray-500 mb-3">Change this user's primary role to allow them access to different categories.</p>
-                                <select 
-                                    className="w-full bg-white border border-gray-200 text-gray-700 rounded-xl py-2 px-3 text-sm font-medium focus:ring-2 focus:ring-indigo-500 outline-none"
-                                    value={selectedUser.role}
-                                    onChange={(e) => handleChangeRole(selectedUser.id, e.target.value)}
+                            <div className="p-5 bg-gray-50 rounded-2xl border border-gray-100">
+                                <h3 className="text-sm font-bold text-gray-900 mb-1">Override Permissions</h3>
+                                <p className="text-xs text-gray-500 mb-4 leading-relaxed">Select the roles you want to assign to this user. They can access multiple portals if assigned.</p>
+                                
+                                <div className="space-y-2 mb-4">
+                                    {['participant', 'organizer', 'sponsor'].map((role) => (
+                                        <label key={role} className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-all ${selectedRoles.includes(role) ? 'bg-indigo-50 border-indigo-200' : 'bg-white border-gray-200 hover:bg-gray-50'}`}>
+                                            <div className={`w-5 h-5 rounded-md flex items-center justify-center shrink-0 transition-colors ${selectedRoles.includes(role) ? 'bg-indigo-600 text-white' : 'border border-gray-300'}`}>
+                                                {selectedRoles.includes(role) && <Check size={14} strokeWidth={3} />}
+                                            </div>
+                                            <span className={`text-sm font-semibold capitalize ${selectedRoles.includes(role) ? 'text-indigo-900' : 'text-gray-600'}`}>{role}</span>
+                                        </label>
+                                    ))}
+                                </div>
+                                
+                                <button 
+                                    onClick={handleSaveRoles}
+                                    className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded-xl shadow-sm transition-all"
                                 >
-                                    <option value="participant">Participant</option>
-                                    <option value="organizer">Organizer</option>
-                                    <option value="sponsor">Sponsor</option>
-                                </select>
+                                    Save Roles
+                                </button>
                             </div>
 
-                            <div className="p-4 bg-red-50 rounded-2xl border border-red-100">
-                                <h3 className="text-sm font-bold text-red-900 mb-2 text-center">Danger Zone</h3>
+                            <div className="p-5 bg-red-50 rounded-2xl border border-red-100">
+                                <h3 className="text-sm font-bold text-red-900 mb-3 text-center">Danger Zone</h3>
                                 <button 
                                     onClick={() => handleDeleteUser(selectedUser.id)}
                                     className="w-full flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 text-white py-2.5 rounded-xl font-bold text-sm transition-colors shadow-sm"

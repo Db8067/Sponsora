@@ -13,13 +13,23 @@ export async function getMainAppUsers() {
         const users = response.data.map(user => {
             const email = user.emailAddresses[0]?.emailAddress || '';
             const name = [user.firstName, user.lastName].filter(Boolean).join(' ');
-            const role = user.unsafeMetadata?.role || 'participant';
+            
+            let roles: string[] = [];
+            const rawRole = user.unsafeMetadata?.role;
+            if (Array.isArray(rawRole)) {
+                roles = rawRole;
+            } else if (typeof rawRole === 'string') {
+                roles = [rawRole];
+            } else {
+                roles = ['participant']; // Default fallback
+            }
             
             return {
                 id: user.id,
                 email,
                 name: name || 'Unnamed User',
-                role,
+                roles,
+                imageUrl: user.imageUrl,
                 created_at: user.createdAt
             };
         });
@@ -42,12 +52,12 @@ export async function deleteMainAppUser(userId: string) {
     }
 }
 
-export async function updateMainAppUserRole(userId: string, newRole: string) {
+export async function updateMainAppUserRole(userId: string, newRoles: string[]) {
     try {
         const client = await clerkClient();
         await client.users.updateUserMetadata(userId, {
             unsafeMetadata: {
-                role: newRole
+                role: newRoles
             }
         });
         return true;
