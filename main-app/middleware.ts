@@ -30,6 +30,14 @@ export default clerkMiddleware(async (auth, req) => {
       const role = user.unsafeMetadata?.role || 'participant';
       
       // Enforce RBAC
+      if (req.nextUrl.pathname.startsWith('/admin')) {
+        const isAdmin = role === 'admin' || 
+                        user.emailAddresses.some(e => e.emailAddress === 'devanshb3456@gmail.com' || e.emailAddress === 'devanshb680@gmail.com');
+        if (!isAdmin) {
+          return NextResponse.redirect(new URL(`/unauthorized?role=${role}&attempted=admin`, req.url));
+        }
+      }
+      
       if (isOrganizerRoute(req) && role !== 'organizer') {
         return NextResponse.redirect(new URL(`/unauthorized?role=${role}&attempted=organizer`, req.url));
       }
