@@ -63,7 +63,7 @@ export default function UnauthorizedPage({ searchParams }: { searchParams: { rol
 
         <div className="pt-2">
           <Link href="/get-started" className="text-sm text-gray-400 hover:text-indigo-600 font-medium transition-colors">
-            Wrong Portal, switch back to the {role !== 'unknown' ? role.charAt(0).toUpperCase() + role.slice(1) : ''} portal
+            Oopsie! Took a wrong turn? Let's teleport you back to your magical portal! ✨🚀
           </Link>
         </div>
 

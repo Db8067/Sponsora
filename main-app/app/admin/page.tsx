@@ -231,12 +231,16 @@ export default function AdminDashboardPage() {
                                 
                                 <div className="space-y-2 mb-4">
                                     {['participant', 'organizer', 'sponsor'].map((role) => (
-                                        <label key={role} className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-all ${selectedRoles.includes(role) ? 'bg-indigo-50 border-indigo-200' : 'bg-white border-gray-200 hover:bg-gray-50'}`}>
+                                        <div 
+                                            key={role} 
+                                            onClick={() => toggleRole(role)}
+                                            className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-all ${selectedRoles.includes(role) ? 'bg-indigo-50 border-indigo-200' : 'bg-white border-gray-200 hover:bg-gray-50'}`}
+                                        >
                                             <div className={`w-5 h-5 rounded-md flex items-center justify-center shrink-0 transition-colors ${selectedRoles.includes(role) ? 'bg-indigo-600 text-white' : 'border border-gray-300'}`}>
                                                 {selectedRoles.includes(role) && <Check size={14} strokeWidth={3} />}
                                             </div>
                                             <span className={`text-sm font-semibold capitalize ${selectedRoles.includes(role) ? 'text-indigo-900' : 'text-gray-600'}`}>{role}</span>
-                                        </label>
+                                        </div>
                                     ))}
                                 </div>
                                 
