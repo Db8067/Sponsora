@@ -8,17 +8,17 @@ import { motion, AnimatePresence } from "framer-motion";
 const portalOptions = [
   {
     title: "Discover Events",
-    href: "/events",
+    href: "/sign-up?role=participant&redirect_url=/events",
     bgImage: "/images/india-gate.png",
   },
   {
     title: "Ask for Sponsorship",
-    href: "/sponsorship/request",
+    href: "/sign-up?role=organizer&redirect_url=/dashboard/organizer",
     bgImage: "/images/doodle_ask_sponsorship.png",
   },
   {
     title: "Become a Sponsor",
-    href: "/dashboard/sponsor",
+    href: "/sign-up?role=sponsor&redirect_url=/dashboard/sponsor",
     bgImage: "/images/doodle_become_sponsor_v2.png",
   },
 ];

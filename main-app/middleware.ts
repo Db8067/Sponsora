@@ -1,16 +1,48 @@
-import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
+import { clerkMiddleware, createRouteMatcher, clerkClient } from '@clerk/nextjs/server';
+import { NextResponse } from 'next/server';
 
 const isPublicRoute = createRouteMatcher([
   '/',
-  '/api/webhooks/clerk',
+  '/api/webhooks/clerk(.*)',
   '/sign-in(.*)',
   '/sign-up(.*)',
   '/get-started(.*)'
 ]);
 
+const isOrganizerRoute = createRouteMatcher(['/dashboard/organizer(.*)', '/sponsorship/request(.*)']);
+const isSponsorRoute = createRouteMatcher(['/dashboard/sponsor(.*)']);
+const isParticipantRoute = createRouteMatcher(['/events(.*)']);
+
 export default clerkMiddleware(async (auth, req) => {
   if (!isPublicRoute(req)) {
-    await auth.protect();
+    const authObj = await auth();
+    
+    if (!authObj.userId) {
+      await auth.protect();
+      return;
+    }
+    
+    // Fetch the user to get their role from unsafeMetadata
+    try {
+      const client = await clerkClient();
+      const user = await client.users.getUser(authObj.userId);
+      const role = user.unsafeMetadata?.role || 'participant';
+      
+      // Enforce RBAC
+      if (isOrganizerRoute(req) && role !== 'organizer') {
+        return NextResponse.redirect(new URL('/get-started', req.url));
+      }
+      
+      if (isSponsorRoute(req) && role !== 'sponsor') {
+        return NextResponse.redirect(new URL('/get-started', req.url));
+      }
+      
+      if (isParticipantRoute(req) && role !== 'participant') {
+        return NextResponse.redirect(new URL('/get-started', req.url));
+      }
+    } catch (e) {
+      console.error("Error fetching user role in middleware", e);
+    }
   }
 });
 
