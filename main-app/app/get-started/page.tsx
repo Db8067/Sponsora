@@ -12,11 +12,6 @@ const portalOptions = [
     bgImage: "/images/india-gate.png",
   },
   {
-    title: "Organise Event",
-    href: "/dashboard/organizer",
-    bgImage: "/images/doodle_organize.png",
-  },
-  {
     title: "Ask for Sponsorship",
     href: "/sponsorship/request",
     bgImage: "/images/doodle_ask_sponsorship.png",
