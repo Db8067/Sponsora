@@ -32,6 +32,8 @@ export default function GetStartedPage() {
     // Smooth transition overlay timeout before actually pushing
     setTimeout(() => {
       router.push(href);
+      // Clean up state in case user navigates back (bfcache / state preservation)
+      setTimeout(() => setIsTransitioning(false), 500);
     }, 1000);
   };
 
