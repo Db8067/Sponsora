@@ -61,7 +61,10 @@ export default function AdminDashboardPage() {
                 .from('sponsora_posts')
                 .select('*, sponsora_categories(name)')
                 .order('created_at', { ascending: false });
-            if (data) setEvents(data);
+            if (data) {
+                // Filter only events created by organizers
+                setEvents(data.filter(e => e.metadata?.organizer_id));
+            }
         } catch (err) {
             console.error('Error fetching events:', err);
         } finally {

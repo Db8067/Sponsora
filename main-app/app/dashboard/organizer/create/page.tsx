@@ -18,6 +18,8 @@ export default function CreateEventPage() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [categoryId, setCategoryId] = useState('');
+  const [customCategoryName, setCustomCategoryName] = useState('');
+  const [applyLink, setApplyLink] = useState('');
   const [dateInfo, setDateInfo] = useState('');
   const [venueType, setVenueType] = useState('online');
   const [venueAddress, setVenueAddress] = useState('');
@@ -64,8 +66,15 @@ export default function CreateEventPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!isLoaded || !user) return;
-    if (!title || !categoryId || !posterFile) {
-      setError('Title, Category, and Poster Image are required.');
+    
+    if (!title) {
+      setError('Event Title is required.');
+      window.scrollTo(0, 0);
+      return;
+    }
+    
+    if (!categoryId && !customCategoryName) {
+      setError('Please select or enter a Category.');
       window.scrollTo(0, 0);
       return;
     }
@@ -74,8 +83,33 @@ export default function CreateEventPage() {
     setError('');
 
     try {
-      // 1. Upload Poster
-      const posterUrl = await handleFileUpload(posterFile, 'sponsora_posters');
+      let finalCategoryId = categoryId;
+      
+      // Handle Custom Category
+      if (categoryId === 'custom' && customCategoryName) {
+        const customSlug = customCategoryName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+        const { data: existing } = await supabase.from('sponsora_categories').select('id').eq('slug', customSlug).single();
+        
+        if (existing) {
+          finalCategoryId = existing.id;
+        } else {
+          const { data: newCat, error: catErr } = await supabase.from('sponsora_categories').insert([{
+            name: customCategoryName.trim(),
+            slug: customSlug,
+            type: 'event',
+            sort_order: 99
+          }]).select().single();
+          
+          if (catErr) throw new Error("Failed to create category: " + catErr.message);
+          finalCategoryId = newCat.id;
+        }
+      }
+
+      // 1. Upload Poster (Optional now)
+      let posterUrl = null;
+      if (posterFile) {
+        posterUrl = await handleFileUpload(posterFile, 'sponsora_posters');
+      }
       
       // 2. Upload PDF (if any)
       let pdfUrl = null;
@@ -88,10 +122,11 @@ export default function CreateEventPage() {
 
       // 4. Save to Database
       const payload = {
-        category_id: categoryId,
+        category_id: finalCategoryId,
         title: title.trim(),
         description: description.trim() || null,
         image_url: posterUrl,
+        apply_link: applyLink.trim() || null,
         slug: generatedSlug,
         date_info: dateInfo.trim() || null,
         metadata: {
@@ -165,14 +200,37 @@ export default function CreateEventPage() {
                 value={categoryId}
                 onChange={e => setCategoryId(e.target.value)}
                 className="w-full bg-black/5 dark:bg-white/5 border border-transparent rounded-xl px-4 py-3 focus:outline-none focus:border-primary text-foreground transition-colors"
-                required
+                required={categoryId !== 'custom'}
               >
                 <option value="">Select a category</option>
                 {categories.map(cat => (
                   <option key={cat.id} value={cat.id}>{cat.name}</option>
                 ))}
+                <option value="custom">Other (Create New)</option>
               </select>
+              {categoryId === 'custom' && (
+                <input 
+                  type="text" 
+                  value={customCategoryName}
+                  onChange={e => setCustomCategoryName(e.target.value)}
+                  placeholder="Enter new category name..."
+                  className="w-full mt-2 bg-black/5 dark:bg-white/5 border border-primary/30 rounded-xl px-4 py-3 focus:outline-none focus:border-primary text-foreground transition-colors animate-in fade-in slide-in-from-top-2"
+                  required
+                />
+              )}
             </div>
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-sm font-bold text-foreground">Event Link (External Link)</label>
+            <input 
+              type="url" 
+              value={applyLink}
+              onChange={e => setApplyLink(e.target.value)}
+              placeholder="e.g., https://lu.ma/event-page or unstop.com/..."
+              className="w-full bg-black/5 dark:bg-white/5 border border-transparent rounded-xl px-4 py-3 focus:outline-none focus:border-primary text-foreground transition-colors"
+            />
+            <p className="text-xs text-foreground/50">Link to Unstop, Luma, or your event portal where users can register.</p>
           </div>
 
           <div className="space-y-2">
@@ -286,14 +344,16 @@ export default function CreateEventPage() {
             
             {/* Poster Upload */}
             <div className="space-y-3">
-              <label className="text-sm font-bold text-foreground">Event Poster (Image) *</label>
+              <label className="text-sm font-bold text-foreground flex items-center justify-between">
+                <span>Event Poster (Image)</span>
+                <span className="text-xs font-medium text-foreground/40 font-normal">Optional</span>
+              </label>
               <div className="relative border-2 border-dashed border-black/10 dark:border-white/10 rounded-2xl p-8 flex flex-col items-center justify-center text-center hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer group">
                 <input 
                   type="file" 
                   accept="image/*"
                   onChange={(e) => setPosterFile(e.target.files?.[0] || null)}
                   className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" 
-                  required
                 />
                 {posterFile ? (
                   <>
