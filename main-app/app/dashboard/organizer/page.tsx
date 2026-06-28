@@ -70,16 +70,13 @@ export default async function OrganizerDashboard() {
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
           {events.map(event => (
             <div key={event.id} className="group flex flex-col bg-white dark:bg-[#1A1A1D] border border-black/5 dark:border-white/10 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300">
-              <div className="h-48 relative overflow-hidden bg-black/5 dark:bg-white/5">
-                 <img src={event.image_url} alt={event.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                 <div className="absolute top-4 left-4">
-                   <span className={`px-3 py-1.5 rounded-full text-xs font-bold shadow-sm backdrop-blur-md ${event.metadata?.status === 'pending' ? 'bg-orange-500/90 text-white' : 'bg-green-500/90 text-white'}`}>
-                     {event.metadata?.status === 'pending' ? 'Pending Review' : 'Active'}
-                   </span>
-                 </div>
-              </div>
               <div className="p-6 flex flex-col flex-1">
-                <div className="text-xs font-bold text-primary mb-2 uppercase tracking-wider">{event.sponsora_categories?.name}</div>
+                <div className="flex justify-between items-start mb-4">
+                  <div className="text-xs font-bold text-primary uppercase tracking-wider">{event.metadata?.organizer_category || event.sponsora_categories?.name}</div>
+                  <span className={`px-3 py-1 rounded-full text-xs font-bold ${event.metadata?.status === 'pending' ? 'bg-orange-500/10 text-orange-500' : 'bg-green-500/10 text-green-500'}`}>
+                    {event.metadata?.status === 'pending' ? 'Pending Review' : 'Active'}
+                  </span>
+                </div>
                 <h3 className="text-xl font-bold text-foreground mb-2 line-clamp-1">{event.title}</h3>
                 <div className="flex items-center gap-4 text-sm text-foreground/60 mb-6">
                    {event.date_info && <span className="flex items-center gap-1"><Calendar size={14} /> {event.date_info}</span>}

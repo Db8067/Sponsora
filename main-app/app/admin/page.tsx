@@ -270,20 +270,34 @@ export default function AdminDashboardPage() {
                                                         <span className="font-bold text-red-600 dark:text-red-400">Deleted (Trash)</span>
                                                     </div>
                                                 )}
-                                                <div className="h-48 relative overflow-hidden bg-black/5 dark:bg-white/5">
-                                                    <img src={event.image_url || '/images/coming_soon_doodle.png'} alt={event.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                                                    <div className="absolute top-4 left-4">
-                                                        <span className={`px-3 py-1.5 rounded-full text-xs font-bold shadow-sm backdrop-blur-md ${event.metadata?.status === 'pending' ? 'bg-orange-500/90 text-white' : 'bg-green-500/90 text-white'}`}>
+                                                <div className="p-6 flex flex-col flex-1">
+                                                    <div className="flex justify-between items-start mb-4">
+                                                        <div className="text-xs font-bold text-primary uppercase tracking-wider">{event.metadata?.organizer_category || event.sponsora_categories?.name || 'Uncategorized'}</div>
+                                                        <span className={`px-3 py-1 rounded-full text-xs font-bold ${event.metadata?.status === 'pending' ? 'bg-orange-500/10 text-orange-500' : 'bg-green-500/10 text-green-500'}`}>
                                                             {event.metadata?.status === 'pending' ? 'Pending' : 'Active'}
                                                         </span>
                                                     </div>
-                                                </div>
-                                                <div className="p-6 flex flex-col flex-1">
-                                                    <div className="text-xs font-bold text-primary mb-2 uppercase tracking-wider">{event.metadata?.organizer_category || event.sponsora_categories?.name || 'Uncategorized'}</div>
-                                                    <h3 className="text-xl font-bold text-foreground mb-2 line-clamp-1">{event.title}</h3>
-                                                    <div className="flex items-center gap-4 text-sm text-foreground/60 mb-6">
-                                                        {event.date_info && <span className="flex items-center gap-1"><CalendarDays size={14} /> {event.date_info}</span>}
-                                                        {event.metadata?.venue_type && <span className="flex items-center gap-1 capitalize"><MapPin size={14} /> {event.metadata.venue_type.replace('_', ' ')}</span>}
+                                                    <h3 className="text-xl font-bold text-foreground mb-2">{event.title}</h3>
+                                                    {event.description && <p className="text-sm text-foreground/70 mb-4 line-clamp-3">{event.description}</p>}
+                                                    
+                                                    <div className="grid grid-cols-1 gap-2 text-sm text-foreground/70 mb-6 bg-black/5 dark:bg-white/5 p-4 rounded-2xl border border-black/5 dark:border-white/5">
+                                                        {event.date_info && <div className="flex items-center gap-2"><CalendarDays size={14} className="text-foreground/40" /> <span className="font-semibold text-foreground">Date:</span> {event.date_info}</div>}
+                                                        {event.metadata?.venue_type && <div className="flex items-center gap-2"><MapPin size={14} className="text-foreground/40" /> <span className="font-semibold text-foreground capitalize">Venue:</span> {event.metadata.venue_type.replace('_', ' ')}</div>}
+                                                        {event.metadata?.venue_address && <div className="flex items-center gap-2"><MapPin size={14} className="text-foreground/40" /> <span className="font-semibold text-foreground">Address:</span> {event.metadata.venue_address}</div>}
+                                                        {event.metadata?.prize_pool && <div className="flex items-center gap-2"><span className="font-semibold text-foreground pl-5">Prize Pool:</span> {event.metadata.prize_pool}</div>}
+                                                        {event.metadata?.team_allowed !== undefined && (
+                                                            <div className="flex items-center gap-2 pl-5">
+                                                                <span className="font-semibold text-foreground">Teams:</span> 
+                                                                {event.metadata.team_allowed ? `Allowed (${event.metadata.min_team} - ${event.metadata.max_team} members)` : 'Individual Only'}
+                                                            </div>
+                                                        )}
+                                                        {event.apply_link && (
+                                                            <div className="flex items-center gap-2 pl-5 mt-2">
+                                                                <Link href={event.apply_link} target="_blank" className="text-primary hover:underline font-semibold flex items-center gap-1">
+                                                                    External Event Link <ExternalLink size={14} />
+                                                                </Link>
+                                                            </div>
+                                                        )}
                                                     </div>
                                                     
                                                     <div className="mt-auto pt-4 border-t border-black/5 dark:border-white/10 flex gap-3">
