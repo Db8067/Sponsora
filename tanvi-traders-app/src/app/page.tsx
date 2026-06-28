@@ -1,10 +1,12 @@
 import React from 'react';
 import RequestForm from '@/components/RequestForm';
+import WelcomeAnimation from '@/components/WelcomeAnimation';
 import { Sparkles } from 'lucide-react';
 
 export default function Home() {
   return (
     <div className="min-h-screen relative py-12 px-4 sm:px-6">
+      <WelcomeAnimation />
       
       <header className="absolute top-0 w-full left-0 p-6 flex justify-between items-center z-20 max-w-7xl mx-auto">
         <div className="font-black text-2xl tracking-tighter text-pink-600 drop-shadow-sm flex items-center gap-2">
