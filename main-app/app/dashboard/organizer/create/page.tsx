@@ -393,7 +393,7 @@ export default function CreateEventPage() {
                 </div>
               )}
               
-              <div className={`relative border-2 ${posterFile ? 'border-green-500/50 bg-green-500/5' : 'border-dashed border-black/10 dark:border-white/10'} rounded-2xl p-8 flex flex-col items-center justify-center text-center hover:bg-black/5 dark:hover:bg-white/5 transition-all cursor-pointer group overflow-hidden`}>
+              <div className={`relative min-h-[300px] border-2 ${posterFile ? 'border-green-500/50 bg-green-500/5' : 'border-dashed border-black/10 dark:border-white/10'} rounded-2xl p-8 flex flex-col items-center justify-center text-center hover:bg-black/5 dark:hover:bg-white/5 transition-all cursor-pointer group overflow-hidden`}>
                 <input 
                   type="file" 
                   accept="image/*"
@@ -436,7 +436,7 @@ export default function CreateEventPage() {
                 </div>
               )}
 
-              <div className={`relative border-2 ${pdfFile ? 'border-green-500/50 bg-green-500/5' : 'border-dashed border-black/10 dark:border-white/10'} rounded-2xl p-8 flex flex-col items-center justify-center text-center hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer group overflow-hidden`}>
+              <div className={`relative min-h-[300px] border-2 ${pdfFile ? 'border-green-500/50 bg-green-500/5' : 'border-dashed border-black/10 dark:border-white/10'} rounded-2xl p-8 flex flex-col items-center justify-center text-center hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer group overflow-hidden`}>
                 <input 
                   type="file" 
                   accept=".pdf"
