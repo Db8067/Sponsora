@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import { useUser } from '@clerk/nextjs';
-import { Upload, X, Loader2, ArrowLeft, Image as ImageIcon, FileText } from 'lucide-react';
+import { Upload, X, Loader2, ArrowLeft, Image as ImageIcon, FileText, CheckCircle2 } from 'lucide-react';
 import Link from 'next/link';
 
 export default function CreateEventPage() {
@@ -348,24 +348,38 @@ export default function CreateEventPage() {
                 <span>Event Poster (Image)</span>
                 <span className="text-xs font-medium text-foreground/40 font-normal">Optional</span>
               </label>
-              <div className="relative border-2 border-dashed border-black/10 dark:border-white/10 rounded-2xl p-8 flex flex-col items-center justify-center text-center hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer group">
+              
+              {posterFile && (
+                <div className="mb-2 p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800/30 text-green-700 dark:text-green-400 rounded-xl text-sm font-bold flex items-center gap-2 animate-in fade-in zoom-in-95">
+                  <CheckCircle2 className="w-5 h-5" />
+                  Image uploaded successfully!
+                </div>
+              )}
+              
+              <div className={`relative border-2 ${posterFile ? 'border-green-500/50 bg-green-500/5' : 'border-dashed border-black/10 dark:border-white/10'} rounded-2xl p-8 flex flex-col items-center justify-center text-center hover:bg-black/5 dark:hover:bg-white/5 transition-all cursor-pointer group overflow-hidden`}>
                 <input 
                   type="file" 
                   accept="image/*"
                   onChange={(e) => setPosterFile(e.target.files?.[0] || null)}
-                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" 
+                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20" 
                 />
+                
                 {posterFile ? (
-                  <>
-                    <ImageIcon className="w-10 h-10 text-primary mb-3" />
-                    <p className="text-sm font-bold text-foreground">{posterFile.name}</p>
-                    <p className="text-xs text-foreground/50 mt-1">Click to replace</p>
-                  </>
+                  <div className="absolute inset-0 w-full h-full z-10 p-2">
+                    <img 
+                      src={URL.createObjectURL(posterFile)} 
+                      alt="Preview" 
+                      className="w-full h-full object-cover rounded-xl"
+                    />
+                    <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-xl m-2">
+                      <p className="text-white text-sm font-bold">Click to replace image</p>
+                    </div>
+                  </div>
                 ) : (
                   <>
-                    <Upload className="w-10 h-10 text-foreground/30 group-hover:text-primary transition-colors mb-3" />
-                    <p className="text-sm font-bold text-foreground">Drop poster here or click to browse</p>
-                    <p className="text-xs text-foreground/50 mt-1">Recommended: 16:9 or 1:1 ratio</p>
+                    <Upload className="w-10 h-10 text-foreground/30 group-hover:text-primary transition-colors mb-3 relative z-10" />
+                    <p className="text-sm font-bold text-foreground relative z-10">Drop poster here or click to browse</p>
+                    <p className="text-xs text-foreground/50 mt-1 relative z-10">Recommended: 16:9 or 1:1 ratio</p>
                   </>
                 )}
               </div>
@@ -377,7 +391,15 @@ export default function CreateEventPage() {
                 <span>Pitch Deck (PDF)</span>
                 <span className="text-xs font-medium text-foreground/40 font-normal">Optional but highly recommended</span>
               </label>
-              <div className="relative border-2 border-dashed border-black/10 dark:border-white/10 rounded-2xl p-8 flex flex-col items-center justify-center text-center hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer group">
+
+              {pdfFile && (
+                <div className="mb-2 p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800/30 text-green-700 dark:text-green-400 rounded-xl text-sm font-bold flex items-center gap-2 animate-in fade-in zoom-in-95">
+                  <CheckCircle2 className="w-5 h-5" />
+                  PDF uploaded successfully!
+                </div>
+              )}
+
+              <div className={`relative border-2 ${pdfFile ? 'border-green-500/50 bg-green-500/5' : 'border-dashed border-black/10 dark:border-white/10'} rounded-2xl p-8 flex flex-col items-center justify-center text-center hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer group`}>
                 <input 
                   type="file" 
                   accept=".pdf"
@@ -386,9 +408,9 @@ export default function CreateEventPage() {
                 />
                 {pdfFile ? (
                   <>
-                    <FileText className="w-10 h-10 text-accent mb-3" />
-                    <p className="text-sm font-bold text-foreground">{pdfFile.name}</p>
-                    <p className="text-xs text-foreground/50 mt-1">Click to replace</p>
+                    <FileText className="w-10 h-10 text-green-500 mb-3" />
+                    <p className="text-sm font-bold text-foreground line-clamp-1 px-4">{pdfFile.name}</p>
+                    <p className="text-xs text-green-600 dark:text-green-400 mt-1 font-semibold">Click to replace</p>
                   </>
                 ) : (
                   <>
