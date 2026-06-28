@@ -36,7 +36,6 @@ export default function GetStartedPage() {
   };
 
   return (
-    <>
       {/* Full screen wrapper, preventing scroll on mobile, flex layout */}
       <div className="relative h-[100dvh] w-full flex flex-col overflow-hidden bg-gradient-to-b from-primary/10 to-background pt-24 md:pt-28 pb-4 md:pb-8">
         
