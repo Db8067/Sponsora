@@ -5,33 +5,40 @@ import { ArrowRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 
+import { useUser } from "@clerk/nextjs";
+
 const portalOptions = [
   {
     title: "Discover Events",
     href: "/sign-up?role=participant&redirect_url=/events",
+    directHref: "/events",
     bgImage: "/images/india-gate.png",
   },
   {
     title: "Ask for Sponsorship",
     href: "/sign-up?role=organizer&redirect_url=/dashboard/organizer",
+    directHref: "/dashboard/organizer",
     bgImage: "/images/doodle_ask_sponsorship.png",
   },
   {
     title: "Become a Sponsor",
     href: "/sign-up?role=sponsor&redirect_url=/dashboard/sponsor",
+    directHref: "/dashboard/sponsor",
     bgImage: "/images/doodle_become_sponsor_v2.png",
   },
 ];
 
 export default function GetStartedPage() {
   const router = useRouter();
+  const { isSignedIn } = useUser();
   const [isTransitioning, setIsTransitioning] = useState(false);
 
-  const handleNavigation = (href: string) => {
+  const handleNavigation = (option: typeof portalOptions[0]) => {
     setIsTransitioning(true);
     // Smooth transition overlay timeout before actually pushing
     setTimeout(() => {
-      router.push(href);
+      // Skip the /sign-up route if already signed in! This prevents the 3-second white flash.
+      router.push(isSignedIn ? option.directHref : option.href);
       // Clean up state in case user navigates back (bfcache / state preservation)
       setTimeout(() => setIsTransitioning(false), 500);
     }, 1000);
@@ -60,7 +67,7 @@ export default function GetStartedPage() {
             {portalOptions.map((option, index) => (
               <button
                 key={index}
-                onClick={() => handleNavigation(option.href)}
+                onClick={() => handleNavigation(option)}
                 className="group relative flex flex-col justify-end w-full h-full rounded-2xl md:rounded-3xl overflow-hidden glass hover:scale-100 md:hover:scale-[1.02] active:scale-[0.96] transition-transform duration-300 ease-out text-left bg-black/90 dark:bg-transparent"
               >
                 {/* Doodle Art Background Image */}

@@ -10,8 +10,8 @@ const isPublicRoute = createRouteMatcher([
   '/unauthorized(.*)'
 ]);
 
-const isOrganizerRoute = createRouteMatcher(['/dashboard/organizer(.*)', '/sponsorship/request(.*)']);
-const isSponsorRoute = createRouteMatcher(['/dashboard/sponsor(.*)']);
+const isOrganizerRoute = createRouteMatcher(['/dashboard/organizer(.*)', '/organizer(.*)', '/sponsorship/request(.*)']);
+const isSponsorRoute = createRouteMatcher(['/dashboard/sponsor(.*)', '/sponsor(.*)']);
 const isParticipantRoute = createRouteMatcher(['/events(.*)']);
 
 export default clerkMiddleware(async (auth, req) => {
