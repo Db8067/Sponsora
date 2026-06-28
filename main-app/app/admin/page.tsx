@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState, useEffect } from 'react';
 import { User, Trash2, X, CheckCircle, Search, ShieldAlert, UserCog, Check, CalendarDays, MapPin, ExternalLink, Activity } from 'lucide-react';
 import { getMainAppUsers, deleteMainAppUser, updateMainAppUserRole } from './actions';
