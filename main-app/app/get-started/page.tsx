@@ -36,8 +36,8 @@ export default function GetStartedPage() {
   };
 
   return (
-      {/* Full screen wrapper, preventing scroll on mobile, flex layout */}
       <div className="relative h-[100dvh] w-full flex flex-col overflow-hidden bg-gradient-to-b from-primary/10 to-background pt-24 md:pt-28 pb-4 md:pb-8">
+        {/* Full screen wrapper, preventing scroll on mobile, flex layout */}
         
         {/* Background ambient lighting (replaces video) */}
         <div className="absolute inset-0 z-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/20 via-background to-background pointer-events-none hidden dark:block"></div>
