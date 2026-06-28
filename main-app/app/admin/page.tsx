@@ -26,6 +26,7 @@ export default function AdminDashboardPage() {
     // Events State
     const [events, setEvents] = useState<any[]>([]);
     const [loadingEvents, setLoadingEvents] = useState(false);
+    const [selectedOrganizerForEvents, setSelectedOrganizerForEvents] = useState<string | null>(null);
     
     const [toast, setToast] = useState<{ message: string, type: 'success' | 'error' } | null>(null);
 
@@ -251,44 +252,85 @@ export default function AdminDashboardPage() {
                             <p className="text-foreground/60">Organizers have not submitted any events yet.</p>
                         </div>
                     ) : (
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {events.map(event => (
-                                <div key={event.id} className="group flex flex-col bg-white dark:bg-[#1A1A1D] border border-black/5 dark:border-white/10 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 relative">
-                                    {event.is_deleted && (
-                                        <div className="absolute inset-0 bg-white/60 dark:bg-black/60 backdrop-blur-sm z-10 flex flex-col items-center justify-center">
-                                            <Trash2 className="w-8 h-8 text-red-500 mb-2" />
-                                            <span className="font-bold text-red-600 dark:text-red-400">Deleted (Trash)</span>
-                                        </div>
-                                    )}
-                                    <div className="h-48 relative overflow-hidden bg-black/5 dark:bg-white/5">
-                                        <img src={event.image_url || '/images/coming_soon_doodle.png'} alt={event.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                                        <div className="absolute top-4 left-4">
-                                            <span className={`px-3 py-1.5 rounded-full text-xs font-bold shadow-sm backdrop-blur-md ${event.metadata?.status === 'pending' ? 'bg-orange-500/90 text-white' : 'bg-green-500/90 text-white'}`}>
-                                                {event.metadata?.status === 'pending' ? 'Pending' : 'Active'}
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div className="p-6 flex flex-col flex-1">
-                                        <div className="text-xs font-bold text-primary mb-2 uppercase tracking-wider">{event.sponsora_categories?.name || 'Uncategorized'}</div>
-                                        <h3 className="text-xl font-bold text-foreground mb-2 line-clamp-1">{event.title}</h3>
-                                        <div className="flex items-center gap-4 text-sm text-foreground/60 mb-6">
-                                            {event.date_info && <span className="flex items-center gap-1"><CalendarDays size={14} /> {event.date_info}</span>}
-                                            {event.metadata?.venue_type && <span className="flex items-center gap-1 capitalize"><MapPin size={14} /> {event.metadata.venue_type.replace('_', ' ')}</span>}
-                                        </div>
-                                        
-                                        <div className="mt-auto pt-4 border-t border-black/5 dark:border-white/10 flex gap-3">
-                                            <Link href={`/events/category/${event.sponsora_categories?.slug || 'unknown'}/${event.id}`} className="flex-1 text-center py-2.5 rounded-xl bg-black/5 dark:bg-white/5 font-bold text-sm hover:bg-primary/10 hover:text-primary transition-colors">
-                                                View Live Listing
-                                            </Link>
-                                            {event.metadata?.pitch_deck_pdf && (
-                                                <Link href={event.metadata.pitch_deck_pdf} target="_blank" className="flex items-center justify-center w-10 rounded-xl bg-accent/10 text-accent hover:bg-accent/20 transition-colors" title="View Pitch Deck">
-                                                    <ExternalLink size={18} />
-                                                </Link>
-                                            )}
-                                        </div>
+                        <div className="space-y-6">
+                            {selectedOrganizerForEvents ? (
+                                <div>
+                                    <button 
+                                        onClick={() => setSelectedOrganizerForEvents(null)}
+                                        className="mb-4 inline-flex items-center text-sm font-bold text-foreground/50 hover:text-foreground transition-colors"
+                                    >
+                                        &larr; Back to Organizers List
+                                    </button>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                        {events.filter(e => e.metadata?.organizer_id === selectedOrganizerForEvents).map(event => (
+                                            <div key={event.id} className="group flex flex-col bg-white dark:bg-[#1A1A1D] border border-black/5 dark:border-white/10 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 relative">
+                                                {event.is_deleted && (
+                                                    <div className="absolute inset-0 bg-white/60 dark:bg-black/60 backdrop-blur-sm z-10 flex flex-col items-center justify-center">
+                                                        <Trash2 className="w-8 h-8 text-red-500 mb-2" />
+                                                        <span className="font-bold text-red-600 dark:text-red-400">Deleted (Trash)</span>
+                                                    </div>
+                                                )}
+                                                <div className="h-48 relative overflow-hidden bg-black/5 dark:bg-white/5">
+                                                    <img src={event.image_url || '/images/coming_soon_doodle.png'} alt={event.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                                                    <div className="absolute top-4 left-4">
+                                                        <span className={`px-3 py-1.5 rounded-full text-xs font-bold shadow-sm backdrop-blur-md ${event.metadata?.status === 'pending' ? 'bg-orange-500/90 text-white' : 'bg-green-500/90 text-white'}`}>
+                                                            {event.metadata?.status === 'pending' ? 'Pending' : 'Active'}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div className="p-6 flex flex-col flex-1">
+                                                    <div className="text-xs font-bold text-primary mb-2 uppercase tracking-wider">{event.metadata?.organizer_category || event.sponsora_categories?.name || 'Uncategorized'}</div>
+                                                    <h3 className="text-xl font-bold text-foreground mb-2 line-clamp-1">{event.title}</h3>
+                                                    <div className="flex items-center gap-4 text-sm text-foreground/60 mb-6">
+                                                        {event.date_info && <span className="flex items-center gap-1"><CalendarDays size={14} /> {event.date_info}</span>}
+                                                        {event.metadata?.venue_type && <span className="flex items-center gap-1 capitalize"><MapPin size={14} /> {event.metadata.venue_type.replace('_', ' ')}</span>}
+                                                    </div>
+                                                    
+                                                    <div className="mt-auto pt-4 border-t border-black/5 dark:border-white/10 flex gap-3">
+                                                        {event.metadata?.pitch_deck_pdf && (
+                                                            <Link href={event.metadata.pitch_deck_pdf} target="_blank" className="flex-1 text-center py-2.5 rounded-xl bg-accent/10 text-accent font-bold text-sm hover:bg-accent/20 transition-colors">
+                                                                View Pitch Deck
+                                                            </Link>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
                                     </div>
                                 </div>
-                            ))}
+                            ) : (
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                    {Array.from(new Set(events.map(e => e.metadata?.organizer_id).filter(Boolean))).map((orgId: any) => {
+                                        const orgUser = users.find(u => u.id === orgId);
+                                        const orgEventsCount = events.filter(e => e.metadata?.organizer_id === orgId).length;
+                                        return (
+                                            <div key={orgId} className="bg-white dark:bg-[#1A1A1D] p-5 rounded-3xl border border-black/5 dark:border-white/10 shadow-sm hover:shadow-md transition-all">
+                                                <div className="flex items-center gap-4 mb-4">
+                                                    {orgUser?.imageUrl ? (
+                                                        <div className="w-12 h-12 relative rounded-2xl overflow-hidden shrink-0">
+                                                            <Image src={orgUser.imageUrl} alt={orgUser.name} fill className="object-cover" />
+                                                        </div>
+                                                    ) : (
+                                                        <div className="w-12 h-12 bg-primary/10 text-primary rounded-2xl flex items-center justify-center font-bold text-xl uppercase shrink-0">
+                                                            {orgUser?.name?.[0] || 'O'}
+                                                        </div>
+                                                    )}
+                                                    <div className="flex-1 min-w-0">
+                                                        <h4 className="font-bold text-foreground truncate">{orgUser?.name || 'Unknown Organizer'}</h4>
+                                                        <p className="text-sm text-foreground/60 truncate">{orgUser?.email || orgId}</p>
+                                                    </div>
+                                                </div>
+                                                <button 
+                                                    onClick={() => setSelectedOrganizerForEvents(orgId)}
+                                                    className="w-full py-2 bg-black/5 dark:bg-white/5 hover:bg-primary/10 text-foreground hover:text-primary font-bold rounded-xl transition-colors text-sm flex items-center justify-center gap-2"
+                                                >
+                                                    View {orgEventsCount} Event{orgEventsCount !== 1 && 's'}
+                                                </button>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            )}
                         </div>
                     )}
                 </div>

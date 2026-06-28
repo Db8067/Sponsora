@@ -10,14 +10,12 @@ import Link from 'next/link';
 export default function CreateEventPage() {
   const router = useRouter();
   const { user, isLoaded } = useUser();
-  const [categories, setCategories] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
   // Form State
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [categoryId, setCategoryId] = useState('');
   const [customCategoryName, setCustomCategoryName] = useState('');
   const [applyLink, setApplyLink] = useState('');
   const [dateInfo, setDateInfo] = useState('');
@@ -40,7 +38,6 @@ export default function CreateEventPage() {
         const parsed = JSON.parse(draft);
         if (parsed.title) setTitle(parsed.title);
         if (parsed.description) setDescription(parsed.description);
-        if (parsed.categoryId) setCategoryId(parsed.categoryId);
         if (parsed.customCategoryName) setCustomCategoryName(parsed.customCategoryName);
         if (parsed.applyLink) setApplyLink(parsed.applyLink);
         if (parsed.dateInfo) setDateInfo(parsed.dateInfo);
@@ -60,26 +57,15 @@ export default function CreateEventPage() {
   useEffect(() => {
     const timer = setTimeout(() => {
       const draft = {
-        title, description, categoryId, customCategoryName, applyLink,
+        title, description, customCategoryName, applyLink,
         dateInfo, venueType, venueAddress, prizePool, teamAllowed, minTeam, maxTeam
       };
       localStorage.setItem('sponsora_organizer_form_draft', JSON.stringify(draft));
     }, 1000);
     return () => clearTimeout(timer);
-  }, [title, description, categoryId, customCategoryName, applyLink, dateInfo, venueType, venueAddress, prizePool, teamAllowed, minTeam, maxTeam]);
+  }, [title, description, customCategoryName, applyLink, dateInfo, venueType, venueAddress, prizePool, teamAllowed, minTeam, maxTeam]);
 
-  useEffect(() => {
-    async function fetchCategories() {
-      const { data } = await supabase
-        .from('sponsora_categories')
-        .select('*')
-        .eq('type', 'event')
-        .or('is_deleted.is.null,is_deleted.eq.false')
-        .order('sort_order', { ascending: true });
-      if (data) setCategories(data);
-    }
-    fetchCategories();
-  }, []);
+
 
   const handleFileUpload = async (file: File, folder: string) => {
     const formData = new FormData();
@@ -109,8 +95,8 @@ export default function CreateEventPage() {
       return;
     }
     
-    if (!categoryId && !customCategoryName) {
-      setError('Please select or enter a Category.');
+    if (!customCategoryName) {
+      setError('Please enter a Category.');
       window.scrollTo(0, 0);
       return;
     }
@@ -119,26 +105,24 @@ export default function CreateEventPage() {
     setError('');
 
     try {
-      let finalCategoryId = categoryId;
+      let finalCategoryId = null;
       
-      // Handle Custom Category
-      if (categoryId === 'custom' && customCategoryName) {
-        const customSlug = customCategoryName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-        const { data: existing } = await supabase.from('sponsora_categories').select('id').eq('slug', customSlug).single();
+      const hiddenCatSlug = 'organizer-submissions-hidden';
+      const { data: existing } = await supabase.from('sponsora_categories').select('id').eq('slug', hiddenCatSlug).single();
+      
+      if (existing) {
+        finalCategoryId = existing.id;
+      } else {
+        const { data: newCat, error: catErr } = await supabase.from('sponsora_categories').insert([{
+          name: 'Organizer Submissions',
+          slug: hiddenCatSlug,
+          type: 'event',
+          sort_order: 999,
+          is_deleted: true
+        }]).select().single();
         
-        if (existing) {
-          finalCategoryId = existing.id;
-        } else {
-          const { data: newCat, error: catErr } = await supabase.from('sponsora_categories').insert([{
-            name: customCategoryName.trim(),
-            slug: customSlug,
-            type: 'event',
-            sort_order: 99
-          }]).select().single();
-          
-          if (catErr) throw new Error("Failed to create category: " + catErr.message);
-          finalCategoryId = newCat.id;
-        }
+        if (catErr) throw new Error("Failed to create hidden category: " + catErr.message);
+        finalCategoryId = newCat.id;
       }
 
       // 1. Upload Poster (Optional now)
@@ -167,6 +151,7 @@ export default function CreateEventPage() {
         date_info: dateInfo.trim() || null,
         metadata: {
           organizer_id: user.id,
+          organizer_category: customCategoryName.trim(),
           venue_type: venueType,
           venue_address: venueAddress.trim() || null,
           prize_pool: prizePool.trim() || null,
@@ -233,28 +218,15 @@ export default function CreateEventPage() {
             </div>
             <div className="space-y-2">
               <label className="text-sm font-bold text-foreground">Category *</label>
-              <select 
-                value={categoryId}
-                onChange={e => setCategoryId(e.target.value)}
+              <input 
+                type="text" 
+                value={customCategoryName}
+                onChange={e => setCustomCategoryName(e.target.value)}
+                placeholder="e.g., Hackathon, Cultural Fest"
                 className="w-full bg-black/5 dark:bg-white/5 border border-transparent rounded-xl px-4 py-3 focus:outline-none focus:border-primary text-foreground transition-colors"
-                required={categoryId !== 'custom'}
-              >
-                <option value="">Select a category</option>
-                {categories.map(cat => (
-                  <option key={cat.id} value={cat.id}>{cat.name}</option>
-                ))}
-                <option value="custom">Other (Create New)</option>
-              </select>
-              {categoryId === 'custom' && (
-                <input 
-                  type="text" 
-                  value={customCategoryName}
-                  onChange={e => setCustomCategoryName(e.target.value)}
-                  placeholder="Enter new category name..."
-                  className="w-full mt-2 bg-black/5 dark:bg-white/5 border border-primary/30 rounded-xl px-4 py-3 focus:outline-none focus:border-primary text-foreground transition-colors animate-in fade-in slide-in-from-top-2"
-                  required
-                />
-              )}
+                required
+              />
+              <p className="text-xs text-foreground/50">Enter the primary category of your event.</p>
             </div>
           </div>
 

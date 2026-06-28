@@ -4,6 +4,7 @@ import { Settings, Calendar, PlusCircle, ExternalLink, CalendarDays, MapPin } fr
 import { auth } from '@clerk/nextjs/server';
 import { redirect } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
+import DeleteButton from './DeleteButton';
 
 export const dynamic = 'force-dynamic';
 
@@ -85,7 +86,7 @@ export default async function OrganizerDashboard() {
                    {event.metadata?.venue_type && <span className="flex items-center gap-1 capitalize"><MapPin size={14} /> {event.metadata.venue_type.replace('_', ' ')}</span>}
                 </div>
                 
-                <div className="mt-auto pt-4 border-t border-black/5 dark:border-white/10 flex gap-3">
+                 <div className="mt-auto pt-4 border-t border-black/5 dark:border-white/10 flex gap-3">
                    <Link href={`/events/category/${event.sponsora_categories?.slug || 'unknown'}/${event.id}`} className="flex-1 text-center py-2.5 rounded-xl bg-black/5 dark:bg-white/5 font-bold text-sm hover:bg-black/10 dark:hover:bg-white/10 transition-colors">
                      View Listing
                    </Link>
@@ -94,6 +95,7 @@ export default async function OrganizerDashboard() {
                        <ExternalLink size={18} />
                      </Link>
                    )}
+                   <DeleteButton eventId={event.id} />
                 </div>
               </div>
             </div>
