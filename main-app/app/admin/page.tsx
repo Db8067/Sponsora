@@ -21,8 +21,6 @@ export default function AdminDashboardPage() {
     const [selectedRoles, setSelectedRoles] = useState<string[]>([]);
     
     const [toast, setToast] = useState<{ message: string, type: 'success' | 'error' } | null>(null);
-    
-    const [toast, setToast] = useState<{ message: string, type: 'success' | 'error' } | null>(null);
 
     useEffect(() => {
         if (toast) {
@@ -196,7 +194,7 @@ export default function AdminDashboardPage() {
                             ))}
                         </div>
                     )}
-
+                </div>
 
             {/* User Profile Modal */}
             {selectedUser && (
