@@ -53,7 +53,7 @@ export default function CategoryEventsPage() {
       setLoading(true);
       
       // Fetch all categories for sidebar
-      const { data: allCats } = await supabase.from('sponsora_categories').select('*').eq('type', 'event').order('sort_order', { ascending: true });
+      const { data: allCats } = await supabase.from('sponsora_categories').select('*').eq('type', 'event').or('is_deleted.is.null,is_deleted.eq.false').order('sort_order', { ascending: true });
       if (allCats) setAllCategories(allCats);
       
       // Fetch Category
@@ -61,6 +61,7 @@ export default function CategoryEventsPage() {
         .from('sponsora_categories')
         .select('*')
         .eq('slug', slug)
+        .or('is_deleted.is.null,is_deleted.eq.false')
         .single();
           
       if (catError || !catData) {
@@ -74,6 +75,7 @@ export default function CategoryEventsPage() {
         .from('sponsora_posts')
         .select('*')
         .eq('category_id', catData.id)
+        .or('is_deleted.is.null,is_deleted.eq.false')
         .order('sort_order', { ascending: true })
         .order('created_at', { ascending: false });
           

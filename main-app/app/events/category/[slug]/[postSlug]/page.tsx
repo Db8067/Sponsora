@@ -14,6 +14,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     .from("sponsora_posts")
     .select("title, description, image_url, metadata")
     .eq("id", postSlug)
+    .or('is_deleted.is.null,is_deleted.eq.false')
     .single();
 
   const previewImage = post?.image_url || "/images/event_doodle_preview.png";
@@ -35,6 +36,7 @@ export default async function EventDetailsPage({ params }: { params: Promise<{ s
     .from('sponsora_posts')
     .select('*')
     .eq('id', postSlug)
+    .or('is_deleted.is.null,is_deleted.eq.false')
     .single();
 
   if (error || !post) {
@@ -45,6 +47,7 @@ export default async function EventDetailsPage({ params }: { params: Promise<{ s
     .from('sponsora_categories')
     .select('*')
     .eq('slug', slug)
+    .or('is_deleted.is.null,is_deleted.eq.false')
     .single();
 
   const meta = post.metadata || {};

@@ -8,6 +8,7 @@ export default async function EventsPage() {
     .from('sponsora_categories')
     .select('*')
     .eq('type', 'event')
+    .or('is_deleted.is.null,is_deleted.eq.false')
     .order('sort_order', { ascending: true });
 
   const initialCategories = (cats || []).map((c: any) => ({
