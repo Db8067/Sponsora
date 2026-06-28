@@ -1,20 +1,29 @@
-'use client';
-
 import React, { useState, useEffect } from 'react';
-import { User, Trash2, X, CheckCircle, Search, ShieldAlert, UserCog, Check } from 'lucide-react';
+import { User, Trash2, X, CheckCircle, Search, ShieldAlert, UserCog, Check, CalendarDays, MapPin, ExternalLink, Activity } from 'lucide-react';
 import { getMainAppUsers, deleteMainAppUser, updateMainAppUserRole } from './actions';
 import { useUser } from '@clerk/nextjs';
 import { redirect } from 'next/navigation';
 import Image from 'next/image';
+import Link from 'next/link';
+import { supabase } from '@/lib/supabase';
 
 export default function AdminDashboardPage() {
     const { user, isLoaded } = useUser();
+    
+    // UI State
+    const [mainTab, setMainTab] = useState<'users' | 'events'>('users');
+    
+    // Users State
     const [users, setUsers] = useState<any[]>([]);
-    const [loading, setLoading] = useState(true);
+    const [loadingUsers, setLoadingUsers] = useState(true);
     const [activeTab, setActiveTab] = useState('participant');
     const [selectedUser, setSelectedUser] = useState<any | null>(null);
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedRoles, setSelectedRoles] = useState<string[]>([]);
+    
+    // Events State
+    const [events, setEvents] = useState<any[]>([]);
+    const [loadingEvents, setLoadingEvents] = useState(false);
     
     const [toast, setToast] = useState<{ message: string, type: 'success' | 'error' } | null>(null);
 
@@ -32,22 +41,38 @@ export default function AdminDashboardPage() {
     }, [user, isLoaded]);
 
     const fetchUsers = async () => {
-        setLoading(true);
+        setLoadingUsers(true);
         try {
             const data = await getMainAppUsers();
             setUsers(data || []);
         } catch (err) {
             console.error('Error fetching main app users:', err);
         } finally {
-            setLoading(false);
+            setLoadingUsers(false);
+        }
+    };
+
+    const fetchEvents = async () => {
+        setLoadingEvents(true);
+        try {
+            const { data, error } = await supabase
+                .from('sponsora_posts')
+                .select('*, sponsora_categories(name)')
+                .order('created_at', { ascending: false });
+            if (data) setEvents(data);
+        } catch (err) {
+            console.error('Error fetching events:', err);
+        } finally {
+            setLoadingEvents(false);
         }
     };
 
     useEffect(() => {
         if (isLoaded && user) {
-            fetchUsers();
+            if (mainTab === 'users') fetchUsers();
+            if (mainTab === 'events') fetchEvents();
         }
-    }, [isLoaded, user]);
+    }, [isLoaded, user, mainTab]);
 
     if (!isLoaded || !user) {
         return <div className="p-12 text-center font-semibold text-gray-500">Loading...</div>;
@@ -75,7 +100,6 @@ export default function AdminDashboardPage() {
 
     const handleDeleteUser = async (userId: string) => {
         if (!confirm('Are you sure you want to permanently delete this user? This cannot be undone.')) return;
-        
         try {
             await deleteMainAppUser(userId);
             setUsers(users.filter(u => u.id !== userId));
@@ -101,7 +125,7 @@ export default function AdminDashboardPage() {
     };
 
     return (
-        <div className="p-6 max-w-7xl mx-auto pt-24 min-h-screen relative">
+        <div className="p-6 max-w-7xl mx-auto pt-24 min-h-screen relative pb-20">
             
             {/* Custom Toast Notification */}
             {toast && (
@@ -111,152 +135,228 @@ export default function AdminDashboardPage() {
                 </div>
             )}
 
-            <div className="mb-8">
-                <h1 className="text-3xl font-black text-gray-900 tracking-tight flex items-center gap-3">
-                    <UserCog className="text-indigo-600" size={32} />
-                    Main App Users
-                </h1>
-                <p className="text-gray-500 mt-2">Manage Participants, Organizers, and Sponsors.</p>
-            </div>
-
-            {/* Tabs */}
-            <div className="flex space-x-1 bg-gray-100 p-1 rounded-2xl mb-6 w-full max-w-2xl">
-                {['participant', 'organizer', 'sponsor'].map((tab) => (
-                    <button
-                        key={tab}
-                        onClick={() => setActiveTab(tab)}
-                        className={`flex-1 py-2.5 px-4 rounded-xl font-semibold text-sm transition-all capitalize ${
-                            activeTab === tab 
-                            ? 'bg-white text-indigo-600 shadow-sm' 
-                            : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'
-                        }`}
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 gap-4 border-b border-black/10 dark:border-white/10 pb-6">
+                <div>
+                    <h1 className="text-3xl font-black text-foreground tracking-tight flex items-center gap-3">
+                        <Activity className="text-primary" size={32} />
+                        Admin Dashboard
+                    </h1>
+                    <p className="text-foreground/60 mt-2 font-medium">Manage Main App Users and Organizer Events.</p>
+                </div>
+                <div className="flex bg-black/5 dark:bg-white/5 p-1 rounded-2xl w-full md:w-auto">
+                    <button 
+                        onClick={() => setMainTab('users')}
+                        className={`flex-1 md:flex-none px-6 py-2.5 rounded-xl font-bold text-sm transition-all ${mainTab === 'users' ? 'bg-white dark:bg-[#1A1A1D] shadow-sm text-primary' : 'text-foreground/60 hover:text-foreground'}`}
                     >
-                        {tab}s
+                        Users Section
                     </button>
-                ))}
+                    <button 
+                        onClick={() => setMainTab('events')}
+                        className={`flex-1 md:flex-none px-6 py-2.5 rounded-xl font-bold text-sm transition-all ${mainTab === 'events' ? 'bg-white dark:bg-[#1A1A1D] shadow-sm text-primary' : 'text-foreground/60 hover:text-foreground'}`}
+                    >
+                        Organizer Events
+                    </button>
+                </div>
             </div>
 
-            {/* Search */}
-            <div className="mb-6 relative w-full max-w-md">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
-                <input 
-                    type="text" 
-                    placeholder={`Search ${activeTab}s by email or name...`}
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full pl-10 pr-4 py-3 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none"
-                />
-            </div>
-
-            {/* Users List */}
-            {loading ? (
-                <div className="flex justify-center py-12">
-                    <div className="size-8 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin" />
-                </div>
-            ) : filteredUsers.length === 0 ? (
-                <div className="bg-white rounded-3xl border border-gray-100 p-12 text-center shadow-sm">
-                    <ShieldAlert className="mx-auto text-gray-300 mb-4" size={48} />
-                    <h3 className="text-lg font-bold text-gray-900">No users found</h3>
-                    <p className="text-gray-500">There are no {activeTab}s matching your search.</p>
-                </div>
-            ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {filteredUsers.map(u => (
-                        <div key={u.id} className="bg-white p-5 rounded-3xl border border-gray-100 shadow-sm hover:shadow-md transition-all">
-                            <div className="flex items-center gap-4 mb-4">
-                                {u.imageUrl ? (
-                                    <div className="w-12 h-12 relative rounded-2xl overflow-hidden shrink-0">
-                                        <Image src={u.imageUrl} alt={u.name} fill className="object-cover" />
-                                    </div>
-                                ) : (
-                                    <div className="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center font-bold text-xl uppercase shrink-0">
-                                        {u.name?.[0] || u.email[0]}
-                                    </div>
-                                )}
-                                <div className="flex-1 min-w-0">
-                                    <h4 className="font-bold text-gray-900 truncate">{u.name || 'Unnamed User'}</h4>
-                                    <p className="text-sm text-gray-500 truncate">{u.email}</p>
-                                </div>
-                            </div>
-                            <button 
-                                onClick={() => openProfile(u)}
-                                className="w-full py-2 bg-gray-50 hover:bg-indigo-50 text-gray-700 hover:text-indigo-600 font-semibold rounded-xl transition-colors text-sm"
+            {mainTab === 'users' && (
+                <div className="animate-in fade-in duration-300">
+                    {/* Tabs */}
+                    <div className="flex space-x-1 bg-black/5 dark:bg-white/5 p-1 rounded-2xl mb-6 w-full max-w-2xl">
+                        {['participant', 'organizer', 'sponsor'].map((tab) => (
+                            <button
+                                key={tab}
+                                onClick={() => setActiveTab(tab)}
+                                className={`flex-1 py-2.5 px-4 rounded-xl font-semibold text-sm transition-all capitalize ${
+                                    activeTab === tab 
+                                    ? 'bg-white dark:bg-[#1A1A1D] text-primary shadow-sm' 
+                                    : 'text-foreground/60 hover:text-foreground hover:bg-black/5 dark:hover:bg-white/5'
+                                }`}
                             >
-                                View Profile
+                                {tab}s
                             </button>
+                        ))}
+                    </div>
+
+                    {/* Search */}
+                    <div className="mb-6 relative w-full max-w-md">
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-foreground/40" size={18} />
+                        <input 
+                            type="text" 
+                            placeholder={`Search ${activeTab}s by email or name...`}
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            className="w-full pl-10 pr-4 py-3 bg-white dark:bg-[#1A1A1D] border border-black/10 dark:border-white/10 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary transition-all outline-none text-foreground"
+                        />
+                    </div>
+
+                    {/* Users List */}
+                    {loadingUsers ? (
+                        <div className="flex justify-center py-12">
+                            <div className="size-8 border-4 border-primary border-t-transparent rounded-full animate-spin" />
                         </div>
-                    ))}
+                    ) : filteredUsers.length === 0 ? (
+                        <div className="bg-white dark:bg-[#1A1A1D] rounded-3xl border border-black/5 dark:border-white/10 p-12 text-center shadow-sm">
+                            <ShieldAlert className="mx-auto text-foreground/20 mb-4" size={48} />
+                            <h3 className="text-lg font-bold text-foreground">No users found</h3>
+                            <p className="text-foreground/60">There are no {activeTab}s matching your search.</p>
+                        </div>
+                    ) : (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            {filteredUsers.map(u => (
+                                <div key={u.id} className="bg-white dark:bg-[#1A1A1D] p-5 rounded-3xl border border-black/5 dark:border-white/10 shadow-sm hover:shadow-md transition-all">
+                                    <div className="flex items-center gap-4 mb-4">
+                                        {u.imageUrl ? (
+                                            <div className="w-12 h-12 relative rounded-2xl overflow-hidden shrink-0">
+                                                <Image src={u.imageUrl} alt={u.name} fill className="object-cover" />
+                                            </div>
+                                        ) : (
+                                            <div className="w-12 h-12 bg-primary/10 text-primary rounded-2xl flex items-center justify-center font-bold text-xl uppercase shrink-0">
+                                                {u.name?.[0] || u.email[0]}
+                                            </div>
+                                        )}
+                                        <div className="flex-1 min-w-0">
+                                            <h4 className="font-bold text-foreground truncate">{u.name || 'Unnamed User'}</h4>
+                                            <p className="text-sm text-foreground/60 truncate">{u.email}</p>
+                                        </div>
+                                    </div>
+                                    <button 
+                                        onClick={() => openProfile(u)}
+                                        className="w-full py-2 bg-black/5 dark:bg-white/5 hover:bg-primary/10 text-foreground hover:text-primary font-bold rounded-xl transition-colors text-sm"
+                                    >
+                                        View Profile
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+            )}
+
+            {mainTab === 'events' && (
+                <div className="animate-in fade-in duration-300">
+                    {loadingEvents ? (
+                        <div className="flex justify-center py-12">
+                            <div className="size-8 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+                        </div>
+                    ) : events.length === 0 ? (
+                        <div className="bg-white dark:bg-[#1A1A1D] rounded-3xl border border-black/5 dark:border-white/10 p-12 text-center shadow-sm">
+                            <CalendarDays className="mx-auto text-foreground/20 mb-4" size={48} />
+                            <h3 className="text-lg font-bold text-foreground">No events found</h3>
+                            <p className="text-foreground/60">Organizers have not submitted any events yet.</p>
+                        </div>
+                    ) : (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            {events.map(event => (
+                                <div key={event.id} className="group flex flex-col bg-white dark:bg-[#1A1A1D] border border-black/5 dark:border-white/10 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 relative">
+                                    {event.is_deleted && (
+                                        <div className="absolute inset-0 bg-white/60 dark:bg-black/60 backdrop-blur-sm z-10 flex flex-col items-center justify-center">
+                                            <Trash2 className="w-8 h-8 text-red-500 mb-2" />
+                                            <span className="font-bold text-red-600 dark:text-red-400">Deleted (Trash)</span>
+                                        </div>
+                                    )}
+                                    <div className="h-48 relative overflow-hidden bg-black/5 dark:bg-white/5">
+                                        <img src={event.image_url || '/images/coming_soon_doodle.png'} alt={event.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                                        <div className="absolute top-4 left-4">
+                                            <span className={`px-3 py-1.5 rounded-full text-xs font-bold shadow-sm backdrop-blur-md ${event.metadata?.status === 'pending' ? 'bg-orange-500/90 text-white' : 'bg-green-500/90 text-white'}`}>
+                                                {event.metadata?.status === 'pending' ? 'Pending' : 'Active'}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div className="p-6 flex flex-col flex-1">
+                                        <div className="text-xs font-bold text-primary mb-2 uppercase tracking-wider">{event.sponsora_categories?.name || 'Uncategorized'}</div>
+                                        <h3 className="text-xl font-bold text-foreground mb-2 line-clamp-1">{event.title}</h3>
+                                        <div className="flex items-center gap-4 text-sm text-foreground/60 mb-6">
+                                            {event.date_info && <span className="flex items-center gap-1"><CalendarDays size={14} /> {event.date_info}</span>}
+                                            {event.metadata?.venue_type && <span className="flex items-center gap-1 capitalize"><MapPin size={14} /> {event.metadata.venue_type.replace('_', ' ')}</span>}
+                                        </div>
+                                        
+                                        <div className="mt-auto pt-4 border-t border-black/5 dark:border-white/10 flex gap-3">
+                                            <Link href={`/events/category/${event.sponsora_categories?.slug || 'unknown'}/${event.id}`} className="flex-1 text-center py-2.5 rounded-xl bg-black/5 dark:bg-white/5 font-bold text-sm hover:bg-primary/10 hover:text-primary transition-colors">
+                                                View Live Listing
+                                            </Link>
+                                            {event.metadata?.pitch_deck_pdf && (
+                                                <Link href={event.metadata.pitch_deck_pdf} target="_blank" className="flex items-center justify-center w-10 rounded-xl bg-accent/10 text-accent hover:bg-accent/20 transition-colors" title="View Pitch Deck">
+                                                    <ExternalLink size={18} />
+                                                </Link>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
                 </div>
             )}
 
             {/* User Profile Modal */}
             {selectedUser && (
                 <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-                    <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setSelectedUser(null)} />
-                    <div className="relative bg-white w-full max-w-md rounded-3xl shadow-2xl p-6 overflow-hidden animate-in zoom-in-95 duration-200">
+                    <div className="absolute inset-0 bg-background/80 backdrop-blur-sm" onClick={() => setSelectedUser(null)} />
+                    <div className="relative bg-white dark:bg-[#1A1A1D] w-full max-w-md rounded-3xl shadow-2xl p-6 overflow-hidden animate-in zoom-in-95 duration-200 border border-black/10 dark:border-white/10">
                         <button 
                             onClick={() => setSelectedUser(null)}
-                            className="absolute top-4 right-4 p-2 text-gray-400 hover:text-gray-900 bg-gray-50 hover:bg-gray-100 rounded-full transition-colors"
+                            className="absolute top-4 right-4 p-2 text-foreground/40 hover:text-foreground bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 rounded-full transition-colors"
                         >
                             <X size={20} />
                         </button>
                         
-                        <div className="text-center mb-6">
+                        <div className="text-center mb-6 mt-4">
                             {selectedUser.imageUrl ? (
-                                <div className="w-20 h-20 relative rounded-3xl overflow-hidden mx-auto mb-4 shadow-md">
+                                <div className="w-24 h-24 relative rounded-3xl overflow-hidden mx-auto mb-4 shadow-md">
                                     <Image src={selectedUser.imageUrl} alt={selectedUser.name} fill className="object-cover" />
                                 </div>
                             ) : (
-                                <div className="w-20 h-20 mx-auto bg-indigo-100 text-indigo-600 rounded-3xl flex items-center justify-center font-black text-3xl uppercase mb-4 shadow-inner">
+                                <div className="w-24 h-24 mx-auto bg-primary/10 text-primary rounded-3xl flex items-center justify-center font-black text-4xl uppercase mb-4 shadow-inner">
                                     {selectedUser.name?.[0] || selectedUser.email[0]}
                                 </div>
                             )}
                             
-                            <h2 className="text-xl font-bold text-gray-900">{selectedUser.name || 'Unnamed User'}</h2>
-                            <p className="text-gray-500">{selectedUser.email}</p>
+                            <h2 className="text-2xl font-bold text-foreground">{selectedUser.name || 'Unnamed User'}</h2>
+                            <p className="text-foreground/60">{selectedUser.email}</p>
                             
-                            <div className="flex flex-wrap items-center justify-center gap-2 mt-3">
+                            <div className="flex flex-wrap items-center justify-center gap-2 mt-4">
                                 {selectedUser.roles?.map((r: string) => (
-                                    <span key={r} className="inline-flex items-center gap-1 px-3 py-1 bg-indigo-50 text-indigo-700 rounded-full text-[10px] font-black uppercase tracking-widest">
-                                        <CheckCircle size={12} /> {r}
+                                    <span key={r} className="inline-flex items-center gap-1 px-3 py-1.5 bg-primary/10 text-primary rounded-full text-xs font-black uppercase tracking-widest">
+                                        <CheckCircle size={14} /> {r}
                                     </span>
                                 ))}
                             </div>
                         </div>
 
                         <div className="space-y-4">
-                            <div className="p-5 bg-gray-50 rounded-2xl border border-gray-100">
-                                <h3 className="text-sm font-bold text-gray-900 mb-1">Override Permissions</h3>
-                                <p className="text-xs text-gray-500 mb-4 leading-relaxed">Select the roles you want to assign to this user. They can access multiple portals if assigned.</p>
+                            <div className="p-5 bg-black/5 dark:bg-white/5 rounded-2xl border border-black/5 dark:border-white/5">
+                                <h3 className="text-sm font-bold text-foreground mb-1">Override Permissions</h3>
+                                <p className="text-xs text-foreground/60 mb-4 leading-relaxed">Select the roles you want to assign to this user. They can access multiple portals if assigned.</p>
                                 
                                 <div className="space-y-2 mb-4">
                                     {['participant', 'organizer', 'sponsor'].map((role) => (
                                         <div 
                                             key={role} 
                                             onClick={() => toggleRole(role)}
-                                            className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-all ${selectedRoles.includes(role) ? 'bg-indigo-50 border-indigo-200' : 'bg-white border-gray-200 hover:bg-gray-50'}`}
+                                            className={`flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-all ${selectedRoles.includes(role) ? 'bg-primary/10 border-primary/20' : 'bg-white dark:bg-[#1A1A1D] border-black/5 dark:border-white/10 hover:bg-black/5 dark:hover:bg-white/5'}`}
                                         >
-                                            <div className={`w-5 h-5 rounded-md flex items-center justify-center shrink-0 transition-colors ${selectedRoles.includes(role) ? 'bg-indigo-600 text-white' : 'border border-gray-300'}`}>
+                                            <div className={`w-5 h-5 rounded-md flex items-center justify-center shrink-0 transition-colors ${selectedRoles.includes(role) ? 'bg-primary text-primary-foreground' : 'border border-black/20 dark:border-white/20'}`}>
                                                 {selectedRoles.includes(role) && <Check size={14} strokeWidth={3} />}
                                             </div>
-                                            <span className={`text-sm font-semibold capitalize ${selectedRoles.includes(role) ? 'text-indigo-900' : 'text-gray-600'}`}>{role}</span>
+                                            <span className={`text-sm font-bold capitalize ${selectedRoles.includes(role) ? 'text-primary' : 'text-foreground/70'}`}>{role}</span>
                                         </div>
                                     ))}
                                 </div>
                                 
                                 <button 
                                     onClick={handleSaveRoles}
-                                    className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded-xl shadow-sm transition-all"
+                                    className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-black py-3 rounded-xl shadow-md transition-all hover:scale-105 active:scale-95"
                                 >
                                     Save Roles
                                 </button>
                             </div>
 
-                            <div className="p-5 bg-red-50 rounded-2xl border border-red-100">
-                                <h3 className="text-sm font-bold text-red-900 mb-3 text-center">Danger Zone</h3>
+                            <div className="p-5 bg-red-50 dark:bg-red-900/10 rounded-2xl border border-red-100 dark:border-red-900/30">
+                                <h3 className="text-sm font-bold text-red-900 dark:text-red-400 mb-3 text-center">Danger Zone</h3>
                                 <button 
                                     onClick={() => handleDeleteUser(selectedUser.id)}
-                                    className="w-full flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 text-white py-2.5 rounded-xl font-bold text-sm transition-colors shadow-sm"
+                                    className="w-full flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 text-white py-3 rounded-xl font-bold text-sm transition-colors shadow-sm"
                                 >
                                     <Trash2 size={16} /> Delete User
                                 </button>
