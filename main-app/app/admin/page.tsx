@@ -12,9 +12,6 @@ import { supabase } from '@/lib/supabase';
 export default function AdminDashboardPage() {
     const { user, isLoaded } = useUser();
     
-    // UI State
-    const [mainTab, setMainTab] = useState<'users' | 'events'>('users');
-    
     // Users State
     const [users, setUsers] = useState<any[]>([]);
     const [loadingUsers, setLoadingUsers] = useState(true);
@@ -23,10 +20,7 @@ export default function AdminDashboardPage() {
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedRoles, setSelectedRoles] = useState<string[]>([]);
     
-    // Events State
-    const [events, setEvents] = useState<any[]>([]);
-    const [loadingEvents, setLoadingEvents] = useState(false);
-    const [selectedOrganizerForEvents, setSelectedOrganizerForEvents] = useState<string | null>(null);
+    const [toast, setToast] = useState<{ message: string, type: 'success' | 'error' } | null>(null);
     
     const [toast, setToast] = useState<{ message: string, type: 'success' | 'error' } | null>(null);
 
@@ -55,30 +49,11 @@ export default function AdminDashboardPage() {
         }
     };
 
-    const fetchEvents = async () => {
-        setLoadingEvents(true);
-        try {
-            const { data, error } = await supabase
-                .from('sponsora_posts')
-                .select('*, sponsora_categories(name)')
-                .order('created_at', { ascending: false });
-            if (data) {
-                // Filter only events created by organizers
-                setEvents(data.filter(e => e.metadata?.organizer_id));
-            }
-        } catch (err) {
-            console.error('Error fetching events:', err);
-        } finally {
-            setLoadingEvents(false);
-        }
-    };
-
     useEffect(() => {
         if (isLoaded && user) {
-            if (mainTab === 'users') fetchUsers();
-            if (mainTab === 'events') fetchEvents();
+            fetchUsers();
         }
-    }, [isLoaded, user, mainTab]);
+    }, [isLoaded, user]);
 
     if (!isLoaded || !user) {
         return <div className="p-12 text-center font-semibold text-gray-500">Loading...</div>;
@@ -147,26 +122,11 @@ export default function AdminDashboardPage() {
                         <Activity className="text-primary" size={32} />
                         Admin Dashboard
                     </h1>
-                    <p className="text-foreground/60 mt-2 font-medium">Manage Main App Users and Organizer Events.</p>
-                </div>
-                <div className="flex bg-black/5 dark:bg-white/5 p-1 rounded-2xl w-full md:w-auto">
-                    <button 
-                        onClick={() => setMainTab('users')}
-                        className={`flex-1 md:flex-none px-6 py-2.5 rounded-xl font-bold text-sm transition-all ${mainTab === 'users' ? 'bg-white dark:bg-[#1A1A1D] shadow-sm text-primary' : 'text-foreground/60 hover:text-foreground'}`}
-                    >
-                        Users Section
-                    </button>
-                    <button 
-                        onClick={() => setMainTab('events')}
-                        className={`flex-1 md:flex-none px-6 py-2.5 rounded-xl font-bold text-sm transition-all ${mainTab === 'events' ? 'bg-white dark:bg-[#1A1A1D] shadow-sm text-primary' : 'text-foreground/60 hover:text-foreground'}`}
-                    >
-                        Organizer Events
-                    </button>
+                    <p className="text-foreground/60 mt-2 font-medium">Manage Main App Users.</p>
                 </div>
             </div>
 
-            {mainTab === 'users' && (
-                <div className="animate-in fade-in duration-300">
+            <div className="animate-in fade-in duration-300">
                     {/* Tabs */}
                     <div className="flex space-x-1 bg-black/5 dark:bg-white/5 p-1 rounded-2xl mb-6 w-full max-w-2xl">
                         {['participant', 'organizer', 'sponsor'].map((tab) => (
@@ -236,119 +196,7 @@ export default function AdminDashboardPage() {
                             ))}
                         </div>
                     )}
-                </div>
-            )}
 
-            {mainTab === 'events' && (
-                <div className="animate-in fade-in duration-300">
-                    {loadingEvents ? (
-                        <div className="flex justify-center py-12">
-                            <div className="size-8 border-4 border-primary border-t-transparent rounded-full animate-spin" />
-                        </div>
-                    ) : events.length === 0 ? (
-                        <div className="bg-white dark:bg-[#1A1A1D] rounded-3xl border border-black/5 dark:border-white/10 p-12 text-center shadow-sm">
-                            <CalendarDays className="mx-auto text-foreground/20 mb-4" size={48} />
-                            <h3 className="text-lg font-bold text-foreground">No events found</h3>
-                            <p className="text-foreground/60">Organizers have not submitted any events yet.</p>
-                        </div>
-                    ) : (
-                        <div className="space-y-6">
-                            {selectedOrganizerForEvents ? (
-                                <div>
-                                    <button 
-                                        onClick={() => setSelectedOrganizerForEvents(null)}
-                                        className="mb-4 inline-flex items-center text-sm font-bold text-foreground/50 hover:text-foreground transition-colors"
-                                    >
-                                        &larr; Back to Organizers List
-                                    </button>
-                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                        {events.filter(e => e.metadata?.organizer_id === selectedOrganizerForEvents).map(event => (
-                                            <div key={event.id} className="group flex flex-col bg-white dark:bg-[#1A1A1D] border border-black/5 dark:border-white/10 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 relative">
-                                                {event.is_deleted && (
-                                                    <div className="absolute inset-0 bg-white/60 dark:bg-black/60 backdrop-blur-sm z-10 flex flex-col items-center justify-center">
-                                                        <Trash2 className="w-8 h-8 text-red-500 mb-2" />
-                                                        <span className="font-bold text-red-600 dark:text-red-400">Deleted (Trash)</span>
-                                                    </div>
-                                                )}
-                                                <div className="p-6 flex flex-col flex-1">
-                                                    <div className="flex justify-between items-start mb-4">
-                                                        <div className="text-xs font-bold text-primary uppercase tracking-wider">{event.metadata?.organizer_category || event.sponsora_categories?.name || 'Uncategorized'}</div>
-                                                        <span className={`px-3 py-1 rounded-full text-xs font-bold ${event.metadata?.status === 'pending' ? 'bg-orange-500/10 text-orange-500' : 'bg-green-500/10 text-green-500'}`}>
-                                                            {event.metadata?.status === 'pending' ? 'Pending' : 'Active'}
-                                                        </span>
-                                                    </div>
-                                                    <h3 className="text-xl font-bold text-foreground mb-2">{event.title}</h3>
-                                                    {event.description && <p className="text-sm text-foreground/70 mb-4 line-clamp-3">{event.description}</p>}
-                                                    
-                                                    <div className="grid grid-cols-1 gap-2 text-sm text-foreground/70 mb-6 bg-black/5 dark:bg-white/5 p-4 rounded-2xl border border-black/5 dark:border-white/5">
-                                                        {event.date_info && <div className="flex items-center gap-2"><CalendarDays size={14} className="text-foreground/40" /> <span className="font-semibold text-foreground">Date:</span> {event.date_info}</div>}
-                                                        {event.metadata?.venue_type && <div className="flex items-center gap-2"><MapPin size={14} className="text-foreground/40" /> <span className="font-semibold text-foreground capitalize">Venue:</span> {event.metadata.venue_type.replace('_', ' ')}</div>}
-                                                        {event.metadata?.venue_address && <div className="flex items-center gap-2"><MapPin size={14} className="text-foreground/40" /> <span className="font-semibold text-foreground">Address:</span> {event.metadata.venue_address}</div>}
-                                                        {event.metadata?.prize_pool && <div className="flex items-center gap-2"><span className="font-semibold text-foreground pl-5">Prize Pool:</span> {event.metadata.prize_pool}</div>}
-                                                        {event.metadata?.team_allowed !== undefined && (
-                                                            <div className="flex items-center gap-2 pl-5">
-                                                                <span className="font-semibold text-foreground">Teams:</span> 
-                                                                {event.metadata.team_allowed ? `Allowed (${event.metadata.min_team} - ${event.metadata.max_team} members)` : 'Individual Only'}
-                                                            </div>
-                                                        )}
-                                                        {event.apply_link && (
-                                                            <div className="flex items-center gap-2 pl-5 mt-2">
-                                                                <Link href={event.apply_link} target="_blank" className="text-primary hover:underline font-semibold flex items-center gap-1">
-                                                                    External Event Link <ExternalLink size={14} />
-                                                                </Link>
-                                                            </div>
-                                                        )}
-                                                    </div>
-                                                    
-                                                    <div className="mt-auto pt-4 border-t border-black/5 dark:border-white/10 flex gap-3">
-                                                        {event.metadata?.pitch_deck_pdf && (
-                                                            <Link href={event.metadata.pitch_deck_pdf} target="_blank" className="flex-1 text-center py-2.5 rounded-xl bg-accent/10 text-accent font-bold text-sm hover:bg-accent/20 transition-colors">
-                                                                View Pitch Deck
-                                                            </Link>
-                                                        )}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-                            ) : (
-                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                                    {Array.from(new Set(events.map(e => e.metadata?.organizer_id).filter(Boolean))).map((orgId: any) => {
-                                        const orgUser = users.find(u => u.id === orgId);
-                                        const orgEventsCount = events.filter(e => e.metadata?.organizer_id === orgId).length;
-                                        return (
-                                            <div key={orgId} className="bg-white dark:bg-[#1A1A1D] p-5 rounded-3xl border border-black/5 dark:border-white/10 shadow-sm hover:shadow-md transition-all">
-                                                <div className="flex items-center gap-4 mb-4">
-                                                    {orgUser?.imageUrl ? (
-                                                        <div className="w-12 h-12 relative rounded-2xl overflow-hidden shrink-0">
-                                                            <Image src={orgUser.imageUrl} alt={orgUser.name} fill className="object-cover" />
-                                                        </div>
-                                                    ) : (
-                                                        <div className="w-12 h-12 bg-primary/10 text-primary rounded-2xl flex items-center justify-center font-bold text-xl uppercase shrink-0">
-                                                            {orgUser?.name?.[0] || 'O'}
-                                                        </div>
-                                                    )}
-                                                    <div className="flex-1 min-w-0">
-                                                        <h4 className="font-bold text-foreground truncate">{orgUser?.name || 'Unknown Organizer'}</h4>
-                                                        <p className="text-sm text-foreground/60 truncate">{orgUser?.email || orgId}</p>
-                                                    </div>
-                                                </div>
-                                                <button 
-                                                    onClick={() => setSelectedOrganizerForEvents(orgId)}
-                                                    className="w-full py-2 bg-black/5 dark:bg-white/5 hover:bg-primary/10 text-foreground hover:text-primary font-bold rounded-xl transition-colors text-sm flex items-center justify-center gap-2"
-                                                >
-                                                    View {orgEventsCount} Event{orgEventsCount !== 1 && 's'}
-                                                </button>
-                                            </div>
-                                        );
-                                    })}
-                                </div>
-                            )}
-                        </div>
-                    )}
-                </div>
-            )}
 
             {/* User Profile Modal */}
             {selectedUser && (

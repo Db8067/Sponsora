@@ -12,18 +12,6 @@ const portalOptions = [
     directHref: "/events",
     bgImage: "/images/india-gate.png",
   },
-  {
-    title: "Ask for Sponsorship",
-    href: "/sign-up?role=organizer&redirect_url=/dashboard/organizer",
-    directHref: "/dashboard/organizer",
-    bgImage: "/images/doodle_ask_sponsorship.png",
-  },
-  {
-    title: "Become a Sponsor",
-    href: "/sign-up?role=sponsor&redirect_url=/dashboard/sponsor",
-    directHref: "/dashboard/sponsor",
-    bgImage: "/images/doodle_become_sponsor_v2.png",
-  },
 ];
 
 export default function GetStartedPage() {
