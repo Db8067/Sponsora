@@ -1,9 +1,7 @@
 "use client";
 
-import { useState } from "react";
 import { ArrowRight } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
 
 import { useUser } from "@clerk/nextjs";
 
@@ -31,17 +29,10 @@ const portalOptions = [
 export default function GetStartedPage() {
   const router = useRouter();
   const { isSignedIn } = useUser();
-  const [isTransitioning, setIsTransitioning] = useState(false);
 
   const handleNavigation = (option: typeof portalOptions[0]) => {
-    setIsTransitioning(true);
-    // Smooth transition overlay timeout before actually pushing
-    setTimeout(() => {
-      // Skip the /sign-up route if already signed in! This prevents the 3-second white flash.
-      router.push(isSignedIn ? option.directHref : option.href);
-      // Clean up state in case user navigates back (bfcache / state preservation)
-      setTimeout(() => setIsTransitioning(false), 500);
-    }, 1000);
+    // Skip the /sign-up route if already signed in!
+    router.push(isSignedIn ? option.directHref : option.href);
   };
 
   return (
@@ -97,53 +88,5 @@ export default function GetStartedPage() {
 
         </div>
       </div>
-
-      {/* Page Transition Overlay */}
-      <AnimatePresence>
-        {isTransitioning && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="fixed inset-0 z-[100] bg-background/80 flex flex-col items-center justify-center backdrop-blur-xl"
-          >
-            <motion.div
-              initial={{ scale: 0.8, opacity: 0, y: 20 }}
-              animate={{ scale: 1, opacity: 1, y: 0 }}
-              transition={{ 
-                duration: 0.5, 
-                ease: "easeOut",
-              }}
-              className="flex flex-col items-center gap-6 text-center max-w-sm px-6"
-            >
-              {/* Cute Doodle Image */}
-              <motion.div
-                animate={{ y: [0, -10, 0] }}
-                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                className="w-48 h-48 relative drop-shadow-2xl"
-              >
-                <img src="/images/india-gate.png" alt="Teleporting" className="w-full h-full object-contain brightness-110 contrast-125" />
-              </motion.div>
-              
-              <div className="space-y-2">
-                <h2 className="text-2xl font-black text-foreground">Teleporting... ✨🚀</h2>
-                <p className="text-foreground/60 font-medium text-balance">
-                  Hold tight! We are opening up your magical portal.
-                </p>
-              </div>
-
-              {/* Premium Loading Bar */}
-              <div className="w-32 h-1.5 bg-black/5 dark:bg-white/5 rounded-full overflow-hidden mt-2 relative">
-                <motion.div 
-                  initial={{ x: "-100%" }}
-                  animate={{ x: "200%" }}
-                  transition={{ duration: 1, repeat: Infinity, ease: "easeInOut" }}
-                  className="absolute top-0 bottom-0 w-1/2 bg-gradient-to-r from-primary to-accent rounded-full"
-                />
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </>
   );
 }
