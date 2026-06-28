@@ -104,28 +104,35 @@ export default function GetStartedPage() {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="fixed inset-0 z-[100] bg-background flex flex-col items-center justify-center backdrop-blur-lg"
+            className="fixed inset-0 z-[100] bg-background/80 flex flex-col items-center justify-center backdrop-blur-xl"
           >
             <motion.div
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
+              initial={{ scale: 0.8, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
               transition={{ 
                 duration: 0.5, 
                 ease: "easeOut",
               }}
-              className="flex flex-col items-center gap-6"
+              className="flex flex-col items-center gap-6 text-center max-w-sm px-6"
             >
-              {/* Pulsing Logos */}
+              {/* Cute Doodle Image */}
               <motion.div
-                animate={{ scale: [1, 1.05, 1] }}
-                transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                animate={{ y: [0, -10, 0] }}
+                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                className="w-48 h-48 relative drop-shadow-2xl"
               >
-                <img src="/images/logo-light.png" alt="Sponsora Logo" className="h-16 md:h-20 w-auto dark:hidden block drop-shadow-2xl" />
-                <img src="/images/logo-dark.png" alt="Sponsora Logo" className="h-16 md:h-20 w-auto hidden dark:block drop-shadow-2xl" />
+                <img src="/images/india-gate.png" alt="Teleporting" className="w-full h-full object-contain brightness-110 contrast-125" />
               </motion.div>
               
+              <div className="space-y-2">
+                <h2 className="text-2xl font-black text-foreground">Teleporting... ✨🚀</h2>
+                <p className="text-foreground/60 font-medium text-balance">
+                  Hold tight! We are opening up your magical portal.
+                </p>
+              </div>
+
               {/* Premium Loading Bar */}
-              <div className="w-40 h-1.5 bg-white/5 rounded-full overflow-hidden mt-4 relative">
+              <div className="w-32 h-1.5 bg-black/5 dark:bg-white/5 rounded-full overflow-hidden mt-2 relative">
                 <motion.div 
                   initial={{ x: "-100%" }}
                   animate={{ x: "200%" }}

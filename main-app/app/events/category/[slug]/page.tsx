@@ -53,7 +53,7 @@ export default function CategoryEventsPage() {
       setLoading(true);
       
       // Fetch all categories for sidebar
-      const { data: allCats } = await supabase.from('sponsora_categories').select('*').eq('app_type', 'main');
+      const { data: allCats } = await supabase.from('sponsora_categories').select('*').eq('type', 'event').order('sort_order', { ascending: true });
       if (allCats) setAllCategories(allCats);
       
       // Fetch Category
@@ -237,8 +237,8 @@ export default function CategoryEventsPage() {
               ))
             ) : (
               <div className="col-span-full py-20 flex flex-col items-center justify-center text-center bg-white dark:bg-[#1A1A1D] border border-black/5 dark:border-white/10 rounded-3xl">
-                <div className="w-32 h-32 mb-6 opacity-80">
-                   <img src={`/images/${getDoodleImage(slug)}`} alt="No Events" className="w-full h-full object-contain drop-shadow-2xl" />
+                <div className="w-48 h-48 mb-6 overflow-hidden flex items-center justify-center relative">
+                   <img src={category?.image_url || `/images/${getDoodleImage(slug)}`} alt="No Events" className="w-full h-full object-contain opacity-90 drop-shadow-2xl" />
                 </div>
                 <h3 className="text-xl font-bold mb-2">No Events Found</h3>
                 <p className="text-foreground/60 max-w-sm">
