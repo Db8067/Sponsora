@@ -32,6 +32,42 @@ export default function CreateEventPage() {
   const [posterFile, setPosterFile] = useState<File | null>(null);
   const [pdfFile, setPdfFile] = useState<File | null>(null);
 
+  // Auto-save: Load Draft
+  useEffect(() => {
+    const draft = localStorage.getItem('sponsora_organizer_form_draft');
+    if (draft) {
+      try {
+        const parsed = JSON.parse(draft);
+        if (parsed.title) setTitle(parsed.title);
+        if (parsed.description) setDescription(parsed.description);
+        if (parsed.categoryId) setCategoryId(parsed.categoryId);
+        if (parsed.customCategoryName) setCustomCategoryName(parsed.customCategoryName);
+        if (parsed.applyLink) setApplyLink(parsed.applyLink);
+        if (parsed.dateInfo) setDateInfo(parsed.dateInfo);
+        if (parsed.venueType) setVenueType(parsed.venueType);
+        if (parsed.venueAddress) setVenueAddress(parsed.venueAddress);
+        if (parsed.prizePool) setPrizePool(parsed.prizePool);
+        if (parsed.teamAllowed !== undefined) setTeamAllowed(parsed.teamAllowed);
+        if (parsed.minTeam) setMinTeam(parsed.minTeam);
+        if (parsed.maxTeam) setMaxTeam(parsed.maxTeam);
+      } catch (e) {
+        console.error("Failed to parse form draft", e);
+      }
+    }
+  }, []);
+
+  // Auto-save: Save Draft
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const draft = {
+        title, description, categoryId, customCategoryName, applyLink,
+        dateInfo, venueType, venueAddress, prizePool, teamAllowed, minTeam, maxTeam
+      };
+      localStorage.setItem('sponsora_organizer_form_draft', JSON.stringify(draft));
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, [title, description, categoryId, customCategoryName, applyLink, dateInfo, venueType, venueAddress, prizePool, teamAllowed, minTeam, maxTeam]);
+
   useEffect(() => {
     async function fetchCategories() {
       const { data } = await supabase
@@ -146,7 +182,8 @@ export default function CreateEventPage() {
       
       if (dbError) throw new Error(dbError.message);
 
-      // Success, redirect to dashboard
+      // Success, clear draft and redirect to dashboard
+      localStorage.removeItem('sponsora_organizer_form_draft');
       router.push('/dashboard/organizer');
       
     } catch (err: any) {
@@ -369,7 +406,7 @@ export default function CreateEventPage() {
                     <img 
                       src={URL.createObjectURL(posterFile)} 
                       alt="Preview" 
-                      className="w-full h-full object-cover rounded-xl"
+                      className="w-full h-full object-contain rounded-xl"
                     />
                     <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-xl m-2">
                       <p className="text-white text-sm font-bold">Click to replace image</p>
@@ -399,24 +436,31 @@ export default function CreateEventPage() {
                 </div>
               )}
 
-              <div className={`relative border-2 ${pdfFile ? 'border-green-500/50 bg-green-500/5' : 'border-dashed border-black/10 dark:border-white/10'} rounded-2xl p-8 flex flex-col items-center justify-center text-center hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer group`}>
+              <div className={`relative border-2 ${pdfFile ? 'border-green-500/50 bg-green-500/5' : 'border-dashed border-black/10 dark:border-white/10'} rounded-2xl p-8 flex flex-col items-center justify-center text-center hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer group overflow-hidden`}>
                 <input 
                   type="file" 
                   accept=".pdf"
                   onChange={(e) => setPdfFile(e.target.files?.[0] || null)}
-                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" 
+                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20" 
                 />
+                
                 {pdfFile ? (
-                  <>
-                    <FileText className="w-10 h-10 text-green-500 mb-3" />
-                    <p className="text-sm font-bold text-foreground line-clamp-1 px-4">{pdfFile.name}</p>
-                    <p className="text-xs text-green-600 dark:text-green-400 mt-1 font-semibold">Click to replace</p>
-                  </>
+                  <div className="absolute inset-0 w-full h-full z-10 p-2">
+                    <iframe 
+                      src={`${URL.createObjectURL(pdfFile)}#toolbar=0&navpanes=0&scrollbar=0`} 
+                      className="w-full h-full rounded-xl pointer-events-none" 
+                    />
+                    <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center rounded-xl m-2">
+                      <FileText className="w-10 h-10 text-white mb-2" />
+                      <p className="text-white text-sm font-bold truncate max-w-[80%]">{pdfFile.name}</p>
+                      <p className="text-white/80 text-xs mt-1">Click to replace</p>
+                    </div>
+                  </div>
                 ) : (
                   <>
-                    <Upload className="w-10 h-10 text-foreground/30 group-hover:text-accent transition-colors mb-3" />
-                    <p className="text-sm font-bold text-foreground">Drop PDF here or click to browse</p>
-                    <p className="text-xs text-foreground/50 mt-1">Max size: 10MB</p>
+                    <Upload className="w-10 h-10 text-foreground/30 group-hover:text-accent transition-colors mb-3 relative z-10" />
+                    <p className="text-sm font-bold text-foreground relative z-10">Drop PDF here or click to browse</p>
+                    <p className="text-xs text-foreground/50 mt-1 relative z-10">Max size: 10MB</p>
                   </>
                 )}
               </div>
