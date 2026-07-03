@@ -63,6 +63,8 @@ export default function PageTransitionProvider({ children }: { children: React.R
       const href = anchor.getAttribute("href");
       if (!href) return;
 
+      if (anchor.hasAttribute("data-no-transition")) return;
+
       // Ignore hash links
       if (href.startsWith("#")) return;
 
@@ -108,6 +110,13 @@ export default function PageTransitionProvider({ children }: { children: React.R
     return () => {
       window.removeEventListener("popstate", handlePopState);
     };
+  }, []);
+
+  // Listen for manual trigger
+  useEffect(() => {
+    const handleManualTrigger = () => setIsTransitioning(true);
+    window.addEventListener("trigger-page-transition", handleManualTrigger);
+    return () => window.removeEventListener("trigger-page-transition", handleManualTrigger);
   }, []);
 
   return (

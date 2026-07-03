@@ -18,12 +18,14 @@ export default function CategoryGrid({ categories }: { categories: any[] }) {
 
   const handleClose = () => {
     setShowPopup(false);
+    window.dispatchEvent(new Event("trigger-page-transition"));
     router.push(selectedHref);
   };
 
   const handleJoin = () => {
     window.open("https://chat.whatsapp.com/ImrwZpwQPENJ1PBR8EBODL", "_blank");
     setShowPopup(false);
+    window.dispatchEvent(new Event("trigger-page-transition"));
     router.push(selectedHref);
   };
 
@@ -34,6 +36,7 @@ export default function CategoryGrid({ categories }: { categories: any[] }) {
           <Link
             key={index}
             href={category.href}
+            data-no-transition="true"
             onClick={(e) => handleCardClick(e, category.href)}
             className="group relative flex flex-row items-center md:flex-col md:justify-end w-full h-auto p-4 sm:p-5 md:p-0 md:h-[280px] lg:h-[300px] xl:h-[320px] rounded-2xl md:rounded-[2rem] overflow-hidden glass md:hover:-translate-y-2 active:scale-[0.98] transition-all duration-300 ease-out text-left bg-white dark:bg-white/5 border border-black/5 dark:border-white/10 hover:border-primary/20 dark:hover:border-white/20 shadow-lg md:shadow-xl hover:shadow-xl md:hover:shadow-primary/20"
           >
