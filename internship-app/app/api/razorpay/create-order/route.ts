@@ -38,7 +38,13 @@ export async function POST(req: NextRequest) {
         const now = new Date();
         const expired = code.expires_at && new Date(code.expires_at) < now;
         const maxed = code.uses_count >= code.max_uses;
-        if (!expired && !maxed) {
+        const isValidPlan = !code.valid_plans || !Array.isArray(code.valid_plans) || code.valid_plans.includes(planType);
+
+        if (!isValidPlan) {
+          return NextResponse.json({ error: 'Discount code not valid for this plan' }, { status: 400 });
+        }
+
+        if (!expired && !maxed && isValidPlan) {
           finalAmount = Math.round(finalAmount * (1 - code.discount_percentage / 100));
         }
       }

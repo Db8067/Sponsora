@@ -3,7 +3,7 @@ import { supabaseAdmin } from '@/lib/supabase';
 
 export async function POST(req: NextRequest) {
   try {
-    const { code } = await req.json();
+    const { code, planType } = await req.json();
 
     if (!code) {
       return NextResponse.json({ error: 'Code is required' }, { status: 400 });
@@ -17,6 +17,13 @@ export async function POST(req: NextRequest) {
 
     if (error || !coupon) {
       return NextResponse.json({ error: 'Invalid or inactive coupon code' }, { status: 400 });
+    }
+
+    // Check plan validity
+    if (planType && coupon.valid_plans && Array.isArray(coupon.valid_plans)) {
+      if (!coupon.valid_plans.includes(planType)) {
+        return NextResponse.json({ error: 'Oops! 🥺 This discount code is not valid for this subscription. Choose another plan to avail the discount!' }, { status: 400 });
+      }
     }
 
     // Check expiration

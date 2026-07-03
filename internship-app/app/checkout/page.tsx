@@ -58,7 +58,7 @@ function CheckoutContent() {
       const res = await fetch(`/api/subscription/validate-discount`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ code: discountCode.trim().toUpperCase() })
+        body: JSON.stringify({ code: discountCode.trim().toUpperCase(), planType: planId })
       });
       const data = await res.json();
       if (data.success) {
