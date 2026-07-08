@@ -12,9 +12,9 @@ export default function AdminLayout({
       {/* Admin Sidebar */}
       <aside className="w-64 bg-slate-900 text-slate-300 flex flex-col hidden md:flex fixed h-screen">
         <div className="p-6">
-          <Link href="/" className="font-bold text-2xl tracking-tight text-white flex items-center gap-2 mb-8">
-            Bazaar<span className="text-accent">X</span> 
-            <span className="text-xs bg-red-600 px-2 py-0.5 rounded-full ml-1 uppercase">Admin</span>
+          <Link href="/" className="flex items-center gap-2 mb-8">
+            <img src="/images/logo-dark.png" alt="Sponsora Logo" className="h-6 md:h-8 w-auto" />
+            <span className="text-xs bg-red-600 px-2 py-0.5 rounded-full uppercase text-white font-bold">Admin</span>
           </Link>
           
           <nav className="space-y-1">

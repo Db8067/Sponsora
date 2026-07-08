@@ -13,8 +13,9 @@ export default function SellerLayout({
       <header className="sticky top-0 z-40 w-full border-b bg-white dark:bg-slate-900 shadow-sm">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Link href="/" className="font-bold text-xl tracking-tight text-primary">
-              Bazaar<span className="text-accent">X</span>
+            <Link href="/" className="flex items-center">
+              <img src="/images/logo-light.png" alt="Sponsora Logo" className="h-6 md:h-8 w-auto dark:hidden block" />
+              <img src="/images/logo-dark.png" alt="Sponsora Logo" className="h-6 md:h-8 w-auto hidden dark:block" />
             </Link>
             <span className="px-2 py-0.5 rounded-md bg-blue-100 text-blue-700 text-xs font-bold uppercase ml-2 dark:bg-blue-900/50 dark:text-blue-400">
               Seller Hub

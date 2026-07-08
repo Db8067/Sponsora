@@ -70,8 +70,9 @@ export default function StorefrontHome() {
             <button className="md:hidden p-2 -ml-2 rounded-md hover:bg-muted">
               <Menu className="w-5 h-5" />
             </button>
-            <Link href="/" className="font-bold text-2xl tracking-tight text-primary">
-              Bazaar<span className="text-accent">X</span>
+            <Link href="/" className="flex items-center">
+              <img src="/images/logo-light.png" alt="Sponsora Logo" className="h-8 md:h-10 w-auto dark:hidden block" />
+              <img src="/images/logo-dark.png" alt="Sponsora Logo" className="h-8 md:h-10 w-auto hidden dark:block" />
             </Link>
           </div>
 
@@ -127,22 +128,7 @@ export default function StorefrontHome() {
       {/* Main Content */}
       <main className="container mx-auto px-4 py-8">
         
-        {/* Hero Carousel/Banner */}
-        <section className="relative rounded-2xl overflow-hidden bg-gradient-to-r from-blue-900 to-indigo-800 text-white shadow-lg">
-          <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?q=80&w=2070')] bg-cover bg-center opacity-30 mix-blend-overlay"></div>
-          <div className="relative z-10 px-8 py-16 md:py-24 max-w-2xl">
-            <span className="inline-block px-3 py-1 rounded-full bg-accent text-accent-foreground text-xs font-bold tracking-wider mb-4 uppercase">Mega Sale</span>
-            <h1 className="text-4xl md:text-5xl font-black mb-4 leading-tight">
-              The Grand <br className="hidden md:block"/> Summer Festival
-            </h1>
-            <p className="text-lg md:text-xl text-white/80 mb-8 max-w-lg">
-              Up to 60% off on top electronics, fashion, and home appliances. Unbeatable prices from our verified sellers.
-            </p>
-            <button className="bg-white text-indigo-900 px-8 py-3 rounded-full font-bold hover:bg-gray-100 transition-colors shadow-lg hover:shadow-xl flex items-center gap-2">
-              Shop Now <ChevronRight className="w-5 h-5" />
-            </button>
-          </div>
-        </section>
+
 
         {/* Categories Bar */}
         <section className="my-12">
