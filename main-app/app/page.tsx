@@ -1,58 +1,229 @@
-import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import React from 'react';
+import Link from 'next/link';
+import { Search, Menu, ShoppingCart, User, ChevronRight, LayoutGrid, Zap, ShieldCheck } from 'lucide-react';
+import { ProductCard, Product } from '@/components/ProductCard';
 
-export default function Home() {
+// Mock data for the storefront
+const FEATURED_PRODUCTS: Product[] = [
+  {
+    id: '1',
+    name: 'Wireless Noise-Cancelling Headphones',
+    description: 'Premium audio experience with active noise cancellation.',
+    price: 14999,
+    imageUrl: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&q=80',
+    vendorName: 'AudioTech India',
+    rating: 4.8,
+    reviews: 1245,
+    status: 'approved'
+  },
+  {
+    id: '2',
+    name: 'Smart Fitness Watch Series 7',
+    description: 'Track your health and workouts with precision.',
+    price: 8499,
+    imageUrl: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&q=80',
+    vendorName: 'GadgetHub',
+    rating: 4.6,
+    reviews: 892,
+    status: 'approved'
+  },
+  {
+    id: '3',
+    name: 'Professional DSLR Camera',
+    description: 'Capture stunning moments in 4K resolution.',
+    price: 54999,
+    imageUrl: 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=800&q=80',
+    vendorName: 'PhotoVision',
+    rating: 4.9,
+    reviews: 432,
+    status: 'approved'
+  },
+  {
+    id: '4',
+    name: 'Ergonomic Office Chair',
+    description: 'Maximum comfort for long working hours.',
+    price: 12999,
+    imageUrl: 'https://images.unsplash.com/photo-1505843490538-5133c6c7d0e1?w=800&q=80',
+    vendorName: 'ErgoMates',
+    rating: 4.5,
+    reviews: 654,
+    status: 'approved'
+  }
+];
+
+const CATEGORIES = [
+  { name: 'Electronics', icon: '💻' },
+  { name: 'Fashion', icon: '👕' },
+  { name: 'Home & Kitchen', icon: '🏠' },
+  { name: 'Beauty', icon: '💄' },
+  { name: 'Sports', icon: '⚽' },
+  { name: 'Books', icon: '📚' }
+];
+
+export default function StorefrontHome() {
   return (
-    <div className="flex flex-col min-h-[100dvh] md:h-[100dvh] overflow-x-hidden md:overflow-hidden relative selection:bg-primary/30">
-      
-      {/* Animated Luma-like Background (Dark Mode Only) */}
-      <div className="absolute inset-0 z-0 overflow-hidden hidden dark:block">
-        <div className="absolute top-[-15%] left-[-15%] w-[65%] h-[65%] rounded-full bg-primary/15 blur-[100px] animate-blob"></div>
-        <div className="absolute top-[15%] right-[-15%] w-[75%] h-[75%] rounded-full bg-accent/12 blur-[120px] animate-blob animation-delay-2000"></div>
-        <div className="absolute bottom-[-25%] left-[5%] w-[65%] h-[65%] rounded-full bg-primary-dark/12 blur-[120px] animate-blob animation-delay-4000"></div>
-        <div className="absolute inset-0 bg-background/75 backdrop-blur-[60px]"></div>
-      </div>
-      
-      {/* Hero Section */}
-      <section className="relative z-10 px-6 lg:px-12 max-w-[1400px] mx-auto w-full flex-1 flex flex-col md:flex-row items-center justify-center md:justify-between pt-32 md:pt-20 pb-16 md:pb-10 gap-12 md:gap-0">
-        
-        {/* Left Content */}
-        <div className="w-full md:w-[45%] flex flex-col justify-center items-center md:items-start text-center md:text-left mt-4 md:mt-0">
-          <h1 className="w-full font-heading font-black tracking-tighter text-foreground text-5xl sm:text-6xl md:text-[3.5rem] lg:text-6xl leading-[1.15] md:leading-[0.95] text-balance">
-            Everything <br className="hidden md:block" /> 
-            under <br className="md:hidden" />
-            <span className="hidden md:inline">one</span><br className="hidden md:block" />
-            <span className="md:hidden">one </span>
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">roof.</span>
-          </h1>
-
-          <p className="mt-6 md:mt-8 text-base md:text-lg lg:text-xl leading-relaxed text-foreground/60 font-medium max-w-lg">
-            Organize events, manage QR ticketing, secure sponsors, and book venues. Discover hackathons, fests, and internships—all in one place.
-          </p>
-          <div className="mt-8 md:mt-12 flex flex-col sm:flex-row items-center md:items-start justify-center md:justify-start w-full">
-            <Link href="/get-started" className="w-auto flex justify-center">
-              <button className="w-auto bg-foreground text-background px-8 py-4 rounded-full font-bold text-base md:text-lg hover:scale-105 transition-transform flex items-center justify-center gap-2 shadow-xl shadow-foreground/5">
-                Explore now
-              </button>
+    <div className="min-h-screen bg-background">
+      {/* Top Header / Navigation */}
+      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <div className="container mx-auto px-4 h-16 flex items-center justify-between gap-4">
+          <div className="flex items-center gap-4">
+            <button className="md:hidden p-2 -ml-2 rounded-md hover:bg-muted">
+              <Menu className="w-5 h-5" />
+            </button>
+            <Link href="/" className="font-bold text-2xl tracking-tight text-primary">
+              Bazaar<span className="text-accent">X</span>
             </Link>
           </div>
-        </div>
 
-        {/* Right Graphic */}
-        <div className="flex w-full md:w-[50%] relative justify-center md:justify-end mt-4 md:mt-0 flex-1 min-h-[350px] md:min-h-0 pb-12 md:pb-0">
-          <div className="relative w-full h-full max-w-sm sm:max-w-md md:max-w-xl flex items-center justify-center">
-            {/* The generated high quality doodle art image */}
-            <div className="absolute inset-0 bg-gradient-to-tr from-primary/30 to-accent/30 rounded-[2rem] md:rounded-[3rem] blur-2xl md:blur-3xl opacity-50 max-h-[100%] md:max-h-[80%] my-auto mx-auto max-w-[100%] md:max-w-full"></div>
-            <img 
-              src="/images/hero-art.png" 
-              alt="Sponsora Event Art" 
-              className="relative z-10 w-full h-full md:h-auto object-contain md:rounded-[3rem] shadow-2xl border border-white/5 my-auto"
-            />
+          <div className="hidden md:flex flex-1 max-w-2xl px-8">
+            <div className="relative w-full">
+              <input 
+                type="text" 
+                placeholder="Search for products, brands and more..." 
+                className="w-full h-10 pl-4 pr-10 rounded-full border border-input bg-muted/50 focus:bg-background focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all"
+              />
+              <button className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-primary">
+                <Search className="w-5 h-5" />
+              </button>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-4 sm:gap-6">
+            <Link href="/seller" className="hidden lg:flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-primary transition-colors">
+              <LayoutGrid className="w-4 h-4" />
+              Become a Seller
+            </Link>
+            
+            <div className="h-6 w-px bg-border hidden sm:block"></div>
+            
+            <button className="flex flex-col items-center gap-1 text-muted-foreground hover:text-primary transition-colors">
+              <User className="w-5 h-5" />
+              <span className="text-[10px] font-medium hidden sm:block">Login</span>
+            </button>
+            
+            <button className="flex flex-col items-center gap-1 text-muted-foreground hover:text-primary transition-colors relative">
+              <ShoppingCart className="w-5 h-5" />
+              <span className="text-[10px] font-medium hidden sm:block">Cart</span>
+              <span className="absolute -top-1 -right-2 w-4 h-4 bg-primary text-[10px] font-bold text-primary-foreground rounded-full flex items-center justify-center">
+                0
+              </span>
+            </button>
           </div>
         </div>
+        
+        {/* Mobile Search Bar */}
+        <div className="md:hidden p-3 border-t bg-muted/30">
+          <div className="relative w-full">
+            <input 
+              type="text" 
+              placeholder="Search..." 
+              className="w-full h-10 pl-4 pr-10 rounded-lg border border-input bg-background focus:ring-2 focus:ring-primary outline-none"
+            />
+            <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+          </div>
+        </div>
+      </header>
 
-      </section>
+      {/* Main Content */}
+      <main className="container mx-auto px-4 py-8">
+        
+        {/* Hero Carousel/Banner */}
+        <section className="relative rounded-2xl overflow-hidden bg-gradient-to-r from-blue-900 to-indigo-800 text-white shadow-lg">
+          <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?q=80&w=2070')] bg-cover bg-center opacity-30 mix-blend-overlay"></div>
+          <div className="relative z-10 px-8 py-16 md:py-24 max-w-2xl">
+            <span className="inline-block px-3 py-1 rounded-full bg-accent text-accent-foreground text-xs font-bold tracking-wider mb-4 uppercase">Mega Sale</span>
+            <h1 className="text-4xl md:text-5xl font-black mb-4 leading-tight">
+              The Grand <br className="hidden md:block"/> Summer Festival
+            </h1>
+            <p className="text-lg md:text-xl text-white/80 mb-8 max-w-lg">
+              Up to 60% off on top electronics, fashion, and home appliances. Unbeatable prices from our verified sellers.
+            </p>
+            <button className="bg-white text-indigo-900 px-8 py-3 rounded-full font-bold hover:bg-gray-100 transition-colors shadow-lg hover:shadow-xl flex items-center gap-2">
+              Shop Now <ChevronRight className="w-5 h-5" />
+            </button>
+          </div>
+        </section>
+
+        {/* Categories Bar */}
+        <section className="my-12">
+          <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
+            Shop by Category
+          </h2>
+          <div className="grid grid-cols-3 md:grid-cols-6 gap-4">
+            {CATEGORIES.map((category) => (
+              <div key={category.name} className="flex flex-col items-center justify-center p-4 bg-card rounded-xl border border-border hover:border-primary hover:shadow-md transition-all cursor-pointer group">
+                <span className="text-3xl mb-3 group-hover:scale-110 transition-transform">{category.icon}</span>
+                <span className="text-sm font-medium text-center">{category.name}</span>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Value Props */}
+        <section className="my-12 grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="flex items-center gap-4 p-6 bg-blue-50 dark:bg-blue-950/30 rounded-2xl">
+            <div className="p-3 bg-blue-100 dark:bg-blue-900 rounded-full text-blue-600 dark:text-blue-400">
+              <Zap className="w-6 h-6" />
+            </div>
+            <div>
+              <h3 className="font-bold">Fast Delivery</h3>
+              <p className="text-sm text-muted-foreground">Free shipping on orders over ₹499</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-4 p-6 bg-green-50 dark:bg-green-950/30 rounded-2xl">
+            <div className="p-3 bg-green-100 dark:bg-green-900 rounded-full text-green-600 dark:text-green-400">
+              <ShieldCheck className="w-6 h-6" />
+            </div>
+            <div>
+              <h3 className="font-bold">100% Secure</h3>
+              <p className="text-sm text-muted-foreground">Safe payments & buyer protection</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-4 p-6 bg-purple-50 dark:bg-purple-950/30 rounded-2xl">
+            <div className="p-3 bg-purple-100 dark:bg-purple-900 rounded-full text-purple-600 dark:text-purple-400">
+              <Star className="w-6 h-6" />
+            </div>
+            <div>
+              <h3 className="font-bold">Top Brands</h3>
+              <p className="text-sm text-muted-foreground">Quality guaranteed directly from sellers</p>
+            </div>
+          </div>
+        </section>
+
+        {/* Featured Products */}
+        <section className="my-12">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-2xl font-bold flex items-center gap-2">
+              Trending Products
+            </h2>
+            <Link href="/products" className="text-primary font-medium hover:underline flex items-center">
+              View All <ChevronRight className="w-4 h-4 ml-1" />
+            </Link>
+          </div>
+          
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {FEATURED_PRODUCTS.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+        </section>
+        
+      </main>
+      
+      {/* Footer */}
+      <footer className="bg-muted/50 border-t py-12 mt-20">
+        <div className="container mx-auto px-4 text-center">
+          <h2 className="text-xl font-bold mb-4">Ready to start selling?</h2>
+          <p className="text-muted-foreground mb-6 max-w-md mx-auto">
+            Join thousands of small businesses selling their products on BazaarX and reach millions of customers.
+          </p>
+          <Link href="/seller">
+            <button className="bg-primary text-primary-foreground px-6 py-2.5 rounded-lg font-medium hover:bg-primary/90 transition-colors">
+              Register as a Seller
+            </button>
+          </Link>
+        </div>
+      </footer>
     </div>
   );
 }
-
