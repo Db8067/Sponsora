@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { Search, Menu, ShoppingCart, User, ChevronRight, LayoutGrid, Zap, ShieldCheck } from 'lucide-react';
+import { Search, Menu, ShoppingCart, User, ChevronRight, LayoutGrid, Zap, ShieldCheck, Star } from 'lucide-react';
 import { ProductCard, Product } from '@/components/ProductCard';
 
 // Mock data for the storefront
