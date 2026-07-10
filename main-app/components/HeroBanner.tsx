@@ -21,8 +21,9 @@ export function HeroBanner() {
   }, []);
 
   return (
-    <section className="w-full">
-      <div className="relative w-full aspect-[4/1] overflow-hidden bg-muted/20">
+    <section className="w-full px-2 sm:px-4 lg:px-6 pt-4 pb-2">
+      <div className="relative w-full aspect-[4/1] overflow-hidden rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-white/20 dark:border-white/10 bg-white/10 dark:bg-black/10 backdrop-blur-md">
+        <div className="absolute inset-0 pointer-events-none rounded-3xl shadow-[inset_0_0_20px_rgba(255,255,255,0.3)] dark:shadow-[inset_0_0_20px_rgba(0,0,0,0.3)] z-20"></div>
         {BANNERS.map((banner, index) => (
           <div
             key={banner.id}

@@ -4,6 +4,7 @@ import { Search, Menu, ShoppingCart, User, ChevronRight, LayoutGrid, Zap, Shield
 import { ProductCard, Product } from '@/components/ProductCard';
 import { PromoBar } from '@/components/PromoBar';
 import { HeroBanner } from '@/components/HeroBanner';
+import { BrandsMarquee } from '@/components/BrandsMarquee';
 import { TypewriterSearch } from '@/components/TypewriterSearch';
 
 // Mock data for the storefront
@@ -115,6 +116,7 @@ export default function StorefrontHome() {
 
       {/* Main Content */}
       <HeroBanner />
+      <BrandsMarquee />
       <main className="container mx-auto px-4 py-8">
         
 
