@@ -3,6 +3,8 @@ import Link from 'next/link';
 import { Search, Menu, ShoppingCart, User, ChevronRight, LayoutGrid, Zap, ShieldCheck, Star } from 'lucide-react';
 import { ProductCard, Product } from '@/components/ProductCard';
 import { PromoBar } from '@/components/PromoBar';
+import { HeroBanner } from '@/components/HeroBanner';
+import { TypewriterSearch } from '@/components/TypewriterSearch';
 
 // Mock data for the storefront
 const FEATURED_PRODUCTS: Product[] = [
@@ -79,16 +81,7 @@ export default function StorefrontHome() {
           </div>
 
           <div className="hidden md:flex flex-1 max-w-2xl px-8">
-            <div className="relative w-full">
-              <input 
-                type="text" 
-                placeholder="Search for products, brands and more..." 
-                className="w-full h-10 pl-4 pr-10 rounded-full border border-input bg-muted/50 focus:bg-background focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all"
-              />
-              <button className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-primary">
-                <Search className="w-5 h-5" />
-              </button>
-            </div>
+            <TypewriterSearch />
           </div>
 
           <div className="flex items-center gap-4 sm:gap-6">
@@ -116,19 +109,14 @@ export default function StorefrontHome() {
         
         {/* Mobile Search Bar */}
         <div className="md:hidden p-3 border-t bg-muted/30">
-          <div className="relative w-full">
-            <input 
-              type="text" 
-              placeholder="Search..." 
-              className="w-full h-10 pl-4 pr-10 rounded-lg border border-input bg-background focus:ring-2 focus:ring-primary outline-none"
-            />
-            <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-          </div>
+          <TypewriterSearch />
         </div>
       </header>
 
       {/* Main Content */}
       <main className="container mx-auto px-4 py-8">
+        
+        <HeroBanner />
         
 
 

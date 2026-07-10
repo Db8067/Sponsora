@@ -21,7 +21,7 @@ export function PromoBar() {
   }, []);
 
   return (
-    <div className="w-full bg-primary text-primary-foreground py-2 px-4 overflow-hidden relative">
+    <div className="w-full bg-black text-white py-2 px-4 overflow-hidden relative">
       <div className="container mx-auto flex items-center justify-center">
         {PROMO_MESSAGES.map((msg, index) => (
           <div
