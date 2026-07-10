@@ -33,7 +33,7 @@ export default function SellerLandingPage() {
       </section>
 
       {/* Benefits Section */}
-      <section className="py-20 px-4 bg-white dark:bg-slate-900">
+      <section className="py-20 px-4 bg-transparent text-center">
         <div className="container mx-auto max-w-6xl text-center">
           <h2 className="text-3xl font-bold mb-12">Why sell on BazaarX?</h2>
           
@@ -74,7 +74,7 @@ export default function SellerLandingPage() {
       </section>
 
       {/* How it works */}
-      <section className="py-20 px-4 bg-slate-50 dark:bg-slate-950">
+      <section className="py-20 px-4 bg-transparent text-center">
         <div className="container mx-auto max-w-4xl text-center">
           <h2 className="text-3xl font-bold mb-12">How to start selling</h2>
           

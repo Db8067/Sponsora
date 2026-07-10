@@ -2,6 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { Search, Menu, ShoppingCart, User, ChevronRight, LayoutGrid, Zap, ShieldCheck, Star } from 'lucide-react';
 import { ProductCard, Product } from '@/components/ProductCard';
+import { PromoBar } from '@/components/PromoBar';
 
 // Mock data for the storefront
 const FEATURED_PRODUCTS: Product[] = [
@@ -62,7 +63,8 @@ const CATEGORIES = [
 
 export default function StorefrontHome() {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-transparent">
+      <PromoBar />
       {/* Top Header / Navigation */}
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between gap-4">
@@ -97,18 +99,18 @@ export default function StorefrontHome() {
             
             <div className="h-6 w-px bg-border hidden sm:block"></div>
             
-            <button className="flex flex-col items-center gap-1 text-muted-foreground hover:text-primary transition-colors">
+            <Link href="/sign-in" className="flex flex-col items-center gap-1 text-muted-foreground hover:text-primary transition-colors">
               <User className="w-5 h-5" />
               <span className="text-[10px] font-medium hidden sm:block">Login</span>
-            </button>
+            </Link>
             
-            <button className="flex flex-col items-center gap-1 text-muted-foreground hover:text-primary transition-colors relative">
+            <Link href="/cart" className="flex flex-col items-center gap-1 text-muted-foreground hover:text-primary transition-colors relative">
               <ShoppingCart className="w-5 h-5" />
               <span className="text-[10px] font-medium hidden sm:block">Cart</span>
               <span className="absolute -top-1 -right-2 w-4 h-4 bg-primary text-[10px] font-bold text-primary-foreground rounded-full flex items-center justify-center">
                 0
               </span>
-            </button>
+            </Link>
           </div>
         </div>
         

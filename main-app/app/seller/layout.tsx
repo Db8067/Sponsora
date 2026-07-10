@@ -8,7 +8,7 @@ export default function SellerLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
+    <div className="min-h-screen bg-transparent">
       {/* Seller Navigation */}
       <header className="sticky top-0 z-40 w-full border-b bg-white dark:bg-slate-900 shadow-sm">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">

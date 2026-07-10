@@ -9,7 +9,7 @@ export default async function SignUpPage(props: { searchParams: Promise<{ redire
   const queryString = redirectParams.toString() ? `?${redirectParams.toString()}` : '';
 
   return (
-    <div className="min-h-[100dvh] flex flex-col items-center justify-center pt-20 pb-10 bg-background gap-4">
+    <div className="min-h-[100dvh] flex flex-col items-center justify-center pt-20 pb-10 bg-transparent gap-4">
       <SignUp 
         forceRedirectUrl={searchParams.redirect_url || '/'} 
         signInUrl={`/sign-in${queryString}`}
