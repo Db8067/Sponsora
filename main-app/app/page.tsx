@@ -114,9 +114,8 @@ export default function StorefrontHome() {
       </header>
 
       {/* Main Content */}
+      <HeroBanner />
       <main className="container mx-auto px-4 py-8">
-        
-        <HeroBanner />
         
 
 

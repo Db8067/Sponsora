@@ -21,8 +21,8 @@ export function HeroBanner() {
   }, []);
 
   return (
-    <section className="container mx-auto px-4 mt-6 mb-12">
-      <div className="relative w-full aspect-[21/9] md:aspect-[32/9] overflow-hidden rounded-2xl shadow-md bg-muted/20">
+    <section className="w-full">
+      <div className="relative w-full aspect-[4/1] overflow-hidden bg-muted/20">
         {BANNERS.map((banner, index) => (
           <div
             key={banner.id}

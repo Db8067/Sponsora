@@ -24,23 +24,23 @@ export function TypewriterSearch() {
       if (!isDeleting) {
         // Typing forward
         setCurrentText(fullPhrase.substring(0, currentText.length + 1));
-        setTypingSpeed(100);
+        setTypingSpeed(50); // Increased typing speed
         
         if (currentText === fullPhrase) {
           // Pause before deleting
-          setTypingSpeed(2000);
+          setTypingSpeed(1500);
           setIsDeleting(true);
         }
       } else {
         // Deleting backward
         setCurrentText(fullPhrase.substring(0, currentText.length - 1));
-        setTypingSpeed(50);
+        setTypingSpeed(30); // Increased deleting speed
         
         if (currentText === '') {
           // Move to next phrase
           setIsDeleting(false);
           setCurrentPhraseIndex((prev) => (prev + 1) % SEARCH_PHRASES.length);
-          setTypingSpeed(500); // Pause before typing new phrase
+          setTypingSpeed(300); // Pause before typing new phrase
         }
       }
     };
