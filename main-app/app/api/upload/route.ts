@@ -11,7 +11,7 @@ export async function POST(request: Request) {
   try {
     const formData = await request.formData();
     const file = formData.get('file') as File;
-    const folder = formData.get('folder') as string || 'sponsora_uploads';
+    const folder = (formData.get('folder') as string) || 'sponsora_uploads';
 
     if (!file) {
       return NextResponse.json({ error: 'No file provided' }, { status: 400 });
@@ -19,21 +19,15 @@ export async function POST(request: Request) {
 
     const arrayBuffer = await file.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
+    const base64Data = buffer.toString('base64');
+    const fileUri = `data:${file.type};base64,${base64Data}`;
 
     const isPdf = file.type === 'application/pdf';
     const resourceType = isPdf ? 'auto' : 'image';
 
-    const uploadResult = await new Promise((resolve, reject) => {
-      cloudinary.uploader.upload_stream(
-        {
-          folder: folder,
-          resource_type: resourceType,
-        },
-        (error, result) => {
-          if (error) reject(error);
-          else resolve(result);
-        }
-      ).end(buffer);
+    const uploadResult = await cloudinary.uploader.upload(fileUri, {
+      folder: folder,
+      resource_type: resourceType,
     });
 
     return NextResponse.json(uploadResult);
