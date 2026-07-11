@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, Users, ShoppingBag, Settings, LogOut, Globe, Menu, X, ChevronDown, Layout, Search, Image as ImageIcon } from 'lucide-react';
+import { LayoutDashboard, Users, ShoppingBag, Settings, LogOut, Globe, Menu, X, ChevronDown, Layout, Search, Image as ImageIcon, Trash2 } from 'lucide-react';
 
 export default function AdminLayout({
   children,
@@ -84,6 +84,9 @@ export default function AdminLayout({
           <Link href="/admin/settings" className="flex items-center gap-2 text-sm font-medium text-slate-700 hover:text-blue-600 transition-colors">
             <Settings className="w-4 h-4" /> Settings
           </Link>
+          <Link href="/admin/trash" className="flex items-center gap-2 text-sm font-medium text-slate-700 hover:text-red-600 transition-colors">
+            <Trash2 className="w-4 h-4" /> Trash
+          </Link>
 
           <button className="flex items-center gap-2 text-sm font-medium text-red-600 hover:text-red-700 transition-colors ml-2 pl-6 border-l border-slate-200">
             <LogOut className="w-4 h-4" /> Sign Out
@@ -133,6 +136,9 @@ export default function AdminLayout({
           </Link>
           <Link href="/admin/settings" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-slate-100 transition-colors text-sm font-medium text-slate-800">
             <Settings className="w-4 h-4" /> Settings
+          </Link>
+          <Link href="/admin/trash" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-slate-100 transition-colors text-sm font-medium text-red-600">
+            <Trash2 className="w-4 h-4" /> Trash
           </Link>
           
           <button className="flex items-center gap-3 px-4 py-3 mt-2 border-t border-slate-100 rounded-b-lg hover:bg-red-50 text-red-600 transition-colors text-sm font-medium w-full text-left">

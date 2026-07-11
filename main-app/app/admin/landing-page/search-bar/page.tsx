@@ -4,6 +4,7 @@ import { Search, Plus, X, Loader2, ArrowLeft } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { SaveAlert } from '@/components/SaveAlert';
 import { ConfirmAlert } from '@/components/ConfirmAlert';
+import { moveToTrash } from '@/lib/trash';
 import Link from 'next/link';
 
 export default function SearchBarAdmin() {
@@ -48,8 +49,11 @@ export default function SearchBarAdmin() {
     setConfirmDelete({ isOpen: true, index });
   };
 
-  const confirmRemoveString = () => {
+  const confirmRemoveString = async () => {
     if (confirmDelete.index !== null) {
+      const removedText = searchTexts[confirmDelete.index];
+      await moveToTrash({ type: 'text', category: 'search_texts', content: removedText });
+
       const newArr = searchTexts.filter((_, i) => i !== confirmDelete.index);
       setSearchTexts(newArr);
       autoSave(newArr);

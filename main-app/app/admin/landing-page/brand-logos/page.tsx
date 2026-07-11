@@ -1,9 +1,11 @@
 'use client';
 import React, { useState, useEffect, useRef } from 'react';
-import { Image as ImageIcon, X, Loader2, ArrowLeft, Upload, ClipboardPaste } from 'lucide-react';
+import { Image as ImageIcon, X, Loader2, ArrowLeft, Upload, ClipboardPaste, Crop } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { SaveAlert } from '@/components/SaveAlert';
 import { ConfirmAlert } from '@/components/ConfirmAlert';
+import { ImageCropper } from '@/components/ImageCropper';
+import { moveToTrash } from '@/lib/trash';
 import Link from 'next/link';
 
 const DEFAULT_BRANDS = [
@@ -20,6 +22,8 @@ export default function BrandLogosAdmin() {
   const [alert, setAlert] = useState<{message: string, type: 'success'|'error'} | null>(null);
   
   const [confirmDelete, setConfirmDelete] = useState<{isOpen: boolean, index: number | null}>({ isOpen: false, index: null });
+  const [imageToCrop, setImageToCrop] = useState<{url: string, index: number} | null>(null);
+  
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -44,7 +48,7 @@ export default function BrandLogosAdmin() {
     }
   }
 
-  async function uploadFile(file: File) {
+  async function uploadFile(file: File): Promise<string | null> {
     setUploadingImage(true);
     try {
       const formData = new FormData();
@@ -58,10 +62,8 @@ export default function BrandLogosAdmin() {
       
       const data = await res.json();
       if (data.secure_url || data.url) {
-        const url = data.secure_url || data.url;
-        const newArr = [...brandLogos, url];
-        setBrandLogos(newArr);
-        autoSave(newArr);
+        setUploadingImage(false);
+        return data.secure_url || data.url;
       } else {
         setAlert({ message: 'Upload failed: ' + (data.error || 'Unknown error'), type: 'error' });
       }
@@ -69,11 +71,19 @@ export default function BrandLogosAdmin() {
       setAlert({ message: 'Upload error', type: 'error' });
     }
     setUploadingImage(false);
+    return null;
   }
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) uploadFile(file);
+    if (file) {
+      const url = await uploadFile(file);
+      if (url) {
+        const newArr = [...brandLogos, url];
+        setBrandLogos(newArr);
+        autoSave(newArr);
+      }
+    }
     if (fileInputRef.current) fileInputRef.current.value = ''; // Reset input
   };
 
@@ -85,7 +95,12 @@ export default function BrandLogosAdmin() {
           if (type.startsWith('image/')) {
             const blob = await item.getType(type);
             const file = new File([blob], "pasted-image.png", { type });
-            uploadFile(file);
+            const url = await uploadFile(file);
+            if (url) {
+              const newArr = [...brandLogos, url];
+              setBrandLogos(newArr);
+              autoSave(newArr);
+            }
             return;
           }
         }
@@ -100,8 +115,12 @@ export default function BrandLogosAdmin() {
     setConfirmDelete({ isOpen: true, index });
   };
 
-  const confirmRemoveImage = () => {
+  const confirmRemoveImage = async () => {
     if (confirmDelete.index !== null) {
+      const removedUrl = brandLogos[confirmDelete.index];
+      // Move to trash
+      await moveToTrash({ type: 'image', category: 'brand_logos', content: removedUrl });
+      
       const newArr = brandLogos.filter((_, i) => i !== confirmDelete.index);
       setBrandLogos(newArr);
       autoSave(newArr);
@@ -109,10 +128,35 @@ export default function BrandLogosAdmin() {
     setConfirmDelete({ isOpen: false, index: null });
   };
 
+  const handleCropComplete = async (croppedFile: File) => {
+    if (!imageToCrop) return;
+    const oldUrl = brandLogos[imageToCrop.index];
+    const newUrl = await uploadFile(croppedFile);
+    
+    if (newUrl) {
+      // Move old to trash
+      await moveToTrash({ type: 'image', category: 'brand_logos', content: oldUrl });
+      
+      const newArr = [...brandLogos];
+      newArr[imageToCrop.index] = newUrl;
+      setBrandLogos(newArr);
+      autoSave(newArr);
+    }
+    setImageToCrop(null);
+  };
+
   if (loading) return <div className="p-10 flex justify-center"><Loader2 className="w-8 h-8 animate-spin text-orange-500" /></div>;
 
   return (
     <div className="pb-20 max-w-5xl mx-auto">
+      {imageToCrop && (
+        <ImageCropper
+          imageSrc={imageToCrop.url}
+          onCropComplete={handleCropComplete}
+          onCancel={() => setImageToCrop(null)}
+        />
+      )}
+      
       {alert && <SaveAlert message={alert.message} type={alert.type} onClose={() => setAlert(null)} />}
       <ConfirmAlert 
         isOpen={confirmDelete.isOpen} 
@@ -179,12 +223,22 @@ export default function BrandLogosAdmin() {
             {brandLogos.map((url, idx) => (
               <div key={idx} className="relative group border border-slate-200 dark:border-white/10 rounded-2xl overflow-visible w-40 h-24 bg-white flex items-center justify-center p-4 shadow-sm hover:shadow-md transition-shadow">
                 <img src={url} alt="Brand Logo" className="w-full h-full object-contain" />
-                <button 
-                  onClick={() => removeImage(idx)}
-                  className="absolute -top-3 -right-3 bg-red-100 p-2 rounded-full text-red-600 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-200 z-20 shadow-md"
-                >
-                  <X className="w-4 h-4" />
-                </button>
+                <div className="absolute -top-3 -right-3 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity z-20">
+                  <button 
+                    onClick={() => setImageToCrop({ url, index: idx })}
+                    className="bg-blue-100 p-2 rounded-full text-blue-600 hover:bg-blue-200 shadow-md"
+                    title="Edit & Crop"
+                  >
+                    <Crop className="w-4 h-4" />
+                  </button>
+                  <button 
+                    onClick={() => removeImage(idx)}
+                    className="bg-red-100 p-2 rounded-full text-red-600 hover:bg-red-200 shadow-md"
+                    title="Delete"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
               </div>
             ))}
           </div>

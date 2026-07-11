@@ -4,6 +4,7 @@ import { Layout, Plus, X, Loader2, ArrowLeft } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { SaveAlert } from '@/components/SaveAlert';
 import { ConfirmAlert } from '@/components/ConfirmAlert';
+import { moveToTrash } from '@/lib/trash';
 import Link from 'next/link';
 
 export default function PromoBarAdmin() {
@@ -48,8 +49,11 @@ export default function PromoBarAdmin() {
     setConfirmDelete({ isOpen: true, index });
   };
 
-  const confirmRemoveString = () => {
+  const confirmRemoveString = async () => {
     if (confirmDelete.index !== null) {
+      const removedText = promoTexts[confirmDelete.index];
+      await moveToTrash({ type: 'text', category: 'promo_texts', content: removedText });
+
       const newArr = promoTexts.filter((_, i) => i !== confirmDelete.index);
       setPromoTexts(newArr);
       autoSave(newArr);
