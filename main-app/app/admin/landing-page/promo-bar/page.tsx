@@ -101,7 +101,7 @@ export default function PromoBarAdmin() {
                 value={text} 
                 onChange={(e) => handleStringChange(idx, e.target.value)}
                 onBlur={handleStringBlur}
-                className="flex-1 bg-white/20 dark:bg-slate-900/50 backdrop-blur-sm border border-slate-200 dark:border-white/10 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500 font-medium" 
+                className="flex-1 bg-white/20 dark:bg-slate-900/50 backdrop-blur-sm border border-slate-200 dark:border-white/10 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500 font-medium text-base sm:text-sm" 
                 placeholder="Enter promo text..."
               />
               <button onClick={() => removeString(idx)} className="p-3 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-xl transition-colors">

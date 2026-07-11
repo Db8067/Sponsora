@@ -103,7 +103,7 @@ export default function AdminLayout({
         }`}
       >
         <nav className="flex flex-col p-4 space-y-1">
-          <Link href="/admin" className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-slate-100 transition-colors text-sm font-medium text-slate-800">
+          <Link href="/admin" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-slate-100 transition-colors text-sm font-medium text-slate-800">
             <LayoutDashboard className="w-4 h-4" /> Dashboard
           </Link>
           
@@ -116,22 +116,22 @@ export default function AdminLayout({
               <ChevronDown className={`w-4 h-4 transition-transform ${isLandingDropdownOpen ? 'rotate-180' : ''}`} />
             </button>
             <div className={`flex flex-col pl-11 pr-4 overflow-hidden transition-all duration-300 ${isLandingDropdownOpen ? 'max-h-[500px] opacity-100 mb-2' : 'max-h-0 opacity-0'}`}>
-              <Link href="/admin/landing-page" className="py-2.5 text-sm font-bold text-slate-800 border-b border-slate-100">Overview</Link>
+              <Link href="/admin/landing-page" onClick={() => setIsMobileMenuOpen(false)} className="py-2.5 text-sm font-bold text-slate-800 border-b border-slate-100">Overview</Link>
               {landingSubLinks.map(link => (
-                <Link key={link.href} href={link.href} className="flex items-center gap-3 py-2.5 text-sm text-slate-600 hover:text-blue-600">
+                <Link key={link.href} href={link.href} onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-3 py-2.5 text-sm text-slate-600 hover:text-blue-600">
                   {link.icon} {link.label}
                 </Link>
               ))}
             </div>
           </div>
 
-          <Link href="/admin/vendors" className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-slate-100 transition-colors text-sm font-medium text-slate-800">
+          <Link href="/admin/vendors" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-slate-100 transition-colors text-sm font-medium text-slate-800">
             <Users className="w-4 h-4" /> Vendor Approvals
           </Link>
-          <Link href="/admin/content" className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-slate-100 transition-colors text-sm font-medium text-slate-800">
+          <Link href="/admin/content" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-slate-100 transition-colors text-sm font-medium text-slate-800">
             <ShoppingBag className="w-4 h-4" /> Content Review
           </Link>
-          <Link href="/admin/settings" className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-slate-100 transition-colors text-sm font-medium text-slate-800">
+          <Link href="/admin/settings" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-slate-100 transition-colors text-sm font-medium text-slate-800">
             <Settings className="w-4 h-4" /> Settings
           </Link>
           

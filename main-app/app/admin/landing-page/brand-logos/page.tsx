@@ -139,21 +139,7 @@ export default function BrandLogosAdmin() {
           <h2 className="text-xl font-bold">Manage Logos</h2>
         </div>
         
-        <div className="flex flex-wrap gap-6 mb-8">
-          {brandLogos.map((url, idx) => (
-            <div key={idx} className="relative group border border-slate-200 dark:border-white/10 rounded-2xl overflow-visible w-40 h-24 bg-white flex items-center justify-center p-4 shadow-sm hover:shadow-md transition-shadow">
-              <img src={url} alt="Brand Logo" className="w-full h-full object-contain" />
-              <button 
-                onClick={() => removeImage(idx)}
-                className="absolute -top-3 -right-3 bg-red-100 p-2 rounded-full text-red-600 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-200 z-20 shadow-md"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-          ))}
-        </div>
-
-        <div className="border-t border-slate-200 dark:border-white/10 pt-8">
+        <div className="mb-8">
           <h3 className="font-semibold mb-4 text-slate-800 dark:text-slate-200">Add New Logo</h3>
           <div className="flex flex-col sm:flex-row gap-4">
             <label className="flex-1 flex flex-col items-center justify-center gap-2 border-2 border-dashed border-slate-300 dark:border-white/20 rounded-2xl p-8 bg-slate-50 hover:bg-slate-100 dark:bg-slate-900/50 dark:hover:bg-slate-900 transition-colors cursor-pointer text-slate-500">
@@ -184,6 +170,23 @@ export default function BrandLogosAdmin() {
                 </>
               )}
             </button>
+          </div>
+        </div>
+
+        <div className="border-t border-slate-200 dark:border-white/10 pt-8">
+          <h3 className="font-semibold mb-4 text-slate-800 dark:text-slate-200">Existing Logos</h3>
+          <div className="flex flex-wrap gap-6">
+            {brandLogos.map((url, idx) => (
+              <div key={idx} className="relative group border border-slate-200 dark:border-white/10 rounded-2xl overflow-visible w-40 h-24 bg-white flex items-center justify-center p-4 shadow-sm hover:shadow-md transition-shadow">
+                <img src={url} alt="Brand Logo" className="w-full h-full object-contain" />
+                <button 
+                  onClick={() => removeImage(idx)}
+                  className="absolute -top-3 -right-3 bg-red-100 p-2 rounded-full text-red-600 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-200 z-20 shadow-md"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            ))}
           </div>
         </div>
       </div>
