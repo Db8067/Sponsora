@@ -39,7 +39,9 @@ export default function SearchBarAdmin() {
     setSearchTexts(newArr);
   };
   const removeString = (index: number) => {
-    setSearchTexts(searchTexts.filter((_, i) => i !== index));
+    if (window.confirm("Are you sure you want to delete this?")) {
+      setSearchTexts(searchTexts.filter((_, i) => i !== index));
+    }
   };
   const addString = () => {
     setSearchTexts([...searchTexts, '']);

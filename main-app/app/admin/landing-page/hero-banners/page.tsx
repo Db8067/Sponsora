@@ -5,6 +5,12 @@ import { supabase } from '@/lib/supabase';
 import { SaveAlert } from '@/components/SaveAlert';
 import Link from 'next/link';
 
+const DEFAULT_BANNERS = [
+  '/images/doodle_banner_1_1783685779156.png',
+  '/images/doodle_banner_2_1783685795061.png',
+  '/images/doodle_banner_3_1783685812120.png',
+];
+
 export default function HeroBannersAdmin() {
   const [heroBanners, setHeroBanners] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
@@ -15,8 +21,10 @@ export default function HeroBannersAdmin() {
   useEffect(() => {
     async function fetchSettings() {
       const { data, error } = await supabase.from('site_settings').select('value').eq('key', 'hero_banners').single();
-      if (!error && data) {
-        setHeroBanners(data.value || []);
+      if (!error && data && data.value && data.value.length > 0) {
+        setHeroBanners(data.value);
+      } else {
+        setHeroBanners(DEFAULT_BANNERS);
       }
       setLoading(false);
     }

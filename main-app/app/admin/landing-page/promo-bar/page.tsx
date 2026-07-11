@@ -39,7 +39,9 @@ export default function PromoBarAdmin() {
     setPromoTexts(newArr);
   };
   const removeString = (index: number) => {
-    setPromoTexts(promoTexts.filter((_, i) => i !== index));
+    if (window.confirm("Are you sure you want to delete this?")) {
+      setPromoTexts(promoTexts.filter((_, i) => i !== index));
+    }
   };
   const addString = () => {
     setPromoTexts([...promoTexts, '']);

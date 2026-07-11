@@ -5,6 +5,13 @@ import { supabase } from '@/lib/supabase';
 import { SaveAlert } from '@/components/SaveAlert';
 import Link from 'next/link';
 
+const DEFAULT_BRANDS = [
+  '/images/brand_logo_1_1783687140018.png',
+  '/images/brand_logo_2_1783687157325.png',
+  '/images/brand_logo_3_1783687174335.png',
+  '/images/brand_logo_4_1783687191532.png',
+];
+
 export default function BrandLogosAdmin() {
   const [brandLogos, setBrandLogos] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
@@ -15,8 +22,10 @@ export default function BrandLogosAdmin() {
   useEffect(() => {
     async function fetchSettings() {
       const { data, error } = await supabase.from('site_settings').select('value').eq('key', 'brand_logos').single();
-      if (!error && data) {
-        setBrandLogos(data.value || []);
+      if (!error && data && data.value && data.value.length > 0) {
+        setBrandLogos(data.value);
+      } else {
+        setBrandLogos(DEFAULT_BRANDS);
       }
       setLoading(false);
     }

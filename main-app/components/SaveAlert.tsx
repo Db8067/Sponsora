@@ -16,13 +16,13 @@ export function SaveAlert({ message, type, onClose }: SaveAlertProps) {
   }, [onClose]);
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 animate-in slide-in-from-bottom-5 fade-in duration-300">
-      <div className={`flex items-center gap-3 px-6 py-4 rounded-xl shadow-lg border backdrop-blur-md font-medium text-sm ${
+    <div className="fixed inset-0 flex items-center justify-center z-50 pointer-events-none animate-in fade-in duration-300">
+      <div className={`flex items-center gap-3 px-6 py-4 rounded-xl shadow-2xl border backdrop-blur-md font-medium text-lg scale-in-center transition-all ${
         type === 'success' 
-          ? 'bg-green-500/90 text-white border-green-400/50 shadow-green-500/20' 
-          : 'bg-red-500/90 text-white border-red-400/50 shadow-red-500/20'
+          ? 'bg-green-500/90 text-white border-green-400/50 shadow-green-500/30' 
+          : 'bg-red-500/90 text-white border-red-400/50 shadow-red-500/30'
       }`}>
-        {type === 'success' ? <CheckCircle2 className="w-5 h-5" /> : <AlertCircle className="w-5 h-5" />}
+        {type === 'success' ? <CheckCircle2 className="w-6 h-6" /> : <AlertCircle className="w-6 h-6" />}
         {message}
       </div>
     </div>
