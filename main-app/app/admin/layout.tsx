@@ -24,7 +24,7 @@ export default function AdminLayout({
       {/* Top Navbar */}
       <header className="fixed top-0 left-0 right-0 h-16 bg-white text-black z-50 flex items-center justify-between px-4 md:px-8 shadow-sm">
         <Link href="/" className="flex items-center gap-2">
-          <img src="/images/logo-dark.png" alt="Sponsora Logo" className="h-6 w-auto" />
+          <img src="/images/logo-light.png" alt="Sponsora Logo" className="h-6 w-auto" />
           <span className="text-[10px] bg-red-600 px-2 py-0.5 rounded-full uppercase text-white font-bold">Admin</span>
         </Link>
 
@@ -70,7 +70,7 @@ export default function AdminLayout({
       </div>
 
       {/* Main Content */}
-      <main className="flex-1 pt-32 pb-12 p-4 md:p-8 w-full max-w-7xl mx-auto min-h-screen">
+      <main className="flex-1 mt-16 pt-8 pb-12 p-4 md:p-8 w-full max-w-7xl mx-auto min-h-screen">
         {children}
       </main>
     </div>

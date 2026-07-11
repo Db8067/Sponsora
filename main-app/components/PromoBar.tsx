@@ -42,22 +42,20 @@ export function PromoBar() {
   if (messages.length === 0) return null;
 
   return (
-    <div className="w-full bg-black text-white py-2 px-4 overflow-hidden relative min-h-[36px]">
-      <div className="container mx-auto flex items-center justify-center">
-        {messages.map((msg, index) => (
-          <div
-            key={index}
-            className={`flex items-center gap-2 text-xs sm:text-sm font-medium transition-all duration-500 absolute w-full justify-center ${
-              index === currentIndex
-                ? 'opacity-100 translate-y-0'
-                : 'opacity-0 translate-y-4 pointer-events-none'
-            }`}
-          >
-            {msg.icon}
-            <span>{msg.text}</span>
-          </div>
-        ))}
-      </div>
+    <div className="w-full bg-black text-white h-[36px] overflow-hidden relative flex items-center justify-center">
+      {messages.map((msg, index) => (
+        <div
+          key={index}
+          className={`flex items-center justify-center gap-2 text-xs sm:text-sm font-medium transition-all duration-500 absolute w-full px-4 h-full ${
+            index === currentIndex
+              ? 'opacity-100 translate-y-0'
+              : 'opacity-0 translate-y-4 pointer-events-none'
+          }`}
+        >
+          {msg.icon}
+          <span className="truncate">{msg.text}</span>
+        </div>
+      ))}
     </div>
   );
 }
