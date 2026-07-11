@@ -10,7 +10,7 @@ export default function AdminDashboard() {
       
       {/* KPI Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border shadow-sm flex flex-col">
+        <div className="bg-white/10 dark:bg-slate-900/30 backdrop-blur-md p-6 rounded-2xl border border-white/20 dark:border-white/10 shadow-sm flex flex-col">
           <div className="flex justify-between items-start mb-4">
             <div className="p-3 bg-blue-100 text-blue-600 rounded-xl dark:bg-blue-900/50 dark:text-blue-400">
               <DollarSign className="w-6 h-6" />
@@ -23,7 +23,7 @@ export default function AdminDashboard() {
           <h3 className="text-3xl font-bold mt-1">₹4.2M</h3>
         </div>
         
-        <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border shadow-sm flex flex-col">
+        <div className="bg-white/10 dark:bg-slate-900/30 backdrop-blur-md p-6 rounded-2xl border border-white/20 dark:border-white/10 shadow-sm flex flex-col">
           <div className="flex justify-between items-start mb-4">
             <div className="p-3 bg-indigo-100 text-indigo-600 rounded-xl dark:bg-indigo-900/50 dark:text-indigo-400">
               <Store className="w-6 h-6" />
@@ -36,7 +36,7 @@ export default function AdminDashboard() {
           <h3 className="text-3xl font-bold mt-1">342</h3>
         </div>
         
-        <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border shadow-sm flex flex-col">
+        <div className="bg-white/10 dark:bg-slate-900/30 backdrop-blur-md p-6 rounded-2xl border border-white/20 dark:border-white/10 shadow-sm flex flex-col">
           <div className="flex justify-between items-start mb-4">
             <div className="p-3 bg-purple-100 text-purple-600 rounded-xl dark:bg-purple-900/50 dark:text-purple-400">
               <ShoppingCart className="w-6 h-6" />
@@ -49,7 +49,7 @@ export default function AdminDashboard() {
           <h3 className="text-3xl font-bold mt-1">12.4k</h3>
         </div>
         
-        <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border shadow-sm flex flex-col">
+        <div className="bg-white/10 dark:bg-slate-900/30 backdrop-blur-md p-6 rounded-2xl border border-white/20 dark:border-white/10 shadow-sm flex flex-col">
           <div className="flex justify-between items-start mb-4">
             <div className="p-3 bg-orange-100 text-orange-600 rounded-xl dark:bg-orange-900/50 dark:text-orange-400">
               <Users className="w-6 h-6" />
@@ -64,7 +64,7 @@ export default function AdminDashboard() {
       <h2 className="text-xl font-bold mb-4">Requires Attention</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         
-        <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-yellow-200 dark:border-yellow-900/50 shadow-sm relative overflow-hidden">
+        <div className="bg-white/10 dark:bg-slate-900/30 backdrop-blur-md p-6 rounded-2xl border border-yellow-200/50 dark:border-yellow-900/30 shadow-sm relative overflow-hidden">
           <div className="absolute top-0 left-0 w-1 h-full bg-yellow-400"></div>
           <div className="flex justify-between items-center mb-4">
             <h3 className="font-bold text-lg">Vendor Approvals</h3>
@@ -80,7 +80,7 @@ export default function AdminDashboard() {
           </Link>
         </div>
         
-        <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-blue-200 dark:border-blue-900/50 shadow-sm relative overflow-hidden">
+        <div className="bg-white/10 dark:bg-slate-900/30 backdrop-blur-md p-6 rounded-2xl border border-blue-200/50 dark:border-blue-900/30 shadow-sm relative overflow-hidden">
           <div className="absolute top-0 left-0 w-1 h-full bg-blue-400"></div>
           <div className="flex justify-between items-center mb-4">
             <h3 className="font-bold text-lg">Content Review</h3>

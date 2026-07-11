@@ -19,10 +19,10 @@ export default function VendorApprovals() {
         </div>
       </div>
       
-      <div className="bg-white dark:bg-slate-900 rounded-2xl border shadow-sm overflow-hidden">
+      <div className="bg-white/10 dark:bg-slate-900/30 backdrop-blur-md rounded-2xl border border-white/20 dark:border-white/10 shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm">
-            <thead className="bg-slate-50 dark:bg-slate-800/50 text-slate-600 dark:text-slate-400 border-b">
+            <thead className="bg-white/10 dark:bg-slate-800/30 text-slate-700 dark:text-slate-300 border-b border-white/20 dark:border-white/10">
               <tr>
                 <th className="px-6 py-4 font-semibold">Business Name</th>
                 <th className="px-6 py-4 font-semibold">Owner</th>
@@ -34,7 +34,7 @@ export default function VendorApprovals() {
             </thead>
             <tbody className="divide-y">
               {VENDOR_APPLICATIONS.map((vendor) => (
-                <tr key={vendor.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                <tr key={vendor.id} className="hover:bg-white/10 dark:hover:bg-slate-800/30 transition-colors border-b border-white/10 dark:border-white/5 last:border-0">
                   <td className="px-6 py-4 font-medium">{vendor.name}</td>
                   <td className="px-6 py-4 text-muted-foreground">{vendor.owner}</td>
                   <td className="px-6 py-4 text-muted-foreground font-mono">{vendor.gstin}</td>
@@ -43,15 +43,15 @@ export default function VendorApprovals() {
                     <StatusBadge status={vendor.status as any} />
                   </td>
                   <td className="px-6 py-4 flex justify-end gap-2">
-                    <button className="p-2 text-slate-400 hover:text-blue-600 bg-slate-100 hover:bg-blue-50 dark:bg-slate-800 dark:hover:bg-blue-900/30 rounded-lg transition-colors" title="View Details">
+                    <button className="p-2 text-slate-700 hover:text-blue-600 bg-white/20 hover:bg-blue-100 dark:bg-white/10 dark:hover:bg-blue-900/50 rounded-lg transition-colors" title="View Details">
                       <Eye className="w-4 h-4" />
                     </button>
                     {vendor.status === 'pending' && (
                       <>
-                        <button className="p-2 text-slate-400 hover:text-green-600 bg-slate-100 hover:bg-green-50 dark:bg-slate-800 dark:hover:bg-green-900/30 rounded-lg transition-colors" title="Approve">
+                        <button className="p-2 text-slate-700 hover:text-green-600 bg-white/20 hover:bg-green-100 dark:bg-white/10 dark:hover:bg-green-900/50 rounded-lg transition-colors" title="Approve">
                           <Check className="w-4 h-4" />
                         </button>
-                        <button className="p-2 text-slate-400 hover:text-red-600 bg-slate-100 hover:bg-red-50 dark:bg-slate-800 dark:hover:bg-red-900/30 rounded-lg transition-colors" title="Reject">
+                        <button className="p-2 text-slate-700 hover:text-red-600 bg-white/20 hover:bg-red-100 dark:bg-white/10 dark:hover:bg-red-900/50 rounded-lg transition-colors" title="Reject">
                           <X className="w-4 h-4" />
                         </button>
                       </>

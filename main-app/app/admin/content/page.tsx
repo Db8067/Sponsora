@@ -19,14 +19,14 @@ export default function ContentReview() {
         </div>
       </div>
       
-      <div className="bg-white dark:bg-slate-900 rounded-2xl border shadow-sm overflow-hidden">
-        <div className="flex items-center gap-4 p-4 border-b bg-slate-50 dark:bg-slate-800/50">
-          <select className="bg-white dark:bg-slate-900 border rounded-lg px-3 py-2 text-sm outline-none">
+      <div className="bg-white/10 dark:bg-slate-900/30 backdrop-blur-md rounded-2xl border border-white/20 dark:border-white/10 shadow-sm overflow-hidden">
+        <div className="flex items-center gap-4 p-4 border-b border-white/20 dark:border-white/10 bg-white/5 dark:bg-slate-800/20">
+          <select className="bg-white/20 dark:bg-slate-900/50 backdrop-blur-sm border border-white/20 dark:border-white/10 rounded-lg px-3 py-2 text-sm outline-none">
             <option>All Types</option>
             <option>Products</option>
             <option>Collections</option>
           </select>
-          <select className="bg-white dark:bg-slate-900 border rounded-lg px-3 py-2 text-sm outline-none">
+          <select className="bg-white/20 dark:bg-slate-900/50 backdrop-blur-sm border border-white/20 dark:border-white/10 rounded-lg px-3 py-2 text-sm outline-none">
             <option>Pending Only</option>
             <option>All Statuses</option>
           </select>
@@ -34,7 +34,7 @@ export default function ContentReview() {
         
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm">
-            <thead className="bg-slate-50 dark:bg-slate-800/50 text-slate-600 dark:text-slate-400 border-b">
+            <thead className="bg-white/10 dark:bg-slate-800/30 text-slate-700 dark:text-slate-300 border-b border-white/20 dark:border-white/10">
               <tr>
                 <th className="px-6 py-4 font-semibold">Type</th>
                 <th className="px-6 py-4 font-semibold">Name</th>
@@ -46,7 +46,7 @@ export default function ContentReview() {
             </thead>
             <tbody className="divide-y">
               {CONTENT_SUBMISSIONS.map((item) => (
-                <tr key={item.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                <tr key={item.id} className="hover:bg-white/10 dark:hover:bg-slate-800/30 transition-colors border-b border-white/10 dark:border-white/5 last:border-0">
                   <td className="px-6 py-4">
                     <span className={`px-2 py-1 rounded-md text-xs font-bold ${
                       item.type === 'Product' 
@@ -63,15 +63,15 @@ export default function ContentReview() {
                     <StatusBadge status={item.status as any} />
                   </td>
                   <td className="px-6 py-4 flex justify-end gap-2">
-                    <button className="p-2 text-slate-400 hover:text-blue-600 bg-slate-100 hover:bg-blue-50 dark:bg-slate-800 dark:hover:bg-blue-900/30 rounded-lg transition-colors" title="Preview">
+                    <button className="p-2 text-slate-700 hover:text-blue-600 bg-white/20 hover:bg-blue-100 dark:bg-white/10 dark:hover:bg-blue-900/50 rounded-lg transition-colors" title="Preview">
                       <ExternalLink className="w-4 h-4" />
                     </button>
                     {item.status === 'pending' && (
                       <>
-                        <button className="p-2 text-slate-400 hover:text-green-600 bg-slate-100 hover:bg-green-50 dark:bg-slate-800 dark:hover:bg-green-900/30 rounded-lg transition-colors" title="Approve & Publish">
+                        <button className="p-2 text-slate-700 hover:text-green-600 bg-white/20 hover:bg-green-100 dark:bg-white/10 dark:hover:bg-green-900/50 rounded-lg transition-colors" title="Approve & Publish">
                           <Check className="w-4 h-4" />
                         </button>
-                        <button className="p-2 text-slate-400 hover:text-red-600 bg-slate-100 hover:bg-red-50 dark:bg-slate-800 dark:hover:bg-red-900/30 rounded-lg transition-colors" title="Reject">
+                        <button className="p-2 text-slate-700 hover:text-red-600 bg-white/20 hover:bg-red-100 dark:bg-white/10 dark:hover:bg-red-900/50 rounded-lg transition-colors" title="Reject">
                           <X className="w-4 h-4" />
                         </button>
                       </>
