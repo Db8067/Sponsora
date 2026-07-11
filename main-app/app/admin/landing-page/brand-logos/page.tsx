@@ -1,8 +1,9 @@
 'use client';
-import React, { useState, useEffect } from 'react';
-import { Image as ImageIcon, X, Save, Upload, Loader2, ArrowLeft } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Image as ImageIcon, X, Loader2, ArrowLeft, Upload, ClipboardPaste } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { SaveAlert } from '@/components/SaveAlert';
+import { ConfirmAlert } from '@/components/ConfirmAlert';
 import Link from 'next/link';
 
 const DEFAULT_BRANDS = [
@@ -15,9 +16,11 @@ const DEFAULT_BRANDS = [
 export default function BrandLogosAdmin() {
   const [brandLogos, setBrandLogos] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
   const [uploadingImage, setUploadingImage] = useState(false);
   const [alert, setAlert] = useState<{message: string, type: 'success'|'error'} | null>(null);
+  
+  const [confirmDelete, setConfirmDelete] = useState<{isOpen: boolean, index: number | null}>({ isOpen: false, index: null });
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     async function fetchSettings() {
@@ -32,21 +35,16 @@ export default function BrandLogosAdmin() {
     fetchSettings();
   }, []);
 
-  async function saveSetting() {
-    setSaving(true);
-    const { error } = await supabase.from('site_settings').upsert({ key: 'brand_logos', value: brandLogos });
+  async function autoSave(newData: string[]) {
+    const { error } = await supabase.from('site_settings').upsert({ key: 'brand_logos', value: newData });
     if (error) {
       setAlert({ message: `Failed to save: ${error.message}`, type: 'error' });
     } else {
-      setAlert({ message: 'Brand logos saved successfully!', type: 'success' });
+      setAlert({ message: 'Saved automatically!', type: 'success' });
     }
-    setSaving(false);
   }
 
-  async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
+  async function uploadFile(file: File) {
     setUploadingImage(true);
     try {
       const formData = new FormData();
@@ -60,7 +58,10 @@ export default function BrandLogosAdmin() {
       
       const data = await res.json();
       if (data.secure_url || data.url) {
-        setBrandLogos(prev => [...prev, data.secure_url || data.url]);
+        const url = data.secure_url || data.url;
+        const newArr = [...brandLogos, url];
+        setBrandLogos(newArr);
+        autoSave(newArr);
       } else {
         setAlert({ message: 'Upload failed: ' + (data.error || 'Unknown error'), type: 'error' });
       }
@@ -70,8 +71,42 @@ export default function BrandLogosAdmin() {
     setUploadingImage(false);
   }
 
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) uploadFile(file);
+    if (fileInputRef.current) fileInputRef.current.value = ''; // Reset input
+  };
+
+  const handlePaste = async () => {
+    try {
+      const items = await navigator.clipboard.read();
+      for (const item of items) {
+        for (const type of item.types) {
+          if (type.startsWith('image/')) {
+            const blob = await item.getType(type);
+            const file = new File([blob], "pasted-image.png", { type });
+            uploadFile(file);
+            return;
+          }
+        }
+      }
+      setAlert({ message: 'No image found in clipboard. Please copy an image first.', type: 'error' });
+    } catch (err) {
+      setAlert({ message: 'Failed to read clipboard. Please allow permissions.', type: 'error' });
+    }
+  };
+
   const removeImage = (index: number) => {
-    setBrandLogos(brandLogos.filter((_, i) => i !== index));
+    setConfirmDelete({ isOpen: true, index });
+  };
+
+  const confirmRemoveImage = () => {
+    if (confirmDelete.index !== null) {
+      const newArr = brandLogos.filter((_, i) => i !== confirmDelete.index);
+      setBrandLogos(newArr);
+      autoSave(newArr);
+    }
+    setConfirmDelete({ isOpen: false, index: null });
   };
 
   if (loading) return <div className="p-10 flex justify-center"><Loader2 className="w-8 h-8 animate-spin text-orange-500" /></div>;
@@ -79,6 +114,12 @@ export default function BrandLogosAdmin() {
   return (
     <div className="pb-20 max-w-5xl mx-auto">
       {alert && <SaveAlert message={alert.message} type={alert.type} onClose={() => setAlert(null)} />}
+      <ConfirmAlert 
+        isOpen={confirmDelete.isOpen} 
+        message="Are you sure you want to delete this logo?" 
+        onConfirm={confirmRemoveImage} 
+        onCancel={() => setConfirmDelete({ isOpen: false, index: null })} 
+      />
       
       <div className="mb-6 flex items-center gap-4">
         <Link href="/admin/landing-page" className="p-2 bg-white/10 dark:bg-slate-900/50 rounded-full hover:bg-white/20 transition-colors">
@@ -86,51 +127,64 @@ export default function BrandLogosAdmin() {
         </Link>
         <div>
           <h1 className="text-3xl font-bold">Brand Logos Marquee</h1>
-          <p className="text-slate-500 mt-1">Upload logos for the endless scrolling brands section.</p>
+          <p className="text-slate-500 mt-1">Upload logos for the endless scrolling brands section. Changes save automatically.</p>
         </div>
       </div>
       
       <div className="bg-white/10 dark:bg-slate-900/30 backdrop-blur-md rounded-2xl border border-white/20 dark:border-white/10 shadow-sm overflow-hidden p-6">
-        <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-orange-100 text-orange-600 dark:bg-orange-900/50 dark:text-orange-400 rounded-lg">
-              <ImageIcon className="w-5 h-5" />
-            </div>
-            <h2 className="text-xl font-bold">Manage Logos</h2>
+        <div className="flex items-center gap-3 mb-8">
+          <div className="p-2 bg-orange-100 text-orange-600 dark:bg-orange-900/50 dark:text-orange-400 rounded-lg">
+            <ImageIcon className="w-5 h-5" />
           </div>
-          <button 
-            onClick={saveSetting}
-            disabled={saving || uploadingImage}
-            className="bg-orange-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-orange-700 disabled:opacity-50 flex items-center gap-2 transition-colors shadow-lg shadow-orange-500/20"
-          >
-            {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />} Save Changes
-          </button>
+          <h2 className="text-xl font-bold">Manage Logos</h2>
         </div>
         
-        <div className="flex flex-wrap gap-6">
+        <div className="flex flex-wrap gap-6 mb-8">
           {brandLogos.map((url, idx) => (
-            <div key={idx} className="relative group border border-slate-200 dark:border-white/10 rounded-2xl overflow-hidden w-40 h-24 bg-white flex items-center justify-center p-4 shadow-sm hover:shadow-md transition-shadow">
+            <div key={idx} className="relative group border border-slate-200 dark:border-white/10 rounded-2xl overflow-visible w-40 h-24 bg-white flex items-center justify-center p-4 shadow-sm hover:shadow-md transition-shadow">
               <img src={url} alt="Brand Logo" className="w-full h-full object-contain" />
               <button 
                 onClick={() => removeImage(idx)}
-                className="absolute -top-2 -right-2 bg-red-100 p-1.5 rounded-full text-red-600 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-200 z-10"
+                className="absolute -top-3 -right-3 bg-red-100 p-2 rounded-full text-red-600 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-200 z-20 shadow-md"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
           ))}
-          
-          <label className="border-2 border-dashed border-slate-300 dark:border-white/20 rounded-2xl w-40 h-24 flex flex-col items-center justify-center bg-white/5 hover:bg-slate-50 dark:hover:bg-white/10 transition-colors cursor-pointer text-slate-500">
-            {uploadingImage ? (
-               <Loader2 className="w-6 h-6 animate-spin text-orange-500" />
-            ) : (
-              <>
-                <Upload className="w-6 h-6 mb-2 text-orange-400" />
-                <span className="text-xs font-medium text-center">Add Logo</span>
-              </>
-            )}
-            <input type="file" className="hidden" accept="image/*" onChange={handleImageUpload} disabled={uploadingImage} />
-          </label>
+        </div>
+
+        <div className="border-t border-slate-200 dark:border-white/10 pt-8">
+          <h3 className="font-semibold mb-4 text-slate-800 dark:text-slate-200">Add New Logo</h3>
+          <div className="flex flex-col sm:flex-row gap-4">
+            <label className="flex-1 flex flex-col items-center justify-center gap-2 border-2 border-dashed border-slate-300 dark:border-white/20 rounded-2xl p-8 bg-slate-50 hover:bg-slate-100 dark:bg-slate-900/50 dark:hover:bg-slate-900 transition-colors cursor-pointer text-slate-500">
+              {uploadingImage ? (
+                <Loader2 className="w-6 h-6 animate-spin text-orange-500" />
+              ) : (
+                <>
+                  <Upload className="w-8 h-8 text-orange-400" />
+                  <span className="font-medium text-slate-700 dark:text-slate-300">Upload from Device</span>
+                  <span className="text-xs">Click to browse files</span>
+                </>
+              )}
+              <input type="file" className="hidden" accept="image/*" onChange={handleImageUpload} disabled={uploadingImage} ref={fileInputRef} />
+            </label>
+
+            <button 
+              onClick={handlePaste} 
+              disabled={uploadingImage}
+              className="flex-1 flex flex-col items-center justify-center gap-2 border-2 border-dashed border-slate-300 dark:border-white/20 rounded-2xl p-8 bg-slate-50 hover:bg-slate-100 dark:bg-slate-900/50 dark:hover:bg-slate-900 transition-colors text-slate-500"
+            >
+              {uploadingImage ? (
+                <Loader2 className="w-6 h-6 animate-spin text-orange-500" />
+              ) : (
+                <>
+                  <ClipboardPaste className="w-8 h-8 text-orange-400" />
+                  <span className="font-medium text-slate-700 dark:text-slate-300">Paste from Clipboard</span>
+                  <span className="text-xs">Copy image & click here</span>
+                </>
+              )}
+            </button>
+          </div>
         </div>
       </div>
     </div>

@@ -17,14 +17,18 @@ export function TypewriterSearch() {
   const [currentText, setCurrentText] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
   const [typingSpeed, setTypingSpeed] = useState(100);
-  const [phrases, setPhrases] = useState<string[]>(DEFAULT_PHRASES);
+  const [phrases, setPhrases] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     async function fetchSearchTexts() {
       const { data, error } = await supabase.from('site_settings').select('value').eq('key', 'search_texts').single();
       if (!error && data?.value && Array.isArray(data.value) && data.value.length > 0) {
         setPhrases(data.value);
+      } else {
+        setPhrases(DEFAULT_PHRASES);
       }
+      setIsLoading(false);
     }
     fetchSearchTexts();
   }, []);
@@ -67,7 +71,7 @@ export function TypewriterSearch() {
     <div className="relative w-full">
       <input 
         type="text" 
-        placeholder={currentText}
+        placeholder={isLoading ? "Search..." : currentText}
         className="w-full h-10 pl-4 pr-10 rounded-full border border-input bg-muted/50 focus:bg-background focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all placeholder:text-muted-foreground/70"
       />
       <button className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-primary transition-colors">

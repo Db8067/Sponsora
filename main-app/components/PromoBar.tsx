@@ -13,6 +13,7 @@ const DEFAULT_MESSAGES = [
 export function PromoBar() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [messages, setMessages] = useState(DEFAULT_MESSAGES);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     async function fetchPromoTexts() {
@@ -26,6 +27,7 @@ export function PromoBar() {
         }));
         setMessages(newMessages);
       }
+      setIsLoading(false);
     }
     fetchPromoTexts();
   }, []);
@@ -38,6 +40,10 @@ export function PromoBar() {
 
     return () => clearInterval(interval);
   }, [messages.length]);
+
+  if (isLoading) {
+    return <div className="w-full bg-black h-[36px]"></div>;
+  }
 
   if (messages.length === 0) return null;
 

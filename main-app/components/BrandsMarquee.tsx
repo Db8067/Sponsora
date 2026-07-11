@@ -12,17 +12,30 @@ const DEFAULT_BRANDS = [
 ];
 
 export function BrandsMarquee() {
-  const [brands, setBrands] = useState(DEFAULT_BRANDS);
+  const [brands, setBrands] = useState<{id: string, src: string, alt: string}[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     async function fetchBrands() {
       const { data, error } = await supabase.from('site_settings').select('value').eq('key', 'brand_logos').single();
       if (!error && data?.value && Array.isArray(data.value) && data.value.length > 0) {
         setBrands(data.value.map((url: string, idx: number) => ({ id: String(idx), src: url, alt: `Brand ${idx + 1}` })));
+      } else {
+        setBrands(DEFAULT_BRANDS);
       }
+      setIsLoading(false);
     }
     fetchBrands();
   }, []);
+
+  if (isLoading) {
+    return (
+      <section className="w-full mt-8 mb-4">
+        <h2 className="text-2xl md:text-3xl font-black text-center mb-6 tracking-tight text-transparent">Our Brands</h2>
+        <div className="w-full h-24 bg-slate-100 dark:bg-slate-900 animate-pulse"></div>
+      </section>
+    );
+  }
 
   if (brands.length === 0) return null;
 

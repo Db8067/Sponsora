@@ -12,14 +12,18 @@ const DEFAULT_BANNERS = [
 
 export function HeroBanner() {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [banners, setBanners] = useState(DEFAULT_BANNERS);
+  const [banners, setBanners] = useState<{id: string, src: string, alt: string}[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     async function fetchBanners() {
       const { data, error } = await supabase.from('site_settings').select('value').eq('key', 'hero_banners').single();
       if (!error && data?.value && Array.isArray(data.value) && data.value.length > 0) {
         setBanners(data.value.map((url: string, idx: number) => ({ id: String(idx), src: url, alt: `Banner ${idx + 1}` })));
+      } else {
+        setBanners(DEFAULT_BANNERS);
       }
+      setIsLoading(false);
     }
     fetchBanners();
   }, []);
@@ -32,6 +36,14 @@ export function HeroBanner() {
 
     return () => clearInterval(interval);
   }, [banners.length]);
+
+  if (isLoading) {
+    return (
+      <section className="w-full px-2 sm:px-4 lg:px-6 pt-4 pb-2">
+        <div className="w-full aspect-[4/1] rounded-3xl bg-slate-200 dark:bg-slate-800 animate-pulse"></div>
+      </section>
+    );
+  }
 
   if (banners.length === 0) return null;
 
