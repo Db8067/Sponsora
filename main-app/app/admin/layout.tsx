@@ -11,55 +11,66 @@ export default function AdminLayout({
 }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+  const navLinks = [
+    { href: "/admin", icon: <LayoutDashboard className="w-4 h-4" />, label: "Dashboard" },
+    { href: "/admin/landing-page", icon: <Globe className="w-4 h-4" />, label: "Landing Page" },
+    { href: "/admin/vendors", icon: <Users className="w-4 h-4" />, label: "Vendor Approvals" },
+    { href: "/admin/content", icon: <ShoppingBag className="w-4 h-4" />, label: "Content Review" },
+    { href: "/admin/settings", icon: <Settings className="w-4 h-4" />, label: "Settings" },
+  ];
+
   return (
-    <div className="flex min-h-screen bg-transparent relative">
-      {/* Mobile Top Bar */}
-      <div className="md:hidden fixed top-0 left-0 right-0 h-16 bg-white/10 dark:bg-black/20 backdrop-blur-md border-b border-white/20 dark:border-white/10 flex items-center justify-between px-4 z-50">
+    <div className="min-h-screen bg-transparent flex flex-col relative">
+      {/* Top Navbar */}
+      <header className="fixed top-0 left-0 right-0 h-16 bg-white text-black z-50 flex items-center justify-between px-4 md:px-8 shadow-sm">
         <Link href="/" className="flex items-center gap-2">
           <img src="/images/logo-dark.png" alt="Sponsora Logo" className="h-6 w-auto" />
           <span className="text-[10px] bg-red-600 px-2 py-0.5 rounded-full uppercase text-white font-bold">Admin</span>
         </Link>
-        <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="p-2 text-foreground">
+
+        {/* Desktop Navigation */}
+        <nav className="hidden md:flex items-center gap-6">
+          {navLinks.map((link) => (
+            <Link key={link.href} href={link.href} className="flex items-center gap-2 text-sm font-medium text-slate-700 hover:text-blue-600 transition-colors">
+              {link.icon} {link.label}
+            </Link>
+          ))}
+          <button className="flex items-center gap-2 text-sm font-medium text-red-600 hover:text-red-700 transition-colors ml-2 pl-6 border-l border-slate-200">
+            <LogOut className="w-4 h-4" /> Sign Out
+          </button>
+        </nav>
+
+        {/* Mobile Hamburger */}
+        <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="md:hidden p-2 text-black">
           {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
         </button>
+      </header>
+
+      {/* Mobile Dropdown Menu (Animated from top to bottom) */}
+      <div 
+        className={`md:hidden fixed top-16 left-0 right-0 bg-white text-black z-40 border-b border-gray-200 shadow-md transition-[max-height,opacity] duration-300 ease-in-out overflow-hidden ${
+          isMobileMenuOpen ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'
+        }`}
+      >
+        <nav className="flex flex-col p-4 space-y-1">
+          {navLinks.map((link) => (
+            <Link 
+              key={link.href} 
+              href={link.href} 
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-slate-100 transition-colors text-sm font-medium text-slate-800"
+            >
+              {link.icon} {link.label}
+            </Link>
+          ))}
+          <button className="flex items-center gap-3 px-4 py-3 mt-2 border-t border-slate-100 rounded-b-lg hover:bg-red-50 text-red-600 transition-colors text-sm font-medium w-full text-left">
+            <LogOut className="w-4 h-4" /> Sign Out
+          </button>
+        </nav>
       </div>
 
-      {/* Admin Sidebar */}
-      <aside className={`fixed inset-y-0 left-0 z-40 w-64 bg-slate-900/80 dark:bg-slate-950/80 backdrop-blur-xl border-r border-white/10 text-slate-300 flex flex-col transition-transform duration-300 ease-in-out md:translate-x-0 ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
-        <div className="p-6 pt-20 md:pt-6">
-          <Link href="/" className="hidden md:flex items-center gap-2 mb-8">
-            <img src="/images/logo-dark.png" alt="Sponsora Logo" className="h-6 md:h-8 w-auto" />
-            <span className="text-xs bg-red-600 px-2 py-0.5 rounded-full uppercase text-white font-bold">Admin</span>
-          </Link>
-          
-          <nav className="space-y-1">
-            <Link onClick={() => setIsMobileMenuOpen(false)} href="/admin" className="flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-white/10 hover:text-white transition-colors">
-              <LayoutDashboard className="w-5 h-5" /> Dashboard Overview
-            </Link>
-            <Link onClick={() => setIsMobileMenuOpen(false)} href="/admin/vendors" className="flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-white/10 hover:text-white transition-colors">
-              <Users className="w-5 h-5" /> Vendor Approvals
-            </Link>
-            <Link onClick={() => setIsMobileMenuOpen(false)} href="/admin/content" className="flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-white/10 hover:text-white transition-colors">
-              <ShoppingBag className="w-5 h-5" /> Content Review
-            </Link>
-            <Link onClick={() => setIsMobileMenuOpen(false)} href="/admin/landing-page" className="flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-white/10 hover:text-white transition-colors">
-              <Globe className="w-5 h-5" /> Landing Page
-            </Link>
-            <Link onClick={() => setIsMobileMenuOpen(false)} href="/admin/settings" className="flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-white/10 hover:text-white transition-colors">
-              <Settings className="w-5 h-5" /> Platform Settings
-            </Link>
-          </nav>
-        </div>
-        
-        <div className="mt-auto p-6">
-          <button className="flex items-center gap-3 px-3 py-3 w-full rounded-lg hover:bg-white/10 hover:text-white transition-colors text-left text-slate-400">
-            <LogOut className="w-5 h-5" /> Sign Out
-          </button>
-        </div>
-      </aside>
-
       {/* Main Content */}
-      <main className="flex-1 md:ml-64 pt-20 md:pt-8 p-4 md:p-8 min-h-screen">
+      <main className="flex-1 pt-24 pb-12 p-4 md:p-8 w-full max-w-7xl mx-auto min-h-screen">
         {children}
       </main>
     </div>
