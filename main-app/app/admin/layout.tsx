@@ -49,25 +49,25 @@ export default function AdminLayout({
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-6">
-          <Link href="/admin" className="flex items-center gap-2 text-sm font-medium text-slate-700 hover:text-blue-600 transition-colors">
+          <Link href="/admin" className="flex items-center gap-2 text-sm font-medium text-slate-700 hover:text-pink-600 transition-colors">
             <LayoutDashboard className="w-4 h-4" /> Dashboard
           </Link>
           
           <div className="relative" ref={dropdownRef}>
             <button 
               onClick={() => setIsLandingDropdownOpen(!isLandingDropdownOpen)}
-              className="flex items-center gap-2 text-sm font-medium text-slate-700 hover:text-blue-600 transition-colors"
+              className="flex items-center gap-2 text-sm font-medium text-slate-700 hover:text-pink-600 transition-colors"
             >
               <Globe className="w-4 h-4" /> Landing Page <ChevronDown className={`w-3 h-3 transition-transform ${isLandingDropdownOpen ? 'rotate-180' : ''}`} />
             </button>
             
             {isLandingDropdownOpen && (
               <div className="absolute top-full left-0 mt-2 w-56 bg-white rounded-xl shadow-xl border border-slate-100 py-2 animate-in fade-in slide-in-from-top-2">
-                <Link href="/admin/landing-page" className="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 hover:text-blue-600 font-bold border-b border-slate-100 mb-1">
+                <Link href="/admin/landing-page" className="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 hover:text-pink-600 font-bold border-b border-slate-100 mb-1">
                   Manager Overview
                 </Link>
                 {landingSubLinks.map(link => (
-                  <Link key={link.href} href={link.href} onClick={() => setIsLandingDropdownOpen(false)} className="flex items-center gap-3 px-4 py-2 text-sm text-slate-600 hover:bg-slate-50 hover:text-blue-600 transition-colors">
+                  <Link key={link.href} href={link.href} onClick={() => setIsLandingDropdownOpen(false)} className="flex items-center gap-3 px-4 py-2 text-sm text-slate-600 hover:bg-slate-50 hover:text-pink-600 transition-colors">
                     {link.icon} {link.label}
                   </Link>
                 ))}
@@ -75,13 +75,13 @@ export default function AdminLayout({
             )}
           </div>
 
-          <Link href="/admin/vendors" className="flex items-center gap-2 text-sm font-medium text-slate-700 hover:text-blue-600 transition-colors">
+          <Link href="/admin/vendors" className="flex items-center gap-2 text-sm font-medium text-slate-700 hover:text-pink-600 transition-colors">
             <Users className="w-4 h-4" /> Vendor Approvals
           </Link>
-          <Link href="/admin/content" className="flex items-center gap-2 text-sm font-medium text-slate-700 hover:text-blue-600 transition-colors">
+          <Link href="/admin/content" className="flex items-center gap-2 text-sm font-medium text-slate-700 hover:text-pink-600 transition-colors">
             <ShoppingBag className="w-4 h-4" /> Content Review
           </Link>
-          <Link href="/admin/settings" className="flex items-center gap-2 text-sm font-medium text-slate-700 hover:text-blue-600 transition-colors">
+          <Link href="/admin/settings" className="flex items-center gap-2 text-sm font-medium text-slate-700 hover:text-pink-600 transition-colors">
             <Settings className="w-4 h-4" /> Settings
           </Link>
           <Link href="/admin/trash" className="flex items-center gap-2 text-sm font-medium text-slate-700 hover:text-red-600 transition-colors">
@@ -121,7 +121,7 @@ export default function AdminLayout({
             <div className={`flex flex-col pl-11 pr-4 overflow-hidden transition-all duration-300 ${isLandingDropdownOpen ? 'max-h-[500px] opacity-100 mb-2' : 'max-h-0 opacity-0'}`}>
               <Link href="/admin/landing-page" onClick={() => setIsMobileMenuOpen(false)} className="py-2.5 text-sm font-bold text-slate-800 border-b border-slate-100">Overview</Link>
               {landingSubLinks.map(link => (
-                <Link key={link.href} href={link.href} onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-3 py-2.5 text-sm text-slate-600 hover:text-blue-600">
+                <Link key={link.href} href={link.href} onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-3 py-2.5 text-sm text-slate-600 hover:text-pink-600">
                   {link.icon} {link.label}
                 </Link>
               ))}

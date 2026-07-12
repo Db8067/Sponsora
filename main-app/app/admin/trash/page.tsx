@@ -92,7 +92,7 @@ export default function TrashAdmin() {
         <button
           onClick={() => handleRestore(item)}
           disabled={processingId === item.id}
-          className="flex-1 flex items-center justify-center gap-2 py-2 px-4 bg-blue-100 text-blue-700 hover:bg-blue-200 dark:bg-blue-900/30 dark:text-blue-400 dark:hover:bg-blue-900/50 rounded-xl font-medium transition-colors disabled:opacity-50"
+          className="flex-1 flex items-center justify-center gap-2 py-2 px-4 bg-pink-100 text-blue-700 hover:bg-blue-200 dark:bg-blue-900/30 dark:text-blue-400 dark:hover:bg-blue-900/50 rounded-xl font-medium transition-colors disabled:opacity-50"
         >
           {processingId === item.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <RotateCcw className="w-4 h-4" />}
           Restore
@@ -146,7 +146,7 @@ export default function TrashAdmin() {
               {categorized.hero_banners.length > 0 && (
                 <div>
                   <h3 className="text-lg font-semibold mb-4 text-slate-700 dark:text-slate-300 flex items-center gap-2">
-                    <span className="w-2 h-2 bg-purple-500 rounded-full"></span>
+                    <span className="w-2 h-2 bg-pink-500 rounded-full"></span>
                     Hero Banners
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -182,7 +182,7 @@ export default function TrashAdmin() {
               {categorized.search_texts.length > 0 && (
                 <div>
                   <h3 className="text-lg font-semibold mb-4 text-slate-700 dark:text-slate-300 flex items-center gap-2">
-                    <span className="w-2 h-2 bg-indigo-500 rounded-full"></span>
+                    <span className="w-2 h-2 bg-pink-500 rounded-full"></span>
                     Search Phrases
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

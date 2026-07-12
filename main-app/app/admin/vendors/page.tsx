@@ -43,7 +43,7 @@ export default function VendorApprovals() {
                     <StatusBadge status={vendor.status as any} />
                   </td>
                   <td className="px-6 py-4 flex justify-end gap-2">
-                    <button className="p-2 text-slate-700 hover:text-blue-600 bg-white/20 hover:bg-blue-100 dark:bg-white/10 dark:hover:bg-blue-900/50 rounded-lg transition-colors" title="View Details">
+                    <button className="p-2 text-slate-700 hover:text-pink-600 bg-white/20 hover:bg-pink-100 dark:bg-white/10 dark:hover:bg-blue-900/50 rounded-lg transition-colors" title="View Details">
                       <Eye className="w-4 h-4" />
                     </button>
                     {vendor.status === 'pending' && (

@@ -226,7 +226,7 @@ export default function BrandLogosAdmin() {
                 <div className="absolute -top-3 -right-3 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity z-20">
                   <button 
                     onClick={() => setImageToCrop({ url, index: idx })}
-                    className="bg-blue-100 p-2 rounded-full text-blue-600 hover:bg-blue-200 shadow-md"
+                    className="bg-pink-100 p-2 rounded-full text-pink-600 hover:bg-blue-200 shadow-md"
                     title="Edit & Crop"
                   >
                     <Crop className="w-4 h-4" />

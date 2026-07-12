@@ -67,7 +67,7 @@ export default function SearchBarAdmin() {
     autoSave(newArr);
   };
 
-  if (loading) return <div className="p-10 flex justify-center"><Loader2 className="w-8 h-8 animate-spin text-indigo-500" /></div>;
+  if (loading) return <div className="p-10 flex justify-center"><Loader2 className="w-8 h-8 animate-spin text-pink-500" /></div>;
 
   return (
     <div className="pb-20 max-w-4xl mx-auto">
@@ -91,7 +91,7 @@ export default function SearchBarAdmin() {
       
       <div className="bg-white/10 dark:bg-slate-900/30 backdrop-blur-md rounded-2xl border border-white/20 dark:border-white/10 shadow-sm overflow-hidden p-6">
         <div className="flex items-center gap-3 mb-6">
-          <div className="p-2 bg-indigo-100 text-indigo-600 dark:bg-indigo-900/50 dark:text-indigo-400 rounded-lg">
+          <div className="p-2 bg-pink-100 text-pink-600 dark:bg-pink-900/50 dark:text-pink-400 rounded-lg">
             <Search className="w-5 h-5" />
           </div>
           <h2 className="text-xl font-bold">Edit Texts</h2>
@@ -105,7 +105,7 @@ export default function SearchBarAdmin() {
                 value={text} 
                 onChange={(e) => handleStringChange(idx, e.target.value)}
                 onBlur={handleStringBlur}
-                className="flex-1 bg-white/20 dark:bg-slate-900/50 backdrop-blur-sm border border-slate-200 dark:border-white/10 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-indigo-500 font-medium text-base sm:text-sm" 
+                className="flex-1 bg-white/20 dark:bg-slate-900/50 backdrop-blur-sm border border-slate-200 dark:border-white/10 rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-pink-500 font-medium text-base sm:text-sm" 
                 placeholder="Enter search phrase..."
               />
               <button onClick={() => removeString(idx)} className="p-3 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-xl transition-colors">
@@ -113,7 +113,7 @@ export default function SearchBarAdmin() {
               </button>
             </div>
           ))}
-          <button onClick={addString} className="flex items-center gap-2 text-sm text-indigo-600 dark:text-indigo-400 font-medium hover:underline mt-4 p-2">
+          <button onClick={addString} className="flex items-center gap-2 text-sm text-pink-600 dark:text-pink-400 font-medium hover:underline mt-4 p-2">
             <Plus className="w-4 h-4" /> Add Search Phrase
           </button>
         </div>

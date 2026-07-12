@@ -6,45 +6,87 @@ export default function SellerLandingPage() {
   return (
     <div className="flex flex-col min-h-screen">
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-pink-50 via-white to-pink-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 py-16 px-4 relative overflow-hidden">
+      <section className="bg-gradient-to-r from-pink-50 via-white to-pink-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 py-12 md:py-16 px-4 relative overflow-hidden">
         {/* Soft abstract shapes in background */}
         <div className="absolute top-0 right-0 w-[50vw] h-[50vw] bg-pink-200/40 rounded-full blur-3xl -translate-y-1/2 translate-x-1/4 pointer-events-none"></div>
         <div className="absolute bottom-0 left-0 w-[30vw] h-[30vw] bg-blue-200/40 rounded-full blur-3xl translate-y-1/2 -translate-x-1/4 pointer-events-none"></div>
         
-        <div className="container mx-auto max-w-7xl flex flex-col md:flex-row items-center gap-12 relative z-10">
+        <div className="container mx-auto max-w-7xl relative z-10">
           
-          {/* Text Content */}
-          <div className="flex-1 text-center md:text-left mt-8 md:mt-0">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-slate-800 dark:text-white leading-tight mb-6">
-              Sell to customers without any hustle for delivery or website
-            </h1>
-            <p className="text-xl text-slate-600 dark:text-slate-300 mb-8 max-w-lg mx-auto md:mx-0">
-              Register on our Sponsora platform and sell across India.
-            </p>
-            
-            <div className="flex flex-col sm:flex-row items-center gap-4 mb-10 bg-white/60 dark:bg-slate-800/60 p-3 rounded-2xl border border-pink-100 dark:border-white/10 max-w-xl mx-auto md:mx-0 shadow-sm backdrop-blur-sm">
-              <span className="bg-pink-500 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">New</span>
-              <span className="text-slate-700 dark:text-slate-300 font-medium">Don't have GSTIN? You can still sell on Sponsora.</span>
-              <Link href="/dont-have-gst" className="text-primary hover:text-primary-dark font-bold whitespace-nowrap transition-colors">
-                Know more
+          {/* LAPTOP / DESKTOP VIEW (Unchanged) */}
+          <div className="hidden md:flex flex-row items-center gap-12">
+            {/* Text Content */}
+            <div className="flex-1 text-left mt-0">
+              <h1 className="text-5xl lg:text-6xl font-black text-slate-800 dark:text-white leading-tight mb-6">
+                Sell to customers without any hustle for delivery or website
+              </h1>
+              <p className="text-xl text-slate-600 dark:text-slate-300 mb-8 max-w-lg mx-0">
+                Register on our Sponsora platform and sell across India.
+              </p>
+              
+              <div className="flex flex-row items-center gap-4 mb-10 bg-white/60 dark:bg-slate-800/60 p-3 rounded-2xl border border-pink-100 dark:border-white/10 max-w-xl mx-0 shadow-sm backdrop-blur-sm">
+                <span className="bg-pink-500 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">New</span>
+                <span className="text-slate-700 dark:text-slate-300 font-medium">Don't have GSTIN? You can still sell on Sponsora.</span>
+                <Link href="/dont-have-gst" className="text-primary hover:text-primary-dark font-bold whitespace-nowrap transition-colors">
+                  Know more
+                </Link>
+              </div>
+              
+              <Link href="/seller/register">
+                <button className="bg-primary text-white px-10 py-4 rounded-xl font-bold text-lg hover:bg-primary-dark transition-colors shadow-xl shadow-primary/30 hover:scale-105 duration-300">
+                  Start Selling
+                </button>
               </Link>
             </div>
-            
-            <Link href="/seller/register">
-              <button className="bg-primary text-white px-10 py-4 rounded-xl font-bold text-lg hover:bg-primary-dark transition-colors shadow-xl shadow-primary/30 hover:scale-105 duration-300">
-                Start Selling
-              </button>
-            </Link>
+
+            {/* Banner Image */}
+            <div className="flex-1 flex justify-end w-full relative">
+              <img 
+                src="/images/seller_banner_doodle.png" 
+                alt="Seller Doodle Banner" 
+                className="w-full lg:max-w-xl object-contain drop-shadow-2xl hover:scale-105 transition-transform duration-500"
+              />
+            </div>
           </div>
 
-          {/* Banner Image */}
-          <div className="flex-1 flex justify-center md:justify-end w-full relative">
-            <img 
-              src="/images/seller_banner_doodle.png" 
-              alt="Seller Doodle Banner" 
-              className="w-full max-w-md lg:max-w-xl object-contain drop-shadow-2xl hover:scale-105 transition-transform duration-500"
-            />
+          {/* MOBILE VIEW (Side by side image and text) */}
+          <div className="flex md:hidden flex-row items-center justify-between gap-4">
+            {/* Left side text */}
+            <div className="flex-1 text-left">
+              <h1 className="text-2xl font-black text-slate-800 dark:text-white leading-tight mb-3">
+                Sell to customers without any hustle
+              </h1>
+              <p className="text-xs text-slate-600 dark:text-slate-300 mb-4">
+                Register on Sponsora and sell across India.
+              </p>
+              
+              <div className="flex flex-col gap-2 mb-6 bg-white/60 dark:bg-slate-800/60 p-2 rounded-xl border border-pink-100 dark:border-white/10 shadow-sm backdrop-blur-sm">
+                <div className="flex items-center gap-2">
+                  <span className="bg-pink-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">New</span>
+                  <Link href="/dont-have-gst" className="text-primary text-xs font-bold transition-colors">
+                    Know more
+                  </Link>
+                </div>
+                <span className="text-slate-700 dark:text-slate-300 text-[10px] font-medium leading-tight">No GSTIN? Still sell on Sponsora.</span>
+              </div>
+              
+              <Link href="/seller/register">
+                <button className="bg-primary text-white px-5 py-2.5 rounded-xl font-bold text-sm shadow-lg shadow-primary/30">
+                  Start Selling
+                </button>
+              </Link>
+            </div>
+
+            {/* Right side image */}
+            <div className="flex-1 flex justify-end items-center relative pl-2">
+              <img 
+                src="/images/seller_banner_doodle.png" 
+                alt="Seller Doodle Banner" 
+                className="w-full max-w-[160px] object-contain drop-shadow-lg"
+              />
+            </div>
           </div>
+
         </div>
       </section>
 
@@ -63,7 +105,7 @@ export default function SellerLandingPage() {
             </div>
             
             <div className="p-6 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800">
-              <div className="w-12 h-12 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center mx-auto mb-4">
+              <div className="w-12 h-12 bg-pink-100 text-pink-600 rounded-xl flex items-center justify-center mx-auto mb-4">
                 <TrendingUp className="w-6 h-6" />
               </div>
               <h3 className="font-bold text-lg mb-2">Reach Millions</h3>
@@ -71,7 +113,7 @@ export default function SellerLandingPage() {
             </div>
             
             <div className="p-6 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800">
-              <div className="w-12 h-12 bg-purple-100 text-purple-600 rounded-xl flex items-center justify-center mx-auto mb-4">
+              <div className="w-12 h-12 bg-pink-100 text-pink-600 rounded-xl flex items-center justify-center mx-auto mb-4">
                 <Truck className="w-6 h-6" />
               </div>
               <h3 className="font-bold text-lg mb-2">Easy Shipping</h3>

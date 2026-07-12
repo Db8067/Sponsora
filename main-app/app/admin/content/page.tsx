@@ -50,8 +50,8 @@ export default function ContentReview() {
                   <td className="px-6 py-4">
                     <span className={`px-2 py-1 rounded-md text-xs font-bold ${
                       item.type === 'Product' 
-                        ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400' 
-                        : 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400'
+                        ? 'bg-pink-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400' 
+                        : 'bg-pink-100 text-pink-700 dark:bg-pink-900/30 dark:text-pink-400'
                     }`}>
                       {item.type}
                     </span>
@@ -63,7 +63,7 @@ export default function ContentReview() {
                     <StatusBadge status={item.status as any} />
                   </td>
                   <td className="px-6 py-4 flex justify-end gap-2">
-                    <button className="p-2 text-slate-700 hover:text-blue-600 bg-white/20 hover:bg-blue-100 dark:bg-white/10 dark:hover:bg-blue-900/50 rounded-lg transition-colors" title="Preview">
+                    <button className="p-2 text-slate-700 hover:text-pink-600 bg-white/20 hover:bg-pink-100 dark:bg-white/10 dark:hover:bg-blue-900/50 rounded-lg transition-colors" title="Preview">
                       <ExternalLink className="w-4 h-4" />
                     </button>
                     {item.status === 'pending' && (

@@ -144,7 +144,7 @@ export default function HeroBannersAdmin() {
     setImageToCrop(null);
   };
 
-  if (loading) return <div className="p-10 flex justify-center"><Loader2 className="w-8 h-8 animate-spin text-purple-500" /></div>;
+  if (loading) return <div className="p-10 flex justify-center"><Loader2 className="w-8 h-8 animate-spin text-pink-500" /></div>;
 
   return (
     <div className="pb-20 max-w-5xl mx-auto">
@@ -177,7 +177,7 @@ export default function HeroBannersAdmin() {
       
       <div className="bg-white/10 dark:bg-slate-900/30 backdrop-blur-md rounded-2xl border border-white/20 dark:border-white/10 shadow-sm overflow-hidden p-6">
         <div className="flex items-center gap-3 mb-8">
-          <div className="p-2 bg-purple-100 text-purple-600 dark:bg-purple-900/50 dark:text-purple-400 rounded-lg">
+          <div className="p-2 bg-pink-100 text-pink-600 dark:bg-pink-900/50 dark:text-pink-400 rounded-lg">
             <ImageIcon className="w-5 h-5" />
           </div>
           <h2 className="text-xl font-bold">Manage Banners</h2>
@@ -188,10 +188,10 @@ export default function HeroBannersAdmin() {
           <div className="flex flex-col sm:flex-row gap-4">
             <label className="flex-1 flex flex-col items-center justify-center gap-2 border-2 border-dashed border-slate-300 dark:border-white/20 rounded-2xl p-8 bg-slate-50 hover:bg-slate-100 dark:bg-slate-900/50 dark:hover:bg-slate-900 transition-colors cursor-pointer text-slate-500">
               {uploadingImage ? (
-                <Loader2 className="w-6 h-6 animate-spin text-purple-500" />
+                <Loader2 className="w-6 h-6 animate-spin text-pink-500" />
               ) : (
                 <>
-                  <Upload className="w-8 h-8 text-purple-400" />
+                  <Upload className="w-8 h-8 text-pink-400" />
                   <span className="font-medium text-slate-700 dark:text-slate-300">Upload from Device</span>
                   <span className="text-xs">Click to browse files</span>
                 </>
@@ -205,10 +205,10 @@ export default function HeroBannersAdmin() {
               className="flex-1 flex flex-col items-center justify-center gap-2 border-2 border-dashed border-slate-300 dark:border-white/20 rounded-2xl p-8 bg-slate-50 hover:bg-slate-100 dark:bg-slate-900/50 dark:hover:bg-slate-900 transition-colors text-slate-500"
             >
               {uploadingImage ? (
-                <Loader2 className="w-6 h-6 animate-spin text-purple-500" />
+                <Loader2 className="w-6 h-6 animate-spin text-pink-500" />
               ) : (
                 <>
-                  <ClipboardPaste className="w-8 h-8 text-purple-400" />
+                  <ClipboardPaste className="w-8 h-8 text-pink-400" />
                   <span className="font-medium text-slate-700 dark:text-slate-300">Paste from Clipboard</span>
                   <span className="text-xs">Copy image & click here</span>
                 </>
@@ -226,7 +226,7 @@ export default function HeroBannersAdmin() {
                 <div className="absolute -top-3 -right-3 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity z-20">
                   <button 
                     onClick={() => setImageToCrop({ url, index: idx })}
-                    className="bg-blue-100 p-2 rounded-full text-blue-600 hover:bg-blue-200 shadow-md"
+                    className="bg-pink-100 p-2 rounded-full text-pink-600 hover:bg-blue-200 shadow-md"
                     title="Edit & Crop"
                   >
                     <Crop className="w-4 h-4" />

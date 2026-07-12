@@ -27,7 +27,7 @@ export default function AdminSettingsPage() {
                 <label className="block text-sm font-medium mb-1">Support Email</label>
                 <input type="email" className="w-full bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500/50" defaultValue="support@intersponsora.space" />
               </div>
-              <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
+              <button className="bg-pink-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
                 Save Changes
               </button>
             </div>

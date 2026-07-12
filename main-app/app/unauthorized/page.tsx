@@ -55,14 +55,14 @@ export default function UnauthorizedPage({ searchParams }: { searchParams: { rol
 
         <div className="pt-4">
           <Link href={buttonLink}>
-            <button className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-2xl shadow-md hover:shadow-lg transition-all active:scale-95">
+            <button className="w-full bg-pink-600 hover:bg-pink-700 text-white font-bold py-3 px-6 rounded-2xl shadow-md hover:shadow-lg transition-all active:scale-95">
               {buttonText}
             </button>
           </Link>
         </div>
 
         <div className="pt-2">
-          <Link href="/get-started" className="text-sm text-gray-400 hover:text-indigo-600 font-medium transition-colors">
+          <Link href="/get-started" className="text-sm text-gray-400 hover:text-pink-600 font-medium transition-colors">
             Oopsie! Took a wrong turn? Let's teleport you back to your magical portal! ✨🚀
           </Link>
         </div>

@@ -139,7 +139,7 @@ export default function StorefrontHome() {
         {/* Value Props */}
         <section className="my-12 grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="flex items-center gap-4 p-6 bg-blue-50 dark:bg-blue-950/30 rounded-2xl">
-            <div className="p-3 bg-blue-100 dark:bg-blue-900 rounded-full text-blue-600 dark:text-blue-400">
+            <div className="p-3 bg-pink-100 dark:bg-blue-900 rounded-full text-pink-600 dark:text-blue-400">
               <Zap className="w-6 h-6" />
             </div>
             <div>
@@ -156,8 +156,8 @@ export default function StorefrontHome() {
               <p className="text-sm text-muted-foreground">Safe payments & buyer protection</p>
             </div>
           </div>
-          <div className="flex items-center gap-4 p-6 bg-purple-50 dark:bg-purple-950/30 rounded-2xl">
-            <div className="p-3 bg-purple-100 dark:bg-purple-900 rounded-full text-purple-600 dark:text-purple-400">
+          <div className="flex items-center gap-4 p-6 bg-pink-50 dark:bg-pink-950/30 rounded-2xl">
+            <div className="p-3 bg-pink-100 dark:bg-pink-900 rounded-full text-pink-600 dark:text-pink-400">
               <Star className="w-6 h-6" />
             </div>
             <div>

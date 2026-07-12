@@ -10,21 +10,21 @@ export default function LandingPageAdmin() {
       description: 'Manage the scrolling announcement texts at the very top of your site.',
       icon: <Layout className="w-6 h-6" />,
       href: '/admin/landing-page/promo-bar',
-      color: 'bg-blue-100 text-blue-600 dark:bg-blue-900/50 dark:text-blue-400'
+      color: 'bg-pink-100 text-pink-600 dark:bg-blue-900/50 dark:text-blue-400'
     },
     {
       title: 'Search Bar Texts',
       description: 'Update the typing animation phrases in the main search bar.',
       icon: <Search className="w-6 h-6" />,
       href: '/admin/landing-page/search-bar',
-      color: 'bg-indigo-100 text-indigo-600 dark:bg-indigo-900/50 dark:text-indigo-400'
+      color: 'bg-pink-100 text-pink-600 dark:bg-pink-900/50 dark:text-pink-400'
     },
     {
       title: 'Hero Banners',
       description: 'Upload and manage the large scrolling image banners on the homepage.',
       icon: <ImageIcon className="w-6 h-6" />,
       href: '/admin/landing-page/hero-banners',
-      color: 'bg-purple-100 text-purple-600 dark:bg-purple-900/50 dark:text-purple-400'
+      color: 'bg-pink-100 text-pink-600 dark:bg-pink-900/50 dark:text-pink-400'
     },
     {
       title: 'Brand Logos Marquee',

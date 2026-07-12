@@ -91,7 +91,7 @@ export default function PromoBarAdmin() {
       
       <div className="bg-white/10 dark:bg-slate-900/30 backdrop-blur-md rounded-2xl border border-white/20 dark:border-white/10 shadow-sm overflow-hidden p-6">
         <div className="flex items-center gap-3 mb-6">
-          <div className="p-2 bg-blue-100 text-blue-600 dark:bg-blue-900/50 dark:text-blue-400 rounded-lg">
+          <div className="p-2 bg-pink-100 text-pink-600 dark:bg-blue-900/50 dark:text-blue-400 rounded-lg">
             <Layout className="w-5 h-5" />
           </div>
           <h2 className="text-xl font-bold">Edit Texts</h2>
@@ -113,7 +113,7 @@ export default function PromoBarAdmin() {
               </button>
             </div>
           ))}
-          <button onClick={addString} className="flex items-center gap-2 text-sm text-blue-600 dark:text-blue-400 font-medium hover:underline mt-4 p-2">
+          <button onClick={addString} className="flex items-center gap-2 text-sm text-pink-600 dark:text-blue-400 font-medium hover:underline mt-4 p-2">
             <Plus className="w-4 h-4" /> Add Promo Text
           </button>
         </div>
