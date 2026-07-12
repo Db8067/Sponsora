@@ -7,9 +7,10 @@ import { useUser } from "@clerk/nextjs";
 
 const portalOptions = [
   {
-    title: "Discover Events",
-    href: "/sign-up?role=participant&redirect_url=/events",
-    directHref: "/events",
+    title: "Participant",
+    description: "I want to attend and discover new events.",
+    href: "/sign-up?role=participant&redirect_url=/",
+    directHref: "/",
     bgImage: "/images/india-gate.png",
   },
 ];

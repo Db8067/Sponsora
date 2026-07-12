@@ -22,8 +22,7 @@ export default function Navbar() {
   }, []);
 
   const navLinks = [
-    { name: "Events", href: "/events", icon: Calendar },
-    { name: "Categories", href: "/events#categories", icon: BookText },
+    { name: "Pricing", href: "/pricing", icon: Banknote },
   ];
 
   return (

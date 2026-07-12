@@ -14,9 +14,9 @@ export default function UnauthorizedPage({ searchParams }: { searchParams: { rol
 
   if (role === 'participant') {
     title = "Oops! Wrong Door!";
-    message = "Looks like you're exploring the backend! This area is specifically for event creators and sponsors. Let's get you back to discovering awesome events.";
-    buttonText = "Back to Discover Events";
-    buttonLink = "/events";
+    message = "You must be signed in to view events.";
+    buttonText = "View Events";
+    buttonLink = "/";
     imageSrc = "/images/doodle_participant_denied.png";
   } else if (role === 'organizer') {
     title = "Hey Organizer!";

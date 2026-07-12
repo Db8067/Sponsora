@@ -74,7 +74,7 @@ export default function Footer() {
     <footer className="bg-background border-t border-white/5 py-8 mt-24">
       <div className="max-w-[1400px] mx-auto px-6 lg:px-12 flex flex-col md:flex-row items-center justify-between gap-6">
         <div className="flex items-center gap-6 text-sm font-medium text-foreground/50">
-          <Link href="/events" className="hover:text-foreground transition-colors">Discover</Link>
+          <Link href="/" className="hover:text-foreground transition-colors">Discover</Link>
         </div>
         
         <div className="flex items-center gap-6">
