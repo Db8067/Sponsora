@@ -21,18 +21,35 @@ export default function SellerLayout({
               Seller Hub
             </span>
           </div>
-          
-          <nav className="flex items-center gap-6">
-            <Link href="/seller" className="text-sm font-medium text-slate-600 hover:text-primary dark:text-slate-300">
-              Overview
+          <nav className="hidden md:flex items-center gap-6 absolute left-1/2 -translate-x-1/2">
+            <Link href="/seller/sell-online" className="text-sm font-medium text-slate-600 hover:text-primary dark:text-slate-300 transition-colors">
+              Sell online
             </Link>
-            <Link href="/seller/dashboard" className="text-sm font-medium text-slate-600 hover:text-primary dark:text-slate-300">
-              Dashboard
+            <Link href="/seller/how-it-works" className="text-sm font-medium text-slate-600 hover:text-primary dark:text-slate-300 transition-colors">
+              How it works
             </Link>
-            <div className="flex items-center gap-2 pl-4 border-l">
-              <UserCircle className="w-6 h-6 text-slate-400" />
-            </div>
+            <Link href="/seller/pricing-and-commission" className="text-sm font-medium text-slate-600 hover:text-primary dark:text-slate-300 transition-colors">
+              Pricing and Commission
+            </Link>
+            <Link href="/seller/shipping-and-routes" className="text-sm font-medium text-slate-600 hover:text-primary dark:text-slate-300 transition-colors">
+              Shipping and routes
+            </Link>
+            <Link href="/seller/grow-business" className="text-sm font-medium text-slate-600 hover:text-primary dark:text-slate-300 transition-colors">
+              Grow Business
+            </Link>
+            <Link href="/seller/no-gst" className="text-sm font-medium text-slate-600 hover:text-primary dark:text-slate-300 transition-colors">
+              Don't have a GST?
+            </Link>
           </nav>
+
+          <div className="flex items-center gap-4">
+            <Link href="/sign-in" className="text-sm font-semibold text-slate-700 hover:text-primary dark:text-slate-200 transition-colors">
+              Login
+            </Link>
+            <Link href="/seller/register" className="text-sm font-semibold bg-primary text-white px-5 py-2.5 rounded-xl hover:bg-primary-dark transition-colors shadow-lg shadow-primary/20">
+              Start Selling
+            </Link>
+          </div>
         </div>
       </header>
 

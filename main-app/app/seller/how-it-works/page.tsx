@@ -1,0 +1,1 @@
+export default function HowItWorks() { return <div className='container mx-auto px-4 py-20 text-center'><h1 className='text-4xl font-bold'>How It Works</h1><p className='mt-4 text-slate-500'>Coming soon...</p></div> }

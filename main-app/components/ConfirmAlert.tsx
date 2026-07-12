@@ -11,6 +11,17 @@ interface ConfirmAlertProps {
 export function ConfirmAlert({ isOpen, message, onConfirm, onCancel }: ConfirmAlertProps) {
   if (!isOpen) return null;
 
+  const [isProcessing, setIsProcessing] = React.useState(false);
+
+  const handleConfirm = async () => {
+    setIsProcessing(true);
+    try {
+      await onConfirm();
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 backdrop-blur-sm animate-in fade-in duration-200">
       <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl p-6 max-w-sm w-full mx-4 scale-in-center border border-slate-200 dark:border-white/10">
@@ -24,15 +35,17 @@ export function ConfirmAlert({ isOpen, message, onConfirm, onCancel }: ConfirmAl
           <div className="flex items-center gap-3 w-full">
             <button 
               onClick={onCancel}
-              className="flex-1 px-4 py-2 rounded-xl border border-slate-200 dark:border-white/10 font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors"
+              disabled={isProcessing}
+              className="flex-1 px-4 py-2 rounded-xl border border-slate-200 dark:border-white/10 font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors disabled:opacity-50"
             >
               Cancel
             </button>
             <button 
-              onClick={onConfirm}
-              className="flex-1 px-4 py-2 rounded-xl bg-red-600 hover:bg-red-700 text-white font-medium transition-colors shadow-lg shadow-red-600/20"
+              onClick={handleConfirm}
+              disabled={isProcessing}
+              className="flex-1 px-4 py-2 rounded-xl bg-red-600 hover:bg-red-700 text-white font-medium transition-colors shadow-lg shadow-red-600/20 disabled:opacity-50 flex items-center justify-center gap-2"
             >
-              Delete
+              {isProcessing ? 'Processing...' : 'Delete'}
             </button>
           </div>
         </div>
