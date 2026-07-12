@@ -1,0 +1,1 @@
+export default function DontHaveGst() { return <div className='container mx-auto px-4 py-20 text-center'><h1 className='text-4xl font-bold'>Selling without GST</h1><p className='mt-4 text-slate-500'>Coming soon... Learn how to sell without a GSTIN.</p></div> }

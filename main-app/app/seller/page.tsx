@@ -6,27 +6,43 @@ export default function SellerLandingPage() {
   return (
     <div className="flex flex-col min-h-screen">
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-indigo-900 to-purple-800 text-white py-20 px-4">
-        <div className="container mx-auto max-w-6xl flex flex-col md:flex-row items-center gap-12">
-          <div className="flex-1 text-center md:text-left">
-            <h1 className="text-4xl md:text-6xl font-black mb-6 leading-tight">
-              Grow Your Business <br />with BazaarX
+      <section className="bg-gradient-to-r from-pink-50 via-white to-pink-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 py-16 px-4 relative overflow-hidden">
+        {/* Soft abstract shapes in background */}
+        <div className="absolute top-0 right-0 w-[50vw] h-[50vw] bg-pink-200/40 rounded-full blur-3xl -translate-y-1/2 translate-x-1/4 pointer-events-none"></div>
+        <div className="absolute bottom-0 left-0 w-[30vw] h-[30vw] bg-blue-200/40 rounded-full blur-3xl translate-y-1/2 -translate-x-1/4 pointer-events-none"></div>
+        
+        <div className="container mx-auto max-w-7xl flex flex-col md:flex-row items-center gap-12 relative z-10">
+          
+          {/* Text Content */}
+          <div className="flex-1 text-center md:text-left mt-8 md:mt-0">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-slate-800 dark:text-white leading-tight mb-6">
+              Sell to customers without any hustle for delivery or website
             </h1>
-            <p className="text-xl md:text-2xl text-white/80 mb-8 max-w-lg mx-auto md:mx-0">
-              Join thousands of sellers. Reach millions of customers across India with zero upfront fees.
+            <p className="text-xl text-slate-600 dark:text-slate-300 mb-8 max-w-lg mx-auto md:mx-0">
+              Register on our Sponsora platform and sell across India.
             </p>
+            
+            <div className="flex flex-col sm:flex-row items-center gap-4 mb-10 bg-white/60 dark:bg-slate-800/60 p-3 rounded-2xl border border-pink-100 dark:border-white/10 max-w-xl mx-auto md:mx-0 shadow-sm backdrop-blur-sm">
+              <span className="bg-pink-500 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">New</span>
+              <span className="text-slate-700 dark:text-slate-300 font-medium">Don't have GSTIN? You can still sell on Sponsora.</span>
+              <Link href="/dont-have-gst" className="text-primary hover:text-primary-dark font-bold whitespace-nowrap transition-colors">
+                Know more
+              </Link>
+            </div>
+            
             <Link href="/seller/register">
-              <button className="bg-white text-indigo-900 px-8 py-4 rounded-full font-bold text-lg hover:bg-indigo-50 transition-colors shadow-lg hover:shadow-xl hover:scale-105 duration-300">
-                Start Selling Now
+              <button className="bg-primary text-white px-10 py-4 rounded-xl font-bold text-lg hover:bg-primary-dark transition-colors shadow-xl shadow-primary/30 hover:scale-105 duration-300">
+                Start Selling
               </button>
             </Link>
           </div>
-          <div className="flex-1 relative">
-            <div className="absolute inset-0 bg-white/10 blur-3xl rounded-full"></div>
+
+          {/* Banner Image */}
+          <div className="flex-1 flex justify-center md:justify-end w-full relative">
             <img 
-              src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&q=80" 
-              alt="Happy small business owner" 
-              className="relative z-10 rounded-2xl shadow-2xl border border-white/20"
+              src="/images/seller_banner_doodle.png" 
+              alt="Seller Doodle Banner" 
+              className="w-full max-w-md lg:max-w-xl object-contain drop-shadow-2xl hover:scale-105 transition-transform duration-500"
             />
           </div>
         </div>

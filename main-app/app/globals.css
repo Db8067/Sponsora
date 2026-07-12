@@ -3,11 +3,11 @@
 @tailwind utilities;
 
 :root {
-  --background: 0 0% 99%; /* Extremely clean, soft pearl white for the best animated glow effect */
+  --background: 0 0% 99%; 
   --foreground: 222 47% 11%;
-  --primary: 199 89% 48%; /* Professional Blue glow, optimized for contrast */
-  --primary-dark: 180 100% 40%; /* Teal glow, optimized for contrast */
-  --accent: 43 100% 52%; /* Amber/Yellow glow, optimized for contrast */
+  --primary: 339 90% 65%; /* Rose Pink */
+  --primary-dark: 339 90% 50%; /* Deep Pink */
+  --accent: 200 90% 75%; /* Soft Blue */
   --success: 160 80% 36%;
 }
 
@@ -64,15 +64,15 @@ html {
     z-index: -1;
     opacity: 0.6;
     background-image: 
-      radial-gradient(8px 8px at 100px 50px, #cbd5e1, transparent),
-      radial-gradient(12px 12px at 200px 150px, #94a3b8, transparent),
-      radial-gradient(6px 6px at 300px 250px, #e2e8f0, transparent),
-      radial-gradient(8px 8px at 400px 350px, #cbd5e1, transparent),
-      radial-gradient(12px 12px at 500px 100px, #94a3b8, transparent),
-      radial-gradient(6px 6px at 50px 200px, #e2e8f0, transparent),
-      radial-gradient(8px 8px at 150px 300px, #cbd5e1, transparent),
-      radial-gradient(12px 12px at 250px 400px, #94a3b8, transparent),
-      radial-gradient(6px 6px at 350px 500px, #e2e8f0, transparent);
+      radial-gradient(8px 8px at 100px 50px, #fbcfe8, transparent),
+      radial-gradient(12px 12px at 200px 150px, #f472b6, transparent),
+      radial-gradient(6px 6px at 300px 250px, #bfdbfe, transparent),
+      radial-gradient(8px 8px at 400px 350px, #fbcfe8, transparent),
+      radial-gradient(12px 12px at 500px 100px, #f472b6, transparent),
+      radial-gradient(6px 6px at 50px 200px, #bfdbfe, transparent),
+      radial-gradient(8px 8px at 150px 300px, #fbcfe8, transparent),
+      radial-gradient(12px 12px at 250px 400px, #f472b6, transparent),
+      radial-gradient(6px 6px at 350px 500px, #bfdbfe, transparent);
     background-size: 600px 600px;
     animation: snow 15s linear infinite;
   }
@@ -88,9 +88,9 @@ html {
     z-index: -1;
     opacity: 0.4;
     background-image: 
-      radial-gradient(6px 6px at 100px 50px, #94a3b8, transparent),
-      radial-gradient(10px 10px at 200px 150px, #cbd5e1, transparent),
-      radial-gradient(4px 4px at 300px 250px, #e2e8f0, transparent);
+      radial-gradient(6px 6px at 100px 50px, #f472b6, transparent),
+      radial-gradient(10px 10px at 200px 150px, #fbcfe8, transparent),
+      radial-gradient(4px 4px at 300px 250px, #bfdbfe, transparent);
     background-size: 400px 400px;
     animation: snow 10s linear infinite;
   }
