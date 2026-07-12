@@ -68,31 +68,40 @@ export default function SellerLayout({
         </div>
 
         {/* Mobile Menu */}
-        <div className={`lg:hidden fixed inset-0 z-40 bg-white dark:bg-slate-900 transition-transform duration-500 ease-in-out ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
-          <div className="flex flex-col items-center justify-center h-full gap-8 p-6">
-            <Link href="/seller/sell-online" onClick={() => setIsMobileMenuOpen(false)} className="text-2xl font-bold text-slate-700 dark:text-slate-200 hover:text-primary transition-colors text-center">
-              Sell online
-            </Link>
-            <Link href="/seller/how-it-works" onClick={() => setIsMobileMenuOpen(false)} className="text-2xl font-bold text-slate-700 dark:text-slate-200 hover:text-primary transition-colors text-center">
-              How it works
-            </Link>
-            <Link href="/seller/pricing-and-commission" onClick={() => setIsMobileMenuOpen(false)} className="text-2xl font-bold text-slate-700 dark:text-slate-200 hover:text-primary transition-colors text-center">
-              Pricing & Commission
-            </Link>
-            <Link href="/seller/shipping-and-routes" onClick={() => setIsMobileMenuOpen(false)} className="text-2xl font-bold text-slate-700 dark:text-slate-200 hover:text-primary transition-colors text-center">
-              Shipping & routes
-            </Link>
-            <Link href="/seller/grow-business" onClick={() => setIsMobileMenuOpen(false)} className="text-2xl font-bold text-slate-700 dark:text-slate-200 hover:text-primary transition-colors text-center">
-              Grow Business
-            </Link>
-            <Link href="/seller/no-gst" onClick={() => setIsMobileMenuOpen(false)} className="text-2xl font-bold text-slate-700 dark:text-slate-200 hover:text-primary transition-colors text-center">
-              Don't have a GST?
-            </Link>
-            
-            <div className="mt-8 w-full max-w-xs flex flex-col gap-4">
-              <Link href="/seller/register" onClick={() => setIsMobileMenuOpen(false)} className="w-full text-center text-lg font-semibold bg-primary text-white px-6 py-4 rounded-2xl shadow-lg shadow-primary/30 active:scale-95 transition-all">
-                Start Selling Now
+        <div className={`lg:hidden fixed inset-0 z-40 bg-white dark:bg-slate-900 transition-transform duration-500 ease-in-out ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+          <div className="flex flex-col h-full p-6">
+            <div className="flex items-center justify-between mb-12">
+              <Link href="/" className="flex items-center">
+                <img src="/images/logo-light.png" alt="Sponsora Logo" className="h-6 w-auto dark:hidden block" />
+                <img src="/images/logo-dark.png" alt="Sponsora Logo" className="h-6 w-auto hidden dark:block" />
               </Link>
+            </div>
+            
+            <div className="flex flex-col items-center justify-center flex-1 gap-8">
+              <Link href="/seller/sell-online" onClick={() => setIsMobileMenuOpen(false)} className="text-2xl font-bold text-slate-700 dark:text-slate-200 hover:text-primary transition-colors text-center">
+                Sell online
+              </Link>
+              <Link href="/seller/how-it-works" onClick={() => setIsMobileMenuOpen(false)} className="text-2xl font-bold text-slate-700 dark:text-slate-200 hover:text-primary transition-colors text-center">
+                How it works
+              </Link>
+              <Link href="/seller/pricing-and-commission" onClick={() => setIsMobileMenuOpen(false)} className="text-2xl font-bold text-slate-700 dark:text-slate-200 hover:text-primary transition-colors text-center">
+                Pricing & Commission
+              </Link>
+              <Link href="/seller/shipping-and-routes" onClick={() => setIsMobileMenuOpen(false)} className="text-2xl font-bold text-slate-700 dark:text-slate-200 hover:text-primary transition-colors text-center">
+                Shipping & routes
+              </Link>
+              <Link href="/seller/grow-business" onClick={() => setIsMobileMenuOpen(false)} className="text-2xl font-bold text-slate-700 dark:text-slate-200 hover:text-primary transition-colors text-center">
+                Grow Business
+              </Link>
+              <Link href="/seller/no-gst" onClick={() => setIsMobileMenuOpen(false)} className="text-2xl font-bold text-slate-700 dark:text-slate-200 hover:text-primary transition-colors text-center">
+                Don't have a GST?
+              </Link>
+              
+              <div className="mt-8 w-full max-w-xs flex flex-col gap-4">
+                <Link href="/seller/register" onClick={() => setIsMobileMenuOpen(false)} className="w-full text-center text-lg font-semibold bg-primary text-white px-6 py-4 rounded-2xl shadow-lg shadow-primary/30 active:scale-95 transition-all">
+                  Start Selling Now
+                </Link>
+              </div>
             </div>
           </div>
         </div>

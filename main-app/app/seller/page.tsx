@@ -54,20 +54,23 @@ export default function SellerLandingPage() {
             {/* Top text */}
             <div className="flex-1 w-full pt-4">
               <h1 className="text-3xl font-black text-slate-800 dark:text-white leading-tight mb-4">
-                Sell online to Crores of Customers at <span className="text-pink-500">0% Commission</span>
+                Sell to customers without any hustle for delivery or website
               </h1>
               <p className="text-sm text-slate-600 dark:text-slate-300 mb-6 px-2">
-                Become a Sponsora seller and grow your business across India
+                Register on our Sponsora platform and sell across India.
               </p>
               
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-8 bg-white/60 dark:bg-slate-800/60 p-3 rounded-xl border border-pink-100 dark:border-white/10 shadow-sm backdrop-blur-sm mx-2">
-                <div className="flex items-center gap-2">
-                  <span className="bg-pink-500 text-white text-xs font-bold px-3 py-1 rounded-full uppercase shadow-md">New</span>
-                  <span className="text-slate-700 dark:text-slate-300 text-xs sm:text-sm font-medium">Don't have a GSTIN? You can still sell on Sponsora.</span>
+              <div className="flex flex-col items-center justify-center gap-1 mb-8 mx-2 text-sm text-slate-700 dark:text-slate-300">
+                <div>
+                  <span className="text-pink-500 font-bold mr-1">New</span> 
+                  <span>Don't have GSTIN?</span>
                 </div>
-                <Link href="/dont-have-gst" className="text-primary hover:text-primary-dark text-sm font-bold whitespace-nowrap transition-colors">
-                  Know more
-                </Link>
+                <div>
+                  <span>You can still sell on Sponsora.</span>
+                  <Link href="/dont-have-gst" className="text-primary hover:text-primary-dark font-bold ml-1 transition-colors">
+                    Know more
+                  </Link>
+                </div>
               </div>
               
               <Link href="/seller/register">
