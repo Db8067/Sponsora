@@ -44,7 +44,7 @@ export default function SellerLayout({
           </nav>
 
           <div className="hidden lg:flex items-center gap-4">
-            <Link href="/sign-in" className="text-sm font-semibold text-slate-700 hover:text-primary dark:text-slate-200 transition-colors">
+            <Link href="/sign-in" className="text-sm font-semibold text-slate-700 hover:text-pink-600 dark:text-slate-200 transition-colors">
               Login
             </Link>
             <Link href="/seller/register" className="text-sm font-semibold bg-primary text-white px-5 py-2.5 rounded-xl hover:bg-primary-dark transition-colors shadow-lg shadow-primary/20">
@@ -52,41 +52,50 @@ export default function SellerLayout({
             </Link>
           </div>
 
-          <button className="lg:hidden p-2 text-slate-600 dark:text-slate-300" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
-            {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
+          <div className="lg:hidden flex items-center gap-2">
+            <Link href="/sign-in" className="text-sm font-semibold border border-primary text-primary px-3 py-1.5 rounded-lg hover:bg-primary hover:text-white transition-colors mr-2">
+              Login
+            </Link>
+            <button className="p-2 text-slate-600 dark:text-slate-300 relative z-50 overflow-hidden" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+              <div className={`transition-transform duration-300 ${isMobileMenuOpen ? 'rotate-90 opacity-0 absolute' : 'rotate-0 opacity-100'}`}>
+                <Menu className="w-6 h-6" />
+              </div>
+              <div className={`transition-transform duration-300 ${isMobileMenuOpen ? 'rotate-0 opacity-100' : '-rotate-90 opacity-0 absolute'}`}>
+                <X className="w-6 h-6" />
+              </div>
+            </button>
+          </div>
         </div>
 
         {/* Mobile Menu */}
-        {isMobileMenuOpen && (
-          <div className="lg:hidden absolute top-16 left-0 w-full bg-white dark:bg-slate-900 border-b border-slate-100 shadow-xl py-4 px-4 flex flex-col gap-4 animate-in slide-in-from-top-2">
-            <Link href="/seller/sell-online" onClick={() => setIsMobileMenuOpen(false)} className="text-base font-medium text-slate-700 dark:text-slate-200 hover:text-primary">
+        <div className={`lg:hidden fixed inset-0 z-40 bg-white dark:bg-slate-900 transition-transform duration-500 ease-in-out ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+          <div className="flex flex-col items-center justify-center h-full gap-8 p-6">
+            <Link href="/seller/sell-online" onClick={() => setIsMobileMenuOpen(false)} className="text-2xl font-bold text-slate-700 dark:text-slate-200 hover:text-primary transition-colors text-center">
               Sell online
             </Link>
-            <Link href="/seller/how-it-works" onClick={() => setIsMobileMenuOpen(false)} className="text-base font-medium text-slate-700 dark:text-slate-200 hover:text-primary">
+            <Link href="/seller/how-it-works" onClick={() => setIsMobileMenuOpen(false)} className="text-2xl font-bold text-slate-700 dark:text-slate-200 hover:text-primary transition-colors text-center">
               How it works
             </Link>
-            <Link href="/seller/pricing-and-commission" onClick={() => setIsMobileMenuOpen(false)} className="text-base font-medium text-slate-700 dark:text-slate-200 hover:text-primary">
-              Pricing and Commission
+            <Link href="/seller/pricing-and-commission" onClick={() => setIsMobileMenuOpen(false)} className="text-2xl font-bold text-slate-700 dark:text-slate-200 hover:text-primary transition-colors text-center">
+              Pricing & Commission
             </Link>
-            <Link href="/seller/shipping-and-routes" onClick={() => setIsMobileMenuOpen(false)} className="text-base font-medium text-slate-700 dark:text-slate-200 hover:text-primary">
-              Shipping and routes
+            <Link href="/seller/shipping-and-routes" onClick={() => setIsMobileMenuOpen(false)} className="text-2xl font-bold text-slate-700 dark:text-slate-200 hover:text-primary transition-colors text-center">
+              Shipping & routes
             </Link>
-            <Link href="/seller/grow-business" onClick={() => setIsMobileMenuOpen(false)} className="text-base font-medium text-slate-700 dark:text-slate-200 hover:text-primary">
+            <Link href="/seller/grow-business" onClick={() => setIsMobileMenuOpen(false)} className="text-2xl font-bold text-slate-700 dark:text-slate-200 hover:text-primary transition-colors text-center">
               Grow Business
             </Link>
-            <Link href="/seller/no-gst" onClick={() => setIsMobileMenuOpen(false)} className="text-base font-medium text-slate-700 dark:text-slate-200 hover:text-primary">
+            <Link href="/seller/no-gst" onClick={() => setIsMobileMenuOpen(false)} className="text-2xl font-bold text-slate-700 dark:text-slate-200 hover:text-primary transition-colors text-center">
               Don't have a GST?
             </Link>
-            <hr className="border-slate-100 my-2" />
-            <Link href="/sign-in" onClick={() => setIsMobileMenuOpen(false)} className="text-base font-medium text-slate-700 dark:text-slate-200 hover:text-primary text-center">
-              Login
-            </Link>
-            <Link href="/seller/register" onClick={() => setIsMobileMenuOpen(false)} className="w-full text-center text-sm font-semibold bg-primary text-white px-5 py-3 rounded-xl hover:bg-primary-dark transition-colors">
-              Start Selling
-            </Link>
+            
+            <div className="mt-8 w-full max-w-xs flex flex-col gap-4">
+              <Link href="/seller/register" onClick={() => setIsMobileMenuOpen(false)} className="w-full text-center text-lg font-semibold bg-primary text-white px-6 py-4 rounded-2xl shadow-lg shadow-primary/30 active:scale-95 transition-all">
+                Start Selling Now
+              </Link>
+            </div>
           </div>
-        )}
+        </div>
       </header>
 
       {/* Page Content */}
