@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { UserButton, useUser } from "@clerk/nextjs";
-import { Menu, X, Rocket, LayoutDashboard, Calendar, BookText } from "lucide-react";
+import { Menu, X, Rocket, LayoutDashboard, Banknote } from "lucide-react";
 import { useState, useEffect } from "react";
 import { ThemeToggle } from "./ThemeToggle";
 import CustomButton from "./ui/CustomButton";
