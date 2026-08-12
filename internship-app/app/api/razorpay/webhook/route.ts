@@ -35,6 +35,22 @@ export async function POST(req: NextRequest) {
 
       const quantity = parseInt(notes.quantity as string || '1', 10);
 
+      // Handle custom Glocalview interview payments
+      if (notes.type === 'glocal_interview') {
+        const amountPaid = payment.amount / 100;
+        await (supabaseAdmin.from('glocalview_interview_payments') as any).insert({
+          applicant_name: notes.name,
+          applicant_email: notes.email,
+          applicant_phone: notes.phone,
+          amount: amountPaid,
+          razorpay_payment_id: payment.id,
+          razorpay_order_id: payment.order_id,
+          status: 'captured'
+        });
+        return NextResponse.json({ received: true });
+      }
+
+      // Standard SaaS Subscription Logic
       if (!planType || !userId) {
         return NextResponse.json({ error: 'Missing notes' }, { status: 400 });
       }
