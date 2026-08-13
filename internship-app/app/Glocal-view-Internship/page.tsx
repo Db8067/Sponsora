@@ -16,7 +16,7 @@ export default function GlocalViewInternshipPage() {
   const [razorpayLoaded, setRazorpayLoaded] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState("");
-  const [timeLeft, setTimeLeft] = useState(3600); // 1 hour in seconds
+  const [timeLeft, setTimeLeft] = useState(3599); // 59 minutes 59 seconds
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -119,45 +119,59 @@ export default function GlocalViewInternshipPage() {
               </p>
             </div>
           ) : (
-            <div className="flex flex-col-reverse lg:grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-                
-                {/* Left Side: Message and Image */}
-                <div className="flex flex-col text-center lg:text-left w-full">
-                  <h1 className="font-heading font-black tracking-tighter text-foreground text-3xl md:text-4xl text-balance drop-shadow-md mb-6 mx-auto lg:mx-0 text-center">
-                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">Glocalview</span> Interview Registration
-                  </h1>
+            <div className="w-full">
+              {/* Main Heading (Top Center) */}
+              <div className="w-full text-center mb-10 md:mb-14">
+                <h1 className="font-heading font-black tracking-tighter text-foreground text-3xl md:text-5xl drop-shadow-md">
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">Glocalview</span> Interview Registration
+                </h1>
+              </div>
+
+              <div className="flex flex-col-reverse lg:grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
                   
-                  <div className="bg-blue-50/80 dark:bg-blue-900/20 backdrop-blur-md p-6 lg:p-8 rounded-3xl border border-blue-100 dark:border-blue-800/50 mb-8 shadow-sm">
-                    <p className="text-foreground/80 font-medium leading-relaxed text-base md:text-lg text-balance">
-                      Thanks for choosing <strong>Glocalview Private Limited</strong>. We get more than <strong>150+ responses</strong> and we have only <strong>20 seats</strong> for Interns at our office. 
-                      <br/><br/>
-                      Make a payment of <strong>₹1</strong> to register your spot for the online HR round and offline interview at Glocalview Private Limited Noida.
-                    </p>
-                  </div>
-
-                  {/* Countdown Timer */}
-                  <div className="bg-red-50 dark:bg-red-900/20 p-5 rounded-2xl border border-red-200 dark:border-red-800/50 mb-8 flex flex-col items-center shadow-sm">
-                    <div className="flex items-center gap-2 text-red-600 dark:text-red-400 mb-2">
-                      <Clock className="w-5 h-5 animate-pulse" />
-                      <span className="font-bold text-lg">Hurry! Offer ends in</span>
+                  {/* Left Side: Message and Image */}
+                  <div className="flex flex-col text-center lg:text-left w-full h-full">
+                    
+                    <div className="bg-blue-50/80 dark:bg-blue-900/20 backdrop-blur-md p-6 lg:p-8 rounded-3xl border border-blue-100 dark:border-blue-800/50 mb-8 shadow-sm">
+                      <p className="text-foreground/80 font-medium leading-relaxed text-base md:text-lg text-balance mb-4">
+                        Thanks for choosing <strong>Glocalview Private Limited</strong>. We get more than <strong>150+ responses</strong> and we have only <strong>20 seats</strong> for Interns at our office. 
+                      </p>
+                      <p className="text-foreground/80 font-medium leading-relaxed text-base md:text-lg text-balance mb-4">
+                        Make a payment of <strong>₹1</strong> to register your spot for the online HR round and offline interview at Glocalview Private Limited Noida. Don't miss this opportunity, secure your registration before any other applicant does.
+                      </p>
+                      <p className="text-foreground/80 font-medium leading-relaxed text-base md:text-lg text-balance">
+                        Your payment ensures you are serious about the Internship and training process and not wasting the company's time and resources.
+                      </p>
+                      <p className="text-xs text-red-500 font-bold mt-4 tracking-wide uppercase">
+                        * Payment is not refundable.
+                      </p>
                     </div>
-                    <div className="text-4xl font-black text-red-600 dark:text-red-400 tracking-wider font-mono bg-white dark:bg-black px-6 py-2 rounded-xl shadow-inner border border-red-100 dark:border-red-900">
-                      {formatTime(timeLeft)}
+
+                    {/* Countdown Timer */}
+                    <div className="bg-gradient-to-br from-zinc-900 to-black p-1 rounded-3xl mb-8 shadow-xl mx-auto lg:mx-0 max-w-sm w-full">
+                      <div className="bg-zinc-900/90 rounded-[22px] p-6 flex flex-col items-center justify-center relative overflow-hidden h-full border border-zinc-800">
+                        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-900/20 via-transparent to-transparent"></div>
+                        <div className="relative z-10 flex items-center justify-center gap-4">
+                          <Clock className="w-8 h-8 text-blue-500 animate-pulse" />
+                          <div className="text-5xl font-black text-white tracking-widest font-mono drop-shadow-[0_0_15px_rgba(59,130,246,0.5)]">
+                            {formatTime(timeLeft)}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden shadow-md bg-white mt-auto">
+                      <Image 
+                        src="/images/internship_clock_doodle.jpg" 
+                        alt="Glocalview Desk Doodle"
+                        fill
+                        className="object-contain"
+                      />
                     </div>
                   </div>
 
-                  <div className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden shadow-md bg-white">
-                    <Image 
-                      src="/images/internship_clock_doodle.jpg" 
-                      alt="Glocalview Desk Doodle"
-                      fill
-                      className="object-contain"
-                    />
-                  </div>
-                </div>
-
-                {/* Right Side: Form */}
-                <div className="flex flex-col w-full max-w-md mx-auto lg:max-w-none">
+                  {/* Right Side: Form */}
+                  <div className="flex flex-col w-full max-w-md mx-auto lg:max-w-none lg:sticky lg:top-32">
                   <div className="bg-white/90 dark:bg-black/90 backdrop-blur-xl border border-black/10 dark:border-white/10 rounded-3xl p-8 shadow-2xl relative overflow-hidden">
                     <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-blue-600 to-indigo-600"></div>
                     
