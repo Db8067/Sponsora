@@ -161,7 +161,7 @@ export default function GlocalViewInternshipPage() {
                         Thanks for choosing <strong>Glocalview Private Limited</strong>. We get more than <strong>250+ Responses</strong> and we have only <strong>20 seats</strong> for Interns at our office. 
                       </p>
                       <p className="text-foreground/80 font-medium leading-relaxed text-base md:text-lg text-balance mb-4">
-                        Make a payment of <strong>₹1</strong> to register your spot for the online HR round and offline interview at Glocalview Private Limited Noida. Don't miss this opportunity, secure your registration before any other applicant does.
+                        Make a payment of <strong>₹99</strong> to register your spot for the online HR round and offline interview at Glocalview Private Limited Noida. Don't miss this opportunity, secure your registration before any other applicant does.
                       </p>
                       <p className="text-foreground/80 font-medium leading-relaxed text-base md:text-lg text-balance">
                         Your payment ensures you are serious about the Internship and training process and not wasting the company's time and resources.
@@ -257,7 +257,7 @@ export default function GlocalViewInternshipPage() {
                         type="submit"
                         className="w-full mt-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold py-4 px-4 rounded-xl shadow-lg hover:shadow-blue-500/25 active:scale-[0.98] transition-all flex items-center justify-center gap-2 text-lg"
                       >
-                        {loading ? <Loader2 className="w-6 h-6 animate-spin" /> : "Pay ₹1"}
+                        {loading ? <Loader2 className="w-6 h-6 animate-spin" /> : "Pay ₹99"}
                       </button>
 
                       <div className="flex items-center justify-center gap-1.5 mt-4 text-xs font-semibold text-zinc-400">
