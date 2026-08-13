@@ -217,7 +217,7 @@ export default function GlocalViewInternshipPage() {
                             placeholder="John Doe"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
-                            className="w-full bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl py-3 pl-10 pr-4 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                            className="w-full bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl py-3 pl-10 pr-4 text-base font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
                           />
                         </div>
                       </div>
@@ -232,7 +232,7 @@ export default function GlocalViewInternshipPage() {
                             placeholder="john@example.com"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            className="w-full bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl py-3 pl-10 pr-4 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                            className="w-full bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl py-3 pl-10 pr-4 text-base font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
                           />
                         </div>
                       </div>
@@ -247,7 +247,7 @@ export default function GlocalViewInternshipPage() {
                             placeholder="9876543210"
                             value={phone}
                             onChange={(e) => setPhone(e.target.value)}
-                            className="w-full bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl py-3 pl-10 pr-4 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                            className="w-full bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl py-3 pl-10 pr-4 text-base font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
                           />
                         </div>
                       </div>
