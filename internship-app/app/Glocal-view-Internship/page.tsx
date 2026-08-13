@@ -92,21 +92,20 @@ export default function GlocalViewInternshipPage() {
         {/* Background ambient lighting */}
         <div className="absolute inset-0 z-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/20 via-background to-background pointer-events-none hidden dark:block"></div>
 
-        <div className="relative z-10 flex flex-col w-full max-w-4xl px-4 md:px-6 lg:px-12 mx-auto">
+        <div className="relative z-10 flex flex-col w-full max-w-7xl px-4 md:px-6 lg:px-12 mx-auto mt-8 md:mt-12">
           
-          <div className="bg-white/80 dark:bg-zinc-900/80 backdrop-blur-xl border border-black/5 dark:border-white/10 rounded-3xl p-6 md:p-10 shadow-2xl">
-            {isSuccess ? (
-              <div className="text-center py-12 flex flex-col items-center">
-                <div className="w-20 h-20 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mb-6">
-                  <CheckCircle className="w-10 h-10 text-green-600 dark:text-green-400" />
-                </div>
-                <h2 className="text-3xl font-black mb-4 text-foreground">Payment Successful!</h2>
-                <p className="text-foreground/70 text-lg max-w-md mx-auto">
-                  Thank you, {name}! Your spot for the online HR round and offline interview at Glocalview Private Limited Noida is confirmed. We will reach out to you shortly.
-                </p>
+          {isSuccess ? (
+            <div className="text-center py-12 flex flex-col items-center bg-white/50 dark:bg-zinc-900/50 backdrop-blur-md p-10 rounded-3xl">
+              <div className="w-20 h-20 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mb-6">
+                <CheckCircle className="w-10 h-10 text-green-600 dark:text-green-400" />
               </div>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+              <h2 className="text-3xl font-black mb-4 text-foreground">Payment Successful!</h2>
+              <p className="text-foreground/70 text-lg max-w-md mx-auto">
+                Thank you, {name}! Your spot for the online HR round and offline interview at Glocalview Private Limited Noida is confirmed. We will reach out to you shortly.
+              </p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
                 
                 {/* Left Side: Message and Image */}
                 <div className="flex flex-col">
@@ -114,11 +113,11 @@ export default function GlocalViewInternshipPage() {
                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">Glocalview</span> Interview Registration
                   </h1>
                   
-                  <div className="bg-blue-50 dark:bg-blue-900/20 p-5 rounded-2xl border border-blue-100 dark:border-blue-800 mb-8">
-                    <p className="text-foreground/80 font-medium leading-relaxed text-sm md:text-base text-balance">
+                  <div className="bg-blue-50/80 dark:bg-blue-900/20 backdrop-blur-md p-6 lg:p-8 rounded-3xl border border-blue-100 dark:border-blue-800/50 mb-8 shadow-sm">
+                    <p className="text-foreground/80 font-medium leading-relaxed text-base md:text-lg text-balance">
                       Thanks for choosing <strong>Glocalview Private Limited</strong>. We get more than <strong>150+ responses</strong> and we have only <strong>20 seats</strong> for Interns at our office. 
                       <br/><br/>
-                      Make a payment of <strong>₹99</strong> to register your spot for the online HR round and offline interview at Glocalview Private Limited Noida.
+                      Make a payment of <strong>₹0.15</strong> to register your spot for the online HR round and offline interview at Glocalview Private Limited Noida.
                     </p>
                   </div>
 
@@ -133,8 +132,8 @@ export default function GlocalViewInternshipPage() {
                 </div>
 
                 {/* Right Side: Form */}
-                <div className="flex flex-col">
-                  <div className="bg-white dark:bg-black border border-black/10 dark:border-white/10 rounded-2xl p-6 md:p-8 shadow-sm relative overflow-hidden">
+                <div className="flex flex-col w-full max-w-md mx-auto lg:max-w-none">
+                  <div className="bg-white/90 dark:bg-black/90 backdrop-blur-xl border border-black/10 dark:border-white/10 rounded-3xl p-8 shadow-2xl relative overflow-hidden">
                     <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-blue-600 to-indigo-600"></div>
                     
                     <h3 className="text-2xl font-bold mb-6 text-foreground">Secure your spot</h3>
@@ -195,9 +194,9 @@ export default function GlocalViewInternshipPage() {
                       <button 
                         disabled={loading || !razorpayLoaded}
                         type="submit"
-                        className="w-full mt-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold py-3.5 px-4 rounded-xl shadow-lg hover:shadow-blue-500/25 active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+                        className="w-full mt-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold py-4 px-4 rounded-xl shadow-lg hover:shadow-blue-500/25 active:scale-[0.98] transition-all flex items-center justify-center gap-2 text-lg"
                       >
-                        {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : "Pay ₹99"}
+                        {loading ? <Loader2 className="w-6 h-6 animate-spin" /> : "Pay ₹0.15"}
                       </button>
 
                       <div className="flex items-center justify-center gap-1.5 mt-4 text-xs font-semibold text-zinc-400">
@@ -210,8 +209,6 @@ export default function GlocalViewInternshipPage() {
 
               </div>
             )}
-          </div>
-
         </div>
       </div>
     </>

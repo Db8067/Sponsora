@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Menu, X, Calendar, ChevronRight, Briefcase, Home, User } from "lucide-react";
 import { UserButton, useUser } from "@clerk/nextjs";
 import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { ThemeToggle } from "./ThemeToggle";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -16,6 +17,8 @@ interface Category {
 
 export default function Navbar() {
   const { isSignedIn, isLoaded, user } = useUser();
+  const pathname = usePathname();
+  const isGlocalPage = pathname === "/Glocal-view-Internship";
   
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -56,7 +59,7 @@ export default function Navbar() {
         {/* Desktop Nav */}
         <div className="hidden md:flex items-center gap-8">
           <div className="flex items-center gap-8">
-            {!isSignedIn && isLoaded && (
+            {!isSignedIn && isLoaded && !isGlocalPage && (
               <Link href="/sign-in" className="text-sm font-medium text-foreground/60 hover:text-foreground transition-colors">
                 Sign In
               </Link>
@@ -81,7 +84,7 @@ export default function Navbar() {
 
         {/* Mobile Toggle */}
         <div className="flex md:hidden items-center gap-4">
-          {!isSignedIn && isLoaded && (
+          {!isSignedIn && isLoaded && !isGlocalPage && (
             <Link href="/sign-in" className="text-sm font-medium text-foreground/60 hover:text-foreground transition-colors">
               Sign In
             </Link>
