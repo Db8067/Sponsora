@@ -247,7 +247,8 @@ export default function GlocalViewInternshipPage() {
                 </div>
 
               </div>
-            )}
+            </div>
+          )}
         </div>
       </div>
     </>
