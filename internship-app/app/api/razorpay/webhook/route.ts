@@ -47,6 +47,20 @@ export async function POST(req: NextRequest) {
           razorpay_order_id: payment.order_id,
           status: 'captured'
         });
+
+        // Send WhatsApp Notification via CallMeBot
+        try {
+          const apiKey = process.env.CALLMEBOT_API_KEY;
+          if (apiKey) {
+            const message = `🎉 *New Internship Registration!*\n\n*Name:* ${notes.name}\n*Email:* ${notes.email}\n*Phone:* ${notes.phone}\n*Amount Paid:* ₹${amountPaid}\n*Order ID:* ${payment.order_id}`;
+            const phone = "+918527296771";
+            const url = `https://api.callmebot.com/whatsapp.php?phone=${encodeURIComponent(phone)}&text=${encodeURIComponent(message)}&apikey=${apiKey}`;
+            await fetch(url);
+          }
+        } catch (e) {
+          console.error("WhatsApp notification failed", e);
+        }
+
         return NextResponse.json({ received: true });
       }
 

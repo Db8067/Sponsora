@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Name, email, and phone are required' }, { status: 400 });
     }
 
-    const finalAmount = 15; // 15 paise = 0.15 rupees for testing
+    const finalAmount = 100; // 100 paise = 1 rupee
 
     const order = await razorpay.orders.create({
       amount: finalAmount,

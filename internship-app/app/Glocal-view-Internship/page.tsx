@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { CheckCircle, Loader2, ShieldCheck, Mail, User, Phone } from "lucide-react";
+import { CheckCircle, Loader2, ShieldCheck, Mail, User, Phone, Clock } from "lucide-react";
 import Image from "next/image";
 
 declare global {
@@ -16,6 +16,20 @@ export default function GlocalViewInternshipPage() {
   const [razorpayLoaded, setRazorpayLoaded] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState("");
+  const [timeLeft, setTimeLeft] = useState(3600); // 1 hour in seconds
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTimeLeft(prev => prev > 0 ? prev - 1 : 0);
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const formatTime = (seconds: number) => {
+    const m = Math.floor(seconds / 60);
+    const s = seconds % 60;
+    return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+  };
 
   useEffect(() => {
     const script = document.createElement("script");
@@ -105,11 +119,11 @@ export default function GlocalViewInternshipPage() {
               </p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+            <div className="flex flex-col-reverse lg:grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
                 
                 {/* Left Side: Message and Image */}
-                <div className="flex flex-col">
-                  <h1 className="font-heading font-black tracking-tighter text-foreground text-3xl md:text-4xl text-balance drop-shadow-md mb-6">
+                <div className="flex flex-col text-center lg:text-left w-full">
+                  <h1 className="font-heading font-black tracking-tighter text-foreground text-3xl md:text-4xl text-balance drop-shadow-md mb-6 mx-auto lg:mx-0 text-center">
                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">Glocalview</span> Interview Registration
                   </h1>
                   
@@ -117,13 +131,24 @@ export default function GlocalViewInternshipPage() {
                     <p className="text-foreground/80 font-medium leading-relaxed text-base md:text-lg text-balance">
                       Thanks for choosing <strong>Glocalview Private Limited</strong>. We get more than <strong>150+ responses</strong> and we have only <strong>20 seats</strong> for Interns at our office. 
                       <br/><br/>
-                      Make a payment of <strong>₹0.15</strong> to register your spot for the online HR round and offline interview at Glocalview Private Limited Noida.
+                      Make a payment of <strong>₹1</strong> to register your spot for the online HR round and offline interview at Glocalview Private Limited Noida.
                     </p>
+                  </div>
+
+                  {/* Countdown Timer */}
+                  <div className="bg-red-50 dark:bg-red-900/20 p-5 rounded-2xl border border-red-200 dark:border-red-800/50 mb-8 flex flex-col items-center shadow-sm">
+                    <div className="flex items-center gap-2 text-red-600 dark:text-red-400 mb-2">
+                      <Clock className="w-5 h-5 animate-pulse" />
+                      <span className="font-bold text-lg">Hurry! Offer ends in</span>
+                    </div>
+                    <div className="text-4xl font-black text-red-600 dark:text-red-400 tracking-wider font-mono bg-white dark:bg-black px-6 py-2 rounded-xl shadow-inner border border-red-100 dark:border-red-900">
+                      {formatTime(timeLeft)}
+                    </div>
                   </div>
 
                   <div className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden shadow-md bg-white">
                     <Image 
-                      src="/images/glocalview_doodle.jpg" 
+                      src="/images/internship_clock_doodle.jpg" 
                       alt="Glocalview Desk Doodle"
                       fill
                       className="object-contain"
@@ -196,7 +221,7 @@ export default function GlocalViewInternshipPage() {
                         type="submit"
                         className="w-full mt-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold py-4 px-4 rounded-xl shadow-lg hover:shadow-blue-500/25 active:scale-[0.98] transition-all flex items-center justify-center gap-2 text-lg"
                       >
-                        {loading ? <Loader2 className="w-6 h-6 animate-spin" /> : "Pay ₹0.15"}
+                        {loading ? <Loader2 className="w-6 h-6 animate-spin" /> : "Pay ₹1"}
                       </button>
 
                       <div className="flex items-center justify-center gap-1.5 mt-4 text-xs font-semibold text-zinc-400">
