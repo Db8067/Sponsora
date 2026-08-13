@@ -97,12 +97,16 @@ export default function GlocalViewInternshipPage() {
           contact: phone,
         },
         theme: { color: "#2563eb" },
+        modal: {
+          ondismiss: function () {
+            window.location.reload();
+          }
+        }
       };
 
       const rzp = new window.Razorpay(options);
       rzp.on("payment.failed", function (response: any) {
-        setError("Payment failed: " + response.error.description);
-        setLoading(false);
+        window.location.reload();
       });
       rzp.open();
     } catch (err: any) {
