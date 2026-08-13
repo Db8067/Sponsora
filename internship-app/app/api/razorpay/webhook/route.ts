@@ -1,6 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import crypto from 'crypto';
 import { supabaseAdmin } from '@/lib/supabase';
+import nodemailer from 'nodemailer';
+
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_APP_PASSWORD,
+  },
+});
 
 const PLAN_CONFIG: Record<string, { applyLimit: number; days: number }> = {
   '1_day':   { applyLimit: 10, days: 1 },
@@ -48,17 +57,31 @@ export async function POST(req: NextRequest) {
           status: 'captured'
         });
 
-        // Send WhatsApp Notification via CallMeBot
+        // Send Email Notification
         try {
-          const apiKey = process.env.CALLMEBOT_API_KEY;
-          if (apiKey) {
-            const message = `🎉 *New Internship Registration!*\n\n*Name:* ${notes.name}\n*Email:* ${notes.email}\n*Phone:* ${notes.phone}\n*Amount Paid:* ₹${amountPaid}\n*Order ID:* ${payment.order_id}`;
-            const phone = "+918527296771";
-            const url = `https://api.callmebot.com/whatsapp.php?phone=${encodeURIComponent(phone)}&text=${encodeURIComponent(message)}&apikey=${apiKey}`;
-            await fetch(url);
+          if (process.env.EMAIL_USER && process.env.EMAIL_APP_PASSWORD) {
+            await transporter.sendMail({
+              from: `"Sponsora Notifications" <${process.env.EMAIL_USER}>`,
+              to: 'devanshb3456@gmail.com', // or process.env.EMAIL_USER if they prefer
+              subject: `🎉 New Glocalview Payment: ${notes.name}`,
+              html: `
+                <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
+                  <h2 style="color: #4f46e5;">New Internship Registration!</h2>
+                  <p>A new applicant has just paid for the Glocalview Interview Registration.</p>
+                  <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+                    <tr><td style="padding: 8px; border-bottom: 1px solid #eee; color: #666;">Name</td><td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">${notes.name}</td></tr>
+                    <tr><td style="padding: 8px; border-bottom: 1px solid #eee; color: #666;">Email</td><td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">${notes.email}</td></tr>
+                    <tr><td style="padding: 8px; border-bottom: 1px solid #eee; color: #666;">Phone</td><td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">${notes.phone}</td></tr>
+                    <tr><td style="padding: 8px; border-bottom: 1px solid #eee; color: #666;">Amount Paid</td><td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">₹${amountPaid}</td></tr>
+                    <tr><td style="padding: 8px; color: #666;">Order ID</td><td style="padding: 8px; font-weight: bold;">${payment.order_id}</td></tr>
+                  </table>
+                  <p style="margin-top: 20px; font-size: 12px; color: #aaa;">This is an automated notification from your Sponsora Webhook.</p>
+                </div>
+              `,
+            });
           }
         } catch (e) {
-          console.error("WhatsApp notification failed", e);
+          console.error("Email notification failed", e);
         }
 
         return NextResponse.json({ received: true });
