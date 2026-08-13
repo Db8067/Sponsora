@@ -134,7 +134,7 @@ export default function GlocalViewInternshipPage() {
                     
                     <div className="bg-blue-50/80 dark:bg-blue-900/20 backdrop-blur-md p-6 lg:p-8 rounded-3xl border border-blue-100 dark:border-blue-800/50 mb-8 shadow-sm">
                       <p className="text-foreground/80 font-medium leading-relaxed text-base md:text-lg text-balance mb-4">
-                        Thanks for choosing <strong>Glocalview Private Limited</strong>. We get more than <strong>150+ responses</strong> and we have only <strong>20 seats</strong> for Interns at our office. 
+                        Thanks for choosing <strong>Glocalview Private Limited</strong>. We get more than <strong>250+ Responses</strong> and we have only <strong>20 seats</strong> for Interns at our office. 
                       </p>
                       <p className="text-foreground/80 font-medium leading-relaxed text-base md:text-lg text-balance mb-4">
                         Make a payment of <strong>₹1</strong> to register your spot for the online HR round and offline interview at Glocalview Private Limited Noida. Don't miss this opportunity, secure your registration before any other applicant does.
@@ -142,21 +142,16 @@ export default function GlocalViewInternshipPage() {
                       <p className="text-foreground/80 font-medium leading-relaxed text-base md:text-lg text-balance">
                         Your payment ensures you are serious about the Internship and training process and not wasting the company's time and resources.
                       </p>
-                      <p className="text-xs text-red-500 font-bold mt-4 tracking-wide uppercase">
+                      <p className="text-sm text-foreground/80 font-bold mt-4 tracking-wide">
                         * Payment is not refundable.
                       </p>
                     </div>
 
                     {/* Countdown Timer */}
-                    <div className="bg-gradient-to-br from-zinc-900 to-black p-1 rounded-3xl mb-8 shadow-xl mx-auto lg:mx-0 max-w-sm w-full">
-                      <div className="bg-zinc-900/90 rounded-[22px] p-6 flex flex-col items-center justify-center relative overflow-hidden h-full border border-zinc-800">
-                        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-900/20 via-transparent to-transparent"></div>
-                        <div className="relative z-10 flex items-center justify-center gap-4">
-                          <Clock className="w-8 h-8 text-blue-500 animate-pulse" />
-                          <div className="text-5xl font-black text-white tracking-widest font-mono drop-shadow-[0_0_15px_rgba(59,130,246,0.5)]">
-                            {formatTime(timeLeft)}
-                          </div>
-                        </div>
+                    <div className="bg-blue-50/80 dark:bg-blue-900/20 backdrop-blur-md px-6 py-4 rounded-2xl border border-blue-100 dark:border-blue-800/50 mb-8 shadow-sm flex items-center justify-center gap-3 mx-auto lg:mx-0 w-max">
+                      <Clock className="w-6 h-6 text-blue-600 dark:text-blue-400 animate-pulse" />
+                      <div className="text-3xl font-black text-blue-700 dark:text-blue-300 tracking-wider font-mono">
+                        {formatTime(timeLeft)}
                       </div>
                     </div>
 
