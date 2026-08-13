@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { CheckCircle, Loader2, ShieldCheck, Mail, User, Phone, Clock } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 declare global {
   interface Window { Razorpay: any; }
@@ -17,6 +18,17 @@ export default function GlocalViewInternshipPage() {
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState("");
   const [timeLeft, setTimeLeft] = useState(3599); // 59 minutes 59 seconds
+  const router = useRouter();
+
+  useEffect(() => {
+    if (isSuccess) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      const timer = setTimeout(() => {
+        router.push('/');
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [isSuccess, router]);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -114,9 +126,17 @@ export default function GlocalViewInternshipPage() {
                 <CheckCircle className="w-10 h-10 text-green-600 dark:text-green-400" />
               </div>
               <h2 className="text-3xl font-black mb-4 text-foreground">Payment Successful!</h2>
-              <p className="text-foreground/70 text-lg max-w-md mx-auto">
-                Thank you, {name}! Your spot for the online HR round and offline interview at Glocalview Private Limited Noida is confirmed. We will reach out to you shortly.
-              </p>
+              <div className="text-foreground/70 text-lg max-w-lg mx-auto space-y-4">
+                <p>
+                  Thank you, <strong>{name}</strong>! Your spot for the online HR round and offline interview at Glocalview Private Limited Noida is confirmed.
+                </p>
+                <p className="font-medium text-foreground">
+                  Please check your email for further updates. The online HR round timings will be shared soon. Keep an eye on your inbox!
+                </p>
+                <p className="text-sm text-foreground/50 pt-4">
+                  Redirecting to homepage in 5 seconds...
+                </p>
+              </div>
             </div>
           ) : (
             <div className="w-full">
@@ -145,10 +165,13 @@ export default function GlocalViewInternshipPage() {
                       <p className="text-sm text-foreground/80 font-bold mt-4 tracking-wide">
                         * Payment is not refundable.
                       </p>
+                      <p className="text-sm text-foreground/80 mt-2 font-medium">
+                        Seat reservation is strictly on a first-come, first-served basis. Please secure your registration as soon as possible to avoid losing your spot.
+                      </p>
                     </div>
 
                     {/* Countdown Timer */}
-                    <div className="bg-blue-50/80 dark:bg-blue-900/20 backdrop-blur-md px-6 py-4 rounded-2xl border border-blue-100 dark:border-blue-800/50 mb-8 shadow-sm flex items-center justify-center gap-3 mx-auto lg:mx-0 w-max">
+                    <div className="bg-blue-50/80 dark:bg-blue-900/20 backdrop-blur-md px-6 py-4 rounded-2xl border border-blue-100 dark:border-blue-800/50 mb-8 shadow-sm flex items-center justify-center gap-3 mx-auto w-max">
                       <Clock className="w-6 h-6 text-blue-600 dark:text-blue-400 animate-pulse" />
                       <div className="text-3xl font-black text-blue-700 dark:text-blue-300 tracking-wider font-mono">
                         {formatTime(timeLeft)}
