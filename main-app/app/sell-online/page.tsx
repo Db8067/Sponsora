@@ -11,7 +11,7 @@ export default function SellOnlinePage() {
       <SellerNavbar />
 
       {/* Hero Section */}
-      <section className="pt-4 pb-6 px-4 text-center max-w-4xl mx-auto">
+      <section className="pt-10 pb-6 px-4 text-center max-w-4xl mx-auto">
         <h1 className="text-2xl md:text-3xl font-bold text-slate-800 dark:text-white mb-4">
           Build your Brand, Build your customer
         </h1>
@@ -28,20 +28,23 @@ export default function SellOnlinePage() {
       {/* Mixed Content Section */}
       <section className="py-6 px-4 max-w-4xl mx-auto w-full">
         {/* Grid layout with fixed sizes for readability */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+        <div className="flex flex-col gap-8 items-start">
             
           {/* Card 1 */}
-          <div className="flex flex-col gap-4 bg-white/60 md:bg-transparent dark:bg-slate-800/60 md:dark:bg-transparent p-6 rounded-2xl backdrop-blur-md md:backdrop-blur-none border border-white/40 md:border-transparent dark:border-white/10 md:dark:border-transparent shadow-lg md:shadow-none">
-            <img 
-              src="/images/sell_online_1.png" 
-              className="w-full h-auto rounded-xl object-contain max-h-56 bg-white/50 dark:bg-slate-900/50" 
-              alt="Website" 
-            />
-            <div className="flex items-center gap-3 mt-3">
-              <Globe className="w-6 h-6 text-pink-500" />
-              <h2 className="text-lg md:text-xl font-bold text-slate-800 dark:text-white">Custom Website</h2>
+          <div className="flex flex-col md:flex-row gap-8 bg-white/60 md:bg-transparent dark:bg-slate-800/60 md:dark:bg-transparent p-6 rounded-2xl backdrop-blur-md md:backdrop-blur-none border border-white/40 md:border-transparent dark:border-white/10 md:dark:border-transparent shadow-lg md:shadow-none items-center">
+            <div className="w-full md:w-1/3 shrink-0">
+              <img 
+                src="/images/sell_online_1.png" 
+                className="w-full h-auto rounded-xl object-contain max-h-56 bg-white/50 dark:bg-slate-900/50" 
+                alt="Website" 
+              />
             </div>
-            <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
+            <div className="w-full md:w-2/3 flex flex-col">
+              <div className="flex items-center gap-3 mt-3 md:mt-0">
+                <Globe className="w-6 h-6 text-pink-500" />
+                <h2 className="text-lg md:text-xl font-bold text-slate-800 dark:text-white">Custom Website</h2>
+              </div>
+              <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed mt-4">
               You don't need to be a developer to get your business online. With our powerful Seller Dashboard, simply upload your logo, add your product catalogs, and instantly generate a beautifully designed website.
             </p>
             <ul className="text-sm space-y-2 mt-2">
@@ -61,17 +64,20 @@ export default function SellOnlinePage() {
           </div>
 
           {/* Card 2 */}
-          <div className="flex flex-col gap-4 bg-white/60 md:bg-transparent dark:bg-slate-800/60 md:dark:bg-transparent p-6 rounded-2xl backdrop-blur-md md:backdrop-blur-none border border-white/40 md:border-transparent dark:border-white/10 md:dark:border-transparent shadow-lg md:shadow-none">
-            <img 
-              src="/images/sell_online_2.png" 
-              className="w-full h-auto rounded-xl object-contain max-h-56 bg-white/50 dark:bg-slate-900/50" 
-              alt="WhatsApp Orders" 
-            />
-            <div className="flex items-center gap-3 mt-3">
-              <MessageCircle className="w-6 h-6 text-green-500" />
-              <h2 className="text-lg md:text-xl font-bold text-slate-800 dark:text-white">WhatsApp Orders</h2>
+          <div className="flex flex-col md:flex-row gap-8 bg-white/60 md:bg-transparent dark:bg-slate-800/60 md:dark:bg-transparent p-6 rounded-2xl backdrop-blur-md md:backdrop-blur-none border border-white/40 md:border-transparent dark:border-white/10 md:dark:border-transparent shadow-lg md:shadow-none items-center">
+            <div className="w-full md:w-1/3 shrink-0">
+              <img 
+                src="/images/sell_online_2.png" 
+                className="w-full h-auto rounded-xl object-contain max-h-56 bg-white/50 dark:bg-slate-900/50" 
+                alt="WhatsApp Orders" 
+              />
             </div>
-            <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
+            <div className="w-full md:w-2/3 flex flex-col">
+              <div className="flex items-center gap-3 mt-3 md:mt-0">
+                <MessageCircle className="w-6 h-6 text-green-500" />
+                <h2 className="text-lg md:text-xl font-bold text-slate-800 dark:text-white">WhatsApp Orders</h2>
+              </div>
+              <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed mt-4">
               Tired of marketplaces holding your money? We connect your customers directly to you. Shoppers click to order on your website and are instantly redirected to your WhatsApp.
             </p>
             <ul className="text-sm space-y-2 mt-2">
@@ -96,21 +102,21 @@ export default function SellOnlinePage() {
         <div className="mt-12 mb-16 bg-white/60 md:bg-transparent dark:bg-slate-800/60 md:dark:bg-transparent p-8 rounded-2xl backdrop-blur-md md:backdrop-blur-none border border-white/40 md:border-transparent dark:border-white/10 md:dark:border-transparent shadow-lg md:shadow-none">
           <h2 className="text-xl font-bold text-slate-800 dark:text-white mb-8 text-center">How to get started</h2>
           
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 text-center">
-            <div className="flex flex-col items-center">
-              <div className="w-10 h-10 bg-pink-500 text-white shadow-md shadow-pink-500/30 rounded-full flex items-center justify-center font-bold mx-auto mb-4">1</div>
+          <div className="grid grid-cols-1 md:grid-cols-1 gap-8 text-center md:text-left max-w-2xl mx-auto">
+            <div className="flex flex-col md:flex-row items-center md:items-start gap-4">
+              <div className="w-10 h-10 bg-pink-500 text-white shadow-md shadow-pink-500/30 rounded-full flex items-center justify-center font-bold mx-auto md:mx-0 mb-4 md:mb-0 shrink-0">1</div>
               <h3 className="font-semibold text-slate-800 dark:text-white text-sm md:text-base">Register Profile</h3>
-              <p className="text-xs md:text-sm text-slate-600 dark:text-slate-400 mt-2 px-2">Create your account in seconds without entering any GST details.</p>
+              <p className="text-xs md:text-sm text-slate-600 dark:text-slate-400 mt-2 md:mt-1 px-2 md:px-0">Create your account in seconds without entering any GST details.</p>
             </div>
-            <div className="flex flex-col items-center">
-              <div className="w-10 h-10 bg-pink-500 text-white shadow-md shadow-pink-500/30 rounded-full flex items-center justify-center font-bold mx-auto mb-4">2</div>
+            <div className="flex flex-col md:flex-row items-center md:items-start gap-4">
+              <div className="w-10 h-10 bg-pink-500 text-white shadow-md shadow-pink-500/30 rounded-full flex items-center justify-center font-bold mx-auto md:mx-0 mb-4 md:mb-0 shrink-0">2</div>
               <h3 className="font-semibold text-slate-800 dark:text-white text-sm md:text-base">Upload Catalog</h3>
-              <p className="text-xs md:text-sm text-slate-600 dark:text-slate-400 mt-2 px-2">Add product photos, descriptions, and prices directly to your dashboard.</p>
+              <p className="text-xs md:text-sm text-slate-600 dark:text-slate-400 mt-2 md:mt-1 px-2 md:px-0">Add product photos, descriptions, and prices directly to your dashboard.</p>
             </div>
-            <div className="flex flex-col items-center">
-              <div className="w-10 h-10 bg-pink-500 text-white shadow-md shadow-pink-500/30 rounded-full flex items-center justify-center font-bold mx-auto mb-4">3</div>
+            <div className="flex flex-col md:flex-row items-center md:items-start gap-4">
+              <div className="w-10 h-10 bg-pink-500 text-white shadow-md shadow-pink-500/30 rounded-full flex items-center justify-center font-bold mx-auto md:mx-0 mb-4 md:mb-0 shrink-0">3</div>
               <h3 className="font-semibold text-slate-800 dark:text-white text-sm md:text-base">Share & Sell</h3>
-              <p className="text-xs md:text-sm text-slate-600 dark:text-slate-400 mt-2 px-2">Share your shop link on social media and chat with buyers instantly.</p>
+              <p className="text-xs md:text-sm text-slate-600 dark:text-slate-400 mt-2 md:mt-1 px-2 md:px-0">Share your shop link on social media and chat with buyers instantly.</p>
             </div>
           </div>
           
@@ -125,4 +131,5 @@ export default function SellOnlinePage() {
     </div>
   );
 }
+
 

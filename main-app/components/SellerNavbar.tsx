@@ -20,18 +20,12 @@ export default function SellerNavbar() {
           <Link href="/sell-online" className="text-sm font-medium text-slate-600 hover:text-primary dark:text-slate-300 transition-colors whitespace-nowrap">
             Sell online
           </Link>
-          <Link href="/seller/how-it-works" className="text-sm font-medium text-slate-600 hover:text-primary dark:text-slate-300 transition-colors whitespace-nowrap">
-            How it works
-          </Link>
+          
           <Link href="/seller/pricing-and-commission" className="text-sm font-medium text-slate-600 hover:text-primary dark:text-slate-300 transition-colors whitespace-nowrap">
             Pricing and Commission
           </Link>
-          <Link href="/seller/shipping-and-routes" className="text-sm font-medium text-slate-600 hover:text-primary dark:text-slate-300 transition-colors whitespace-nowrap">
-            Shipping and routes
-          </Link>
-          <Link href="/seller/grow-business" className="text-sm font-medium text-slate-600 hover:text-primary dark:text-slate-300 transition-colors whitespace-nowrap">
-            Grow Business
-          </Link>
+          
+          
           
         </nav>
 
@@ -73,18 +67,12 @@ export default function SellerNavbar() {
             <Link href="/sell-online" onClick={() => setIsMobileMenuOpen(false)} className="text-2xl font-bold text-slate-700 dark:text-slate-200 hover:text-primary transition-colors text-center">
               Sell online
             </Link>
-            <Link href="/seller/how-it-works" onClick={() => setIsMobileMenuOpen(false)} className="text-2xl font-bold text-slate-700 dark:text-slate-200 hover:text-primary transition-colors text-center">
-              How it works
-            </Link>
+            
             <Link href="/seller/pricing-and-commission" onClick={() => setIsMobileMenuOpen(false)} className="text-2xl font-bold text-slate-700 dark:text-slate-200 hover:text-primary transition-colors text-center">
               Pricing & Commission
             </Link>
-            <Link href="/seller/shipping-and-routes" onClick={() => setIsMobileMenuOpen(false)} className="text-2xl font-bold text-slate-700 dark:text-slate-200 hover:text-primary transition-colors text-center">
-              Shipping & routes
-            </Link>
-            <Link href="/seller/grow-business" onClick={() => setIsMobileMenuOpen(false)} className="text-2xl font-bold text-slate-700 dark:text-slate-200 hover:text-primary transition-colors text-center">
-              Grow Business
-            </Link>
+            
+            
             
             
             <div className="mt-8 w-full max-w-xs flex flex-col gap-4">
@@ -98,5 +86,6 @@ export default function SellerNavbar() {
     </header>
   );
 }
+
 
 
