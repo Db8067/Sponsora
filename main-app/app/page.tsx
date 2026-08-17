@@ -1,206 +1,197 @@
+import SellerNavbar from '@/components/SellerNavbar';
 import React from 'react';
 import Link from 'next/link';
-import { Search, Menu, ShoppingCart, User, ChevronRight, LayoutGrid, Zap, ShieldCheck, Star } from 'lucide-react';
-import { ProductCard, Product } from '@/components/ProductCard';
-import { PromoBar } from '@/components/PromoBar';
-import { HeroBanner } from '@/components/HeroBanner';
-import { BrandsMarquee } from '@/components/BrandsMarquee';
-import { TypewriterSearch } from '@/components/TypewriterSearch';
+import { TrendingUp, Truck, HeadphonesIcon, DollarSign, CheckCircle2 } from 'lucide-react';
 
-// Mock data for the storefront
-const FEATURED_PRODUCTS: Product[] = [
-  {
-    id: '1',
-    name: 'Wireless Noise-Cancelling Headphones',
-    description: 'Premium audio experience with active noise cancellation.',
-    price: 14999,
-    imageUrl: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&q=80',
-    vendorName: 'AudioTech India',
-    rating: 4.8,
-    reviews: 1245,
-    status: 'approved'
-  },
-  {
-    id: '2',
-    name: 'Smart Fitness Watch Series 7',
-    description: 'Track your health and workouts with precision.',
-    price: 8499,
-    imageUrl: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&q=80',
-    vendorName: 'GadgetHub',
-    rating: 4.6,
-    reviews: 892,
-    status: 'approved'
-  },
-  {
-    id: '3',
-    name: 'Professional DSLR Camera',
-    description: 'Capture stunning moments in 4K resolution.',
-    price: 54999,
-    imageUrl: 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=800&q=80',
-    vendorName: 'PhotoVision',
-    rating: 4.9,
-    reviews: 432,
-    status: 'approved'
-  },
-  {
-    id: '4',
-    name: 'Ergonomic Office Chair',
-    description: 'Maximum comfort for long working hours.',
-    price: 12999,
-    imageUrl: 'https://images.unsplash.com/photo-1505843490538-5133c6c7d0e1?w=800&q=80',
-    vendorName: 'ErgoMates',
-    rating: 4.5,
-    reviews: 654,
-    status: 'approved'
-  }
-];
-
-const CATEGORIES = [
-  { name: 'Electronics', icon: '💻' },
-  { name: 'Fashion', icon: '👕' },
-  { name: 'Home & Kitchen', icon: '🏠' },
-  { name: 'Beauty', icon: '💄' },
-  { name: 'Sports', icon: '⚽' },
-  { name: 'Books', icon: '📚' }
-];
-
-export default function StorefrontHome() {
+export default function SellerLandingPage() {
   return (
-    <div className="min-h-screen bg-transparent">
-      <PromoBar />
-      {/* Top Header / Navigation */}
-      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container mx-auto px-4 h-16 flex items-center justify-between gap-4">
-          <div className="flex items-center gap-4">
-            <button className="md:hidden p-2 -ml-2 rounded-md hover:bg-muted">
-              <Menu className="w-5 h-5" />
-            </button>
-            <Link href="/" className="flex items-center">
-              <img src="/images/logo-light.png" alt="Sponsora Logo" className="h-8 md:h-10 w-auto dark:hidden block" />
-              <img src="/images/logo-dark.png" alt="Sponsora Logo" className="h-8 md:h-10 w-auto hidden dark:block" />
-            </Link>
-          </div>
-
-          <div className="hidden md:flex flex-1 max-w-2xl px-8">
-            <TypewriterSearch />
-          </div>
-
-          <div className="flex items-center gap-4 sm:gap-6">
-            <Link href="/seller" className="hidden lg:flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-primary transition-colors">
-              <LayoutGrid className="w-4 h-4" />
-              Become a Seller
-            </Link>
-            
-            <div className="h-6 w-px bg-border hidden sm:block"></div>
-            
-            <Link href="/sign-in" className="flex flex-col items-center gap-1 text-muted-foreground hover:text-primary transition-colors">
-              <User className="w-5 h-5" />
-              <span className="text-[10px] font-medium hidden sm:block">Login</span>
-            </Link>
-            
-            <Link href="/cart" className="flex flex-col items-center gap-1 text-muted-foreground hover:text-primary transition-colors relative">
-              <ShoppingCart className="w-5 h-5" />
-              <span className="text-[10px] font-medium hidden sm:block">Cart</span>
-              <span className="absolute -top-1 -right-2 w-4 h-4 bg-primary text-[10px] font-bold text-primary-foreground rounded-full flex items-center justify-center">
-                0
-              </span>
-            </Link>
-          </div>
-        </div>
+    <div className="flex flex-col min-h-screen">`n      <SellerNavbar />
+      {/* Hero Section */}
+      <section className="bg-gradient-to-r from-pink-50 via-white to-pink-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 py-12 md:py-16 px-4 relative overflow-hidden">
+        {/* Soft abstract shapes in background */}
+        <div className="absolute top-0 right-0 w-[50vw] h-[50vw] bg-pink-200/40 rounded-full blur-3xl -translate-y-1/2 translate-x-1/4 pointer-events-none"></div>
+        <div className="absolute bottom-0 left-0 w-[30vw] h-[30vw] bg-blue-200/40 rounded-full blur-3xl translate-y-1/2 -translate-x-1/4 pointer-events-none"></div>
         
-        {/* Mobile Search Bar */}
-        <div className="md:hidden p-3 border-t bg-muted/30">
-          <TypewriterSearch />
-        </div>
-      </header>
-
-      {/* Main Content */}
-      <HeroBanner />
-      <BrandsMarquee />
-      <main className="container mx-auto px-4 py-8">
-        
-
-
-        {/* Categories Bar */}
-        <section className="my-12">
-          <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
-            Shop by Category
-          </h2>
-          <div className="grid grid-cols-3 md:grid-cols-6 gap-4">
-            {CATEGORIES.map((category) => (
-              <div key={category.name} className="flex flex-col items-center justify-center p-4 bg-card rounded-xl border border-border hover:border-primary hover:shadow-md transition-all cursor-pointer group">
-                <span className="text-3xl mb-3 group-hover:scale-110 transition-transform">{category.icon}</span>
-                <span className="text-sm font-medium text-center">{category.name}</span>
+        <div className="container mx-auto max-w-7xl relative z-10">
+          
+          {/* LAPTOP / DESKTOP VIEW (Unchanged) */}
+          <div className="hidden md:flex flex-row items-center gap-12">
+            {/* Text Content */}
+            <div className="flex-1 text-left mt-0">
+              <h1 className="text-5xl lg:text-6xl font-black text-slate-800 dark:text-white leading-tight mb-6">
+                Sell to customers without any hustle for delivery or website
+              </h1>
+              <p className="text-xl text-slate-600 dark:text-slate-300 mb-8 max-w-lg mx-0">
+                Register on our Sponsora platform and sell across India.
+              </p>
+              
+              <div className="flex flex-row items-center gap-4 mb-10 bg-white/60 dark:bg-slate-800/60 p-3 rounded-2xl border border-pink-100 dark:border-white/10 max-w-xl mx-0 shadow-sm backdrop-blur-sm">
+                <span className="bg-pink-500 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">New</span>
+                <span className="text-slate-700 dark:text-slate-300 font-medium">Don't have GSTIN? You can still sell on Sponsora.</span>
+                <Link href="/dont-have-gst" className="text-primary hover:text-primary-dark font-bold whitespace-nowrap transition-colors">
+                  Know more
+                </Link>
               </div>
-            ))}
-          </div>
-        </section>
+              
+              <Link href="/seller/register">
+                <button className="bg-primary text-white px-10 py-4 rounded-xl font-bold text-lg hover:bg-primary-dark transition-colors shadow-xl shadow-primary/30 hover:scale-105 duration-300">
+                  Start Selling
+                </button>
+              </Link>
+            </div>
 
-        {/* Value Props */}
-        <section className="my-12 grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="flex items-center gap-4 p-6 bg-blue-50 dark:bg-blue-950/30 rounded-2xl">
-            <div className="p-3 bg-pink-100 dark:bg-blue-900 rounded-full text-pink-600 dark:text-blue-400">
-              <Zap className="w-6 h-6" />
-            </div>
-            <div>
-              <h3 className="font-bold">Fast Delivery</h3>
-              <p className="text-sm text-muted-foreground">Free shipping on orders over ₹499</p>
+            {/* Banner Image */}
+            <div className="flex-1 flex justify-end w-full relative">
+              <img 
+                src="/images/seller_banner_doodle.png" 
+                alt="Seller Doodle Banner" 
+                className="w-full lg:max-w-xl object-contain drop-shadow-2xl hover:scale-105 transition-transform duration-500"
+              />
             </div>
           </div>
-          <div className="flex items-center gap-4 p-6 bg-green-50 dark:bg-green-950/30 rounded-2xl">
-            <div className="p-3 bg-green-100 dark:bg-green-900 rounded-full text-green-600 dark:text-green-400">
-              <ShieldCheck className="w-6 h-6" />
-            </div>
-            <div>
-              <h3 className="font-bold">100% Secure</h3>
-              <p className="text-sm text-muted-foreground">Safe payments & buyer protection</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-4 p-6 bg-pink-50 dark:bg-pink-950/30 rounded-2xl">
-            <div className="p-3 bg-pink-100 dark:bg-pink-900 rounded-full text-pink-600 dark:text-pink-400">
-              <Star className="w-6 h-6" />
-            </div>
-            <div>
-              <h3 className="font-bold">Top Brands</h3>
-              <p className="text-sm text-muted-foreground">Quality guaranteed directly from sellers</p>
-            </div>
-          </div>
-        </section>
 
-        {/* Featured Products */}
-        <section className="my-12">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold flex items-center gap-2">
-              Trending Products
-            </h2>
-            <Link href="/products" className="text-primary font-medium hover:underline flex items-center">
-              View All <ChevronRight className="w-4 h-4 ml-1" />
-            </Link>
+          {/* MOBILE VIEW (Stacked text and image) */}
+          <div className="flex md:hidden flex-col items-center text-center gap-6">
+            {/* Top text */}
+            <div className="flex-1 w-full pt-4">
+              <h1 className="text-3xl font-black text-slate-800 dark:text-white leading-tight mb-4">
+                Sell to customers without any hustle for delivery or website
+              </h1>
+              <p className="text-sm text-slate-600 dark:text-slate-300 mb-6 px-2">
+                Register on our Sponsora platform and sell across India.
+              </p>
+              
+              <div className="flex flex-col items-center justify-center gap-1 mb-8 mx-2 text-sm text-slate-700 dark:text-slate-300">
+                <div>
+                  <span className="text-pink-500 font-bold mr-1">New</span> 
+                  <span>Don't have GSTIN?</span>
+                </div>
+                <div>
+                  <span>You can still sell on Sponsora.</span>
+                  <Link href="/dont-have-gst" className="text-primary hover:text-primary-dark font-bold ml-1 transition-colors">
+                    Know more
+                  </Link>
+                </div>
+              </div>
+              
+              <Link href="/seller/register">
+                <button className="bg-primary hover:bg-primary-dark text-white px-8 py-3.5 w-[90%] sm:w-auto rounded-xl font-bold text-base shadow-xl shadow-primary/30 active:scale-95 transition-all">
+                  Start Selling
+                </button>
+              </Link>
+            </div>
+
+            {/* Bottom image */}
+            <div className="flex-1 flex justify-center w-full mt-4">
+              <img 
+                src="/images/seller_banner_mobile.png" 
+                alt="Seller Doodle Banner Mobile" 
+                className="w-full max-w-[320px] sm:max-w-sm object-contain drop-shadow-2xl"
+              />
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      {/* How it works */}
+      <section className="py-20 px-4 bg-transparent text-center">
+        <div className="container mx-auto max-w-4xl text-center">
+          <h2 className="text-3xl font-bold mb-12">How to start selling</h2>
+          
+          <div className="flex flex-col gap-8 text-left">
+            <div className="flex gap-6 items-start">
+              <div className="flex-shrink-0 w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-bold text-xl">
+                1
+              </div>
+              <div>
+                <h3 className="font-bold text-xl mb-2">Register your account</h3>
+                <p className="text-slate-600 dark:text-slate-400">Fill out a simple form with your business details, GSTIN, and bank account information.</p>
+              </div>
+            </div>
+            
+            <div className="flex gap-6 items-start">
+              <div className="flex-shrink-0 w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-bold text-xl">
+                2
+              </div>
+              <div>
+                <h3 className="font-bold text-xl mb-2">Wait for Admin Approval</h3>
+                <p className="text-slate-600 dark:text-slate-400">Our team verifies your details to ensure a safe marketplace for customers. Usually takes 24 hours.</p>
+              </div>
+            </div>
+            
+            <div className="flex gap-6 items-start">
+              <div className="flex-shrink-0 w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-bold text-xl">
+                3
+              </div>
+              <div>
+                <h3 className="font-bold text-xl mb-2">List your products</h3>
+                <p className="text-slate-600 dark:text-slate-400">Upload your product catalog using our simple dashboard. Your products go live once approved.</p>
+              </div>
+            </div>
+            
+            <div className="flex gap-6 items-start">
+              <div className="flex-shrink-0 w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-bold text-xl">
+                4
+              </div>
+              <div>
+                <h3 className="font-bold text-xl mb-2">Receive orders & get paid</h3>
+                <p className="text-slate-600 dark:text-slate-400">Start getting orders from across India. Payments are deposited directly to your bank account weekly.</p>
+              </div>
+            </div>
           </div>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {FEATURED_PRODUCTS.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
+          <div className="mt-16">
+            <Link href="/seller/register">
+              <button className="bg-primary text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-primary-dark transition-colors shadow-lg">
+                Create Seller Account
+              </button>
+            </Link>
           </div>
-        </section>
-        
-      </main>
-      
-      {/* Footer */}
-      <footer className="bg-muted/50 border-t py-12 mt-20">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-xl font-bold mb-4">Ready to start selling?</h2>
-          <p className="text-muted-foreground mb-6 max-w-md mx-auto">
-            Join thousands of small businesses selling their products on BazaarX and reach millions of customers.
-          </p>
-          <Link href="/seller">
-            <button className="bg-primary text-primary-foreground px-6 py-2.5 rounded-lg font-medium hover:bg-primary/90 transition-colors">
-              Register as a Seller
-            </button>
-          </Link>
         </div>
-      </footer>
+      </section>
+
+      {/* Benefits Section */}
+      <section className="py-20 px-4 bg-transparent text-center">
+        <div className="container mx-auto max-w-6xl text-center">
+          <h2 className="text-3xl font-bold mb-12">Why sell on Sponsora?</h2>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="p-6 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800">
+              <div className="w-12 h-12 bg-green-100 text-green-600 rounded-xl flex items-center justify-center mx-auto mb-4">
+                <DollarSign className="w-6 h-6" />
+              </div>
+              <h3 className="font-bold text-lg mb-2">0% Commission Fee</h3>
+              <p className="text-slate-600 dark:text-slate-400">Keep 100% of your profits for the first 3 months. No hidden charges.</p>
+            </div>
+            
+            <div className="p-6 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800">
+              <div className="w-12 h-12 bg-pink-100 text-pink-600 rounded-xl flex items-center justify-center mx-auto mb-4">
+                <TrendingUp className="w-6 h-6" />
+              </div>
+              <h3 className="font-bold text-lg mb-2">Reach Millions</h3>
+              <p className="text-slate-600 dark:text-slate-400">Access a massive customer base across India immediately.</p>
+            </div>
+            
+            <div className="p-6 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800">
+              <div className="w-12 h-12 bg-pink-100 text-pink-600 rounded-xl flex items-center justify-center mx-auto mb-4">
+                <Truck className="w-6 h-6" />
+              </div>
+              <h3 className="font-bold text-lg mb-2">Easy Shipping</h3>
+              <p className="text-slate-600 dark:text-slate-400">We handle the delivery. Just pack the product and our partners will pick it up.</p>
+            </div>
+            
+            <div className="p-6 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800">
+              <div className="w-12 h-12 bg-orange-100 text-orange-600 rounded-xl flex items-center justify-center mx-auto mb-4">
+                <HeadphonesIcon className="w-6 h-6" />
+              </div>
+              <h3 className="font-bold text-lg mb-2">24/7 Support</h3>
+              <p className="text-slate-600 dark:text-slate-400">Dedicated seller support team to help you grow your business.</p>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
+
