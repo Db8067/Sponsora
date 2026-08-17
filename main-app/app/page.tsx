@@ -94,7 +94,7 @@ export default function SellerLandingPage() {
       {/* How it works */}
       <section className="py-20 px-4 bg-transparent text-center">
         <div className="container mx-auto max-w-4xl text-center">
-          <h2 className="text-3xl font-bold mb-12">How to start selling</h2>
+          <h2 className="text-3xl font-bold mb-12">How to get Customer</h2>
           
           <div className="flex flex-col gap-8 text-left">
             <div className="flex gap-6 items-start">
@@ -171,7 +171,7 @@ export default function SellerLandingPage() {
             </div>
             
             <div className="p-6 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800">
-              <div className="w-12 h-12 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center mx-auto mb-4">`n                <ShieldCheck className="w-6 h-6" />
+              <div className="w-12 h-12 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center mx-auto mb-4"><ShieldCheck className="w-6 h-6" />
               </div>
               <h3 className="font-bold text-lg mb-2">GST-Free Onboarding</h3>
               <p className="text-slate-600 dark:text-slate-400">No complicated tax paperwork needed to start. Get your business online in under 2 minutes.</p>
@@ -190,6 +190,8 @@ export default function SellerLandingPage() {
     </div>
   );
 }
+
+
 
 
 
