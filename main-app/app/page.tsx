@@ -5,7 +5,8 @@ import { TrendingUp, Truck, HeadphonesIcon, DollarSign, CheckCircle2 } from 'luc
 
 export default function SellerLandingPage() {
   return (
-    <div className="flex flex-col min-h-screen">`n      <SellerNavbar />
+    <div className="flex flex-col min-h-screen">
+      <SellerNavbar />
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-pink-50 via-white to-pink-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 py-12 md:py-16 px-4 relative overflow-hidden">
         {/* Soft abstract shapes in background */}
@@ -19,23 +20,21 @@ export default function SellerLandingPage() {
             {/* Text Content */}
             <div className="flex-1 text-left mt-0">
               <h1 className="text-5xl lg:text-6xl font-black text-slate-800 dark:text-white leading-tight mb-6">
-                Sell to customers without any hustle for delivery or website
+                Get customers for your Brand from all over India.
               </h1>
               <p className="text-xl text-slate-600 dark:text-slate-300 mb-8 max-w-lg mx-0">
-                Register on our Sponsora platform and sell across India.
+                Register and get your own Dashboard and Customers from all over India.
               </p>
               
               <div className="flex flex-row items-center gap-4 mb-10 bg-white/60 dark:bg-slate-800/60 p-3 rounded-2xl border border-pink-100 dark:border-white/10 max-w-xl mx-0 shadow-sm backdrop-blur-sm">
                 <span className="bg-pink-500 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">New</span>
-                <span className="text-slate-700 dark:text-slate-300 font-medium">Don't have GSTIN? You can still sell on Sponsora.</span>
-                <Link href="/dont-have-gst" className="text-primary hover:text-primary-dark font-bold whitespace-nowrap transition-colors">
-                  Know more
-                </Link>
+                <span className="text-slate-700 dark:text-slate-300 font-medium">Don't have Website? You can get your own in just 2 minutes.</span>
+                
               </div>
               
               <Link href="/seller/register">
                 <button className="bg-primary text-white px-10 py-4 rounded-xl font-bold text-lg hover:bg-primary-dark transition-colors shadow-xl shadow-primary/30 hover:scale-105 duration-300">
-                  Start Selling
+                  Get Customers
                 </button>
               </Link>
             </div>
@@ -55,28 +54,26 @@ export default function SellerLandingPage() {
             {/* Top text */}
             <div className="flex-1 w-full pt-4">
               <h1 className="text-3xl font-black text-slate-800 dark:text-white leading-tight mb-4">
-                Sell to customers without any hustle for delivery or website
+                Get customers for your Brand from all over India.
               </h1>
               <p className="text-sm text-slate-600 dark:text-slate-300 mb-6 px-2">
-                Register on our Sponsora platform and sell across India.
+                Register and get your own Dashboard and Customers from all over India.
               </p>
               
               <div className="flex flex-col items-center justify-center gap-1 mb-8 mx-2 text-sm text-slate-700 dark:text-slate-300">
                 <div>
                   <span className="text-pink-500 font-bold mr-1">New</span> 
-                  <span>Don't have GSTIN?</span>
+                  <span>Don't have Website?</span>
                 </div>
                 <div>
-                  <span>You can still sell on Sponsora.</span>
-                  <Link href="/dont-have-gst" className="text-primary hover:text-primary-dark font-bold ml-1 transition-colors">
-                    Know more
-                  </Link>
+                  <span>You can get your own in just 2 minutes.</span>
+                  
                 </div>
               </div>
               
               <Link href="/seller/register">
                 <button className="bg-primary hover:bg-primary-dark text-white px-8 py-3.5 w-[90%] sm:w-auto rounded-xl font-bold text-base shadow-xl shadow-primary/30 active:scale-95 transition-all">
-                  Start Selling
+                  Get Customers
                 </button>
               </Link>
             </div>
@@ -194,4 +191,5 @@ export default function SellerLandingPage() {
     </div>
   );
 }
+
 

@@ -32,9 +32,7 @@ export default function SellerNavbar() {
           <Link href="/seller/grow-business" className="text-sm font-medium text-slate-600 hover:text-primary dark:text-slate-300 transition-colors whitespace-nowrap">
             Grow Business
           </Link>
-          <Link href="/seller/no-gst" className="text-sm font-medium text-slate-600 hover:text-primary dark:text-slate-300 transition-colors whitespace-nowrap">
-            Don't have a GST?
-          </Link>
+          
         </nav>
 
         <div className="hidden lg:flex items-center gap-4">
@@ -42,7 +40,7 @@ export default function SellerNavbar() {
             Login
           </Link>
           <Link href="/seller/register" className="text-sm font-semibold bg-primary text-white px-5 py-2.5 rounded-xl hover:bg-primary-dark transition-colors shadow-lg shadow-primary/20">
-            Start Selling
+            Get Customers
           </Link>
         </div>
 
@@ -87,13 +85,11 @@ export default function SellerNavbar() {
             <Link href="/seller/grow-business" onClick={() => setIsMobileMenuOpen(false)} className="text-2xl font-bold text-slate-700 dark:text-slate-200 hover:text-primary transition-colors text-center">
               Grow Business
             </Link>
-            <Link href="/seller/no-gst" onClick={() => setIsMobileMenuOpen(false)} className="text-2xl font-bold text-slate-700 dark:text-slate-200 hover:text-primary transition-colors text-center">
-              Don't have a GST?
-            </Link>
+            
             
             <div className="mt-8 w-full max-w-xs flex flex-col gap-4">
               <Link href="/seller/register" onClick={() => setIsMobileMenuOpen(false)} className="w-full text-center text-lg font-semibold bg-primary text-white px-6 py-4 rounded-2xl shadow-lg shadow-primary/30 active:scale-95 transition-all">
-                Start Selling Now
+                Get Customers
               </Link>
             </div>
           </div>
@@ -102,3 +98,4 @@ export default function SellerNavbar() {
     </header>
   );
 }
+
