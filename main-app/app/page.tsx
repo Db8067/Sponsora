@@ -1,7 +1,7 @@
 import SellerNavbar from '@/components/SellerNavbar';
 import React from 'react';
 import Link from 'next/link';
-import { TrendingUp, Truck, HeadphonesIcon, DollarSign, CheckCircle2 } from 'lucide-react';
+import { LineChart, MessageCircle, ShieldCheck, Percent, CheckCircle2 } from 'lucide-react';
 
 export default function SellerLandingPage() {
   return (
@@ -102,8 +102,8 @@ export default function SellerLandingPage() {
                 1
               </div>
               <div>
-                <h3 className="font-bold text-xl mb-2">Register your account</h3>
-                <p className="text-slate-600 dark:text-slate-400">Fill out a simple form with your business details, GSTIN, and bank account information.</p>
+                <h3 className="font-bold text-xl mb-2">Create your Profile</h3>
+                <p className="text-slate-600 dark:text-slate-400">Fill out a simple form with your business name and details to generate your custom micro-website instantly. (No GSTIN required!)</p>
               </div>
             </div>
             
@@ -112,8 +112,8 @@ export default function SellerLandingPage() {
                 2
               </div>
               <div>
-                <h3 className="font-bold text-xl mb-2">Wait for Admin Approval</h3>
-                <p className="text-slate-600 dark:text-slate-400">Our team verifies your details to ensure a safe marketplace for customers. Usually takes 24 hours.</p>
+                <h3 className="font-bold text-xl mb-2">Upload your Products</h3>
+                <p className="text-slate-600 dark:text-slate-400">Add your product photos, descriptions, and prices directly through your easy-to-use merchant dashboard.</p>
               </div>
             </div>
             
@@ -122,8 +122,8 @@ export default function SellerLandingPage() {
                 3
               </div>
               <div>
-                <h3 className="font-bold text-xl mb-2">List your products</h3>
-                <p className="text-slate-600 dark:text-slate-400">Upload your product catalog using our simple dashboard. Your products go live once approved.</p>
+                <h3 className="font-bold text-xl mb-2">Share your Shop Link</h3>
+                <p className="text-slate-600 dark:text-slate-400">Your digital storefront goes live immediately. Share your unique Sponsora shop link on Instagram, WhatsApp, or Facebook.</p>
               </div>
             </div>
             
@@ -132,8 +132,8 @@ export default function SellerLandingPage() {
                 4
               </div>
               <div>
-                <h3 className="font-bold text-xl mb-2">Receive orders & get paid</h3>
-                <p className="text-slate-600 dark:text-slate-400">Start getting orders from across India. Payments are deposited directly to your bank account weekly.</p>
+                <h3 className="font-bold text-xl mb-2">Get Customers on WhatsApp</h3>
+                <p className="text-slate-600 dark:text-slate-400">Customers browse your shop and click to order directly on your WhatsApp. No commissions, no middleman delays.</p>
               </div>
             </div>
           </div>
@@ -156,34 +156,33 @@ export default function SellerLandingPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             <div className="p-6 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800">
               <div className="w-12 h-12 bg-green-100 text-green-600 rounded-xl flex items-center justify-center mx-auto mb-4">
-                <DollarSign className="w-6 h-6" />
+                <Percent className="w-6 h-6" />
               </div>
-              <h3 className="font-bold text-lg mb-2">0% Commission Fee</h3>
-              <p className="text-slate-600 dark:text-slate-400">Keep 100% of your profits for the first 3 months. No hidden charges.</p>
+              <h3 className="font-bold text-lg mb-2">0% Commission</h3>
+              <p className="text-slate-600 dark:text-slate-400">We never take a cut from your sales. You handle payments directly with your customers.</p>
             </div>
             
             <div className="p-6 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800">
               <div className="w-12 h-12 bg-pink-100 text-pink-600 rounded-xl flex items-center justify-center mx-auto mb-4">
-                <TrendingUp className="w-6 h-6" />
+                <LineChart className="w-6 h-6" />
               </div>
-              <h3 className="font-bold text-lg mb-2">Reach Millions</h3>
-              <p className="text-slate-600 dark:text-slate-400">Access a massive customer base across India immediately.</p>
+              <h3 className="font-bold text-lg mb-2">Powerful Dashboard</h3>
+              <p className="text-slate-600 dark:text-slate-400">Track your shop visitors, product views, and customer clicks in real-time.</p>
             </div>
             
             <div className="p-6 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800">
-              <div className="w-12 h-12 bg-pink-100 text-pink-600 rounded-xl flex items-center justify-center mx-auto mb-4">
-                <Truck className="w-6 h-6" />
+              <div className="w-12 h-12 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center mx-auto mb-4">`n                <ShieldCheck className="w-6 h-6" />
               </div>
-              <h3 className="font-bold text-lg mb-2">Easy Shipping</h3>
-              <p className="text-slate-600 dark:text-slate-400">We handle the delivery. Just pack the product and our partners will pick it up.</p>
+              <h3 className="font-bold text-lg mb-2">GST-Free Onboarding</h3>
+              <p className="text-slate-600 dark:text-slate-400">No complicated tax paperwork needed to start. Get your business online in under 2 minutes.</p>
             </div>
             
             <div className="p-6 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800">
               <div className="w-12 h-12 bg-orange-100 text-orange-600 rounded-xl flex items-center justify-center mx-auto mb-4">
-                <HeadphonesIcon className="w-6 h-6" />
+                <MessageCircle className="w-6 h-6" />
               </div>
-              <h3 className="font-bold text-lg mb-2">24/7 Support</h3>
-              <p className="text-slate-600 dark:text-slate-400">Dedicated seller support team to help you grow your business.</p>
+              <h3 className="font-bold text-lg mb-2">WhatsApp Integration</h3>
+              <p className="text-slate-600 dark:text-slate-400">Customers connect with you directly on WhatsApp for orders, building real relationships.</p>
             </div>
           </div>
         </div>
@@ -191,5 +190,6 @@ export default function SellerLandingPage() {
     </div>
   );
 }
+
 
 
