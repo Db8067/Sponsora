@@ -11,33 +11,38 @@ export default function SellOnlinePage() {
       <SellerNavbar />
 
       {/* Hero Section */}
-      <section className="py-12 px-4 text-center max-w-4xl mx-auto mt-4">
+      <section className="pt-4 pb-6 px-4 text-center max-w-4xl mx-auto">
         <h1 className="text-2xl md:text-3xl font-bold text-slate-800 dark:text-white mb-4">
-          Build your Brand. On your own terms.
+          Build your Brand, Build your customer
         </h1>
         <p className="text-sm md:text-base text-slate-600 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed">
-          Forget about paying high marketplace commissions or dealing with complex GST paperwork just to start. We give you the tools to launch your own micro-website and chat with your customers directly.
+          Forget about paying high marketplace commissions or dealing with complex GST paperwork just to start. We give you the tools to launch your own website and chat with your customers directly.
         </p>
+        <div className="mt-6">
+          <Link href="/seller/register" className="inline-block bg-primary hover:bg-primary-dark text-white px-8 py-3 rounded-xl font-bold text-base shadow-lg hover:scale-105 transition-all">
+            Get customer
+          </Link>
+        </div>
       </section>
 
       {/* Mixed Content Section */}
-      <section className="py-6 px-4 max-w-5xl mx-auto w-full">
+      <section className="py-6 px-4 max-w-4xl mx-auto w-full">
         {/* Grid layout with fixed sizes for readability */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
             
           {/* Card 1 */}
-          <div className="flex flex-col gap-4 bg-white/60 dark:bg-slate-800/60 p-6 rounded-2xl backdrop-blur-md border border-white/40 dark:border-white/10 shadow-lg">
+          <div className="flex flex-col gap-4 bg-white/60 md:bg-transparent dark:bg-slate-800/60 md:dark:bg-transparent p-6 rounded-2xl backdrop-blur-md md:backdrop-blur-none border border-white/40 md:border-transparent dark:border-white/10 md:dark:border-transparent shadow-lg md:shadow-none">
             <img 
               src="/images/sell_online_1.png" 
               className="w-full h-auto rounded-xl object-contain max-h-56 bg-white/50 dark:bg-slate-900/50" 
-              alt="Micro-website" 
+              alt="Website" 
             />
             <div className="flex items-center gap-3 mt-3">
               <Globe className="w-6 h-6 text-pink-500" />
-              <h2 className="text-lg md:text-xl font-bold text-slate-800 dark:text-white">Custom Micro-Website</h2>
+              <h2 className="text-lg md:text-xl font-bold text-slate-800 dark:text-white">Custom Website</h2>
             </div>
             <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
-              You don't need to be a developer to get your business online. With our powerful Seller Dashboard, simply upload your logo, add your product catalogs, and instantly generate a beautifully designed micro-website.
+              You don't need to be a developer to get your business online. With our powerful Seller Dashboard, simply upload your logo, add your product catalogs, and instantly generate a beautifully designed website.
             </p>
             <ul className="text-sm space-y-2 mt-2">
               <li className="flex items-center gap-2 text-slate-700 dark:text-slate-300">
@@ -56,7 +61,7 @@ export default function SellOnlinePage() {
           </div>
 
           {/* Card 2 */}
-          <div className="flex flex-col gap-4 bg-white/60 dark:bg-slate-800/60 p-6 rounded-2xl backdrop-blur-md border border-white/40 dark:border-white/10 shadow-lg">
+          <div className="flex flex-col gap-4 bg-white/60 md:bg-transparent dark:bg-slate-800/60 md:dark:bg-transparent p-6 rounded-2xl backdrop-blur-md md:backdrop-blur-none border border-white/40 md:border-transparent dark:border-white/10 md:dark:border-transparent shadow-lg md:shadow-none">
             <img 
               src="/images/sell_online_2.png" 
               className="w-full h-auto rounded-xl object-contain max-h-56 bg-white/50 dark:bg-slate-900/50" 
@@ -67,7 +72,7 @@ export default function SellOnlinePage() {
               <h2 className="text-lg md:text-xl font-bold text-slate-800 dark:text-white">WhatsApp Orders</h2>
             </div>
             <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
-              Tired of marketplaces holding your money? We connect your customers directly to you. Shoppers click to order on your micro-website and are instantly redirected to your WhatsApp.
+              Tired of marketplaces holding your money? We connect your customers directly to you. Shoppers click to order on your website and are instantly redirected to your WhatsApp.
             </p>
             <ul className="text-sm space-y-2 mt-2">
               <li className="flex items-center gap-2 text-slate-700 dark:text-slate-300">
@@ -88,7 +93,7 @@ export default function SellOnlinePage() {
         </div>
 
         {/* Steps / Process */}
-        <div className="mt-12 mb-16 bg-white/60 dark:bg-slate-800/60 p-8 rounded-2xl backdrop-blur-md border border-white/40 dark:border-white/10 shadow-lg">
+        <div className="mt-12 mb-16 bg-white/60 md:bg-transparent dark:bg-slate-800/60 md:dark:bg-transparent p-8 rounded-2xl backdrop-blur-md md:backdrop-blur-none border border-white/40 md:border-transparent dark:border-white/10 md:dark:border-transparent shadow-lg md:shadow-none">
           <h2 className="text-xl font-bold text-slate-800 dark:text-white mb-8 text-center">How to get started</h2>
           
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 text-center">
@@ -111,7 +116,7 @@ export default function SellOnlinePage() {
           
           <div className="mt-10 text-center">
               <Link href="/seller/register" className="inline-block bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-8 py-3 rounded-xl font-medium text-sm shadow-md hover:opacity-90 transition-opacity">
-                Create Your Micro-Website
+                Create Your Website
               </Link>
           </div>
         </div>
@@ -120,3 +125,4 @@ export default function SellOnlinePage() {
     </div>
   );
 }
+
