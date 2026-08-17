@@ -21,8 +21,8 @@ export default function SellerNavbar() {
             Sell online
           </Link>
           
-          <Link href="/seller/pricing-and-commission" className="text-sm font-medium text-slate-600 hover:text-primary dark:text-slate-300 transition-colors whitespace-nowrap">
-            Pricing and Commission
+          <Link href="/subscriptions" className="text-sm font-medium text-slate-600 hover:text-primary dark:text-slate-300 transition-colors whitespace-nowrap">
+            Subscriptions
           </Link>
           
           
@@ -68,8 +68,8 @@ export default function SellerNavbar() {
               Sell online
             </Link>
             
-            <Link href="/seller/pricing-and-commission" onClick={() => setIsMobileMenuOpen(false)} className="text-2xl font-bold text-slate-700 dark:text-slate-200 hover:text-primary transition-colors text-center">
-              Pricing & Commission
+            <Link href="/subscriptions" onClick={() => setIsMobileMenuOpen(false)} className="text-2xl font-bold text-slate-700 dark:text-slate-200 hover:text-primary transition-colors text-center">
+              Subscriptions
             </Link>
             
             
