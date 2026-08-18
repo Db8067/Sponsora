@@ -500,7 +500,7 @@ export default function SIHMasterclassPage() {
                               type="submit"
                               className="w-full mt-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold py-4 px-4 rounded-xl shadow-lg hover:shadow-blue-500/25 active:scale-[0.98] transition-all flex items-center justify-center gap-2 text-lg cursor-pointer"
                             >
-                              {loading ? <Loader2 className="w-6 h-6 animate-spin" /> : "Pay ₹1"}
+                              {loading ? <Loader2 className="w-6 h-6 animate-spin" /> : passType === "team" ? "Pay ₹150" : "Pay ₹29"}
                             </button>
 
                             <div className="flex items-center justify-center gap-1.5 mt-2 text-xs font-semibold text-zinc-400">
