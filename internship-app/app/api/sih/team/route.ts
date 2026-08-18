@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
+import { supabaseAdmin } from '@/lib/supabase';
 
 export async function POST(req: NextRequest) {
   try {
@@ -8,6 +9,19 @@ export async function POST(req: NextRequest) {
     if (!leaderEmail || !members || members.length === 0) {
       return NextResponse.json({ error: 'Missing team data' }, { status: 400 });
     }
+
+    // Insert teammates into database
+    const teammatesData = members.map((m: any) => ({
+      leader_email: leaderEmail,
+      name: m.name,
+      email: m.email,
+      phone: m.phone,
+      college: m.college,
+      branch: m.branch,
+      year: m.year
+    }));
+
+    await (supabaseAdmin.from('sih_masterclass_teammates') as any).insert(teammatesData);
 
     if (!process.env.EMAIL_USER || !process.env.EMAIL_APP_PASSWORD) {
       console.error('Email credentials missing');

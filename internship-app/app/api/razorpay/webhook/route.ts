@@ -47,15 +47,32 @@ export async function POST(req: NextRequest) {
       // Handle custom Glocalview & SIH Masterclass payments
       if (notes.type === 'glocal_interview' || notes.type === 'sih_masterclass') {
         const amountPaid = payment.amount / 100;
-        await (supabaseAdmin.from('glocalview_interview_payments') as any).insert({
-          applicant_name: notes.name,
-          applicant_email: notes.email,
-          applicant_phone: notes.phone,
-          amount: amountPaid,
-          razorpay_payment_id: payment.id,
-          razorpay_order_id: payment.order_id,
-          status: 'captured'
-        });
+        
+        if (notes.type === 'sih_masterclass') {
+          await (supabaseAdmin.from('sih_masterclass_registrations') as any).insert({
+            applicant_name: notes.name,
+            applicant_email: notes.email,
+            applicant_phone: notes.phone,
+            college: notes.college,
+            branch: notes.branch,
+            year: notes.year,
+            pass_type: notes.passType || 'individual',
+            amount: amountPaid,
+            razorpay_payment_id: payment.id,
+            razorpay_order_id: payment.order_id,
+            status: 'captured'
+          });
+        } else {
+          await (supabaseAdmin.from('glocalview_interview_payments') as any).insert({
+            applicant_name: notes.name,
+            applicant_email: notes.email,
+            applicant_phone: notes.phone,
+            amount: amountPaid,
+            razorpay_payment_id: payment.id,
+            razorpay_order_id: payment.order_id,
+            status: 'captured'
+          });
+        }
 
         // Send Email Notification
         try {
