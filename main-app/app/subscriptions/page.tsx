@@ -1,9 +1,13 @@
-import React from 'react';
+'use client';
+
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { Check, Sparkles, Zap, ShieldCheck, HelpCircle } from 'lucide-react';
 import SellerNavbar from '@/components/SellerNavbar';
 
 export default function SubscriptionsPage() {
+  const [selectedPlan, setSelectedPlan] = useState<number | null>(null);
+
   return (
     <div className="flex flex-col min-h-screen bg-transparent">
       {/* Global Navbar */}
@@ -13,7 +17,7 @@ export default function SubscriptionsPage() {
       <section className="pt-10 pb-8 px-4 md:px-12 text-center max-w-4xl mx-auto">
         <div className="inline-flex items-center gap-2 bg-pink-100 dark:bg-pink-900/30 text-pink-700 dark:text-pink-300 px-4 py-1.5 rounded-full font-bold text-xs md:text-sm mb-4">
           <Zap className="w-4 h-4 fill-pink-500" />
-          0% Sales Commission on All Plans
+          A platfrom where you get Customers for your brand
         </div>
         <h1 className="text-2xl md:text-4xl font-bold text-slate-800 dark:text-white mb-4">
           Simple, Transparent Subscriptions
@@ -28,15 +32,22 @@ export default function SubscriptionsPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
           
           {/* Plan 1: Starter */}
-          <div className="flex flex-col justify-between bg-white/60 dark:bg-slate-800/60 p-6 md:p-8 rounded-3xl backdrop-blur-md border border-white/40 dark:border-white/10 shadow-lg hover:shadow-xl transition-shadow">
+          <div 
+            onClick={() => setSelectedPlan(1)}
+            className={`cursor-pointer flex flex-col justify-between p-6 md:p-8 rounded-3xl backdrop-blur-md transition-all ${
+              selectedPlan === 1 
+                ? 'bg-white/80 dark:bg-slate-800/80 border-2 border-primary shadow-2xl scale-[1.02]' 
+                : 'bg-white/60 dark:bg-slate-800/60 border border-white/40 dark:border-white/10 shadow-lg hover:shadow-xl'
+            }`}
+          >
             <div>
-              <div className="text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">Free Starter</div>
+              <div className="text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">Startup package</div>
               <div className="flex items-baseline gap-1 mb-4">
-                <span className="text-3xl md:text-4xl font-black text-slate-900 dark:text-white">₹0</span>
-                <span className="text-sm text-slate-500 font-medium">/forever</span>
+                <span className="text-3xl md:text-4xl font-black text-slate-900 dark:text-white">₹99</span>
+                <span className="text-sm text-slate-500 font-medium">/month</span>
               </div>
               <p className="text-xs md:text-sm text-slate-600 dark:text-slate-300 mb-6">
-                Perfect for new sellers getting their brand online and testing the waters.
+                Perfect for new sellers getting their brand online.
               </p>
               
               <div className="h-px bg-slate-200 dark:bg-slate-700 mb-6"></div>
@@ -48,11 +59,11 @@ export default function SubscriptionsPage() {
                 </li>
                 <li className="flex items-center gap-3">
                   <Check className="w-4 h-4 text-green-500 shrink-0" />
-                  <span>Up to <strong>15 Products</strong> listing</span>
+                  <span>Up to <strong>10 product uploading for 1 month</strong></span>
                 </li>
                 <li className="flex items-center gap-3">
                   <Check className="w-4 h-4 text-green-500 shrink-0" />
-                  <span>Custom shop link (sponsora.com/shop)</span>
+                  <span>Customized brand page and link</span>
                 </li>
                 <li className="flex items-center gap-3">
                   <Check className="w-4 h-4 text-green-500 shrink-0" />
@@ -60,20 +71,27 @@ export default function SubscriptionsPage() {
                 </li>
                 <li className="flex items-center gap-3">
                   <Check className="w-4 h-4 text-green-500 shrink-0" />
-                  <span>Basic visitor view counts</span>
+                  <span>Brand Dashboard Access</span>
                 </li>
               </ul>
             </div>
 
             <div className="mt-8">
               <Link href="/seller-onboard" className="block w-full text-center bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-800 dark:text-white py-3 rounded-xl font-bold text-sm transition-colors">
-                Get Started Free
+                Get Startup package
               </Link>
             </div>
           </div>
 
-          {/* Plan 2: Pro Growth (Highlighted) */}
-          <div className="relative flex flex-col justify-between bg-white/80 dark:bg-slate-800/80 p-6 md:p-8 rounded-3xl backdrop-blur-md border-2 border-primary shadow-2xl scale-100 md:-translate-y-2 transition-all">
+          {/* Plan 2: Pro Growth (Highlighted optionally by default or when clicked) */}
+          <div 
+            onClick={() => setSelectedPlan(2)}
+            className={`cursor-pointer relative flex flex-col justify-between p-6 md:p-8 rounded-3xl backdrop-blur-md transition-all ${
+              selectedPlan === 2 || selectedPlan === null // Keep default highlighted unless another is selected
+                ? 'bg-white/80 dark:bg-slate-800/80 border-2 border-primary shadow-2xl scale-[1.02]'
+                : 'bg-white/60 dark:bg-slate-800/60 border border-white/40 dark:border-white/10 shadow-lg hover:shadow-xl'
+            }`}
+          >
             <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-primary text-white text-xs font-bold px-4 py-1 rounded-full shadow-md flex items-center gap-1">
               <Sparkles className="w-3.5 h-3.5" /> Most Popular
             </div>
@@ -108,7 +126,7 @@ export default function SubscriptionsPage() {
                 </li>
                 <li className="flex items-center gap-3">
                   <Check className="w-4 h-4 text-green-500 shrink-0" />
-                  <span>Remove Sponsora badge from site</span>
+                  <span>Realtime access of customers</span>
                 </li>
                 <li className="flex items-center gap-3">
                   <Check className="w-4 h-4 text-green-500 shrink-0" />
@@ -119,13 +137,20 @@ export default function SubscriptionsPage() {
 
             <div className="mt-8">
               <Link href="/seller-onboard" className="block w-full text-center bg-primary hover:bg-primary-dark text-white py-3.5 rounded-xl font-bold text-sm shadow-lg shadow-primary/30 transition-all hover:scale-[1.02]">
-                Start 14-Day Free Trial
+                Get Growth Pro
               </Link>
             </div>
           </div>
 
           {/* Plan 3: Business Scale */}
-          <div className="flex flex-col justify-between bg-white/60 dark:bg-slate-800/60 p-6 md:p-8 rounded-3xl backdrop-blur-md border border-white/40 dark:border-white/10 shadow-lg hover:shadow-xl transition-shadow">
+          <div 
+            onClick={() => setSelectedPlan(3)}
+            className={`cursor-pointer flex flex-col justify-between p-6 md:p-8 rounded-3xl backdrop-blur-md transition-all ${
+              selectedPlan === 3 
+                ? 'bg-white/80 dark:bg-slate-800/80 border-2 border-primary shadow-2xl scale-[1.02]' 
+                : 'bg-white/60 dark:bg-slate-800/60 border border-white/40 dark:border-white/10 shadow-lg hover:shadow-xl'
+            }`}
+          >
             <div>
               <div className="text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">Business Scale</div>
               <div className="flex items-baseline gap-1 mb-4">
@@ -228,4 +253,3 @@ export default function SubscriptionsPage() {
     </div>
   );
 }
-
