@@ -8,10 +8,10 @@ export async function POST(req: NextRequest) {
       key_secret: process.env.RAZORPAY_KEY_SECRET || 'dummy_secret',
     });
 
-    const { name, email, phone, passType } = await req.json();
+    const { name, email, phone, college, branch, year, passType } = await req.json();
 
-    if (!name || !email || !phone) {
-      return NextResponse.json({ error: 'Name, email, and phone are required' }, { status: 400 });
+    if (!name || !email || !phone || !college || !branch || !year) {
+      return NextResponse.json({ error: 'All fields are required' }, { status: 400 });
     }
 
     const finalAmount = passType === 'team' ? 15000 : 2900;
@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
       amount: finalAmount,
       currency: 'INR',
       receipt: `sih_${Date.now()}`,
-      notes: { type: 'sih_masterclass', passType: passType || 'individual', name, email, phone },
+      notes: { type: 'sih_masterclass', passType: passType || 'individual', name, email, phone, college, branch, year },
     });
 
     return NextResponse.json({
