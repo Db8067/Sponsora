@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
       amount: finalAmount,
       currency: 'INR',
       receipt: `sih_${Date.now()}`,
-      notes: { type: 'sih_masterclass', name, email, phone },
+      notes: { type: 'sih_masterclass', passType: passType || 'individual', name, email, phone },
     });
 
     return NextResponse.json({
@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
       keyId: process.env.RAZORPAY_KEY_ID,
     });
   } catch (error: any) {
-    console.error('Razorpay glocal order error:', error);
+    console.error('Razorpay SIH order error:', error);
     return NextResponse.json({ error: 'Payment service unavailable' }, { status: 503 });
   }
 }

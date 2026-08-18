@@ -44,8 +44,8 @@ export async function POST(req: NextRequest) {
 
       const quantity = parseInt(notes.quantity as string || '1', 10);
 
-      // Handle custom Glocalview interview payments
-      if (notes.type === 'glocal_interview') {
+      // Handle custom Glocalview & SIH Masterclass payments
+      if (notes.type === 'glocal_interview' || notes.type === 'sih_masterclass') {
         const amountPaid = payment.amount / 100;
         await (supabaseAdmin.from('glocalview_interview_payments') as any).insert({
           applicant_name: notes.name,
@@ -60,18 +60,20 @@ export async function POST(req: NextRequest) {
         // Send Email Notification
         try {
           if (process.env.EMAIL_USER && process.env.EMAIL_APP_PASSWORD) {
+            const isSIH = notes.type === 'sih_masterclass';
             await transporter.sendMail({
               from: `"Sponsora Notifications" <${process.env.EMAIL_USER}>`,
-              to: 'devanshb3456@gmail.com', // or process.env.EMAIL_USER if they prefer
-              subject: `🎉 New Glocalview Payment: ${notes.name}`,
+              to: 'devanshb3456@gmail.com',
+              subject: isSIH ? `🎉 New SIH Masterclass Payment: ${notes.name} (₹${amountPaid})` : `🎉 New Glocalview Payment: ${notes.name}`,
               html: `
                 <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
-                  <h2 style="color: #4f46e5;">New Internship Registration!</h2>
-                  <p>A new applicant has just paid for the Glocalview Interview Registration.</p>
+                  <h2 style="color: #4f46e5;">${isSIH ? 'New SIH Masterclass Registration!' : 'New Internship Registration!'}</h2>
+                  <p>A new student has registered for the ${isSIH ? 'SIH 2026 Online Masterclass' : 'Glocalview Interview'}.</p>
                   <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
                     <tr><td style="padding: 8px; border-bottom: 1px solid #eee; color: #666;">Name</td><td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">${notes.name}</td></tr>
                     <tr><td style="padding: 8px; border-bottom: 1px solid #eee; color: #666;">Email</td><td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">${notes.email}</td></tr>
                     <tr><td style="padding: 8px; border-bottom: 1px solid #eee; color: #666;">Phone</td><td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">${notes.phone}</td></tr>
+                    ${notes.passType ? `<tr><td style="padding: 8px; border-bottom: 1px solid #eee; color: #666;">Pass Type</td><td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">${notes.passType}</td></tr>` : ''}
                     <tr><td style="padding: 8px; border-bottom: 1px solid #eee; color: #666;">Amount Paid</td><td style="padding: 8px; border-bottom: 1px solid #eee; font-weight: bold;">₹${amountPaid}</td></tr>
                     <tr><td style="padding: 8px; color: #666;">Order ID</td><td style="padding: 8px; font-weight: bold;">${payment.order_id}</td></tr>
                   </table>

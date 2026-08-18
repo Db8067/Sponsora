@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { CheckCircle, Loader2, ShieldCheck, Mail, User, Phone, Clock } from "lucide-react";
+import { CheckCircle, Loader2, ShieldCheck, Mail, User, Phone, CheckCircle2, Sparkles } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
@@ -18,7 +18,6 @@ export default function SIHMasterclassPage() {
   const [razorpayLoaded, setRazorpayLoaded] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState("");
-  const [timeLeft, setTimeLeft] = useState(3599); // 59 minutes 59 seconds
   const router = useRouter();
 
   useEffect(() => {
@@ -30,19 +29,6 @@ export default function SIHMasterclassPage() {
       return () => clearTimeout(timer);
     }
   }, [isSuccess, router]);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeLeft(prev => prev > 0 ? prev - 1 : 0);
-    }, 1000);
-    return () => clearInterval(timer);
-  }, []);
-
-  const formatTime = (seconds: number) => {
-    const m = Math.floor(seconds / 60);
-    const s = seconds % 60;
-    return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
-  };
 
   useEffect(() => {
     const script = document.createElement("script");
@@ -85,8 +71,8 @@ export default function SIHMasterclassPage() {
         key: data.keyId,
         amount: data.amount,
         currency: data.currency,
-        name: "Glocalview Private Limited",
-        description: "Interview Registration Fee",
+        name: "SIH Online Masterclass",
+        description: "Online SIH Masterclass Pass",
         order_id: data.orderId,
         handler: function (response: any) {
           setIsSuccess(true);
@@ -130,13 +116,13 @@ export default function SIHMasterclassPage() {
               <div className="w-20 h-20 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mb-6">
                 <CheckCircle className="w-10 h-10 text-green-600 dark:text-green-400" />
               </div>
-              <h2 className="text-3xl font-black mb-4 text-foreground">Payment Successful!</h2>
+              <h2 className="text-3xl font-black mb-4 text-foreground">Registration Successful!</h2>
               <div className="text-foreground/70 text-lg max-w-lg mx-auto space-y-4">
                 <p>
-                  Thank you, <strong>{name}</strong>! Your spot for the SIH 2026 Internal Round Masterclass is confirmed.
+                  Thank you, <strong>{name}</strong>! Your spot for the <strong>SIH Online Masterclass</strong> is confirmed.
                 </p>
                 <p className="font-medium text-foreground">
-                  Please check your email and WhatsApp for the Google Meet link. See you this Friday at 8:30 PM!
+                  Please check your email and WhatsApp for the Google Meet link. See you this Friday at 5:30 PM!
                 </p>
                 <p className="text-sm text-foreground/50 pt-4">
                   Redirecting to homepage in 5 seconds...
@@ -145,61 +131,77 @@ export default function SIHMasterclassPage() {
             </div>
           ) : (
             <div className="w-full">
-              {/* Main Heading (Top Center) */}
+              {/* Main Heading */}
               <div className="w-full flex flex-col md:flex-row items-center justify-center md:justify-start gap-6 mb-10 md:mb-14 text-left">
-                <Image src="/images/sih_logo.png" alt="SIH Logo" width={100} height={100} className="w-20 md:w-24 object-contain" />
+                <Image src="/images/sih_logo.png" alt="SIH Logo" width={120} height={120} className="w-20 md:w-28 object-contain" />
                 <div className="text-center md:text-left">
-                  <h1 className="font-heading font-black tracking-tighter text-foreground text-3xl md:text-5xl drop-shadow-md mb-3">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 text-xs font-bold uppercase tracking-wider mb-2">
+                    <Sparkles className="w-3.5 h-3.5" /> Live Interactive Workshop
+                  </div>
+                  <h1 className="font-heading font-black tracking-tighter text-foreground text-3xl md:text-5xl drop-shadow-md mb-2">
                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">SIH Masterclass,</span> Winning Strategy
                   </h1>
-                  <p className="text-lg md:text-xl font-bold text-foreground/70">Plan for SIH Internal Rounds to final round</p>
+                  <p className="text-lg md:text-xl font-bold text-foreground/70">
+                    Online SIH Masterclass, From Internal round to Final Round.
+                  </p>
                 </div>
               </div>
 
               <div className="flex flex-col-reverse lg:grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
                   
-                  {/* Left Side: Message and Image */}
-                  <div className="flex flex-col text-center lg:text-left w-full h-full">
+                  {/* Left Side: Professional Overview & Deliverables */}
+                  <div className="flex flex-col text-left w-full h-full">
                     
-                    <div className="bg-blue-50/80 dark:bg-blue-900/20 backdrop-blur-md p-6 lg:p-8 rounded-3xl border border-blue-100 dark:border-blue-800/50 mb-8 shadow-sm">
-                      <p className="text-foreground/80 font-medium leading-relaxed text-base md:text-lg text-balance mb-4">
-                        Confused about how college judges shortlist teams for Smart India Hackathon? Don't get eliminated in the internal round! Join our <strong>Live Strategy Masterclass</strong> this Friday @ 8:30 PM.
+                    <div className="bg-blue-50/80 dark:bg-blue-900/20 backdrop-blur-md p-6 lg:p-8 rounded-3xl border border-blue-100 dark:border-blue-800/50 shadow-sm">
+                      <p className="text-foreground/90 font-medium leading-relaxed text-base md:text-lg mb-6">
+                        Confused about how college judges shortlist teams for Smart India Hackathon? Don't get eliminated in the internal round! Join our <strong>online SIH masterclass this Friday at 5:30 PM</strong>.
                       </p>
-                      <div className="text-foreground/80 font-medium leading-relaxed text-base md:text-lg text-balance mb-4 space-y-2">
-                        <p className="font-bold text-foreground">What you'll get inside:</p>
-                        <ul className="list-disc pl-5 space-y-1">
-                          <li>Winning stratergy from SIH winners</li>
-                          <li>One-one questions and doubt answer for SIH Hackathon</li>
-                          <li>PPT format</li>
-                          <li>how to get selected in Internal college round</li>
-                          <li>SIH hackathon dates and timelines</li>
-                          <li>Questions ask in internal college rounds</li>
-                          <li>Juding criteria for SIH</li>
+                      
+                      <div className="mb-6">
+                        <p className="font-bold text-foreground text-lg mb-3 flex items-center gap-2">
+                          <span className="w-2 h-2 rounded-full bg-blue-600"></span>
+                          What You Will Get Inside:
+                        </p>
+                        <ul className="space-y-2.5">
+                          <li className="flex items-start gap-2.5 text-foreground/80 font-medium text-sm md:text-base">
+                            <CheckCircle2 className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />
+                            <span><strong>Winning strategy</strong> directly from previous SIH Winners</span>
+                          </li>
+                          <li className="flex items-start gap-2.5 text-foreground/80 font-medium text-sm md:text-base">
+                            <CheckCircle2 className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />
+                            <span><strong>1-on-1 Q&A</strong> & dedicated doubt resolution for your SIH Hackathon project</span>
+                          </li>
+                          <li className="flex items-start gap-2.5 text-foreground/80 font-medium text-sm md:text-base">
+                            <CheckCircle2 className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />
+                            <span><strong>Official Winning PPT Format</strong> & presentation structure</span>
+                          </li>
+                          <li className="flex items-start gap-2.5 text-foreground/80 font-medium text-sm md:text-base">
+                            <CheckCircle2 className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />
+                            <span><strong>How to get selected</strong> in your Internal College Round</span>
+                          </li>
+                          <li className="flex items-start gap-2.5 text-foreground/80 font-medium text-sm md:text-base">
+                            <CheckCircle2 className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />
+                            <span><strong>SIH hackathon key dates</strong>, roadmap & submission timelines</span>
+                          </li>
+                          <li className="flex items-start gap-2.5 text-foreground/80 font-medium text-sm md:text-base">
+                            <CheckCircle2 className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />
+                            <span><strong>Top questions asked</strong> by evaluators in internal college screening rounds</span>
+                          </li>
+                          <li className="flex items-start gap-2.5 text-foreground/80 font-medium text-sm md:text-base">
+                            <CheckCircle2 className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />
+                            <span><strong>Official Judging Criteria</strong> and scoring parameters for SIH</span>
+                          </li>
                         </ul>
                       </div>
-                      <p className="text-foreground/80 font-medium leading-relaxed text-base md:text-lg text-balance">
-                        Secure your spot for masterclass by just rupees <strong>29</strong> for indiviual and team seats for rupees <strong>150</strong> for 6 teammate.
-                      </p>
-                      <p className="text-sm text-foreground/80 mt-4 font-medium">
-                        Seat reservation is strictly on a first-come, first-served basis. Secure your registration ASAP to avoid losing your spot.
-                      </p>
-                    </div>
 
-                    {/* Countdown Timer */}
-                    <div className="bg-blue-50/80 dark:bg-blue-900/20 backdrop-blur-md px-6 py-4 rounded-2xl border border-blue-100 dark:border-blue-800/50 mb-8 shadow-sm flex items-center justify-center gap-3 mx-auto w-max">
-                      <Clock className="w-6 h-6 text-blue-600 dark:text-blue-400 animate-pulse" />
-                      <div className="text-3xl font-black text-blue-700 dark:text-blue-300 tracking-wider font-mono">
-                        {formatTime(timeLeft)}
+                      <div className="pt-4 border-t border-blue-200/60 dark:border-blue-800/40">
+                        <p className="text-foreground/90 font-semibold text-base mb-2">
+                          Secure your spot for masterclass by just <strong>₹29 for individual</strong> and team seats for <strong>₹150 for 6 teammates</strong>.
+                        </p>
+                        <p className="text-xs text-foreground/70 font-medium">
+                          ⚡ Seat reservation is strictly on a first-come, first-served basis. Secure your registration ASAP to guarantee your spot.
+                        </p>
                       </div>
-                    </div>
-
-                    <div className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden shadow-md bg-white mt-auto">
-                      <Image 
-                        src="/images/internship_clock_doodle.jpg" 
-                        alt="Glocalview Desk Doodle"
-                        fill
-                        className="object-contain"
-                      />
                     </div>
                   </div>
 
