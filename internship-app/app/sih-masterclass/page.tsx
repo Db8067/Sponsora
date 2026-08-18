@@ -94,6 +94,7 @@ export default function SIHMasterclassPage() {
         currency: data.currency,
         name: "SIH Online Masterclass",
         description: "Online SIH Masterclass Pass",
+        image: typeof window !== "undefined" ? `${window.location.origin}/images/logo-light.png` : "/images/logo-light.png",
         order_id: data.orderId,
         handler: function (response: any) {
           setIsSuccess(true);
@@ -315,6 +316,10 @@ export default function SIHMasterclassPage() {
                           <li className="flex items-start gap-2.5 text-foreground/80 font-medium text-sm md:text-base">
                             <CheckCircle2 className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />
                             <span><strong>Official Judging Criteria</strong> and scoring parameters for SIH</span>
+                          </li>
+                          <li className="flex items-start gap-2.5 text-foreground/80 font-medium text-sm md:text-base">
+                            <CheckCircle2 className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />
+                            <span><strong>Certificate for masterclass</strong> (Official Certificate of Participation)</span>
                           </li>
                         </ul>
                       </div>
