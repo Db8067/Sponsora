@@ -32,7 +32,7 @@ export default function SellerLandingPage() {
                 
               </div>
               
-              <Link href="/seller/register">
+              <Link href="/seller-onboard">
                 <button className="bg-primary text-white px-10 py-4 rounded-xl font-bold text-lg hover:bg-primary-dark transition-colors shadow-xl shadow-primary/30 hover:scale-105 duration-300">
                   Get Customers
                 </button>
@@ -71,7 +71,7 @@ export default function SellerLandingPage() {
                 </div>
               </div>
               
-              <Link href="/seller/register">
+              <Link href="/seller-onboard">
                 <button className="bg-primary hover:bg-primary-dark text-white px-8 py-3.5 w-[90%] sm:w-auto rounded-xl font-bold text-base shadow-xl shadow-primary/30 active:scale-95 transition-all">
                   Get Customers
                 </button>
@@ -139,7 +139,7 @@ export default function SellerLandingPage() {
           </div>
           
           <div className="mt-16">
-            <Link href="/seller/register">
+            <Link href="/seller-onboard">
               <button className="bg-primary text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-primary-dark transition-colors shadow-lg">
                 Create Seller Account
               </button>
@@ -190,6 +190,7 @@ export default function SellerLandingPage() {
     </div>
   );
 }
+
 
 
 

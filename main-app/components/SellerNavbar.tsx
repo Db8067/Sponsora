@@ -33,7 +33,7 @@ export default function SellerNavbar() {
           <Link href="/sign-in" className="text-sm font-semibold text-slate-700 hover:text-pink-600 dark:text-slate-200 transition-colors">
             Login
           </Link>
-          <Link href="/seller/register" className="text-sm font-semibold bg-primary text-white px-5 py-2.5 rounded-xl hover:bg-primary-dark transition-colors shadow-lg shadow-primary/20">
+          <Link href="/seller-onboard" className="text-sm font-semibold bg-primary text-white px-5 py-2.5 rounded-xl hover:bg-primary-dark transition-colors shadow-lg shadow-primary/20">
             Get Customers
           </Link>
         </div>
@@ -76,7 +76,7 @@ export default function SellerNavbar() {
             
             
             <div className="mt-8 w-full max-w-xs flex flex-col gap-4">
-              <Link href="/seller/register" onClick={() => setIsMobileMenuOpen(false)} className="w-full text-center text-lg font-semibold bg-primary text-white px-6 py-4 rounded-2xl shadow-lg shadow-primary/30 active:scale-95 transition-all">
+              <Link href="/seller-onboard" onClick={() => setIsMobileMenuOpen(false)} className="w-full text-center text-lg font-semibold bg-primary text-white px-6 py-4 rounded-2xl shadow-lg shadow-primary/30 active:scale-95 transition-all">
                 Get Customers
               </Link>
             </div>
@@ -86,6 +86,7 @@ export default function SellerNavbar() {
     </header>
   );
 }
+
 
 
 

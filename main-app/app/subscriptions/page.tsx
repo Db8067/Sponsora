@@ -66,7 +66,7 @@ export default function SubscriptionsPage() {
             </div>
 
             <div className="mt-8">
-              <Link href="/seller/register" className="block w-full text-center bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-800 dark:text-white py-3 rounded-xl font-bold text-sm transition-colors">
+              <Link href="/seller-onboard" className="block w-full text-center bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-800 dark:text-white py-3 rounded-xl font-bold text-sm transition-colors">
                 Get Started Free
               </Link>
             </div>
@@ -118,7 +118,7 @@ export default function SubscriptionsPage() {
             </div>
 
             <div className="mt-8">
-              <Link href="/seller/register" className="block w-full text-center bg-primary hover:bg-primary-dark text-white py-3.5 rounded-xl font-bold text-sm shadow-lg shadow-primary/30 transition-all hover:scale-[1.02]">
+              <Link href="/seller-onboard" className="block w-full text-center bg-primary hover:bg-primary-dark text-white py-3.5 rounded-xl font-bold text-sm shadow-lg shadow-primary/30 transition-all hover:scale-[1.02]">
                 Start 14-Day Free Trial
               </Link>
             </div>
@@ -163,7 +163,7 @@ export default function SubscriptionsPage() {
             </div>
 
             <div className="mt-8">
-              <Link href="/seller/register" className="block w-full text-center bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-800 dark:text-white py-3 rounded-xl font-bold text-sm transition-colors">
+              <Link href="/seller-onboard" className="block w-full text-center bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-800 dark:text-white py-3 rounded-xl font-bold text-sm transition-colors">
                 Choose Business Scale
               </Link>
             </div>
@@ -228,3 +228,4 @@ export default function SubscriptionsPage() {
     </div>
   );
 }
+

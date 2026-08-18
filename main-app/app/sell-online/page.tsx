@@ -19,7 +19,7 @@ export default function SellOnlinePage() {
           Forget about paying high marketplace commissions or dealing with complex GST paperwork just to start. We give you the tools to launch your own website and chat with your customers directly.
         </p>
         <div className="mt-6">
-          <Link href="/seller/register" className="inline-block bg-primary hover:bg-primary-dark text-white px-8 py-3 rounded-xl font-bold text-base shadow-lg hover:scale-105 transition-all">
+          <Link href="/seller-onboard" className="inline-block bg-primary hover:bg-primary-dark text-white px-8 py-3 rounded-xl font-bold text-base shadow-lg hover:scale-105 transition-all">
             Get customer
           </Link>
         </div>
@@ -128,7 +128,7 @@ export default function SellOnlinePage() {
           </div>
           
           <div className="mt-12 text-center">
-            <Link href="/seller/register" className="inline-block bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-8 py-3.5 rounded-xl font-bold text-sm shadow-md hover:scale-105 transition-transform">
+            <Link href="/seller-onboard" className="inline-block bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-8 py-3.5 rounded-xl font-bold text-sm shadow-md hover:scale-105 transition-transform">
               Create Your Website
             </Link>
           </div>
@@ -138,3 +138,4 @@ export default function SellOnlinePage() {
     </div>
   );
 }
+
