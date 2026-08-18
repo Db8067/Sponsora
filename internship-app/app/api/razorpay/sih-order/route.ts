@@ -14,7 +14,8 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'All fields are required' }, { status: 400 });
     }
 
-    const finalAmount = passType === 'team' ? 15000 : 2900;
+    // Test mode: ₹1 (100 paise) for both individual and team spot registration
+    const finalAmount = 100;
 
     const order = await razorpay.orders.create({
       amount: finalAmount,

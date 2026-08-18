@@ -199,27 +199,27 @@ export default function SIHMasterclassPage() {
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                           <label className="text-xs font-bold text-foreground mb-1 block">Full Name</label>
-                          <input required type="text" value={member.name} onChange={(e) => updateTeamMember(index, 'name', e.target.value)} className="w-full bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-lg py-2 px-3 text-sm focus:ring-2 focus:ring-blue-500 transition-all" />
+                          <input required type="text" value={member.name} onChange={(e) => updateTeamMember(index, 'name', e.target.value)} className="w-full bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-lg py-2 px-3 text-base focus:ring-2 focus:ring-blue-500 transition-all" />
                         </div>
                         <div>
                           <label className="text-xs font-bold text-foreground mb-1 block">Email</label>
-                          <input required type="email" value={member.email} onChange={(e) => updateTeamMember(index, 'email', e.target.value)} className="w-full bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-lg py-2 px-3 text-sm focus:ring-2 focus:ring-blue-500 transition-all" />
+                          <input required type="email" value={member.email} onChange={(e) => updateTeamMember(index, 'email', e.target.value)} className="w-full bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-lg py-2 px-3 text-base focus:ring-2 focus:ring-blue-500 transition-all" />
                         </div>
                         <div>
                           <label className="text-xs font-bold text-foreground mb-1 block">Phone</label>
-                          <input required type="tel" value={member.phone} onChange={(e) => updateTeamMember(index, 'phone', e.target.value)} className="w-full bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-lg py-2 px-3 text-sm focus:ring-2 focus:ring-blue-500 transition-all" />
+                          <input required type="tel" value={member.phone} onChange={(e) => updateTeamMember(index, 'phone', e.target.value)} className="w-full bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-lg py-2 px-3 text-base focus:ring-2 focus:ring-blue-500 transition-all" />
                         </div>
                         <div>
                           <label className="text-xs font-bold text-foreground mb-1 block">College</label>
-                          <input required type="text" value={member.college} onChange={(e) => updateTeamMember(index, 'college', e.target.value)} className="w-full bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-lg py-2 px-3 text-sm focus:ring-2 focus:ring-blue-500 transition-all" />
+                          <input required type="text" value={member.college} onChange={(e) => updateTeamMember(index, 'college', e.target.value)} className="w-full bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-lg py-2 px-3 text-base focus:ring-2 focus:ring-blue-500 transition-all" />
                         </div>
                         <div>
                           <label className="text-xs font-bold text-foreground mb-1 block">Branch</label>
-                          <input required type="text" value={member.branch} onChange={(e) => updateTeamMember(index, 'branch', e.target.value)} className="w-full bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-lg py-2 px-3 text-sm focus:ring-2 focus:ring-blue-500 transition-all" />
+                          <input required type="text" value={member.branch} onChange={(e) => updateTeamMember(index, 'branch', e.target.value)} className="w-full bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-lg py-2 px-3 text-base focus:ring-2 focus:ring-blue-500 transition-all" />
                         </div>
                         <div>
                           <label className="text-xs font-bold text-foreground mb-1 block">Year</label>
-                          <input required type="text" value={member.year} onChange={(e) => updateTeamMember(index, 'year', e.target.value)} className="w-full bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-lg py-2 px-3 text-sm focus:ring-2 focus:ring-blue-500 transition-all" />
+                          <input required type="text" value={member.year} onChange={(e) => updateTeamMember(index, 'year', e.target.value)} className="w-full bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-lg py-2 px-3 text-base focus:ring-2 focus:ring-blue-500 transition-all" />
                         </div>
                       </div>
                     </div>
@@ -245,7 +245,7 @@ export default function SIHMasterclassPage() {
                   Thank you, <strong>{name}</strong>! Your spot for the <strong>SIH Online Masterclass</strong> is confirmed.
                 </p>
                 <p className="font-medium text-foreground">
-                  Please check your email and WhatsApp for the Google Meet link. See you this Friday at 5:30 PM!
+                  Please check your email and WhatsApp for the Google Meet link. See you on 21 August 2026 at 5:30 PM!
                 </p>
                 <p className="text-sm text-foreground/50 pt-4">
                   Redirecting to homepage in 5 seconds...
@@ -280,7 +280,7 @@ export default function SIHMasterclassPage() {
                     
                     <div className="bg-blue-50/80 dark:bg-blue-900/20 backdrop-blur-md p-6 lg:p-8 rounded-3xl border border-blue-100 dark:border-blue-800/50 shadow-sm">
                       <p className="text-foreground/90 font-medium leading-relaxed text-base md:text-lg mb-6">
-                        Confused about how college judges shortlist teams for Smart India Hackathon? Don't get eliminated in the internal round! Join our <strong>online SIH masterclass this Friday at 5:30 PM</strong>.
+                        Confused about how college judges shortlist teams for Smart India Hackathon? Don't get eliminated in the internal round! Join our <strong>online SIH masterclass on 21 August 2026 at 5:30 PM</strong>.
                       </p>
                       
                       <div className="mb-6">
@@ -445,7 +445,7 @@ export default function SIHMasterclassPage() {
                                   <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400" />
                                   <input 
                                     type="email" required placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)}
-                                    className="w-full bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl py-3 pl-9 pr-3 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                                    className="w-full bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl py-3 pl-9 pr-3 text-base font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
                                   />
                                 </div>
                               </div>
@@ -455,7 +455,7 @@ export default function SIHMasterclassPage() {
                                   <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400" />
                                   <input 
                                     type="tel" required placeholder="Phone" value={phone} onChange={(e) => setPhone(e.target.value)}
-                                    className="w-full bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl py-3 pl-9 pr-3 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                                    className="w-full bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl py-3 pl-9 pr-3 text-base font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
                                   />
                                 </div>
                               </div>
@@ -479,7 +479,7 @@ export default function SIHMasterclassPage() {
                                   <BookOpen className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400" />
                                   <input 
                                     type="text" required placeholder="CSE, IT..." value={branch} onChange={(e) => setBranch(e.target.value)}
-                                    className="w-full bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl py-3 pl-9 pr-3 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                                    className="w-full bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl py-3 pl-9 pr-3 text-base font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
                                   />
                                 </div>
                               </div>
@@ -489,7 +489,7 @@ export default function SIHMasterclassPage() {
                                   <CalendarIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400" />
                                   <input 
                                     type="text" required placeholder="1st, 2nd..." value={year} onChange={(e) => setYear(e.target.value)}
-                                    className="w-full bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl py-3 pl-9 pr-3 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                                    className="w-full bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl py-3 pl-9 pr-3 text-base font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
                                   />
                                 </div>
                               </div>
@@ -500,7 +500,7 @@ export default function SIHMasterclassPage() {
                               type="submit"
                               className="w-full mt-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold py-4 px-4 rounded-xl shadow-lg hover:shadow-blue-500/25 active:scale-[0.98] transition-all flex items-center justify-center gap-2 text-lg cursor-pointer"
                             >
-                              {loading ? <Loader2 className="w-6 h-6 animate-spin" /> : `Pay ₹${passType === "individual" ? "29" : "150"}`}
+                              {loading ? <Loader2 className="w-6 h-6 animate-spin" /> : "Pay ₹1"}
                             </button>
 
                             <div className="flex items-center justify-center gap-1.5 mt-2 text-xs font-semibold text-zinc-400">
