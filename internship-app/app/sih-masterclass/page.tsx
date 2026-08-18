@@ -13,6 +13,7 @@ export default function SIHMasterclassPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
+  const [passType, setPassType] = useState<"individual" | "team">("individual");
   const [loading, setLoading] = useState(false);
   const [razorpayLoaded, setRazorpayLoaded] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -72,7 +73,7 @@ export default function SIHMasterclassPage() {
       const res = await fetch("/api/razorpay/sih-order", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, phone }),
+        body: JSON.stringify({ name, email, phone, passType }),
       });
       const data = await res.json();
 
@@ -145,11 +146,14 @@ export default function SIHMasterclassPage() {
           ) : (
             <div className="w-full">
               {/* Main Heading (Top Center) */}
-              <div className="w-full text-center mb-10 md:mb-14">
-                <h1 className="font-heading font-black tracking-tighter text-foreground text-3xl md:text-5xl drop-shadow-md mb-3">
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">Crack SIH 2026</span> Internal Round
-                </h1>
-                <p className="text-lg md:text-xl font-bold text-foreground/70">Live Strategy & PPT Blueprint Masterclass</p>
+              <div className="w-full flex flex-col md:flex-row items-center justify-center md:justify-start gap-6 mb-10 md:mb-14 text-left">
+                <Image src="/images/sih_logo.png" alt="SIH Logo" width={100} height={100} className="w-20 md:w-24 object-contain" />
+                <div className="text-center md:text-left">
+                  <h1 className="font-heading font-black tracking-tighter text-foreground text-3xl md:text-5xl drop-shadow-md mb-3">
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">SIH Masterclass,</span> Winning Strategy
+                  </h1>
+                  <p className="text-lg md:text-xl font-bold text-foreground/70">Plan for SIH Internal Rounds to final round</p>
+                </div>
               </div>
 
               <div className="flex flex-col-reverse lg:grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
@@ -164,19 +168,19 @@ export default function SIHMasterclassPage() {
                       <div className="text-foreground/80 font-medium leading-relaxed text-base md:text-lg text-balance mb-4 space-y-2">
                         <p className="font-bold text-foreground">What you'll get inside:</p>
                         <ul className="list-disc pl-5 space-y-1">
-                          <li>Proven SIH Winning PPT Template (Official Format)</li>
-                          <li>How to select low-competition Problem Statements</li>
-                          <li>Top 10 questions college evaluators ask</li>
-                          <li>Live Q&A + Idea review</li>
+                          <li>Winning stratergy from SIH winners</li>
+                          <li>One-one questions and doubt answer for SIH Hackathon</li>
+                          <li>PPT format</li>
+                          <li>how to get selected in Internal college round</li>
+                          <li>SIH hackathon dates and timelines</li>
+                          <li>Questions ask in internal college rounds</li>
+                          <li>Juding criteria for SIH</li>
                         </ul>
                       </div>
                       <p className="text-foreground/80 font-medium leading-relaxed text-base md:text-lg text-balance">
-                        Make a payment of <strong>₹49</strong> to secure your spot. Limited to 50 students only.
+                        Secure your spot for masterclass by just rupees <strong>29</strong> for indiviual and team seats for rupees <strong>150</strong> for 6 teammate.
                       </p>
-                      <p className="text-sm text-foreground/80 font-bold mt-4 tracking-wide">
-                        * Payment is not refundable.
-                      </p>
-                      <p className="text-sm text-foreground/80 mt-2 font-medium">
+                      <p className="text-sm text-foreground/80 mt-4 font-medium">
                         Seat reservation is strictly on a first-come, first-served basis. Secure your registration ASAP to avoid losing your spot.
                       </p>
                     </div>
@@ -214,6 +218,17 @@ export default function SIHMasterclassPage() {
 
                     <form onSubmit={handlePayment} className="flex flex-col gap-4">
                       
+                      <div className="flex gap-4 mb-2">
+                        <label className={`flex-1 flex items-center justify-center p-3 rounded-xl border cursor-pointer transition-all ${passType === "individual" ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300" : "border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-foreground/70"}`}>
+                          <input type="radio" name="passType" value="individual" checked={passType === "individual"} onChange={() => setPassType("individual")} className="hidden" />
+                          <span className="font-bold text-sm">Individual (₹29)</span>
+                        </label>
+                        <label className={`flex-1 flex items-center justify-center p-3 rounded-xl border cursor-pointer transition-all ${passType === "team" ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300" : "border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-foreground/70"}`}>
+                          <input type="radio" name="passType" value="team" checked={passType === "team"} onChange={() => setPassType("team")} className="hidden" />
+                          <span className="font-bold text-sm">Team (₹150)</span>
+                        </label>
+                      </div>
+
                       <div>
                         <label className="text-sm font-bold text-foreground mb-1.5 block">Full Name</label>
                         <div className="relative">
@@ -264,7 +279,7 @@ export default function SIHMasterclassPage() {
                         type="submit"
                         className="w-full mt-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold py-4 px-4 rounded-xl shadow-lg hover:shadow-blue-500/25 active:scale-[0.98] transition-all flex items-center justify-center gap-2 text-lg"
                       >
-                        {loading ? <Loader2 className="w-6 h-6 animate-spin" /> : "Pay ₹49"}
+                        {loading ? <Loader2 className="w-6 h-6 animate-spin" /> : `Pay ₹${passType === "individual" ? "29" : "150"}`}
                       </button>
 
                       <div className="flex items-center justify-center gap-1.5 mt-4 text-xs font-semibold text-zinc-400">

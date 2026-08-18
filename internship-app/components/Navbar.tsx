@@ -18,7 +18,7 @@ interface Category {
 export default function Navbar() {
   const { isSignedIn, isLoaded, user } = useUser();
   const pathname = usePathname();
-  const isGlocalPage = pathname === "/Glocal-view-Internship";
+  const isLandingPage = pathname === "/sih-masterclass";
   
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -59,7 +59,7 @@ export default function Navbar() {
         {/* Desktop Nav */}
         <div className="hidden md:flex items-center gap-8">
           <div className="flex items-center gap-8">
-            {!isSignedIn && isLoaded && !isGlocalPage && (
+            {!isSignedIn && isLoaded && !isLandingPage && (
               <Link href="/sign-in" className="text-sm font-medium text-foreground/60 hover:text-foreground transition-colors">
                 Sign In
               </Link>
@@ -84,7 +84,7 @@ export default function Navbar() {
 
         {/* Mobile Toggle */}
         <div className="flex md:hidden items-center gap-4">
-          {!isSignedIn && isLoaded && !isGlocalPage && (
+          {!isSignedIn && isLoaded && !isLandingPage && (
             <Link href="/sign-in" className="text-sm font-medium text-foreground/60 hover:text-foreground transition-colors">
               Sign In
             </Link>

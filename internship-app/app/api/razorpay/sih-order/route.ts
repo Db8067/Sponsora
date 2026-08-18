@@ -8,13 +8,13 @@ export async function POST(req: NextRequest) {
       key_secret: process.env.RAZORPAY_KEY_SECRET || 'dummy_secret',
     });
 
-    const { name, email, phone } = await req.json();
+    const { name, email, phone, passType } = await req.json();
 
     if (!name || !email || !phone) {
       return NextResponse.json({ error: 'Name, email, and phone are required' }, { status: 400 });
     }
 
-    const finalAmount = 4900; // 4900 paise = 49 rupees
+    const finalAmount = passType === 'team' ? 15000 : 2900;
 
     const order = await razorpay.orders.create({
       amount: finalAmount,
