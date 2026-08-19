@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, Store, User, Phone, Mail, Calendar, Upload, FileText, MapPin, Sparkles, CheckCircle2, ChevronRight, Loader2, Image as ImageIcon } from 'lucide-react';
+import { ArrowLeft, Store, User, Phone, Mail, Calendar, FileText, MapPin, Sparkles, CheckCircle2, ChevronRight, Loader2, Image as ImageIcon } from 'lucide-react';
 import SellerNavbar from '@/components/SellerNavbar';
 import { useAuth, useClerk } from '@clerk/nextjs';
 
@@ -17,22 +17,30 @@ export default function SellerOnboardPage() {
   const [formStep, setFormStep] = useState(1);
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
   
+  // Form input states
+  const [personalName, setPersonalName] = useState('');
+  const [whatsappNumber, setWhatsappNumber] = useState('');
+  const [emailAddress, setEmailAddress] = useState('');
+  const [brandName, setBrandName] = useState('');
+  const [establishmentDate, setEstablishmentDate] = useState('');
+  const [gstMsmeNumber, setGstMsmeNumber] = useState('');
+  const [businessAddress, setBusinessAddress] = useState('');
+  
   // Upload state
   const [isUploading, setIsUploading] = useState(false);
   const [uploadedLogo, setUploadedLogo] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleOpenBox = () => {
     if (isOpen) return;
     setIsOpen(true);
     setShowConfetti(true);
     
-    // Open Clerk Sign In modal after a short delay for animation
     setTimeout(() => {
       clerk.openSignIn({
         forceRedirectUrl: '/seller-onboard',
         signUpForceRedirectUrl: '/seller-onboard'
       });
-      // Reset animation state just in case modal closes without logging in
       setTimeout(() => {
         setIsOpen(false);
         setShowConfetti(false);
@@ -71,28 +79,56 @@ export default function SellerOnboardPage() {
     setFormStep(2);
   };
 
-  const handleStep2Submit = (e: React.FormEvent) => {
+  const handleStep2Submit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!uploadedLogo) {
       alert('Please upload a brand logo first.');
       return;
     }
-    setIsFormSubmitted(true);
+    
+    setIsSubmitting(true);
+    try {
+      const res = await fetch('/api/vendor-profile', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          personalName,
+          whatsappNumber,
+          emailAddress,
+          brandName,
+          establishmentDate,
+          brandLogoUrl: uploadedLogo,
+          gstMsmeNumber,
+          businessAddress
+        })
+      });
+      
+      if (res.ok) {
+        setIsFormSubmitted(true);
+      } else {
+        const error = await res.json();
+        alert('Failed to save profile: ' + (error.details || error.error));
+      }
+    } catch (error) {
+      console.error(error);
+      alert('Network error occurred.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
-  // While Clerk is loading auth state
   if (!isLoaded) {
     return (
       <div className="flex flex-col min-h-screen bg-transparent">
         <SellerNavbar />
         <div className="flex-1 flex items-center justify-center">
-          <div className="animate-spin w-8 h-8 border-4 border-pink-500 border-t-transparent rounded-full"></div>
         </div>
       </div>
     );
   }
 
-  // If user is logged in, show the brand onboard form
   if (isSignedIn) {
     if (isFormSubmitted) {
       return (
@@ -150,7 +186,7 @@ export default function SellerOnboardPage() {
                     <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
                       <User className="w-4 h-4 text-pink-500" />
                     </div>
-                    <input required type="text" className="w-full h-12 pl-10 pr-4 rounded-xl border-none bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-white focus:ring-2 focus:ring-pink-500 outline-none transition-shadow" placeholder="John Doe" />
+                    <input value={personalName} onChange={e => setPersonalName(e.target.value)} required type="text" className="w-full h-12 pl-10 pr-4 rounded-xl border-none bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-white focus:ring-2 focus:ring-pink-500 outline-none transition-shadow" placeholder="John Doe" />
                   </div>
                 </div>
 
@@ -161,7 +197,7 @@ export default function SellerOnboardPage() {
                       <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
                         <Phone className="w-4 h-4 text-pink-500" />
                       </div>
-                      <input required type="tel" className="w-full h-12 pl-10 pr-4 rounded-xl border-none bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-white focus:ring-2 focus:ring-pink-500 outline-none transition-shadow" placeholder="+91 98765 43210" />
+                      <input value={whatsappNumber} onChange={e => setWhatsappNumber(e.target.value)} required type="tel" className="w-full h-12 pl-10 pr-4 rounded-xl border-none bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-white focus:ring-2 focus:ring-pink-500 outline-none transition-shadow" placeholder="+91 98765 43210" />
                     </div>
                   </div>
                   <div className="space-y-2">
@@ -170,7 +206,7 @@ export default function SellerOnboardPage() {
                       <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
                         <Mail className="w-4 h-4 text-pink-500" />
                       </div>
-                      <input required type="email" className="w-full h-12 pl-10 pr-4 rounded-xl border-none bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-white focus:ring-2 focus:ring-pink-500 outline-none transition-shadow" placeholder="john@example.com" />
+                      <input value={emailAddress} onChange={e => setEmailAddress(e.target.value)} required type="email" className="w-full h-12 pl-10 pr-4 rounded-xl border-none bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-white focus:ring-2 focus:ring-pink-500 outline-none transition-shadow" placeholder="john@example.com" />
                     </div>
                   </div>
                 </div>
@@ -191,7 +227,7 @@ export default function SellerOnboardPage() {
                       <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
                         <Store className="w-4 h-4 text-pink-500" />
                       </div>
-                      <input required type="text" className="w-full h-12 pl-10 pr-4 rounded-xl border-none bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-white focus:ring-2 focus:ring-pink-500 outline-none transition-shadow" placeholder="E.g. Trends Boutique" />
+                      <input value={brandName} onChange={e => setBrandName(e.target.value)} required type="text" className="w-full h-12 pl-10 pr-4 rounded-xl border-none bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-white focus:ring-2 focus:ring-pink-500 outline-none transition-shadow" placeholder="E.g. Trends Boutique" />
                     </div>
                   </div>
                   <div className="space-y-2">
@@ -200,7 +236,7 @@ export default function SellerOnboardPage() {
                       <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
                         <Calendar className="w-4 h-4 text-pink-500" />
                       </div>
-                      <input required type="date" className="w-full h-12 pl-10 pr-4 rounded-xl border-none bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-white focus:ring-2 focus:ring-pink-500 outline-none transition-shadow text-sm" />
+                      <input value={establishmentDate} onChange={e => setEstablishmentDate(e.target.value)} required type="date" className="w-full h-12 pl-10 pr-4 rounded-xl border-none bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-white focus:ring-2 focus:ring-pink-500 outline-none transition-shadow text-sm" />
                     </div>
                   </div>
                 </div>
@@ -230,7 +266,7 @@ export default function SellerOnboardPage() {
                       type="file" 
                       accept="image/*"
                       onChange={handleLogoUpload}
-                      disabled={isUploading}
+                      disabled={isUploading || isSubmitting}
                       className="absolute inset-0 w-full h-full opacity-0 cursor-pointer disabled:cursor-not-allowed"
                     />
                   </div>
@@ -242,7 +278,7 @@ export default function SellerOnboardPage() {
                     <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
                       <FileText className="w-4 h-4 text-pink-500" />
                     </div>
-                    <input type="text" className="w-full h-12 pl-10 pr-4 rounded-xl border-none bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-white focus:ring-2 focus:ring-pink-500 outline-none transition-shadow" placeholder="Enter GSTIN / Udyam No." />
+                    <input value={gstMsmeNumber} onChange={e => setGstMsmeNumber(e.target.value)} type="text" className="w-full h-12 pl-10 pr-4 rounded-xl border-none bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-white focus:ring-2 focus:ring-pink-500 outline-none transition-shadow" placeholder="Enter GSTIN / Udyam No." />
                   </div>
                 </div>
 
@@ -252,7 +288,7 @@ export default function SellerOnboardPage() {
                     <div className="absolute top-3.5 left-0 pl-3.5 pointer-events-none">
                       <MapPin className="w-4 h-4 text-pink-500" />
                     </div>
-                    <textarea required className="w-full h-24 pl-10 p-4 rounded-xl border-none bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-white focus:ring-2 focus:ring-pink-500 outline-none transition-shadow resize-none" placeholder="Where do you operate from?"></textarea>
+                    <textarea value={businessAddress} onChange={e => setBusinessAddress(e.target.value)} required className="w-full h-24 pl-10 p-4 rounded-xl border-none bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-white focus:ring-2 focus:ring-pink-500 outline-none transition-shadow resize-none" placeholder="Where do you operate from?"></textarea>
                   </div>
                 </div>
 
@@ -260,9 +296,9 @@ export default function SellerOnboardPage() {
                   <button type="button" onClick={() => setFormStep(1)} className="px-6 py-4 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-bold hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
                     Back
                   </button>
-                  <button type="submit" disabled={isUploading} className="flex-1 bg-gradient-to-r from-pink-500 to-purple-600 text-white font-bold py-4 rounded-xl hover:scale-[1.02] active:scale-95 transition-all shadow-xl flex items-center justify-center gap-2 disabled:opacity-70 disabled:hover:scale-100">
-                    Submit Brand Details
-                    <Sparkles className="w-5 h-5" />
+                  <button type="submit" disabled={isUploading || isSubmitting} className="flex-1 bg-gradient-to-r from-pink-500 to-purple-600 text-white font-bold py-4 rounded-xl hover:scale-[1.02] active:scale-95 transition-all shadow-xl flex items-center justify-center gap-2 disabled:opacity-70 disabled:hover:scale-100">
+                    {isSubmitting ? 'Submitting...' : 'Submit Brand Details'}
+                    {!isSubmitting && <Sparkles className="w-5 h-5" />}
                   </button>
                 </div>
               </form>
@@ -278,7 +314,6 @@ export default function SellerOnboardPage() {
     <div className="flex flex-col min-h-screen bg-transparent relative overflow-hidden">
       <SellerNavbar />
       
-      {/* Confetti Particles (CSS Only) */}
       {showConfetti && (
         <div className="absolute inset-0 pointer-events-none z-50 flex items-center justify-center">
           {[...Array(35)].map((_, i) => (
@@ -296,7 +331,6 @@ export default function SellerOnboardPage() {
         </div>
       )}
 
-      {/* Full screen click area */}
       <div 
         className="flex-1 flex flex-col items-center justify-center p-4 z-10 relative cursor-pointer"
         onClick={handleOpenBox}
@@ -310,7 +344,6 @@ export default function SellerOnboardPage() {
           Back
         </Link>
 
-        {/* The Image Container */}
         <div 
           className={`
             relative transition-all duration-700 ease-out mt-8
@@ -322,18 +355,14 @@ export default function SellerOnboardPage() {
             relative flex flex-col items-center justify-center
             ${!isOpen ? 'animate-bounce-slow' : ''}
           `}>
-            
-            {/* Doodle Image */}
             <img 
               src="/doodle_girl_products_tap.jpg" 
               alt="Tap to unlock" 
               className="w-64 h-64 md:w-96 md:h-96 object-contain rounded-3xl shadow-xl border-4 border-white dark:border-slate-800 bg-white"
             />
-            
           </div>
         </div>
 
-        {/* Floating instruction text */}
         {!isOpen && (
           <p className="mt-12 text-slate-500 dark:text-slate-400 font-medium animate-pulse text-sm">
             Tap anywhere to unlock!
@@ -341,7 +370,6 @@ export default function SellerOnboardPage() {
         )}
       </div>
 
-      {/* Global styles for the custom confetti animation and slow bounce */}
       <style dangerouslySetInnerHTML={{__html: `
         @keyframes bounce-slow {
           0%, 100% { transform: translateY(-5%); animation-timing-function: cubic-bezier(0.8,0,1,1); }
