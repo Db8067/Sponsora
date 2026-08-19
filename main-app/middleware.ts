@@ -4,13 +4,17 @@ import { NextResponse } from 'next/server';
 const isPublicRoute = createRouteMatcher([
   '/',
   '/api/webhooks/clerk(.*)',
+  '/api/vendors(.*)',
+  '/api/vendor-profile(.*)',
+  '/api/upload(.*)',
   '/sign-in(.*)',
   '/sign-up(.*)',
   '/get-started(.*)',
   '/unauthorized(.*)',
   '/sell-online(.*)',
   '/subscriptions(.*)',
-  '/seller-onboard(.*)'
+  '/seller-onboard(.*)',
+  '/sponsora(.*)'
 ]);
 
 const isOrganizerRoute = createRouteMatcher(['/dashboard/organizer(.*)', '/organizer(.*)', '/sponsorship/request(.*)']);
@@ -18,7 +22,20 @@ const isSponsorRoute = createRouteMatcher(['/dashboard/sponsor(.*)', '/sponsor(.
 const isParticipantRoute = createRouteMatcher([]);
 
 export default clerkMiddleware(async (auth, req) => {
-  if (!isPublicRoute(req)) {
+  // Handle /admin/vendors-[slug] by rewriting to /admin/vendors/[slug]
+  if (req.nextUrl.pathname.startsWith('/admin/vendors-')) {
+    const slug = req.nextUrl.pathname.replace('/admin/vendors-', '');
+    const url = req.nextUrl.clone();
+    url.pathname = `/admin/vendors/${slug}`;
+    return NextResponse.rewrite(url);
+  }
+
+  // Allow dynamic brand routes (e.g. /[brand]) without blocking if public
+  const pathname = req.nextUrl.pathname;
+  const isTopLevelBrandRoute = /^\/[a-zA-Z0-9_-]+$/.test(pathname) && 
+    !['/admin', '/dashboard', '/seller', '/api', '/sign-in', '/sign-up', '/sell-online', '/subscriptions', '/seller-onboard'].some(p => pathname.startsWith(p));
+
+  if (!isPublicRoute(req) && !isTopLevelBrandRoute) {
     const authObj = await auth();
     
     if (!authObj.userId) {

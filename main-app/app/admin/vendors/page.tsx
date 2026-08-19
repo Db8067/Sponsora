@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { RefreshCw, Loader2, Search, Store, User, Phone, Mail, Calendar, MapPin, FileText, ExternalLink } from 'lucide-react';
+import Link from 'next/link';
+import { RefreshCw, Loader2, Search, Store, User, Phone, Mail, Calendar, MapPin, FileText, ChevronRight, ExternalLink } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 
 export default function VendorApprovals() {
@@ -9,7 +10,6 @@ export default function VendorApprovals() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedVendor, setSelectedVendor] = useState<any | null>(null);
 
   const fetchVendors = async () => {
     setLoading(true);
@@ -62,7 +62,7 @@ export default function VendorApprovals() {
         <div>
           <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">Vendors Database</h1>
           <p className="text-slate-500 dark:text-slate-400 mt-1">
-            View and manage all registered brand owners and their business details.
+            Click on any brand name to view its dedicated full detail page.
           </p>
         </div>
         <button
@@ -120,82 +120,102 @@ export default function VendorApprovals() {
       ) : (
         /* Vendors List */
         <div className="grid grid-cols-1 gap-6">
-          {filteredVendors.map((vendor) => (
-            <div
-              key={vendor.id}
-              className="bg-white/60 dark:bg-slate-900/60 backdrop-blur-xl rounded-3xl border border-white/50 dark:border-white/10 shadow-lg p-6 hover:shadow-xl transition-all duration-300"
-            >
-              <div className="flex flex-col lg:flex-row gap-6 items-start lg:items-center">
-                {/* Brand Logo & Basic Info */}
-                <div className="flex items-center gap-4 w-full lg:w-72 shrink-0">
-                  <div className="w-20 h-20 rounded-2xl overflow-hidden bg-white dark:bg-slate-800 border-2 border-pink-100 dark:border-pink-900/30 shadow-md flex items-center justify-center shrink-0">
-                    {vendor.brand_logo_url ? (
-                      <img
-                        src={vendor.brand_logo_url}
-                        alt={vendor.brand_name}
-                        className="w-full h-full object-contain p-1"
-                      />
-                    ) : (
-                      <Store className="w-8 h-8 text-pink-300" />
-                    )}
-                  </div>
-                  <div className="min-w-0">
-                    <h2 className="text-xl font-extrabold text-slate-900 dark:text-white truncate">
-                      {vendor.brand_name || 'Unnamed Brand'}
-                    </h2>
-                    <span className="inline-flex items-center text-xs font-semibold px-2.5 py-0.5 rounded-full bg-pink-100 text-pink-600 dark:bg-pink-950/60 dark:text-pink-400 mt-1">
-                      Est. {vendor.establishment_date || 'N/A'}
-                    </span>
-                  </div>
-                </div>
+          {filteredVendors.map((vendor) => {
+            const rawBrandName = (vendor.brand_name || 'Brand').trim();
+            const brandSlug = rawBrandName.replace(/\s+/g, '-');
+            const detailRoute = `/admin/vendors-${encodeURIComponent(brandSlug)}`;
 
-                {/* Details Grid */}
-                <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4 w-full border-t lg:border-t-0 lg:border-l border-slate-200/60 dark:border-slate-800/60 pt-4 lg:pt-0 lg:pl-6">
-                  {/* Personal Contact Details */}
-                  <div className="space-y-2">
-                    <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1 flex items-center gap-1.5">
-                      <User className="w-3.5 h-3.5 text-pink-500" /> Owner Information
+            return (
+              <div
+                key={vendor.id}
+                className="bg-white/60 dark:bg-slate-900/60 backdrop-blur-xl rounded-3xl border border-white/50 dark:border-white/10 shadow-lg p-6 hover:shadow-xl transition-all duration-300 group/card"
+              >
+                <div className="flex flex-col lg:flex-row gap-6 items-start lg:items-center justify-between">
+                  {/* Brand Logo & Clickable Brand Name */}
+                  <div className="flex items-center gap-4 w-full lg:w-80 shrink-0">
+                    <Link href={detailRoute} className="shrink-0 group/logo">
+                      <div className="w-20 h-20 rounded-2xl overflow-hidden bg-white dark:bg-slate-800 border-2 border-pink-100 dark:border-pink-900/30 shadow-md flex items-center justify-center group-hover/logo:scale-105 transition-transform">
+                        {vendor.brand_logo_url ? (
+                          <img
+                            src={vendor.brand_logo_url}
+                            alt={vendor.brand_name}
+                            className="w-full h-full object-contain p-1"
+                          />
+                        ) : (
+                          <Store className="w-8 h-8 text-pink-300" />
+                        )}
+                      </div>
+                    </Link>
+                    
+                    <div className="min-w-0">
+                      <Link href={detailRoute} className="group/title inline-block">
+                        <h2 className="text-xl font-extrabold text-slate-900 dark:text-white group-hover/title:text-pink-600 dark:group-hover/title:text-pink-400 transition-colors truncate flex items-center gap-1.5">
+                          {vendor.brand_name || 'Unnamed Brand'}
+                          <ChevronRight className="w-4 h-4 text-pink-500 opacity-60 group-hover/title:opacity-100 group-hover/title:translate-x-1 transition-all" />
+                        </h2>
+                      </Link>
+                      <div>
+                        <span className="inline-flex items-center text-xs font-semibold px-2.5 py-0.5 rounded-full bg-pink-100 text-pink-600 dark:bg-pink-950/60 dark:text-pink-400 mt-1">
+                          Est. {vendor.establishment_date || 'N/A'}
+                        </span>
+                      </div>
+                      <Link
+                        href={detailRoute}
+                        className="text-xs text-pink-600 dark:text-pink-400 font-semibold hover:underline mt-1.5 inline-flex items-center gap-1"
+                      >
+                        View Full Details &rarr;
+                      </Link>
                     </div>
-                    <p className="text-sm font-semibold text-slate-800 dark:text-slate-200">
-                      {vendor.personal_name || 'N/A'}
-                    </p>
-                    <p className="text-xs text-slate-600 dark:text-slate-400 flex items-center gap-2">
-                      <Phone className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
-                      <a href={`https://wa.me/${vendor.whatsapp_number?.replace(/[^0-9]/g, '')}`} target="_blank" rel="noreferrer" className="hover:underline text-emerald-600 dark:text-emerald-400 font-medium">
-                        {vendor.whatsapp_number || 'N/A'}
-                      </a>
-                    </p>
-                    <p className="text-xs text-slate-600 dark:text-slate-400 flex items-center gap-2">
-                      <Mail className="w-3.5 h-3.5 text-blue-500 shrink-0" />
-                      <a href={`mailto:${vendor.email_address}`} className="hover:underline truncate">
-                        {vendor.email_address || 'N/A'}
-                      </a>
-                    </p>
                   </div>
 
-                  {/* Business & Address Details */}
-                  <div className="space-y-2">
-                    <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1 flex items-center gap-1.5">
-                      <FileText className="w-3.5 h-3.5 text-pink-500" /> Business Details
+                  {/* Details Grid */}
+                  <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4 w-full border-t lg:border-t-0 lg:border-l border-slate-200/60 dark:border-slate-800/60 pt-4 lg:pt-0 lg:pl-6">
+                    {/* Personal Contact Details */}
+                    <div className="space-y-2">
+                      <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1 flex items-center gap-1.5">
+                        <User className="w-3.5 h-3.5 text-pink-500" /> Owner Information
+                      </div>
+                      <p className="text-sm font-semibold text-slate-800 dark:text-slate-200">
+                        {vendor.personal_name || 'N/A'}
+                      </p>
+                      <p className="text-xs text-slate-600 dark:text-slate-400 flex items-center gap-2">
+                        <Phone className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                        <a href={`https://wa.me/${vendor.whatsapp_number?.replace(/[^0-9]/g, '')}`} target="_blank" rel="noreferrer" className="hover:underline text-emerald-600 dark:text-emerald-400 font-medium">
+                          {vendor.whatsapp_number || 'N/A'}
+                        </a>
+                      </p>
+                      <p className="text-xs text-slate-600 dark:text-slate-400 flex items-center gap-2">
+                        <Mail className="w-3.5 h-3.5 text-blue-500 shrink-0" />
+                        <a href={`mailto:${vendor.email_address}`} className="hover:underline truncate">
+                          {vendor.email_address || 'N/A'}
+                        </a>
+                      </p>
                     </div>
-                    <p className="text-xs text-slate-600 dark:text-slate-400">
-                      <span className="font-semibold text-slate-700 dark:text-slate-300">GST / MSME:</span>{' '}
-                      <span className="font-mono bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded text-slate-800 dark:text-slate-200">
-                        {vendor.gst_msme_number || 'Not provided'}
-                      </span>
-                    </p>
-                    <p className="text-xs text-slate-600 dark:text-slate-400 flex items-start gap-1.5">
-                      <MapPin className="w-3.5 h-3.5 text-red-500 shrink-0 mt-0.5" />
-                      <span>{vendor.business_address || 'N/A'}</span>
-                    </p>
-                    <p className="text-[11px] text-slate-400">
-                      Registered on: {vendor.created_at ? new Date(vendor.created_at).toLocaleString() : 'N/A'}
-                    </p>
+
+                    {/* Business & Address Details */}
+                    <div className="space-y-2">
+                      <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1 flex items-center gap-1.5">
+                        <FileText className="w-3.5 h-3.5 text-pink-500" /> Business Details
+                      </div>
+                      <p className="text-xs text-slate-600 dark:text-slate-400">
+                        <span className="font-semibold text-slate-700 dark:text-slate-300">GST / MSME:</span>{' '}
+                        <span className="font-mono bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded text-slate-800 dark:text-slate-200">
+                          {vendor.gst_msme_number || 'Not provided'}
+                        </span>
+                      </p>
+                      <p className="text-xs text-slate-600 dark:text-slate-400 flex items-start gap-1.5">
+                        <MapPin className="w-3.5 h-3.5 text-red-500 shrink-0 mt-0.5" />
+                        <span>{vendor.business_address || 'N/A'}</span>
+                      </p>
+                      <p className="text-[11px] text-slate-400">
+                        Registered on: {vendor.created_at ? new Date(vendor.created_at).toLocaleString() : 'N/A'}
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
     </div>
