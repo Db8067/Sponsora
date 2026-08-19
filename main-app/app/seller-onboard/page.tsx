@@ -23,7 +23,7 @@ export default function SellerOnboardPage() {
   const [formStep, setFormStep] = useState(1);
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
   const [submittedBrandSlug, setSubmittedBrandSlug] = useState('sponsora');
-  const [countdown, setCountdown] = useState(5);
+  const [countdown, setCountdown] = useState(10);
   
   // Form input states
   const [personalName, setPersonalName] = useState('');
@@ -43,9 +43,6 @@ export default function SellerOnboardPage() {
   // Prefill personal info from Clerk if available
   useEffect(() => {
     if (user) {
-      if (!personalName && user.fullName) {
-        setPersonalName(user.fullName);
-      }
       if (!emailAddress && user.primaryEmailAddress?.emailAddress) {
         setEmailAddress(user.primaryEmailAddress.emailAddress);
       }
@@ -269,7 +266,7 @@ export default function SellerOnboardPage() {
                 <div className="w-full h-2 bg-pink-200/60 dark:bg-pink-900/50 rounded-full overflow-hidden">
                   <div 
                     className="h-full bg-gradient-to-r from-pink-500 to-purple-600 transition-all duration-1000 ease-linear rounded-full"
-                    style={{ width: `${((5 - countdown) / 5) * 100}%` }}
+                    style={{ width: `${((10 - countdown) / 10) * 100}%` }}
                   ></div>
                 </div>
                 <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">
@@ -321,7 +318,7 @@ export default function SellerOnboardPage() {
                     <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
                       <User className="w-4 h-4 text-pink-500" />
                     </div>
-                    <input value={personalName} onChange={e => setPersonalName(e.target.value)} required type="text" className="w-full h-12 pl-10 pr-4 rounded-xl border-none bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-white focus:ring-2 focus:ring-pink-500 outline-none transition-shadow" placeholder="John Doe" />
+                    <input value={personalName} onChange={e => setPersonalName(e.target.value)} required type="text" className="w-full h-12 pl-10 pr-4 rounded-xl border-none bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-white focus:ring-2 focus:ring-pink-500 outline-none transition-shadow text-base" placeholder="John Doe" />
                   </div>
                 </div>
 
@@ -332,7 +329,7 @@ export default function SellerOnboardPage() {
                       <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
                         <Phone className="w-4 h-4 text-pink-500" />
                       </div>
-                      <input value={whatsappNumber} onChange={e => setWhatsappNumber(e.target.value)} required type="tel" className="w-full h-12 pl-10 pr-4 rounded-xl border-none bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-white focus:ring-2 focus:ring-pink-500 outline-none transition-shadow" placeholder="+91 98765 43210" />
+                      <input value={whatsappNumber} onChange={e => setWhatsappNumber(e.target.value)} required type="tel" className="w-full h-12 pl-10 pr-4 rounded-xl border-none bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-white focus:ring-2 focus:ring-pink-500 outline-none transition-shadow text-base" placeholder="+91 98765 43210" />
                     </div>
                   </div>
                   <div className="space-y-2">
@@ -341,7 +338,7 @@ export default function SellerOnboardPage() {
                       <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
                         <Mail className="w-4 h-4 text-pink-500" />
                       </div>
-                      <input value={emailAddress} onChange={e => setEmailAddress(e.target.value)} required type="email" className="w-full h-12 pl-10 pr-4 rounded-xl border-none bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-white focus:ring-2 focus:ring-pink-500 outline-none transition-shadow" placeholder="john@example.com" />
+                      <input value={emailAddress} onChange={e => setEmailAddress(e.target.value)} required type="email" className="w-full h-12 pl-10 pr-4 rounded-xl border-none bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-white focus:ring-2 focus:ring-pink-500 outline-none transition-shadow text-base" placeholder="john@example.com" />
                     </div>
                   </div>
                 </div>
@@ -362,7 +359,7 @@ export default function SellerOnboardPage() {
                       <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
                         <Store className="w-4 h-4 text-pink-500" />
                       </div>
-                      <input value={brandName} onChange={e => setBrandName(e.target.value)} required type="text" className="w-full h-12 pl-10 pr-4 rounded-xl border-none bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-white focus:ring-2 focus:ring-pink-500 outline-none transition-shadow" placeholder="E.g. Sponsora" />
+                      <input value={brandName} onChange={e => setBrandName(e.target.value)} required type="text" className="w-full h-12 pl-10 pr-4 rounded-xl border-none bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-white focus:ring-2 focus:ring-pink-500 outline-none transition-shadow text-base" placeholder="E.g. Sponsora" />
                     </div>
                   </div>
                   <div className="space-y-2">
@@ -371,7 +368,7 @@ export default function SellerOnboardPage() {
                       <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
                         <Calendar className="w-4 h-4 text-pink-500" />
                       </div>
-                      <input value={establishmentDate} onChange={e => setEstablishmentDate(e.target.value)} required type="date" className="w-full h-12 pl-10 pr-4 rounded-xl border-none bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-white focus:ring-2 focus:ring-pink-500 outline-none transition-shadow text-sm" />
+                      <input value={establishmentDate} onChange={e => setEstablishmentDate(e.target.value)} required type="date" className="w-full max-w-full h-12 pl-10 pr-2 rounded-xl border-none bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-white focus:ring-2 focus:ring-pink-500 outline-none transition-shadow text-base text-ellipsis" />
                     </div>
                   </div>
                 </div>
@@ -413,7 +410,7 @@ export default function SellerOnboardPage() {
                     <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
                       <FileText className="w-4 h-4 text-pink-500" />
                     </div>
-                    <input value={gstMsmeNumber} onChange={e => setGstMsmeNumber(e.target.value)} type="text" className="w-full h-12 pl-10 pr-4 rounded-xl border-none bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-white focus:ring-2 focus:ring-pink-500 outline-none transition-shadow" placeholder="Enter GSTIN / Udyam No." />
+                    <input value={gstMsmeNumber} onChange={e => setGstMsmeNumber(e.target.value)} type="text" className="w-full h-12 pl-10 pr-4 rounded-xl border-none bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-white focus:ring-2 focus:ring-pink-500 outline-none transition-shadow text-base" placeholder="Enter GSTIN / Udyam No." />
                   </div>
                 </div>
 
@@ -423,7 +420,7 @@ export default function SellerOnboardPage() {
                     <div className="absolute top-3.5 left-0 pl-3.5 pointer-events-none">
                       <MapPin className="w-4 h-4 text-pink-500" />
                     </div>
-                    <textarea value={businessAddress} onChange={e => setBusinessAddress(e.target.value)} required className="w-full h-24 pl-10 p-4 rounded-xl border-none bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-white focus:ring-2 focus:ring-pink-500 outline-none transition-shadow resize-none" placeholder="Where do you operate from?"></textarea>
+                    <textarea value={businessAddress} onChange={e => setBusinessAddress(e.target.value)} required className="w-full h-24 pl-10 p-4 rounded-xl border-none bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-white focus:ring-2 focus:ring-pink-500 outline-none transition-shadow text-base resize-none" placeholder="Where do you operate from?"></textarea>
                   </div>
                 </div>
 
@@ -433,7 +430,6 @@ export default function SellerOnboardPage() {
                   </button>
                   <button type="submit" disabled={isUploading || isSubmitting} className="flex-1 bg-gradient-to-r from-pink-500 to-purple-600 text-white font-bold py-4 rounded-xl hover:scale-[1.02] active:scale-95 transition-all shadow-xl flex items-center justify-center gap-2 disabled:opacity-70 disabled:hover:scale-100">
                     {isSubmitting ? 'Submitting...' : 'Submit Brand Details'}
-                    {!isSubmitting && <Sparkles className="w-5 h-5" />}
                   </button>
                 </div>
               </form>
