@@ -1,8 +1,14 @@
 import { NextResponse } from 'next/server';
 import { supabaseServer } from '@/lib/supabase-server';
+import { auth } from '@clerk/nextjs/server';
 
 export async function POST(req: Request) {
   try {
+    // We try to get the clerk userId, but if it fails we don't block the submission.
+    // This allows you to collect details without strictly depending on Clerk auth.
+    const { userId } = await auth().catch(() => ({ userId: null }));
+    const clerkId = userId || 'unauthenticated';
+
     const body = await req.json();
     const { 
       personalName, 
@@ -15,45 +21,25 @@ export async function POST(req: Request) {
       businessAddress 
     } = body;
     
-    // Fetch existing vendors list from site_settings
-    const { data: existingData, error: fetchError } = await supabaseServer
-      .from('site_settings')
-      .select('value')
-      .eq('key', 'vendors')
-      .single();
-
-    let vendors = [];
-    if (!fetchError && existingData?.value) {
-      vendors = Array.isArray(existingData.value) ? existingData.value : [];
-    }
-
-    // Append new vendor
-    const newVendor = {
-      id: crypto.randomUUID(),
+    // Insert directly into the vendor_profiles table you created!
+    const { data, error } = await supabaseServer.from('vendor_profiles').insert({
+      clerk_id: clerkId,
       personal_name: personalName,
       whatsapp_number: whatsappNumber,
       email_address: emailAddress,
       brand_name: brandName,
-      establishment_date: establishmentDate,
-      brand_logo_url: brandLogoUrl,
-      gst_msme_number: gstMsmeNumber,
-      business_address: businessAddress,
-      created_at: new Date().toISOString()
-    };
+      establishment_date: establishmentDate || new Date().toISOString().split('T')[0], // fallback date if empty
+      brand_logo_url: brandLogoUrl || '', // fallback
+      gst_msme_number: gstMsmeNumber || '',
+      business_address: businessAddress
+    }).select();
 
-    vendors.unshift(newVendor);
-
-    // Save back to site_settings
-    const { error: upsertError } = await supabaseServer
-      .from('site_settings')
-      .upsert({ key: 'vendors', value: vendors });
-
-    if (upsertError) {
-      console.error('Supabase upsert error:', upsertError);
-      return NextResponse.json({ error: 'Database error', details: upsertError.message }, { status: 500 });
+    if (error) {
+      console.error('Supabase insertion error:', error);
+      return NextResponse.json({ error: 'Database error', details: error.message }, { status: 500 });
     }
 
-    return NextResponse.json({ success: true, data: newVendor }, { status: 200 });
+    return NextResponse.json({ success: true, data }, { status: 200 });
   } catch (error: any) {
     console.error('Error saving vendor profile:', error);
     return NextResponse.json({ error: 'Server error', details: error.message }, { status: 500 });
