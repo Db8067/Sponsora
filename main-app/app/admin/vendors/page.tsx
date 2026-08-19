@@ -3,17 +3,17 @@ import { Eye } from 'lucide-react';
 import { supabaseServer } from '@/lib/supabase-server';
 
 export default async function VendorApprovals() {
-  // Fetch from the vendor_profiles table joining users table
-  const { data: vendors, error } = await supabaseServer
-    .from('vendor_profiles')
-    .select(`
-      *,
-      users!clerk_id (
-        email,
-        name
-      )
-    `)
-    .order('created_at', { ascending: false });
+  // Fetch from site_settings table
+  const { data, error } = await supabaseServer
+    .from('site_settings')
+    .select('value')
+    .eq('key', 'vendors')
+    .single();
+
+  let vendors: any[] = [];
+  if (!error && data?.value) {
+    vendors = Array.isArray(data.value) ? data.value : [];
+  }
 
   return (
     <div>
@@ -24,14 +24,14 @@ export default async function VendorApprovals() {
         </div>
       </div>
       
-      {error && (
+      {error && error.code !== 'PGRST116' && ( // Ignore not found error if the key doesn't exist yet
         <div className="bg-red-100 text-red-600 p-4 rounded-xl mb-6">
           <p>Failed to load vendors: {error.message}</p>
         </div>
       )}
 
       <div className="grid grid-cols-1 gap-6">
-        {vendors?.map((vendor) => (
+        {vendors.map((vendor) => (
           <div key={vendor.id} className="bg-white/10 dark:bg-slate-900/30 backdrop-blur-md rounded-2xl border border-white/20 dark:border-white/10 shadow-sm overflow-hidden p-6">
             <div className="flex flex-col md:flex-row gap-6">
               
@@ -72,7 +72,7 @@ export default async function VendorApprovals() {
           </div>
         ))}
 
-        {vendors?.length === 0 && (
+        {vendors.length === 0 && (
           <div className="text-center py-12 bg-white/10 dark:bg-slate-900/30 backdrop-blur-md rounded-2xl border border-white/20 dark:border-white/10">
             <p className="text-slate-500">No vendors found. Once users submit their profile on /seller-onboard, they will appear here.</p>
           </div>
