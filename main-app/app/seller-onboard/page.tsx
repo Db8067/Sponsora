@@ -44,30 +44,25 @@ export default function SellerOnboardMysteryBox() {
         </Link>
 
         {/* The Image Container */}
+        {/* Optimized animation: Use a smaller scale (e.g., scale-150 or scale-0 depending on intent), faster duration, and will-change-transform for smooth 60fps rendering */}
         <div 
           onClick={handleOpenBox}
           className={`
-            relative cursor-pointer group transition-all duration-1000 ease-in-out mt-8
-            ${isOpen ? 'scale-[30] md:scale-[50] opacity-0 pointer-events-none' : 'scale-100 hover:scale-105'}
+            relative cursor-pointer group transition-all duration-700 ease-out mt-8
+            ${isOpen ? 'scale-0 opacity-0 pointer-events-none' : 'scale-100 hover:scale-105'}
           `}
+          style={{ willChange: 'transform, opacity' }}
         >
           <div className={`
             relative flex flex-col items-center justify-center
             ${!isOpen ? 'animate-bounce-slow' : ''}
           `}>
             
-            {/* Speech Bubble */}
-            <div className="relative bg-white dark:bg-slate-800 text-slate-800 dark:text-white font-bold text-sm md:text-lg text-center px-6 py-4 rounded-3xl shadow-xl border border-slate-100 dark:border-slate-700 mb-6 max-w-[250px] md:max-w-[300px]">
-              Tap me and get 1 day free access
-              {/* Bubble Tail */}
-              <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-6 h-6 bg-white dark:bg-slate-800 border-r border-b border-slate-100 dark:border-slate-700 rotate-45 shadow-sm"></div>
-            </div>
-
             {/* Doodle Image */}
             <img 
-              src="/doodle_girl_tap_me.jpg" 
+              src="/doodle_girl_products_tap.jpg" 
               alt="Tap to unlock" 
-              className="w-48 h-48 md:w-64 md:h-64 object-contain rounded-full shadow-lg border-4 border-white dark:border-slate-800 bg-white"
+              className="w-64 h-64 md:w-96 md:h-96 object-contain rounded-3xl shadow-xl border-4 border-white dark:border-slate-800 bg-white"
             />
             
           </div>
