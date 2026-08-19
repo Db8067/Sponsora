@@ -9,10 +9,10 @@ import {
   Image as ImageIcon, ExternalLink, Rocket
 } from 'lucide-react';
 import SellerNavbar from '@/components/SellerNavbar';
-import { useAuth, useClerk } from '@clerk/nextjs';
+import { useUser, useClerk } from '@clerk/nextjs';
 
 export default function SellerOnboardPage() {
-  const { isLoaded, isSignedIn } = useAuth();
+  const { isLoaded, isSignedIn, user } = useUser();
   const clerk = useClerk();
   const router = useRouter();
   
@@ -40,17 +40,40 @@ export default function SellerOnboardPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isCheckingProfile, setIsCheckingProfile] = useState(true);
 
+  // Prefill personal info from Clerk if available
+  useEffect(() => {
+    if (user) {
+      if (!personalName && user.fullName) {
+        setPersonalName(user.fullName);
+      }
+      if (!emailAddress && user.primaryEmailAddress?.emailAddress) {
+        setEmailAddress(user.primaryEmailAddress.emailAddress);
+      }
+    }
+  }, [user]);
+
   // Check if existing user
   useEffect(() => {
     if (isLoaded && isSignedIn) {
+      // 1. Quick client-side check if brand slug was saved in local storage
+      const cachedSlug = typeof window !== 'undefined' ? localStorage.getItem('sponsora_brand_slug') : null;
+      if (cachedSlug) {
+        router.replace(`/${cachedSlug}`);
+        return;
+      }
+
       const checkProfile = async () => {
         try {
-          const res = await fetch('/api/vendor-profile');
+          const email = user?.primaryEmailAddress?.emailAddress || '';
+          const res = await fetch(`/api/vendor-profile?email=${encodeURIComponent(email)}`);
           if (res.ok) {
             const data = await res.json();
-            if (data.profile) {
+            if (data.profile && data.profile.brand_name) {
               const slug = data.profile.brand_name.trim().toLowerCase().replace(/\s+/g, '-') || 'sponsora';
-              router.push(`/${slug}`);
+              if (typeof window !== 'undefined') {
+                localStorage.setItem('sponsora_brand_slug', slug);
+              }
+              router.replace(`/${slug}`);
               return; // Stay on loading state while redirecting
             }
           }
@@ -64,7 +87,7 @@ export default function SellerOnboardPage() {
     } else if (isLoaded && !isSignedIn) {
       setIsCheckingProfile(false);
     }
-  }, [isLoaded, isSignedIn, router]);
+  }, [isLoaded, isSignedIn, user, router]);
 
   // Auto-redirect countdown effect
   useEffect(() => {
@@ -76,7 +99,7 @@ export default function SellerOnboardPage() {
       setCountdown((prev) => {
         if (prev <= 1) {
           clearInterval(timer);
-          router.push(`/${submittedBrandSlug}?new=true`);
+          router.replace(`/${submittedBrandSlug}?new=true`);
           return 0;
         }
         return prev - 1;
@@ -146,6 +169,12 @@ export default function SellerOnboardPage() {
       const slug = brandName.trim().toLowerCase().replace(/\s+/g, '-') || 'sponsora';
       setSubmittedBrandSlug(slug);
 
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('sponsora_brand_slug', slug);
+        localStorage.setItem('sponsora_just_onboarded', 'true');
+        sessionStorage.setItem('sponsora_just_onboarded', 'true');
+      }
+
       const res = await fetch('/api/vendor-profile', {
         method: 'POST',
         headers: {
@@ -181,8 +210,9 @@ export default function SellerOnboardPage() {
     return (
       <div className="flex flex-col min-h-screen bg-transparent">
         <SellerNavbar />
-        <div className="flex-1 flex items-center justify-center">
-          <Loader2 className="w-8 h-8 text-pink-500 animate-spin" />
+        <div className="flex-1 flex flex-col items-center justify-center gap-3">
+          <Loader2 className="w-9 h-9 text-pink-500 animate-spin" />
+          <p className="text-sm font-semibold text-slate-500 animate-pulse">Loading dashboard...</p>
         </div>
       </div>
     );
@@ -264,7 +294,7 @@ export default function SellerOnboardPage() {
               </div>
 
               {/* Direct Access CTA */}
-              <Link href={`/${submittedBrandSlug}`}>
+              <Link href={`/${submittedBrandSlug}?new=true`}>
                 <button className="w-full bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-extrabold py-4 rounded-2xl transition-all shadow-xl hover:shadow-2xl hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2">
                   <span>Go to {brandName || 'Brand'} Dashboard Now</span>
                   <ExternalLink className="w-4 h-4" />

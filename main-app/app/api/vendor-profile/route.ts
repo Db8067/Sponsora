@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { supabaseServer } from '@/lib/supabase-server';
-import { auth } from '@clerk/nextjs/server';
+import { auth, currentUser } from '@clerk/nextjs/server';
 
 export async function POST(req: Request) {
   try {
@@ -49,28 +49,38 @@ export async function POST(req: Request) {
 export async function GET(req: Request) {
   try {
     const { userId } = await auth().catch(() => ({ userId: null }));
+    const user = await currentUser().catch(() => null);
     
-    if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    const { searchParams } = new URL(req.url);
+    const emailQuery = searchParams.get('email');
+    const userEmail = user?.emailAddresses?.[0]?.emailAddress || emailQuery;
+
+    if (!userId && !userEmail) {
+      return NextResponse.json({ profile: null }, { status: 200 });
     }
 
-    const { data, error } = await supabaseServer
-      .from('vendor_profiles')
-      .select('*')
-      .eq('clerk_id', userId)
-      .single();
+    let query = supabaseServer.from('vendor_profiles').select('*');
+
+    if (userId && userEmail) {
+      query = query.or(`clerk_id.eq.${userId},email_address.ilike.${userEmail.trim()}`);
+    } else if (userId) {
+      query = query.eq('clerk_id', userId);
+    } else if (userEmail) {
+      query = query.ilike('email_address', userEmail.trim());
+    }
+
+    const { data, error } = await query.order('created_at', { ascending: false }).limit(1);
 
     if (error) {
-      if (error.code === 'PGRST116') {
-        // No rows returned
-        return NextResponse.json({ profile: null }, { status: 200 });
-      }
+      console.error('Supabase fetch error:', error);
       return NextResponse.json({ error: 'Database error', details: error.message }, { status: 500 });
     }
 
-    return NextResponse.json({ profile: data }, { status: 200 });
+    const profile = data && data.length > 0 ? data[0] : null;
+    return NextResponse.json({ profile }, { status: 200 });
   } catch (error: any) {
     console.error('Error fetching vendor profile:', error);
     return NextResponse.json({ error: 'Server error', details: error.message }, { status: 500 });
   }
 }
+
