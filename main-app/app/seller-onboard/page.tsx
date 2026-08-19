@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, Gift } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import SellerNavbar from '@/components/SellerNavbar';
 
 export default function SellerOnboardMysteryBox() {
@@ -43,28 +43,32 @@ export default function SellerOnboardMysteryBox() {
           Back
         </Link>
 
-        {/* The Mystery Box Container */}
+        {/* The Image Container */}
         <div 
           onClick={handleOpenBox}
           className={`
-            relative cursor-pointer group transition-all duration-1000 ease-in-out
+            relative cursor-pointer group transition-all duration-1000 ease-in-out mt-8
             ${isOpen ? 'scale-[30] md:scale-[50] opacity-0 pointer-events-none' : 'scale-100 hover:scale-105'}
           `}
         >
-          {/* White Box Body - No glowing/pink background */}
           <div className={`
-            relative flex flex-col items-center justify-center w-64 h-64 md:w-80 md:h-80 
-            bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-100 dark:border-slate-800
+            relative flex flex-col items-center justify-center
             ${!isOpen ? 'animate-bounce-slow' : ''}
           `}>
             
-            {/* Gift Icon on the box */}
-            <Gift className="w-24 h-24 md:w-32 md:h-32 text-pink-500 dark:text-pink-400 drop-shadow-sm mb-4" />
-            
-            {/* Clean Text without any logo/icon */}
-            <p className="text-slate-800 dark:text-white font-bold text-sm md:text-base text-center px-4">
-              Open me and get 1 day free access
-            </p>
+            {/* Speech Bubble */}
+            <div className="relative bg-white dark:bg-slate-800 text-slate-800 dark:text-white font-bold text-sm md:text-lg text-center px-6 py-4 rounded-3xl shadow-xl border border-slate-100 dark:border-slate-700 mb-6 max-w-[250px] md:max-w-[300px]">
+              Tap me and get 1 day free access
+              {/* Bubble Tail */}
+              <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-6 h-6 bg-white dark:bg-slate-800 border-r border-b border-slate-100 dark:border-slate-700 rotate-45 shadow-sm"></div>
+            </div>
+
+            {/* Doodle Image */}
+            <img 
+              src="/doodle_girl_tap_me.jpg" 
+              alt="Tap to unlock" 
+              className="w-48 h-48 md:w-64 md:h-64 object-contain rounded-full shadow-lg border-4 border-white dark:border-slate-800 bg-white"
+            />
             
           </div>
         </div>
@@ -72,7 +76,7 @@ export default function SellerOnboardMysteryBox() {
         {/* Floating instruction text */}
         {!isOpen && (
           <p className="mt-12 text-slate-500 dark:text-slate-400 font-medium animate-pulse text-sm">
-            Tap the Mystery Box to unlock!
+            Tap the Image to unlock!
           </p>
         )}
       </div>
@@ -80,7 +84,7 @@ export default function SellerOnboardMysteryBox() {
       {/* Global styles for the custom confetti animation and slow bounce */}
       <style dangerouslySetInnerHTML={{__html: `
         @keyframes bounce-slow {
-          0%, 100% { transform: translateY(-10%); animation-timing-function: cubic-bezier(0.8,0,1,1); }
+          0%, 100% { transform: translateY(-5%); animation-timing-function: cubic-bezier(0.8,0,1,1); }
           50% { transform: none; animation-timing-function: cubic-bezier(0,0,0.2,1); }
         }
         .animate-bounce-slow {
