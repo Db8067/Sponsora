@@ -31,17 +31,9 @@ export default function BrandDashboardPage() {
 
   useEffect(() => {
     const isNewParam = searchParams?.get('new') === 'true';
-    const isNewStorage = typeof window !== 'undefined' && (
-      sessionStorage.getItem('sponsora_just_onboarded') === 'true' ||
-      localStorage.getItem('sponsora_just_onboarded') === 'true'
-    );
 
-    if (isNewParam || isNewStorage) {
+    if (isNewParam) {
       setShowCongrats(true);
-      if (typeof window !== 'undefined') {
-        sessionStorage.removeItem('sponsora_just_onboarded');
-        localStorage.removeItem('sponsora_just_onboarded');
-      }
       
       const timer = setInterval(() => {
         setCongratsCountdown((prev) => {

@@ -55,13 +55,6 @@ export default function SellerOnboardPage() {
   // Check if existing user
   useEffect(() => {
     if (isLoaded && isSignedIn) {
-      // 1. Quick client-side check if brand slug was saved in local storage
-      const cachedSlug = typeof window !== 'undefined' ? localStorage.getItem('sponsora_brand_slug') : null;
-      if (cachedSlug) {
-        router.replace(`/${cachedSlug}`);
-        return;
-      }
-
       const checkProfile = async () => {
         try {
           const email = user?.primaryEmailAddress?.emailAddress || '';
@@ -70,9 +63,6 @@ export default function SellerOnboardPage() {
             const data = await res.json();
             if (data.profile && data.profile.brand_name) {
               const slug = data.profile.brand_name.trim().toLowerCase().replace(/\s+/g, '-') || 'sponsora';
-              if (typeof window !== 'undefined') {
-                localStorage.setItem('sponsora_brand_slug', slug);
-              }
               router.replace(`/${slug}`);
               return; // Stay on loading state while redirecting
             }
@@ -168,12 +158,6 @@ export default function SellerOnboardPage() {
     try {
       const slug = brandName.trim().toLowerCase().replace(/\s+/g, '-') || 'sponsora';
       setSubmittedBrandSlug(slug);
-
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('sponsora_brand_slug', slug);
-        localStorage.setItem('sponsora_just_onboarded', 'true');
-        sessionStorage.setItem('sponsora_just_onboarded', 'true');
-      }
 
       const res = await fetch('/api/vendor-profile', {
         method: 'POST',
