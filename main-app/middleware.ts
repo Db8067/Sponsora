@@ -7,7 +7,10 @@ const isPublicRoute = createRouteMatcher([
   '/sign-in(.*)',
   '/sign-up(.*)',
   '/get-started(.*)',
-  '/unauthorized(.*)'
+  '/unauthorized(.*)',
+  '/sell-online(.*)',
+  '/subscriptions(.*)',
+  '/seller-onboard(.*)'
 ]);
 
 const isOrganizerRoute = createRouteMatcher(['/dashboard/organizer(.*)', '/organizer(.*)', '/sponsorship/request(.*)']);

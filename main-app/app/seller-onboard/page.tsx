@@ -1,20 +1,149 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Store, User, Phone, Briefcase, Sparkles, CheckCircle2 } from 'lucide-react';
 import SellerNavbar from '@/components/SellerNavbar';
+import { useAuth, useClerk } from '@clerk/nextjs';
 
-export default function SellerOnboardMysteryBox() {
+export default function SellerOnboardPage() {
+  const { isLoaded, isSignedIn } = useAuth();
+  const clerk = useClerk();
+  
   const [isOpen, setIsOpen] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
+  const [isFormSubmitted, setIsFormSubmitted] = useState(false);
 
   const handleOpenBox = () => {
     if (isOpen) return;
     setIsOpen(true);
     setShowConfetti(true);
+    
+    // Open Clerk Sign In modal after a short delay for animation
+    setTimeout(() => {
+      clerk.openSignIn({
+        forceRedirectUrl: '/seller-onboard',
+        signUpForceRedirectUrl: '/seller-onboard'
+      });
+      // Reset animation state just in case modal closes without logging in
+      setTimeout(() => {
+        setIsOpen(false);
+        setShowConfetti(false);
+      }, 1000);
+    }, 700);
   };
 
+  const handleFormSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsFormSubmitted(true);
+  };
+
+  // While Clerk is loading auth state
+  if (!isLoaded) {
+    return (
+      <div className="flex flex-col min-h-screen bg-transparent">
+        <SellerNavbar />
+        <div className="flex-1 flex items-center justify-center">
+          <div className="animate-spin w-8 h-8 border-4 border-primary border-t-transparent rounded-full"></div>
+        </div>
+      </div>
+    );
+  }
+
+  // If user is logged in, show the brand onboard form
+  if (isSignedIn) {
+    if (isFormSubmitted) {
+      return (
+        <div className="flex flex-col min-h-screen bg-transparent">
+          <SellerNavbar />
+          <div className="flex-1 flex flex-col items-center justify-center px-4 py-12">
+            <div className="max-w-md w-full bg-white/80 dark:bg-slate-900/80 p-8 rounded-[2rem] shadow-2xl backdrop-blur-xl border border-white/50 dark:border-white/10 text-center relative overflow-hidden">
+              <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-pink-500 to-purple-500"></div>
+              <div className="w-24 h-24 bg-green-100/80 dark:bg-green-900/50 text-green-600 dark:text-green-400 rounded-full flex items-center justify-center mx-auto mb-6">
+                <CheckCircle2 className="w-12 h-12" />
+              </div>
+              <h2 className="text-3xl font-bold mb-4 text-slate-800 dark:text-white">Brand Setup Complete!</h2>
+              <p className="text-slate-600 dark:text-slate-300 mb-8 leading-relaxed">
+                Your brand profile has been successfully submitted. We are preparing your personalized dashboard.
+              </p>
+              <Link href="/">
+                <button className="w-full bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-bold py-3.5 rounded-xl transition-all shadow-lg hover:shadow-xl hover:scale-[1.02]">
+                  Return to Home
+                </button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="flex flex-col min-h-screen bg-transparent">
+        <SellerNavbar />
+        <div className="flex-1 w-full max-w-2xl mx-auto py-12 px-4 md:px-8">
+          <div className="bg-white/70 dark:bg-slate-900/70 p-8 md:p-10 rounded-[2.5rem] shadow-2xl backdrop-blur-xl border border-white/50 dark:border-white/10 relative overflow-hidden">
+            <div className="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 bg-pink-500/10 rounded-full blur-3xl pointer-events-none"></div>
+            
+            <div className="text-center mb-10 relative z-10">
+              <h2 className="text-2xl md:text-3xl font-extrabold text-slate-800 dark:text-white mb-2">
+                Let's setup your Brand!
+              </h2>
+              <p className="text-slate-500 dark:text-slate-400">
+                Provide a few details so we can get your store ready for customers.
+              </p>
+            </div>
+
+            <form onSubmit={handleFormSubmit} className="space-y-6 relative z-10">
+              <div className="space-y-2">
+                <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Brand / Store Name *</label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                    <Store className="w-4 h-4 text-pink-500" />
+                  </div>
+                  <input required type="text" className="w-full h-12 pl-10 pr-4 rounded-xl border-none bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-white focus:ring-2 focus:ring-pink-500 outline-none transition-shadow" placeholder="E.g. Trends Boutique" />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div className="space-y-2">
+                  <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Your Name *</label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                      <User className="w-4 h-4 text-pink-500" />
+                    </div>
+                    <input required type="text" className="w-full h-12 pl-10 pr-4 rounded-xl border-none bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-white focus:ring-2 focus:ring-pink-500 outline-none transition-shadow" placeholder="John Doe" />
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">WhatsApp Number *</label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                      <Phone className="w-4 h-4 text-pink-500" />
+                    </div>
+                    <input required type="tel" className="w-full h-12 pl-10 pr-4 rounded-xl border-none bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-white focus:ring-2 focus:ring-pink-500 outline-none transition-shadow" placeholder="+91 98765 43210" />
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Business Address *</label>
+                <textarea required className="w-full h-24 p-4 rounded-xl border-none bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-white focus:ring-2 focus:ring-pink-500 outline-none transition-shadow resize-none" placeholder="Where do you operate from?"></textarea>
+              </div>
+
+              <div className="pt-4">
+                <button type="submit" className="w-full bg-gradient-to-r from-pink-500 to-purple-600 text-white font-bold py-4 rounded-xl hover:scale-[1.02] active:scale-95 transition-all shadow-xl flex items-center justify-center gap-2">
+                  Launch My Brand
+                  <Sparkles className="w-5 h-5" />
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // If user is NOT logged in, show the animation image to click
   return (
     <div className="flex flex-col min-h-screen bg-transparent relative overflow-hidden">
       <SellerNavbar />
@@ -44,7 +173,6 @@ export default function SellerOnboardMysteryBox() {
         </Link>
 
         {/* The Image Container */}
-        {/* Optimized animation: Use a smaller scale (e.g., scale-150 or scale-0 depending on intent), faster duration, and will-change-transform for smooth 60fps rendering */}
         <div 
           onClick={handleOpenBox}
           className={`

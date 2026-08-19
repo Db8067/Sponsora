@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { Menu, X } from 'lucide-react';
 
+import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
+
 export default function SellerNavbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -30,18 +32,32 @@ export default function SellerNavbar() {
         </nav>
 
         <div className="hidden lg:flex items-center gap-4">
-          <Link href="/sign-in" className="text-sm font-semibold text-slate-700 hover:text-pink-600 dark:text-slate-200 transition-colors">
-            Login
-          </Link>
+          <SignedIn>
+            <UserButton afterSignOutUrl="/" />
+          </SignedIn>
+          <SignedOut>
+            <SignInButton mode="modal">
+              <button className="text-sm font-semibold text-slate-700 hover:text-pink-600 dark:text-slate-200 transition-colors">
+                Login
+              </button>
+            </SignInButton>
+          </SignedOut>
           <Link href="/seller-onboard" className="text-sm font-semibold bg-primary text-white px-5 py-2.5 rounded-xl hover:bg-primary-dark transition-colors shadow-lg shadow-primary/20">
             Get Customers
           </Link>
         </div>
 
         <div className="lg:hidden flex items-center gap-2">
-          <Link href="/sign-in" className="text-sm font-semibold border border-primary text-primary px-3 py-1.5 rounded-lg hover:bg-primary hover:text-white transition-colors mr-2">
-            Login
-          </Link>
+          <SignedIn>
+            <UserButton afterSignOutUrl="/" />
+          </SignedIn>
+          <SignedOut>
+            <SignInButton mode="modal">
+              <button className="text-sm font-semibold border border-primary text-primary px-3 py-1.5 rounded-lg hover:bg-primary hover:text-white transition-colors mr-2">
+                Login
+              </button>
+            </SignInButton>
+          </SignedOut>
           <button className="p-2 text-slate-600 dark:text-slate-300 relative z-50 overflow-hidden" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
             <div className={`transition-transform duration-300 ${isMobileMenuOpen ? 'rotate-90 opacity-0 absolute' : 'rotate-0 opacity-100'}`}>
               <Menu className="w-6 h-6" />
