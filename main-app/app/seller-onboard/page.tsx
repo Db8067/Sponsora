@@ -38,6 +38,33 @@ export default function SellerOnboardPage() {
   const [isUploading, setIsUploading] = useState(false);
   const [uploadedLogo, setUploadedLogo] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isCheckingProfile, setIsCheckingProfile] = useState(true);
+
+  // Check if existing user
+  useEffect(() => {
+    if (isLoaded && isSignedIn) {
+      const checkProfile = async () => {
+        try {
+          const res = await fetch('/api/vendor-profile');
+          if (res.ok) {
+            const data = await res.json();
+            if (data.profile) {
+              const slug = data.profile.brand_name.trim().toLowerCase().replace(/\s+/g, '-') || 'sponsora';
+              router.push(`/${slug}`);
+              return; // Stay on loading state while redirecting
+            }
+          }
+        } catch (error) {
+          console.error("Error checking profile:", error);
+        } finally {
+          setIsCheckingProfile(false);
+        }
+      };
+      checkProfile();
+    } else if (isLoaded && !isSignedIn) {
+      setIsCheckingProfile(false);
+    }
+  }, [isLoaded, isSignedIn, router]);
 
   // Auto-redirect countdown effect
   useEffect(() => {
@@ -49,7 +76,7 @@ export default function SellerOnboardPage() {
       setCountdown((prev) => {
         if (prev <= 1) {
           clearInterval(timer);
-          router.push(`/${submittedBrandSlug}`);
+          router.push(`/${submittedBrandSlug}?new=true`);
           return 0;
         }
         return prev - 1;
@@ -150,11 +177,12 @@ export default function SellerOnboardPage() {
     }
   };
 
-  if (!isLoaded) {
+  if (!isLoaded || (isSignedIn && isCheckingProfile)) {
     return (
       <div className="flex flex-col min-h-screen bg-transparent">
         <SellerNavbar />
         <div className="flex-1 flex items-center justify-center">
+          <Loader2 className="w-8 h-8 text-pink-500 animate-spin" />
         </div>
       </div>
     );

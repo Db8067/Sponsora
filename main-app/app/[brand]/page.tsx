@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
+import { useParams, useSearchParams, useRouter } from 'next/navigation';
 import { 
   Store, User, Phone, Mail, Package, TrendingUp, Users, 
   IndianRupee, Share2, Plus, Copy, Check, ExternalLink, 
@@ -15,6 +15,8 @@ import { useUser } from '@clerk/nextjs';
 
 export default function BrandDashboardPage() {
   const params = useParams();
+  const searchParams = useSearchParams();
+  const router = useRouter();
   const rawBrandSlug = (params?.brand as string) || 'sponsora';
   const { user } = useUser();
 
@@ -22,6 +24,31 @@ export default function BrandDashboardPage() {
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
   const [activeTab, setActiveTab] = useState<'overview' | 'products' | 'inquiries' | 'settings'>('overview');
+  
+  // Congrats modal state
+  const [showCongrats, setShowCongrats] = useState(false);
+  const [congratsCountdown, setCongratsCountdown] = useState(5);
+
+  useEffect(() => {
+    if (searchParams?.get('new') === 'true') {
+      setShowCongrats(true);
+      
+      const timer = setInterval(() => {
+        setCongratsCountdown((prev) => {
+          if (prev <= 1) {
+            clearInterval(timer);
+            setShowCongrats(false);
+            // Clean up the URL
+            router.replace(`/${rawBrandSlug}`);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+
+      return () => clearInterval(timer);
+    }
+  }, [searchParams, rawBrandSlug, router]);
 
   // Product modal state
   const [showAddProduct, setShowAddProduct] = useState(false);
@@ -474,6 +501,54 @@ export default function BrandDashboardPage() {
                   </button>
                 </div>
               </form>
+            </div>
+          </div>
+        )}
+
+        {/* Congratulations Modal */}
+        {showCongrats && (
+          <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+            <div className="max-w-md w-full bg-white dark:bg-slate-900 rounded-[2rem] shadow-2xl border border-white/20 p-8 space-y-6 animate-in fade-in zoom-in-95 relative overflow-hidden text-center">
+              {/* Confetti styling within modal */}
+              <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500"></div>
+              
+              <button 
+                onClick={() => {
+                  setShowCongrats(false);
+                  router.replace(`/${rawBrandSlug}`);
+                }} 
+                className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 bg-slate-100 dark:bg-slate-800 p-2 rounded-full"
+              >
+                ✕
+              </button>
+
+              <div className="w-20 h-20 mx-auto rounded-full bg-emerald-100 dark:bg-emerald-950/60 flex items-center justify-center shadow-inner">
+                <CheckCircle2 className="w-10 h-10 text-emerald-500" />
+              </div>
+
+              <div>
+                <h3 className="text-2xl font-black text-slate-900 dark:text-white mb-2">Congratulations!</h3>
+                <p className="text-slate-600 dark:text-slate-300 text-sm">
+                  Your dashboard is ready for getting customers for <strong>{brandName}</strong>. 
+                  Share your link and start selling with 0% commission.
+                </p>
+              </div>
+
+              <div className="space-y-3">
+                <button
+                  onClick={() => {
+                    setShowCongrats(false);
+                    router.replace(`/${rawBrandSlug}`);
+                  }}
+                  className="w-full py-3.5 rounded-xl bg-gradient-to-r from-pink-500 to-purple-600 text-white font-bold shadow-lg hover:scale-[1.02] active:scale-95 transition-all flex justify-center items-center gap-2"
+                >
+                  Continue to Dashboard
+                  <ArrowUpRight className="w-4 h-4" />
+                </button>
+                <p className="text-xs text-slate-400 font-medium">
+                  Auto-closing in {congratsCountdown}s...
+                </p>
+              </div>
             </div>
           </div>
         )}

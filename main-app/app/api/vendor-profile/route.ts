@@ -45,3 +45,32 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'Server error', details: error.message }, { status: 500 });
   }
 }
+
+export async function GET(req: Request) {
+  try {
+    const { userId } = await auth().catch(() => ({ userId: null }));
+    
+    if (!userId) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const { data, error } = await supabaseServer
+      .from('vendor_profiles')
+      .select('*')
+      .eq('clerk_id', userId)
+      .single();
+
+    if (error) {
+      if (error.code === 'PGRST116') {
+        // No rows returned
+        return NextResponse.json({ profile: null }, { status: 200 });
+      }
+      return NextResponse.json({ error: 'Database error', details: error.message }, { status: 500 });
+    }
+
+    return NextResponse.json({ profile: data }, { status: 200 });
+  } catch (error: any) {
+    console.error('Error fetching vendor profile:', error);
+    return NextResponse.json({ error: 'Server error', details: error.message }, { status: 500 });
+  }
+}
