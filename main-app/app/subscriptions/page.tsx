@@ -1,9 +1,58 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
-import { Check, Sparkles, Zap, ShieldCheck, HelpCircle } from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
+import { Check, Sparkles, Zap, ShieldCheck, HelpCircle, X } from 'lucide-react';
 import SellerNavbar from '@/components/SellerNavbar';
+
+function PopupModal() {
+  const searchParams = useSearchParams();
+  const [showPopup, setShowPopup] = useState(false);
+
+  useEffect(() => {
+    if (searchParams.get('from') === 'storefront') {
+      setShowPopup(true);
+    }
+  }, [searchParams]);
+
+  if (!showPopup) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-300">
+      <div className="relative bg-white dark:bg-slate-800 rounded-3xl p-6 md:p-8 max-w-sm w-full shadow-2xl flex flex-col items-center text-center animate-in zoom-in-95 duration-300">
+        {/* Close Button */}
+        <button 
+          onClick={() => setShowPopup(false)}
+          className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors"
+        >
+          <X className="w-5 h-5" />
+        </button>
+        
+        {/* Image */}
+        <div className="w-56 h-56 mb-6 rounded-2xl overflow-hidden shadow-inner border border-slate-100 dark:border-slate-700 bg-white flex items-center justify-center">
+          <img src="/subscription-doodle.jpg" alt="Cute shopping girl" className="w-full h-full object-cover" />
+        </div>
+
+        {/* Text */}
+        <h3 className="text-xl font-black text-pink-600 dark:text-pink-400 mb-2">
+          Ready to grow? ✨
+        </h3>
+        <p className="text-sm font-medium text-slate-600 dark:text-slate-300 mb-8 leading-relaxed">
+          Please buy a subscription plan for our service to continue adding your products and reaching more customers!
+        </p>
+
+        {/* CTA */}
+        <button 
+          onClick={() => setShowPopup(false)}
+          className="w-full py-3.5 rounded-xl bg-pink-500 hover:bg-pink-600 text-white font-bold shadow-lg shadow-pink-500/30 transition-all active:scale-95"
+        >
+          Continue
+        </button>
+      </div>
+    </div>
+  );
+}
 
 export default function SubscriptionsPage() {
   const [selectedPlan, setSelectedPlan] = useState<number | null>(null);
@@ -250,6 +299,10 @@ export default function SubscriptionsPage() {
           </div>
         </div>
       </section>
+
+      <Suspense fallback={null}>
+        <PopupModal />
+      </Suspense>
     </div>
   );
 }

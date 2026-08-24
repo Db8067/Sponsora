@@ -107,7 +107,7 @@ export default function BrandDashboardPage() {
             </p>
 
             {/* Primary CTA */}
-            <Link href="/subscriptions">
+            <Link href="/subscriptions?from=storefront">
               <button className="group inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-pink-500 hover:bg-pink-600 text-white text-lg font-bold shadow-lg shadow-pink-500/30 hover:shadow-xl hover:shadow-pink-500/40 hover:-translate-y-0.5 active:scale-95 transition-all">
                 <Plus className="w-5 h-5" />
                 List Your First Product
