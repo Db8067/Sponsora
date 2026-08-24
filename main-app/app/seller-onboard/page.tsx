@@ -174,7 +174,7 @@ export default function SellerOnboardPage() {
       });
       
       if (res.ok) {
-        setIsFormSubmitted(true);
+        router.replace(`/${slug}`);
       } else {
         const error = await res.json();
         alert('Failed to save profile: ' + (error.details || error.error));
@@ -200,92 +200,7 @@ export default function SellerOnboardPage() {
   }
 
   if (isSignedIn) {
-    if (isFormSubmitted) {
-      return (
-        <div className="flex flex-col min-h-screen bg-transparent relative overflow-hidden">
-          <SellerNavbar />
 
-          {/* Confetti Particles */}
-          <div className="absolute inset-0 pointer-events-none z-50 flex items-center justify-center">
-            {[...Array(40)].map((_, i) => (
-              <div 
-                key={i} 
-                className="absolute w-3 h-3 md:w-4 md:h-4 rounded-full animate-confetti-pop"
-                style={{
-                  backgroundColor: ['#ec4899', '#8b5cf6', '#3b82f6', '#10b981', '#f59e0b', '#ef4444'][Math.floor(Math.random() * 6)],
-                  '--tx': `${(Math.random() - 0.5) * 600}px`,
-                  '--ty': `${(Math.random() - 0.5) * 600}px`,
-                  '--r': `${Math.random() * 360}deg`,
-                } as React.CSSProperties}
-              />
-            ))}
-          </div>
-
-          <div className="flex-1 flex flex-col items-center justify-center px-4 py-12 z-10">
-            <div className="max-w-lg w-full bg-white/85 dark:bg-slate-900/85 p-8 sm:p-10 rounded-[2.5rem] shadow-2xl backdrop-blur-2xl border border-white/60 dark:border-white/10 text-center relative overflow-hidden animate-in fade-in zoom-in-95 duration-500">
-              {/* Top Accent Gradient */}
-              <div className="absolute top-0 left-0 w-full h-3 bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500"></div>
-              
-              {/* Logo / Success Badge */}
-              <div className="relative mx-auto mb-6">
-                <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-3xl p-1 bg-gradient-to-tr from-pink-500 via-purple-500 to-emerald-400 mx-auto shadow-xl flex items-center justify-center">
-                  <div className="w-full h-full bg-white dark:bg-slate-800 rounded-[1.35rem] flex items-center justify-center overflow-hidden p-2">
-                    {uploadedLogo ? (
-                      <img src={uploadedLogo} alt={brandName} className="w-full h-full object-contain" />
-                    ) : (
-                      <CheckCircle2 className="w-12 h-12 text-emerald-500" />
-                    )}
-                  </div>
-                </div>
-                <div className="absolute -bottom-2 -right-2 bg-emerald-500 text-white p-2 rounded-full shadow-lg">
-                  <Sparkles className="w-4 h-4" />
-                </div>
-              </div>
-
-              {/* Title & Brand Name */}
-              <div className="space-y-2 mb-6">
-                <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300">
-                  <CheckCircle2 className="w-3.5 h-3.5" /> Setup Successful
-                </span>
-                <h2 className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
-                  Welcome, {brandName || 'Partner'}!
-                </h2>
-                <p className="text-slate-600 dark:text-slate-300 text-sm leading-relaxed max-w-md mx-auto">
-                  Your brand profile is live. Your store dashboard is ready with 0% sales commission and customer access.
-                </p>
-              </div>
-
-              {/* Progress & Countdown Section */}
-              <div className="p-4 rounded-2xl bg-pink-50/80 dark:bg-pink-950/30 border border-pink-100 dark:border-pink-900/30 mb-8 space-y-3">
-                <div className="flex items-center justify-between text-xs font-bold text-pink-600 dark:text-pink-400">
-                  <span className="flex items-center gap-1.5">
-                    <Rocket className="w-4 h-4 animate-bounce" /> Redirecting to dashboard...
-                  </span>
-                  <span>{countdown} seconds</span>
-                </div>
-                <div className="w-full h-2 bg-pink-200/60 dark:bg-pink-900/50 rounded-full overflow-hidden">
-                  <div 
-                    className="h-full bg-gradient-to-r from-pink-500 to-purple-600 transition-all duration-1000 ease-linear rounded-full"
-                    style={{ width: `${((10 - countdown) / 10) * 100}%` }}
-                  ></div>
-                </div>
-                <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">
-                  Destination: <span className="font-mono font-semibold text-slate-700 dark:text-slate-300">/{submittedBrandSlug}</span>
-                </p>
-              </div>
-
-              {/* Direct Access CTA */}
-              <Link href={`/${submittedBrandSlug}?new=true`}>
-                <button className="w-full bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-extrabold py-4 rounded-2xl transition-all shadow-xl hover:shadow-2xl hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2">
-                  <span>Go to {brandName || 'Brand'} Dashboard Now</span>
-                  <ExternalLink className="w-4 h-4" />
-                </button>
-              </Link>
-            </div>
-          </div>
-        </div>
-      );
-    }
 
     return (
       <div className="flex flex-col min-h-screen bg-transparent">
