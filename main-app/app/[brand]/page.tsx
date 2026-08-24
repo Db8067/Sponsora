@@ -66,6 +66,7 @@ export default function BrandDashboardPage() {
 
   const brandName = brandData?.brand_name || 'My Brand';
 
+  return (
     <div className="h-screen bg-transparent flex flex-col overflow-hidden">
       <SellerNavbar />
 
