@@ -41,8 +41,12 @@ function BrandDashboard({ brandName, plan, brandLogo }: { brandName: string, pla
         <div className="absolute bottom-0 left-0 -ml-16 -mb-16 w-64 h-64 bg-pink-500/10 rounded-full blur-3xl pointer-events-none"></div>
         
         <div className="relative z-10">
-          <div className="inline-flex items-center justify-center w-20 h-20 bg-pink-100 dark:bg-pink-900/50 text-pink-600 dark:text-pink-400 rounded-full mb-6 shadow-inner border-2 border-white dark:border-slate-800">
-            <Sparkles className="w-10 h-10" />
+          <div className="inline-flex items-center justify-center w-24 h-24 bg-white dark:bg-slate-800 rounded-full mb-6 shadow-md border-4 border-pink-100 dark:border-pink-900/50 overflow-hidden">
+            {brandLogo ? (
+              <img src={brandLogo} alt={brandName} className="w-full h-full object-cover" />
+            ) : (
+              <Store className="w-10 h-10 text-pink-400" />
+            )}
           </div>
           
           <h1 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white mb-4">
@@ -61,27 +65,15 @@ function BrandDashboard({ brandName, plan, brandLogo }: { brandName: string, pla
             </h2>
             <form className="space-y-5" onSubmit={(e) => { e.preventDefault(); alert('Product upload feature coming soon!'); }}>
               <div>
-                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Product Name</label>
+                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Title</label>
                 <input type="text" className="w-full px-4 py-3.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-pink-500 outline-none transition-all shadow-sm" placeholder="e.g., Pink Summer Dress" required />
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                <div>
-                  <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Price (₹)</label>
-                  <input type="number" className="w-full px-4 py-3.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-pink-500 outline-none transition-all shadow-sm" placeholder="999" required />
-                </div>
-                <div>
-                  <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Category</label>
-                  <select className="w-full px-4 py-3.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-pink-500 outline-none transition-all shadow-sm" required>
-                    <option value="">Select category</option>
-                    <option value="clothing">Clothing</option>
-                    <option value="electronics">Electronics</option>
-                    <option value="home">Home & Decor</option>
-                    <option value="beauty">Beauty & Personal Care</option>
-                  </select>
-                </div>
+              <div>
+                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Description</label>
+                <textarea rows={3} className="w-full px-4 py-3.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-pink-500 outline-none transition-all shadow-sm resize-none" placeholder="Describe your product..."></textarea>
               </div>
               <div>
-                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Product Image</label>
+                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Media</label>
                 <div className="border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-xl p-8 text-center bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors cursor-pointer group">
                   <div className="w-12 h-12 bg-pink-50 dark:bg-slate-700 rounded-full flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
                     <Upload className="w-6 h-6 text-pink-500" />
@@ -89,6 +81,23 @@ function BrandDashboard({ brandName, plan, brandLogo }: { brandName: string, pla
                   <span className="text-sm font-medium text-slate-500 dark:text-slate-400 block">Click to upload image</span>
                   <span className="text-xs text-slate-400 dark:text-slate-500 mt-1 block">PNG, JPG up to 5MB</span>
                 </div>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div>
+                  <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Pricing (₹)</label>
+                  <input type="number" className="w-full px-4 py-3.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-pink-500 outline-none transition-all shadow-sm" placeholder="999" required />
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Compare-at price (₹)</label>
+                  <input type="number" className="w-full px-4 py-3.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-pink-500 outline-none transition-all shadow-sm" placeholder="1499" />
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Status</label>
+                <select className="w-full px-4 py-3.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-pink-500 outline-none transition-all shadow-sm" required>
+                  <option value="active">Active</option>
+                  <option value="draft">Draft</option>
+                </select>
               </div>
               <button type="submit" className="w-full mt-8 bg-pink-500 hover:bg-pink-600 text-white font-bold py-4 rounded-xl transition-transform active:scale-95 shadow-lg shadow-pink-500/30 flex items-center justify-center gap-2">
                 <Plus className="w-5 h-5" />
@@ -138,7 +147,12 @@ export default function DynamicBrandRoute() {
         const match = data.find((v: any) => {
           const name = (v.brand_name || '').toLowerCase().trim();
           const hyphenated = name.replace(/\s+/g, '-');
-          return name === decoded || hyphenated === actualBrandSlug.toLowerCase() || name.includes(decoded);
+          return (
+            name === decoded || 
+            hyphenated === actualBrandSlug.toLowerCase() || 
+            actualBrandSlug.toLowerCase().startsWith(hyphenated + '-') ||
+            (decoded && name.includes(decoded))
+          );
         });
 
         if (match) {
@@ -149,8 +163,10 @@ export default function DynamicBrandRoute() {
       }
 
       // Fallback if not found
+      // Assuming extra link text is appended with a hyphen, we take the first part
+      const baseName = actualBrandSlug.split('-')[0];
       setBrandData({
-        brand_name: actualBrandSlug.charAt(0).toUpperCase() + actualBrandSlug.slice(1),
+        brand_name: baseName.charAt(0).toUpperCase() + baseName.slice(1),
         brand_logo_url: ''
       });
     } catch (err) {
