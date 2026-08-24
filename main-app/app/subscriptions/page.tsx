@@ -19,7 +19,7 @@ function PopupModal() {
   if (!showPopup) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-300">
+    <div id="subscription-popup" className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-300">
       <div className="relative bg-white dark:bg-slate-800 rounded-3xl p-6 md:p-8 max-w-sm w-full shadow-2xl flex flex-col items-center text-center animate-in zoom-in-95 duration-300">
         {/* Close Button */}
         <button 
@@ -36,10 +36,10 @@ function PopupModal() {
 
         {/* Text */}
         <h3 className="text-xl font-black text-pink-600 dark:text-pink-400 mb-2">
-          Ready to grow? ✨
+          Unlock Your Store's Full Potential!
         </h3>
         <p className="text-sm font-medium text-slate-600 dark:text-slate-300 mb-8 leading-relaxed">
-          Please buy a subscription plan for our service to continue adding your products and reaching more customers!
+          Please Buy a Subscription plan to continue adding products and gets more Customers!
         </p>
 
         {/* CTA */}
@@ -56,6 +56,61 @@ function PopupModal() {
 
 export default function SubscriptionsPage() {
   const [selectedPlan, setSelectedPlan] = useState<number | null>(null);
+
+  useEffect(() => {
+    // 1. Set Default Plan
+    if (window.innerWidth < 768) {
+      setSelectedPlan(1); // Startup package on mobile
+    } else {
+      setSelectedPlan(2); // Growth Pro on laptop
+    }
+
+    // 2. Mobile Auto-Scroll Logic
+    if (window.innerWidth >= 768) return;
+
+    let isInteracting = false;
+    let animationId: number;
+
+    const stopScroll = () => {
+      isInteracting = true;
+    };
+
+    window.addEventListener('touchstart', stopScroll, { passive: true });
+    window.addEventListener('wheel', stopScroll, { passive: true });
+    window.addEventListener('touchmove', stopScroll, { passive: true });
+
+    const scrollFn = () => {
+      if (isInteracting) return;
+      
+      const isPopupOpen = document.getElementById('subscription-popup');
+      if (!isPopupOpen) {
+        window.scrollBy(0, 0.5);
+        
+        // Check if reached bottom
+        if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 2) {
+          window.scrollTo(0, 0); // Jump back to top
+          stopScroll(); // Stop auto-scrolling
+          return;
+        }
+      }
+      animationId = requestAnimationFrame(scrollFn);
+    };
+
+    // Start auto scroll after a short delay
+    setTimeout(() => {
+      if (!isInteracting) {
+        animationId = requestAnimationFrame(scrollFn);
+      }
+    }, 800);
+
+    return () => {
+      stopScroll();
+      if (animationId) cancelAnimationFrame(animationId);
+      window.removeEventListener('touchstart', stopScroll);
+      window.removeEventListener('wheel', stopScroll);
+      window.removeEventListener('touchmove', stopScroll);
+    };
+  }, []);
 
   return (
     <div className="flex flex-col min-h-screen bg-transparent">
