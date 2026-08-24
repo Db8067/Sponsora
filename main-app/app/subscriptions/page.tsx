@@ -138,19 +138,19 @@ export default function SubscriptionsPage() {
           {/* Plan 1: Startup package */}
           <div 
             onClick={() => setSelectedPlan(1)}
-            className={`cursor-pointer relative flex flex-col justify-between p-6 md:p-8 rounded-3xl backdrop-blur-md transition-all pt-12 ${
+            className={`cursor-pointer relative flex flex-col justify-between p-6 md:p-8 rounded-3xl backdrop-blur-md transition-all ${
               selectedPlan === 1 
                 ? 'bg-white/80 dark:bg-slate-800/80 border-2 border-pink-500 shadow-2xl scale-[1.02]' 
                 : 'bg-white/60 dark:bg-slate-800/60 border border-white/40 dark:border-white/10 shadow-lg hover:shadow-xl'
             }`}
           >
-            {/* Discount Tag */}
-            <div className="absolute top-4 right-4 bg-pink-100 text-pink-600 dark:bg-pink-900/40 dark:text-pink-400 font-bold px-3 py-1 rounded-full text-xs shadow-sm">
-              83% off
-            </div>
-
             <div>
-              <div className="text-sm font-bold text-pink-500 uppercase tracking-wider mb-2">Startup package</div>
+              <div className="flex items-center justify-between mb-2">
+                <div className="text-sm font-bold text-pink-500 uppercase tracking-wider">Startup package</div>
+                <div className="bg-pink-100 text-pink-600 dark:bg-pink-900/40 dark:text-pink-400 font-bold px-2.5 py-0.5 rounded-full text-xs shadow-sm">
+                  83% off
+                </div>
+              </div>
               <div className="mb-1 text-sm font-semibold text-slate-400 dark:text-slate-500 line-through">₹599</div>
               <div className="flex items-baseline gap-1 mb-4">
                 <span className="text-3xl md:text-4xl font-black text-slate-900 dark:text-white">₹99</span>
@@ -188,7 +188,7 @@ export default function SubscriptionsPage() {
 
             <div className="mt-8">
               <Link href="/seller-onboard" className="block w-full text-center bg-pink-500 hover:bg-pink-600 text-white py-3.5 rounded-xl font-bold text-sm shadow-lg shadow-pink-500/30 transition-all hover:scale-[1.02]">
-                Get Startup package
+                Pay ₹99
               </Link>
             </div>
           </div>
@@ -196,7 +196,7 @@ export default function SubscriptionsPage() {
           {/* Plan 2: Growth Pro */}
           <div 
             onClick={() => setSelectedPlan(2)}
-            className={`cursor-pointer relative flex flex-col justify-between p-6 md:p-8 rounded-3xl backdrop-blur-md transition-all pt-12 ${
+            className={`cursor-pointer relative flex flex-col justify-between p-6 md:p-8 rounded-3xl backdrop-blur-md transition-all ${
               selectedPlan === 2 || selectedPlan === null // Keep default highlighted unless another is selected
                 ? 'bg-white/80 dark:bg-slate-800/80 border-2 border-pink-500 shadow-2xl scale-[1.02]'
                 : 'bg-white/60 dark:bg-slate-800/60 border border-white/40 dark:border-white/10 shadow-lg hover:shadow-xl'
@@ -206,13 +206,13 @@ export default function SubscriptionsPage() {
               Most Popular
             </div>
 
-            {/* Discount Tag */}
-            <div className="absolute top-4 right-4 bg-pink-100 text-pink-600 dark:bg-pink-900/40 dark:text-pink-400 font-bold px-3 py-1 rounded-full text-xs shadow-sm">
-              76% off
-            </div>
-
             <div>
-              <div className="text-sm font-bold text-pink-500 uppercase tracking-wider mb-2">Growth Pro</div>
+              <div className="flex items-center justify-between mb-2">
+                <div className="text-sm font-bold text-pink-500 uppercase tracking-wider">Growth Pro</div>
+                <div className="bg-pink-100 text-pink-600 dark:bg-pink-900/40 dark:text-pink-400 font-bold px-2.5 py-0.5 rounded-full text-xs shadow-sm">
+                  76% off
+                </div>
+              </div>
               <div className="mb-1 text-sm font-semibold text-slate-400 dark:text-slate-500 line-through">₹2,099</div>
               <div className="flex items-baseline gap-1 mb-4">
                 <span className="text-3xl md:text-4xl font-black text-slate-900 dark:text-white">₹499</span>
@@ -254,7 +254,7 @@ export default function SubscriptionsPage() {
 
             <div className="mt-8">
               <Link href="/seller-onboard" className="block w-full text-center bg-pink-500 hover:bg-pink-600 text-white py-3.5 rounded-xl font-bold text-sm shadow-lg shadow-pink-500/30 transition-all hover:scale-[1.02]">
-                Get Growth Pro
+                Pay ₹499
               </Link>
             </div>
           </div>
@@ -262,19 +262,19 @@ export default function SubscriptionsPage() {
           {/* Plan 3: Business Scale */}
           <div 
             onClick={() => setSelectedPlan(3)}
-            className={`cursor-pointer relative flex flex-col justify-between p-6 md:p-8 rounded-3xl backdrop-blur-md transition-all pt-12 ${
+            className={`cursor-pointer relative flex flex-col justify-between p-6 md:p-8 rounded-3xl backdrop-blur-md transition-all ${
               selectedPlan === 3 
                 ? 'bg-white/80 dark:bg-slate-800/80 border-2 border-pink-500 shadow-2xl scale-[1.02]' 
                 : 'bg-white/60 dark:bg-slate-800/60 border border-white/40 dark:border-white/10 shadow-lg hover:shadow-xl'
             }`}
           >
-            {/* Discount Tag */}
-            <div className="absolute top-4 right-4 bg-pink-100 text-pink-600 dark:bg-pink-900/40 dark:text-pink-400 font-bold px-3 py-1 rounded-full text-xs shadow-sm">
-              65% off
-            </div>
-
             <div>
-              <div className="text-sm font-bold text-pink-500 uppercase tracking-wider mb-2">Business Scale</div>
+              <div className="flex items-center justify-between mb-2">
+                <div className="text-sm font-bold text-pink-500 uppercase tracking-wider">Business Scale</div>
+                <div className="bg-pink-100 text-pink-600 dark:bg-pink-900/40 dark:text-pink-400 font-bold px-2.5 py-0.5 rounded-full text-xs shadow-sm">
+                  65% off
+                </div>
+              </div>
               <div className="mb-1 text-sm font-semibold text-slate-400 dark:text-slate-500 line-through">₹4,299</div>
               <div className="flex items-baseline gap-1 mb-4">
                 <span className="text-3xl md:text-4xl font-black text-slate-900 dark:text-white">₹1,499</span>
@@ -312,7 +312,7 @@ export default function SubscriptionsPage() {
 
             <div className="mt-8">
               <Link href="/seller-onboard" className="block w-full text-center bg-pink-500 hover:bg-pink-600 text-white py-3.5 rounded-xl font-bold text-sm shadow-lg shadow-pink-500/30 transition-all hover:scale-[1.02]">
-                Choose Business Scale
+                Pay ₹1,499
               </Link>
             </div>
           </div>
