@@ -27,8 +27,14 @@ export default function SellerNavbar() {
           <Link href="/subscriptions" className="text-sm font-medium text-slate-600 hover:text-primary dark:text-slate-300 transition-colors whitespace-nowrap">
             Subscriptions
           </Link>
-          
-          
+
+          <Link href="/seller-onboard" className="text-sm font-medium text-slate-600 hover:text-primary dark:text-slate-300 transition-colors whitespace-nowrap">
+            Brand page
+          </Link>
+
+          <span className="text-sm font-medium text-slate-400 dark:text-slate-500 whitespace-nowrap cursor-not-allowed" title="Soon to be added">
+            Creator program <span className="text-[10px] font-bold bg-pink-100 text-pink-600 dark:bg-pink-900/40 dark:text-pink-400 px-1.5 py-0.5 rounded-md ml-1 shadow-sm border border-pink-200 dark:border-pink-800">Soon</span>
+          </span>
           
         </nav>
 
@@ -88,9 +94,15 @@ export default function SellerNavbar() {
             <Link href="/subscriptions" onClick={() => setIsMobileMenuOpen(false)} className="text-2xl font-bold text-slate-700 dark:text-slate-200 hover:text-primary transition-colors text-center">
               Subscriptions
             </Link>
-            
-            
-            
+
+            <Link href="/seller-onboard" onClick={() => setIsMobileMenuOpen(false)} className="text-2xl font-bold text-slate-700 dark:text-slate-200 hover:text-primary transition-colors text-center">
+              Brand page
+            </Link>
+
+            <span className="text-2xl font-bold text-slate-400 dark:text-slate-500 text-center flex flex-col items-center gap-1">
+              Creator program
+              <span className="text-[12px] font-bold bg-pink-100 text-pink-600 dark:bg-pink-900/40 dark:text-pink-400 px-2 py-0.5 rounded-md shadow-sm border border-pink-200 dark:border-pink-800 tracking-wider uppercase">Soon</span>
+            </span>
             
             <div className="mt-8 w-full max-w-xs flex flex-col gap-4">
               <Link href="/seller-onboard" onClick={() => setIsMobileMenuOpen(false)} className="w-full text-center text-lg font-semibold bg-primary text-white px-6 py-4 rounded-2xl shadow-lg shadow-primary/30 active:scale-95 transition-all">

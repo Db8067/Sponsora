@@ -36,7 +36,7 @@ function PopupModal() {
 
         {/* Text */}
         <h3 className="text-xl font-black text-pink-600 dark:text-pink-400 mb-2">
-          Unlock Your Store's Full Potential!
+          Get your Brand Page now !!
         </h3>
         <p className="text-sm font-medium text-slate-600 dark:text-slate-300 mb-8 leading-relaxed">
           Please Buy a Subscription plan to continue adding products and gets more Customers!
@@ -133,19 +133,25 @@ export default function SubscriptionsPage() {
 
       {/* Subscription Pricing Cards */}
       <section className="py-6 px-4 md:px-12 lg:px-20 w-full max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch mt-4">
           
-          {/* Plan 1: Starter */}
+          {/* Plan 1: Startup package */}
           <div 
             onClick={() => setSelectedPlan(1)}
-            className={`cursor-pointer flex flex-col justify-between p-6 md:p-8 rounded-3xl backdrop-blur-md transition-all ${
+            className={`cursor-pointer relative flex flex-col justify-between p-6 md:p-8 rounded-3xl backdrop-blur-md transition-all pt-12 ${
               selectedPlan === 1 
-                ? 'bg-white/80 dark:bg-slate-800/80 border-2 border-primary shadow-2xl scale-[1.02]' 
+                ? 'bg-white/80 dark:bg-slate-800/80 border-2 border-pink-500 shadow-2xl scale-[1.02]' 
                 : 'bg-white/60 dark:bg-slate-800/60 border border-white/40 dark:border-white/10 shadow-lg hover:shadow-xl'
             }`}
           >
+            {/* Discount Tag */}
+            <div className="absolute top-4 right-4 bg-pink-100 text-pink-600 dark:bg-pink-900/40 dark:text-pink-400 font-bold px-3 py-1 rounded-full text-xs shadow-sm">
+              83% off
+            </div>
+
             <div>
-              <div className="text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">Startup package</div>
+              <div className="text-sm font-bold text-pink-500 uppercase tracking-wider mb-2">Startup package</div>
+              <div className="mb-1 text-sm font-semibold text-slate-400 dark:text-slate-500 line-through">₹599</div>
               <div className="flex items-baseline gap-1 mb-4">
                 <span className="text-3xl md:text-4xl font-black text-slate-900 dark:text-white">₹99</span>
                 <span className="text-sm text-slate-500 font-medium">/month</span>
@@ -181,26 +187,33 @@ export default function SubscriptionsPage() {
             </div>
 
             <div className="mt-8">
-              <Link href="/seller-onboard" className="block w-full text-center bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-800 dark:text-white py-3 rounded-xl font-bold text-sm transition-colors">
+              <Link href="/seller-onboard" className="block w-full text-center bg-pink-500 hover:bg-pink-600 text-white py-3.5 rounded-xl font-bold text-sm shadow-lg shadow-pink-500/30 transition-all hover:scale-[1.02]">
                 Get Startup package
               </Link>
             </div>
           </div>
 
-          {/* Plan 2: Pro Growth (Highlighted optionally by default or when clicked) */}
+          {/* Plan 2: Growth Pro */}
           <div 
             onClick={() => setSelectedPlan(2)}
-            className={`cursor-pointer relative flex flex-col justify-between p-6 md:p-8 rounded-3xl backdrop-blur-md transition-all ${
+            className={`cursor-pointer relative flex flex-col justify-between p-6 md:p-8 rounded-3xl backdrop-blur-md transition-all pt-12 ${
               selectedPlan === 2 || selectedPlan === null // Keep default highlighted unless another is selected
-                ? 'bg-white/80 dark:bg-slate-800/80 border-2 border-primary shadow-2xl scale-[1.02]'
+                ? 'bg-white/80 dark:bg-slate-800/80 border-2 border-pink-500 shadow-2xl scale-[1.02]'
                 : 'bg-white/60 dark:bg-slate-800/60 border border-white/40 dark:border-white/10 shadow-lg hover:shadow-xl'
             }`}
           >
-            <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-primary text-white text-xs font-bold px-4 py-1 rounded-full shadow-md flex items-center gap-1">
-              <Sparkles className="w-3.5 h-3.5" /> Most Popular
+            <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-pink-500 text-white text-xs font-bold px-4 py-1 rounded-full shadow-md flex items-center gap-1">
+              Most Popular
             </div>
+
+            {/* Discount Tag */}
+            <div className="absolute top-4 right-4 bg-pink-100 text-pink-600 dark:bg-pink-900/40 dark:text-pink-400 font-bold px-3 py-1 rounded-full text-xs shadow-sm">
+              76% off
+            </div>
+
             <div>
-              <div className="text-sm font-bold text-primary uppercase tracking-wider mb-2">Growth Pro</div>
+              <div className="text-sm font-bold text-pink-500 uppercase tracking-wider mb-2">Growth Pro</div>
+              <div className="mb-1 text-sm font-semibold text-slate-400 dark:text-slate-500 line-through">₹2,099</div>
               <div className="flex items-baseline gap-1 mb-4">
                 <span className="text-3xl md:text-4xl font-black text-slate-900 dark:text-white">₹499</span>
                 <span className="text-sm text-slate-500 font-medium">/month</span>
@@ -240,7 +253,7 @@ export default function SubscriptionsPage() {
             </div>
 
             <div className="mt-8">
-              <Link href="/seller-onboard" className="block w-full text-center bg-primary hover:bg-primary-dark text-white py-3.5 rounded-xl font-bold text-sm shadow-lg shadow-primary/30 transition-all hover:scale-[1.02]">
+              <Link href="/seller-onboard" className="block w-full text-center bg-pink-500 hover:bg-pink-600 text-white py-3.5 rounded-xl font-bold text-sm shadow-lg shadow-pink-500/30 transition-all hover:scale-[1.02]">
                 Get Growth Pro
               </Link>
             </div>
@@ -249,14 +262,20 @@ export default function SubscriptionsPage() {
           {/* Plan 3: Business Scale */}
           <div 
             onClick={() => setSelectedPlan(3)}
-            className={`cursor-pointer flex flex-col justify-between p-6 md:p-8 rounded-3xl backdrop-blur-md transition-all ${
+            className={`cursor-pointer relative flex flex-col justify-between p-6 md:p-8 rounded-3xl backdrop-blur-md transition-all pt-12 ${
               selectedPlan === 3 
-                ? 'bg-white/80 dark:bg-slate-800/80 border-2 border-primary shadow-2xl scale-[1.02]' 
+                ? 'bg-white/80 dark:bg-slate-800/80 border-2 border-pink-500 shadow-2xl scale-[1.02]' 
                 : 'bg-white/60 dark:bg-slate-800/60 border border-white/40 dark:border-white/10 shadow-lg hover:shadow-xl'
             }`}
           >
+            {/* Discount Tag */}
+            <div className="absolute top-4 right-4 bg-pink-100 text-pink-600 dark:bg-pink-900/40 dark:text-pink-400 font-bold px-3 py-1 rounded-full text-xs shadow-sm">
+              65% off
+            </div>
+
             <div>
-              <div className="text-sm font-bold text-slate-500 uppercase tracking-wider mb-2">Business Scale</div>
+              <div className="text-sm font-bold text-pink-500 uppercase tracking-wider mb-2">Business Scale</div>
+              <div className="mb-1 text-sm font-semibold text-slate-400 dark:text-slate-500 line-through">₹4,299</div>
               <div className="flex items-baseline gap-1 mb-4">
                 <span className="text-3xl md:text-4xl font-black text-slate-900 dark:text-white">₹1,499</span>
                 <span className="text-sm text-slate-500 font-medium">/month</span>
@@ -292,7 +311,7 @@ export default function SubscriptionsPage() {
             </div>
 
             <div className="mt-8">
-              <Link href="/seller-onboard" className="block w-full text-center bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-800 dark:text-white py-3 rounded-xl font-bold text-sm transition-colors">
+              <Link href="/seller-onboard" className="block w-full text-center bg-pink-500 hover:bg-pink-600 text-white py-3.5 rounded-xl font-bold text-sm shadow-lg shadow-pink-500/30 transition-all hover:scale-[1.02]">
                 Choose Business Scale
               </Link>
             </div>
