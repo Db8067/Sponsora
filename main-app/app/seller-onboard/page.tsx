@@ -9,7 +9,7 @@ import {
   Image as ImageIcon, ExternalLink, Rocket
 } from 'lucide-react';
 import SellerNavbar from '@/components/SellerNavbar';
-import { useUser, useClerk } from '@clerk/nextjs';
+import { useUser, useClerk, RedirectToSignIn } from '@clerk/nextjs';
 
 export default function SellerOnboardPage() {
   const { isLoaded, isSignedIn, user } = useUser();
@@ -355,11 +355,9 @@ export default function SellerOnboardPage() {
     );
   }
 
-  // If user is NOT logged in, show the animation image to click
-  return (
   // If not signed in, redirect to sign in immediately
   if (isLoaded && !isSignedIn) {
-    return <RedirectToSignIn forceRedirectUrl="/seller-onboard" signUpForceRedirectUrl="/seller-onboard" />;
+    return <RedirectToSignIn redirectUrl="/seller-onboard" />;
   }
 
   return null; // Fallback in case none of the above conditions hit
