@@ -2,9 +2,11 @@
 
 import React, { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
-import { Check, Sparkles, Zap, ShieldCheck, HelpCircle, X } from 'lucide-react';
+import Script from 'next/script';
+import { useSearchParams, useRouter } from 'next/navigation';
+import { Check, Sparkles, Zap, ShieldCheck, HelpCircle, X, Loader2 } from 'lucide-react';
 import SellerNavbar from '@/components/SellerNavbar';
+import { useUser } from '@clerk/nextjs';
 
 function PopupModal() {
   const searchParams = useSearchParams();
@@ -56,6 +58,64 @@ function PopupModal() {
 
 export default function SubscriptionsPage() {
   const [selectedPlan, setSelectedPlan] = useState<number | null>(null);
+  const [isProcessing, setIsProcessing] = useState<number | null>(null);
+  const { isSignedIn, user } = useUser();
+  const router = useRouter();
+
+  const handlePayment = async (amount: number, planName: string, planId: number) => {
+    if (!isSignedIn) {
+      router.push('/sign-in?redirectUrl=/subscriptions');
+      return;
+    }
+
+    try {
+      setIsProcessing(planId);
+      const res = await fetch('/api/create-razorpay-order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ amount, planId: planName })
+      });
+
+      const orderData = await res.json();
+      
+      if (!res.ok) {
+        alert('Failed to initialize payment: ' + (orderData.error || 'Unknown error'));
+        return;
+      }
+
+      const options = {
+        key: orderData.key_id,
+        amount: orderData.amount,
+        currency: orderData.currency,
+        name: "Sponsora",
+        description: `Subscription for ${planName}`,
+        order_id: orderData.id,
+        handler: function (response: any) {
+          alert('Payment successful! Payment ID: ' + response.razorpay_payment_id);
+          // Redirect to success or onboard
+          router.push('/seller-onboard?payment=success');
+        },
+        prefill: {
+          name: user?.fullName || "Sponsora Seller",
+          email: user?.primaryEmailAddress?.emailAddress || "seller@example.com",
+        },
+        theme: {
+          color: "#ec4899"
+        }
+      };
+
+      const rzp = new (window as any).Razorpay(options);
+      rzp.on('payment.failed', function (response: any) {
+        alert('Payment Failed: ' + response.error.description);
+      });
+      rzp.open();
+    } catch (error) {
+      console.error(error);
+      alert('Network error while processing payment.');
+    } finally {
+      setIsProcessing(null);
+    }
+  };
 
   useEffect(() => {
     // 1. Set Default Plan
@@ -187,9 +247,13 @@ export default function SubscriptionsPage() {
             </div>
 
             <div className="mt-8">
-              <Link href="/seller-onboard" className="block w-full text-center bg-pink-500 hover:bg-pink-600 text-white py-3.5 rounded-xl font-bold text-sm shadow-lg shadow-pink-500/30 transition-all hover:scale-[1.02]">
-                Pay ₹99
-              </Link>
+              <button 
+                onClick={() => handlePayment(99, 'Startup package', 1)}
+                disabled={isProcessing === 1}
+                className="w-full flex items-center justify-center gap-2 bg-pink-500 hover:bg-pink-600 text-white py-3.5 rounded-xl font-bold text-sm shadow-lg shadow-pink-500/30 transition-all hover:scale-[1.02] disabled:opacity-70 disabled:hover:scale-100"
+              >
+                {isProcessing === 1 ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Pay ₹99'}
+              </button>
             </div>
           </div>
 
@@ -253,9 +317,13 @@ export default function SubscriptionsPage() {
             </div>
 
             <div className="mt-8">
-              <Link href="/seller-onboard" className="block w-full text-center bg-pink-500 hover:bg-pink-600 text-white py-3.5 rounded-xl font-bold text-sm shadow-lg shadow-pink-500/30 transition-all hover:scale-[1.02]">
-                Pay ₹499
-              </Link>
+              <button 
+                onClick={() => handlePayment(499, 'Growth Pro', 2)}
+                disabled={isProcessing === 2}
+                className="w-full flex items-center justify-center gap-2 bg-pink-500 hover:bg-pink-600 text-white py-3.5 rounded-xl font-bold text-sm shadow-lg shadow-pink-500/30 transition-all hover:scale-[1.02] disabled:opacity-70 disabled:hover:scale-100"
+              >
+                {isProcessing === 2 ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Pay ₹499'}
+              </button>
             </div>
           </div>
 
@@ -311,9 +379,13 @@ export default function SubscriptionsPage() {
             </div>
 
             <div className="mt-8">
-              <Link href="/seller-onboard" className="block w-full text-center bg-pink-500 hover:bg-pink-600 text-white py-3.5 rounded-xl font-bold text-sm shadow-lg shadow-pink-500/30 transition-all hover:scale-[1.02]">
-                Pay ₹1,499
-              </Link>
+              <button 
+                onClick={() => handlePayment(1499, 'Business Scale', 3)}
+                disabled={isProcessing === 3}
+                className="w-full flex items-center justify-center gap-2 bg-pink-500 hover:bg-pink-600 text-white py-3.5 rounded-xl font-bold text-sm shadow-lg shadow-pink-500/30 transition-all hover:scale-[1.02] disabled:opacity-70 disabled:hover:scale-100"
+              >
+                {isProcessing === 3 ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Pay ₹1,499'}
+              </button>
             </div>
           </div>
 
