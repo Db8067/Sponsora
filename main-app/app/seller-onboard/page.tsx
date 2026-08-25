@@ -53,6 +53,7 @@ export default function SellerOnboardPage() {
   useEffect(() => {
     if (isLoaded && isSignedIn) {
       const checkProfile = async () => {
+        let shouldRedirect = false;
         try {
           const email = user?.primaryEmailAddress?.emailAddress || '';
           const res = await fetch(`/api/vendor-profile?email=${encodeURIComponent(email)}`);
@@ -60,14 +61,16 @@ export default function SellerOnboardPage() {
             const data = await res.json();
             if (data.profile && data.profile.brand_name) {
               const slug = data.profile.brand_name.trim().toLowerCase().replace(/\s+/g, '-') || 'sponsora';
+              shouldRedirect = true;
               router.replace(`/${slug}`);
-              return; // Stay on loading state while redirecting
             }
           }
         } catch (error) {
           console.error("Error checking profile:", error);
         } finally {
-          setIsCheckingProfile(false);
+          if (!shouldRedirect) {
+            setIsCheckingProfile(false);
+          }
         }
       };
       checkProfile();

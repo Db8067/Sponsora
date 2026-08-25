@@ -2,8 +2,9 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
-import { Store, Plus, ArrowRight, ShieldCheck, ShoppingBag, Sparkles, Upload, LayoutDashboard, Users, Activity, Settings, Check } from 'lucide-react';
+import { useParams, useRouter } from 'next/navigation';
+import { useAuth } from '@clerk/nextjs';
+import { Store, Plus, ArrowRight, ShieldCheck, ShoppingBag, Sparkles, Upload, LayoutDashboard, Users, Activity, Settings, Check, Loader2 } from 'lucide-react';
 import SellerNavbar from '@/components/SellerNavbar';
 import { supabase } from '@/lib/supabase';
 
@@ -61,11 +62,11 @@ function BrandDashboard({ brandName, plan, brandLogo, currentTab, actualBrandSlu
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 h-full overflow-y-auto p-4 md:p-8">
+      <main className="flex-1 h-full overflow-y-auto p-4 md:p-8 pb-24 lg:pb-8">
         <div className="max-w-5xl mx-auto">
           
           {/* Welcome Header */}
-          <div className="bg-gradient-to-r from-pink-500 to-rose-400 rounded-3xl p-8 md:p-10 text-white mb-8 shadow-lg relative overflow-hidden flex items-center justify-between">
+          <div className="bg-gradient-to-r from-pink-500 to-rose-400 rounded-3xl p-6 md:p-10 text-white mb-8 shadow-lg relative overflow-hidden flex flex-col sm:flex-row items-center justify-between text-center sm:text-left gap-6">
             <div className="relative z-10 max-w-xl">
               <h1 className="text-3xl md:text-4xl font-black mb-3">Welcome to {planNames[plan]}! 🎉</h1>
               <p className="text-pink-50 text-sm md:text-base leading-relaxed opacity-90">
@@ -75,17 +76,16 @@ function BrandDashboard({ brandName, plan, brandLogo, currentTab, actualBrandSlu
             </div>
             
             {/* Brand Logo inside the page */}
-            <div className="relative z-10 hidden sm:flex w-28 h-28 bg-white rounded-full p-1.5 shadow-xl shrink-0 items-center justify-center overflow-hidden border-4 border-pink-200/50">
-              {brandLogo ? <img src={brandLogo} alt="" className="w-full h-full object-cover rounded-full" /> : <Store className="w-12 h-12 text-pink-400" />}
+            <div className="relative z-10 flex w-24 h-24 sm:w-28 sm:h-28 bg-white rounded-full p-1.5 shadow-xl shrink-0 items-center justify-center overflow-hidden border-4 border-pink-200/50">
+              {brandLogo ? <img src={brandLogo} alt="" className="w-full h-full object-cover rounded-full" /> : <Store className="w-10 h-10 sm:w-12 sm:h-12 text-pink-400" />}
             </div>
-            
-            <Sparkles className="absolute right-32 top-4 w-32 h-32 text-white opacity-20 pointer-events-none" />
           </div>
 
           {currentTab === 'dashboard' && (
-            <>
+            <div className="flex flex-col-reverse lg:flex-col gap-8">
+              
               {/* Stats Overview */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
                 {['Total Sales', 'Active Products', 'Store Views', 'Orders'].map((stat, i) => (
                   <div key={i} className="bg-white dark:bg-slate-800 p-6 rounded-3xl border border-slate-100 dark:border-slate-700 shadow-sm flex flex-col justify-between h-36 relative overflow-hidden group">
                     <div className="absolute top-0 right-0 w-16 h-16 bg-pink-50 dark:bg-slate-700/30 rounded-bl-full -mr-8 -mt-8 group-hover:scale-150 transition-transform duration-500"></div>
@@ -102,7 +102,7 @@ function BrandDashboard({ brandName, plan, brandLogo, currentTab, actualBrandSlu
               </div>
 
               {/* Enhanced Setup Guide on Dashboard */}
-              <div className="bg-white dark:bg-slate-800 rounded-3xl p-8 border border-slate-200 dark:border-slate-700 shadow-sm mb-8">
+              <div className="bg-white dark:bg-slate-800 rounded-3xl p-6 md:p-8 border border-slate-200 dark:border-slate-700 shadow-sm">
                 <div className="flex items-center gap-3 mb-8">
                   <div className="w-12 h-12 bg-pink-100 dark:bg-pink-900/50 rounded-xl flex items-center justify-center text-pink-600 dark:text-pink-400">
                     <LayoutDashboard className="w-6 h-6" />
@@ -130,10 +130,8 @@ function BrandDashboard({ brandName, plan, brandLogo, currentTab, actualBrandSlu
                         </h4>
                         <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">{step.desc}</p>
                         {!step.done && step.action && (
-                          <Link href={step.link}>
-                            <button className="mt-3 px-4 py-2 bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-200 text-xs font-bold rounded-lg hover:shadow-sm transition-all">
-                              {step.action}
-                            </button>
+                          <Link href={step.link} className="inline-block mt-3 px-4 py-2 bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-200 text-xs font-bold rounded-lg hover:shadow-sm transition-all">
+                            {step.action}
                           </Link>
                         )}
                       </div>
@@ -141,7 +139,7 @@ function BrandDashboard({ brandName, plan, brandLogo, currentTab, actualBrandSlu
                   ))}
                 </div>
               </div>
-            </>
+            </div>
           )}
 
           {currentTab === 'products' && (
@@ -255,6 +253,26 @@ function BrandDashboard({ brandName, plan, brandLogo, currentTab, actualBrandSlu
 
         </div>
       </main>
+
+      {/* Mobile Bottom Navigation */}
+      <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 flex justify-around items-center h-16 px-2 z-50 shadow-[0_-4px_12px_rgba(0,0,0,0.05)]">
+        <Link href={`/${actualBrandSlug}-${plan}`} className={`flex flex-col items-center justify-center w-full h-full space-y-1 ${currentTab === 'dashboard' ? 'text-pink-600 dark:text-pink-400' : 'text-slate-500 dark:text-slate-400'}`}>
+          <LayoutDashboard className="w-5 h-5" />
+          <span className="text-[10px] font-bold">Dashboard</span>
+        </Link>
+        <Link href={`/${actualBrandSlug}-${plan}-products`} className={`flex flex-col items-center justify-center w-full h-full space-y-1 ${currentTab === 'products' ? 'text-pink-600 dark:text-pink-400' : 'text-slate-500 dark:text-slate-400'}`}>
+          <ShoppingBag className="w-5 h-5" />
+          <span className="text-[10px] font-bold">Products</span>
+        </Link>
+        <a href="#" className="flex flex-col items-center justify-center w-full h-full space-y-1 text-slate-500 dark:text-slate-400">
+          <Activity className="w-5 h-5" />
+          <span className="text-[10px] font-bold">Analytics</span>
+        </a>
+        <a href="#" className="flex flex-col items-center justify-center w-full h-full space-y-1 text-slate-500 dark:text-slate-400">
+          <Settings className="w-5 h-5" />
+          <span className="text-[10px] font-bold">Settings</span>
+        </a>
+      </nav>
     </div>
   );
 }
@@ -283,12 +301,18 @@ export default function DynamicBrandRoute() {
     ? rawBrandSlug.replace(/-(99|499|1499)(-products)?$/, '') 
     : rawBrandSlug;
 
+  const { isLoaded, isSignedIn } = useAuth();
+  const router = useRouter();
   const [brandData, setBrandData] = useState<any | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchBrandProfile();
-  }, [actualBrandSlug]);
+    if (isLoaded && !isSignedIn) {
+      router.push('/');
+    } else if (isLoaded && isSignedIn) {
+      fetchBrandProfile();
+    }
+  }, [actualBrandSlug, isLoaded, isSignedIn, router]);
 
   const fetchBrandProfile = async () => {
     setLoading(true);
@@ -326,7 +350,7 @@ export default function DynamicBrandRoute() {
     }
   };
 
-  if (loading) {
+  if (loading || !isLoaded || !isSignedIn) {
     return (
       <div className="min-h-screen bg-slate-50 dark:bg-slate-900 flex flex-col">
         <SellerNavbar />
