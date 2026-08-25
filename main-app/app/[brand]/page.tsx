@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
-import { Store, Plus, ArrowRight, ShieldCheck, ShoppingBag, Sparkles, Upload } from 'lucide-react';
+import { Store, Plus, ArrowRight, ShieldCheck, ShoppingBag, Sparkles, Upload, LayoutDashboard, Users, Activity, Settings } from 'lucide-react';
 import SellerNavbar from '@/components/SellerNavbar';
 import { supabase } from '@/lib/supabase';
 
@@ -34,79 +34,163 @@ function BrandDashboard({ brandName, plan, brandLogo }: { brandName: string, pla
   };
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-8 md:py-12 w-full flex-1 flex flex-col">
-      <div className="bg-white dark:bg-slate-800 rounded-3xl p-8 md:p-12 shadow-2xl text-center border border-pink-100 dark:border-pink-900/30 relative overflow-hidden flex-1">
-        {/* Background glow */}
-        <div className="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 bg-pink-500/10 rounded-full blur-3xl pointer-events-none"></div>
-        <div className="absolute bottom-0 left-0 -ml-16 -mb-16 w-64 h-64 bg-pink-500/10 rounded-full blur-3xl pointer-events-none"></div>
-        
-        <div className="relative z-10">
-          <div className="inline-flex items-center justify-center w-24 h-24 bg-white dark:bg-slate-800 rounded-full mb-6 shadow-md border-4 border-pink-100 dark:border-pink-900/50 overflow-hidden">
-            {brandLogo ? (
-              <img src={brandLogo} alt={brandName} className="w-full h-full object-cover" />
-            ) : (
-              <Store className="w-10 h-10 text-pink-400" />
-            )}
+    <div className="flex w-full min-h-[calc(100vh-80px)] bg-slate-50 dark:bg-slate-900 overflow-hidden">
+      {/* Sidebar */}
+      <aside className="hidden lg:flex w-64 flex-col bg-white dark:bg-slate-800 border-r border-slate-200 dark:border-slate-700 h-full">
+        <div className="p-6 flex items-center gap-3 border-b border-slate-100 dark:border-slate-700/50">
+          <div className="w-10 h-10 bg-slate-100 dark:bg-slate-700 rounded-lg flex items-center justify-center overflow-hidden">
+            {brandLogo ? <img src={brandLogo} alt="" className="w-full h-full object-cover" /> : <Store className="w-5 h-5 text-pink-500" />}
           </div>
-          
-          <h1 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white mb-4">
-            Welcome to {planNames[plan]}!
-          </h1>
-          
-          <p className="text-lg md:text-xl text-slate-600 dark:text-slate-300 mb-10 max-w-2xl mx-auto font-medium leading-relaxed">
-            Congratulations, <strong className="text-pink-600 dark:text-pink-400">{brandName}</strong>! Your brand dashboard is officially active for {planDuration[plan]}. 
-            Let's get started by adding your very first product to your real catalog.
-          </p>
-
-          <div className="bg-slate-50 dark:bg-slate-900/50 rounded-2xl p-6 md:p-8 text-left border border-slate-200 dark:border-slate-700 max-w-2xl mx-auto shadow-inner">
-            <h2 className="text-xl font-bold text-slate-800 dark:text-white mb-6 flex items-center gap-2">
-              <ShoppingBag className="w-6 h-6 text-pink-500" />
-              Upload Your First Product
-            </h2>
-            <form className="space-y-5" onSubmit={(e) => { e.preventDefault(); alert('Product upload feature coming soon!'); }}>
-              <div>
-                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Title</label>
-                <input type="text" className="w-full px-4 py-3.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-pink-500 outline-none transition-all shadow-sm" placeholder="e.g., Pink Summer Dress" required />
-              </div>
-              <div>
-                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Description</label>
-                <textarea rows={3} className="w-full px-4 py-3.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-pink-500 outline-none transition-all shadow-sm resize-none" placeholder="Describe your product..."></textarea>
-              </div>
-              <div>
-                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Media</label>
-                <div className="border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-xl p-8 text-center bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors cursor-pointer group">
-                  <div className="w-12 h-12 bg-pink-50 dark:bg-slate-700 rounded-full flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
-                    <Upload className="w-6 h-6 text-pink-500" />
-                  </div>
-                  <span className="text-sm font-medium text-slate-500 dark:text-slate-400 block">Click to upload image</span>
-                  <span className="text-xs text-slate-400 dark:text-slate-500 mt-1 block">PNG, JPG up to 5MB</span>
-                </div>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                <div>
-                  <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Pricing (₹)</label>
-                  <input type="number" className="w-full px-4 py-3.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-pink-500 outline-none transition-all shadow-sm" placeholder="999" required />
-                </div>
-                <div>
-                  <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Compare-at price (₹)</label>
-                  <input type="number" className="w-full px-4 py-3.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-pink-500 outline-none transition-all shadow-sm" placeholder="1499" />
-                </div>
-              </div>
-              <div>
-                <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Status</label>
-                <select className="w-full px-4 py-3.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-pink-500 outline-none transition-all shadow-sm" required>
-                  <option value="active">Active</option>
-                  <option value="draft">Draft</option>
-                </select>
-              </div>
-              <button type="submit" className="w-full mt-8 bg-pink-500 hover:bg-pink-600 text-white font-bold py-4 rounded-xl transition-transform active:scale-95 shadow-lg shadow-pink-500/30 flex items-center justify-center gap-2">
-                <Plus className="w-5 h-5" />
-                Publish Product
-              </button>
-            </form>
+          <div>
+            <h2 className="font-bold text-slate-800 dark:text-white leading-tight line-clamp-1">{brandName}</h2>
+            <span className="text-xs font-medium text-pink-500">{planNames[plan]}</span>
           </div>
         </div>
-      </div>
+        <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
+          <a href="#" className="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-pink-50 dark:bg-pink-500/10 text-pink-600 dark:text-pink-400 font-semibold">
+            <LayoutDashboard className="w-5 h-5" /> Dashboard
+          </a>
+          <a href="#" className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50 font-medium transition-colors">
+            <ShoppingBag className="w-5 h-5" /> Products
+          </a>
+          <a href="#" className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50 font-medium transition-colors">
+            <Users className="w-5 h-5" /> Customers
+          </a>
+          <a href="#" className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50 font-medium transition-colors">
+            <Activity className="w-5 h-5" /> Analytics
+          </a>
+          <a href="#" className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50 font-medium transition-colors">
+            <Settings className="w-5 h-5" /> Settings
+          </a>
+        </nav>
+      </aside>
+
+      {/* Main Content */}
+      <main className="flex-1 h-full overflow-y-auto p-4 md:p-8">
+        <div className="max-w-5xl mx-auto">
+          
+          {/* Welcome Header */}
+          <div className="bg-gradient-to-r from-pink-500 to-rose-400 rounded-2xl p-6 md:p-8 text-white mb-8 shadow-lg relative overflow-hidden">
+            <div className="relative z-10">
+              <h1 className="text-2xl md:text-3xl font-bold mb-2">Welcome to {planNames[plan]}! 🎉</h1>
+              <p className="text-pink-100 max-w-2xl text-sm md:text-base">
+                Congratulations, {brandName}! Your brand dashboard is officially active for {planDuration[plan]}.
+                This is your new home to manage products, view analytics, and grow your sales.
+              </p>
+            </div>
+            <Sparkles className="absolute right-0 top-1/2 -translate-y-1/2 w-48 h-48 text-white opacity-10 pointer-events-none" />
+          </div>
+
+          {/* Stats Overview */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+            {['Total Sales', 'Active Products', 'Store Views', 'Orders'].map((stat, i) => (
+              <div key={i} className="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm flex flex-col justify-between h-32">
+                <div className="flex items-center justify-between text-slate-500 dark:text-slate-400">
+                  <span className="text-sm font-medium">{stat}</span>
+                  <Activity className="w-4 h-4" />
+                </div>
+                <div>
+                  <span className="text-3xl font-black text-slate-800 dark:text-white">0</span>
+                  <p className="text-xs text-green-500 font-medium mt-1">Start adding products!</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Content Split */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            {/* Form Section (Takes 2 columns) */}
+            <div className="lg:col-span-2">
+              <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+                <div className="px-6 py-5 border-b border-slate-100 dark:border-slate-700/50 flex items-center justify-between bg-slate-50/50 dark:bg-slate-800/50">
+                  <h2 className="text-lg font-bold text-slate-800 dark:text-white flex items-center gap-2">
+                    <ShoppingBag className="w-5 h-5 text-pink-500" />
+                    Add Your First Product
+                  </h2>
+                </div>
+                <div className="p-6 md:p-8">
+                  <form className="space-y-5" onSubmit={(e) => { e.preventDefault(); alert('Product upload feature coming soon!'); }}>
+                    <div>
+                      <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Title</label>
+                      <input type="text" className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-pink-500 outline-none transition-all" placeholder="e.g., Pink Summer Dress" required />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Description</label>
+                      <textarea rows={3} className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-pink-500 outline-none transition-all resize-none" placeholder="Describe your product..."></textarea>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Media</label>
+                      <div className="border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-xl p-8 text-center bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700/50 transition-colors cursor-pointer group">
+                        <div className="w-12 h-12 bg-white dark:bg-slate-700 rounded-full flex items-center justify-center mx-auto mb-3 shadow-sm group-hover:scale-110 transition-transform">
+                          <Upload className="w-5 h-5 text-slate-400 dark:text-slate-300" />
+                        </div>
+                        <span className="text-sm font-medium text-slate-600 dark:text-slate-300 block">Click to upload image</span>
+                        <span className="text-xs text-slate-400 dark:text-slate-500 mt-1 block">PNG, JPG up to 5MB</span>
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                      <div>
+                        <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Pricing (₹)</label>
+                        <input type="number" className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-pink-500 outline-none transition-all" placeholder="999" required />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Status</label>
+                        <select className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-pink-500 outline-none transition-all" required>
+                          <option value="active">Active</option>
+                          <option value="draft">Draft</option>
+                        </select>
+                      </div>
+                    </div>
+                    <button type="submit" className="w-full mt-4 bg-pink-500 hover:bg-pink-600 text-white font-bold py-3.5 rounded-xl transition-transform active:scale-95 shadow-md flex items-center justify-center gap-2">
+                      <Plus className="w-5 h-5" />
+                      Publish Product
+                    </button>
+                  </form>
+                </div>
+              </div>
+            </div>
+
+            {/* Sidebar info (Takes 1 column) */}
+            <div className="space-y-6">
+              <div className="bg-pink-50 dark:bg-pink-900/20 rounded-2xl p-6 border border-pink-100 dark:border-pink-900/30">
+                <h3 className="font-bold text-pink-800 dark:text-pink-300 mb-2 flex items-center gap-2">
+                  <ShieldCheck className="w-5 h-5" />
+                  Your Plan Details
+                </h3>
+                <p className="text-sm text-pink-700 dark:text-pink-400 mb-4 leading-relaxed">
+                  You are currently on the <strong>{planNames[plan]}</strong>. Make the most of your features and start adding your catalog now.
+                </p>
+                <button className="w-full py-2.5 bg-white dark:bg-slate-800 text-pink-600 dark:text-pink-400 font-bold text-sm rounded-xl border border-pink-200 dark:border-pink-800 hover:shadow-sm transition-all">
+                  Upgrade Plan
+                </button>
+              </div>
+
+              <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700 shadow-sm">
+                <h3 className="font-bold text-slate-800 dark:text-white mb-4">Setup Guide</h3>
+                <div className="space-y-4">
+                  {[
+                    { text: 'Create your account', done: true },
+                    { text: 'Choose a subscription plan', done: true },
+                    { text: 'Add your first product', done: false },
+                    { text: 'Customize storefront', done: false },
+                  ].map((step, i) => (
+                    <div key={i} className="flex items-center gap-3">
+                      <div className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 ${step.done ? 'bg-green-500' : 'border-2 border-slate-300 dark:border-slate-600'}`}>
+                        {step.done && <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>}
+                      </div>
+                      <span className={`text-sm font-medium ${step.done ? 'text-slate-400 line-through' : 'text-slate-700 dark:text-slate-200'}`}>
+                        {step.text}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </main>
     </div>
   );
 }
@@ -162,15 +246,11 @@ export default function DynamicBrandRoute() {
         }
       }
 
-      // Fallback if not found
-      // Assuming extra link text is appended with a hyphen, we take the first part
-      const baseName = actualBrandSlug.split('-')[0];
-      setBrandData({
-        brand_name: baseName.charAt(0).toUpperCase() + baseName.slice(1),
-        brand_logo_url: ''
-      });
+      // If we reach here, no match was found
+      setBrandData(null);
     } catch (err) {
       console.error('Error fetching brand:', err);
+      setBrandData(null);
     } finally {
       setLoading(false);
     }
@@ -183,6 +263,31 @@ export default function DynamicBrandRoute() {
         <div className="flex-1 flex items-center justify-center">
           <div className="animate-spin w-8 h-8 border-4 border-pink-500 border-t-transparent rounded-full"></div>
         </div>
+      </div>
+    );
+  }
+
+  // 404 Error State (Brand not found)
+  if (!brandData) {
+    return (
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-900 flex flex-col font-sans">
+        <SellerNavbar />
+        <main className="flex-1 w-full flex flex-col items-center justify-center relative p-4 text-center">
+          <div className="w-64 h-64 md:w-80 md:h-80 mb-6 rounded-3xl overflow-hidden shadow-2xl border-4 border-white dark:border-slate-800 bg-white flex items-center justify-center">
+            <img src="/404-doodle.jpg" alt="404 Not Found" className="w-full h-full object-cover" />
+          </div>
+          <h1 className="text-4xl md:text-5xl font-black text-slate-900 dark:text-white mb-4">
+            Oops! Store Not Found.
+          </h1>
+          <p className="text-lg text-slate-600 dark:text-slate-300 max-w-md mx-auto mb-8 font-medium">
+            It looks like this brand page doesn't exist or the link is broken. Let's get you back on track!
+          </p>
+          <Link href="/">
+            <button className="bg-pink-500 hover:bg-pink-600 text-white font-bold py-3 px-8 rounded-xl transition-transform active:scale-95 shadow-lg shadow-pink-500/30">
+              Return Home
+            </button>
+          </Link>
+        </main>
       </div>
     );
   }
