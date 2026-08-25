@@ -32,6 +32,20 @@ const recommendedProducts = [
 ];
 
 export default function MarketplacePage() {
+  const heroImages = [
+    "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1200&h=400&fit=crop",
+    "https://images.unsplash.com/photo-1472851294608-062f824d29cc?w=1200&h=400&fit=crop",
+    "https://images.unsplash.com/photo-1607082349566-187342175e2f?w=1200&h=400&fit=crop"
+  ];
+  const [currentSlide, setCurrentSlide] = React.useState(0);
+
+  React.useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % heroImages.length);
+    }, 4000);
+    return () => clearInterval(timer);
+  }, []);
+
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-900 font-sans flex flex-col">
       <SellerNavbar />
@@ -39,21 +53,28 @@ export default function MarketplacePage() {
       <main className="flex-1 w-full pb-20">
         
         {/* Header Hero Section */}
-        <section className="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 pt-16 pb-12 overflow-hidden">
-          <div className="max-w-7xl mx-auto px-4 md:px-8 text-center relative z-10">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-pink-100 dark:bg-pink-900/30 text-pink-600 dark:text-pink-400 font-bold text-sm mb-6 shadow-sm">
-              <SparkleIcon className="w-4 h-4" /> Discover the Best Brands
+        <section className="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 pb-12 overflow-hidden">
+          
+          {/* Slideshow replacing text */}
+          <div className="w-full h-[300px] md:h-[400px] relative bg-slate-100 dark:bg-slate-900 overflow-hidden">
+            {heroImages.map((src, idx) => (
+              <img
+                key={idx}
+                src={src}
+                alt={`Slide ${idx + 1}`}
+                className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${currentSlide === idx ? 'opacity-100' : 'opacity-0'}`}
+              />
+            ))}
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent pointer-events-none" />
+            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+              {heroImages.map((_, idx) => (
+                <div key={idx} className={`w-2 h-2 rounded-full transition-all ${currentSlide === idx ? 'bg-white w-6' : 'bg-white/50'}`} />
+              ))}
             </div>
-            <h1 className="text-4xl md:text-6xl font-black text-slate-800 dark:text-white mb-6 tracking-tight">
-              Sponsora <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-rose-400">Marketplace</span>
-            </h1>
-            <p className="text-slate-500 dark:text-slate-400 text-lg md:text-xl max-w-2xl mx-auto font-medium mb-10">
-              Shop curated products directly from top independent creators, startups, and established brands.
-            </p>
           </div>
 
           {/* Marquee Showcase */}
-          <div className="relative w-full overflow-hidden py-8 flex items-center bg-slate-50 dark:bg-slate-900/50 border-y border-slate-100 dark:border-slate-800/50">
+          <div className="relative w-full overflow-hidden py-8 mt-4 flex items-center bg-slate-50 dark:bg-slate-900/50 border-y border-slate-100 dark:border-slate-800/50">
             <div className="absolute left-0 top-0 w-32 h-full bg-gradient-to-r from-slate-50 dark:from-slate-900/50 to-transparent z-10 pointer-events-none"></div>
             <div className="absolute right-0 top-0 w-32 h-full bg-gradient-to-l from-slate-50 dark:from-slate-900/50 to-transparent z-10 pointer-events-none"></div>
             

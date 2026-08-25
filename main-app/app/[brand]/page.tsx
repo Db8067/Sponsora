@@ -34,6 +34,13 @@ function BrandDashboard({ brandName, plan, brandLogo, currentTab, actualBrandSlu
     1499: 'massive scale with dedicated support'
   };
 
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return 'Good morning';
+    if (hour < 18) return 'Good afternoon';
+    return 'Good evening';
+  };
+
   return (
     <div className="flex w-full min-h-[calc(100vh-80px)] bg-slate-50 dark:bg-slate-900 overflow-hidden">
       {/* Sidebar */}
@@ -46,8 +53,11 @@ function BrandDashboard({ brandName, plan, brandLogo, currentTab, actualBrandSlu
           <Link href={`/${actualBrandSlug}-${plan}`} className={`flex items-center gap-3 px-3 py-3 rounded-xl font-semibold transition-colors ${currentTab === 'dashboard' ? 'bg-pink-50 dark:bg-pink-500/10 text-pink-600 dark:text-pink-400' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50'}`}>
             <LayoutDashboard className="w-5 h-5" /> Dashboard
           </Link>
-          <Link href={`/${actualBrandSlug}-${plan}-products`} className={`flex items-center gap-3 px-3 py-3 rounded-xl font-semibold transition-colors ${currentTab === 'products' ? 'bg-pink-50 dark:bg-pink-500/10 text-pink-600 dark:text-pink-400' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50'}`}>
+          <Link href={`/${actualBrandSlug}-${plan}-products`} className={`flex items-center gap-3 px-3 py-3 rounded-xl font-semibold transition-colors ${currentTab === 'products' || currentTab === 'add-product' ? 'bg-pink-50 dark:bg-pink-500/10 text-pink-600 dark:text-pink-400' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50'}`}>
             <ShoppingBag className="w-5 h-5" /> Products
+          </Link>
+          <Link href={`/${actualBrandSlug}-${plan}-add-product`} className={`flex items-center gap-3 px-3 py-3 rounded-xl font-semibold transition-colors ${currentTab === 'add-product' ? 'bg-pink-50 dark:bg-pink-500/10 text-pink-600 dark:text-pink-400' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50'}`}>
+            <Plus className="w-5 h-5" /> Add Product
           </Link>
           <a href="#" className="flex items-center gap-3 px-3 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/50 font-semibold transition-colors">
             <Users className="w-5 h-5" /> Customers
@@ -75,7 +85,7 @@ function BrandDashboard({ brandName, plan, brandLogo, currentTab, actualBrandSlu
               
               {currentTab === 'dashboard' && (
                 <div>
-                  <h1 className="text-2xl md:text-3xl font-black text-slate-800 dark:text-white">Welcome back, {brandName}!</h1>
+                  <h1 className="text-2xl md:text-3xl font-black text-slate-800 dark:text-white" suppressHydrationWarning>{getGreeting()}, {brandName}!</h1>
                   <p className="text-slate-500 dark:text-slate-400 text-sm md:text-base mt-1">
                     Manage your <span className="font-semibold text-pink-500">{planNames[plan]}</span> features.
                   </p>
@@ -84,8 +94,8 @@ function BrandDashboard({ brandName, plan, brandLogo, currentTab, actualBrandSlu
             </div>
             
             {currentTab === 'dashboard' && (
-              <div className="hidden md:flex">
-                <Link href={`/${actualBrandSlug}-${plan}-products`} className="bg-slate-900 hover:bg-slate-800 dark:bg-pink-500 dark:hover:bg-pink-600 text-white font-bold py-2.5 px-5 rounded-xl transition-all shadow-sm flex items-center gap-2">
+              <div className="flex">
+                <Link href={`/${actualBrandSlug}-${plan}-add-product`} className="bg-slate-900 hover:bg-slate-800 dark:bg-pink-500 dark:hover:bg-pink-600 text-white font-bold py-2.5 px-5 rounded-xl transition-all shadow-sm flex items-center gap-2">
                   <Plus className="w-4 h-4" /> Add Product
                 </Link>
               </div>
@@ -96,8 +106,8 @@ function BrandDashboard({ brandName, plan, brandLogo, currentTab, actualBrandSlu
             <div className="flex flex-col-reverse lg:flex-col gap-8">
               
               {/* Stats Overview */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-                {['Total Sales', 'Active Products', 'Store Views', 'Orders'].map((stat, i) => (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                {['Active Products', 'Store Views'].map((stat, i) => (
                   <div key={i} className="bg-white dark:bg-slate-800 p-6 rounded-3xl border border-slate-100 dark:border-slate-700 shadow-sm flex flex-col justify-between h-36 relative overflow-hidden group">
                     <div className="absolute top-0 right-0 w-16 h-16 bg-pink-50 dark:bg-slate-700/30 rounded-bl-full -mr-8 -mt-8 group-hover:scale-150 transition-transform duration-500"></div>
                     <div className="flex items-center justify-between text-slate-500 dark:text-slate-400 relative z-10">
@@ -112,38 +122,42 @@ function BrandDashboard({ brandName, plan, brandLogo, currentTab, actualBrandSlu
                 ))}
               </div>
 
-              {/* Enhanced Setup Guide on Dashboard */}
+              {/* Enhanced Setup Guide on Dashboard (Shopify Theme) */}
               <div className="bg-white dark:bg-slate-800 rounded-3xl p-6 md:p-8 border border-slate-200 dark:border-slate-700 shadow-sm">
-                <div className="flex items-center gap-3 mb-8">
-                  <div className="w-12 h-12 bg-pink-100 dark:bg-pink-900/50 rounded-xl flex items-center justify-center text-pink-600 dark:text-pink-400">
-                    <LayoutDashboard className="w-6 h-6" />
+                <div className="flex flex-col mb-6">
+                  <h3 className="font-black text-2xl text-slate-800 dark:text-white mb-2">Setup guide</h3>
+                  <div className="flex items-center justify-between mb-2">
+                    <p className="text-slate-500 dark:text-slate-400 text-sm font-medium">2 of 4 tasks complete</p>
                   </div>
-                  <div>
-                    <h3 className="font-black text-2xl text-slate-800 dark:text-white">Store Setup Guide</h3>
-                    <p className="text-slate-500 dark:text-slate-400 text-sm font-medium mt-1">Complete these steps to launch your brand page</p>
+                  <div className="w-full bg-slate-100 dark:bg-slate-700 rounded-full h-2 overflow-hidden">
+                    <div className="bg-slate-800 dark:bg-white h-full rounded-full transition-all duration-500" style={{ width: '50%' }}></div>
                   </div>
                 </div>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="flex flex-col border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden bg-white dark:bg-slate-800">
                   {[
                     { text: 'Create your account', desc: 'You have successfully signed up.', done: true },
                     { text: 'Choose a subscription plan', desc: 'You selected the ' + planNames[plan] + '.', done: true },
-                    { text: 'Add your first product', desc: 'Upload your first item to your catalog.', done: false, action: 'Go to Products', link: `/${actualBrandSlug}-${plan}-products` },
-                    { text: 'Customize storefront', desc: 'Add a banner and update your logo.', done: false, action: 'Settings', link: '#' },
+                    { text: 'Add your first product', desc: 'Upload your first item to your catalog to start selling.', done: false, action: 'Add product', link: `/${actualBrandSlug}-${plan}-add-product` },
+                    { text: 'Customize storefront', desc: 'Add a banner and update your logo.', done: false, action: 'Customize store', link: '#' },
                   ].map((step, i) => (
-                    <div key={i} className={`flex items-start gap-4 p-5 rounded-2xl border-2 transition-all ${step.done ? 'border-green-100 bg-green-50/30 dark:border-green-900/30 dark:bg-green-900/10' : 'border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50'}`}>
-                      <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 mt-1 shadow-sm ${step.done ? 'bg-green-500 text-white' : 'bg-white dark:bg-slate-700 border-2 border-slate-200 dark:border-slate-600'}`}>
-                        {step.done ? <Check className="w-4 h-4 font-bold" /> : <span className="text-sm font-bold text-slate-400">{i + 1}</span>}
+                    <div key={i} className={`flex items-start gap-4 p-5 transition-all ${i !== 3 ? 'border-b border-slate-200 dark:border-slate-700' : ''} ${!step.done ? 'bg-slate-50/50 dark:bg-slate-800/30' : 'bg-white dark:bg-slate-800'}`}>
+                      <div className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 mt-0.5 transition-colors border-2 ${step.done ? 'bg-slate-800 border-slate-800 dark:bg-slate-200 dark:border-slate-200 text-white dark:text-slate-800' : 'border-slate-300 dark:border-slate-600 bg-transparent border-dashed text-transparent'}`}>
+                        {step.done ? <Check className="w-3.5 h-3.5 font-bold" /> : <div className="w-full h-full rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 cursor-pointer"></div>}
                       </div>
                       <div className="flex-1">
-                        <h4 className={`text-base font-bold ${step.done ? 'text-slate-600 line-through dark:text-slate-400' : 'text-slate-800 dark:text-white'}`}>
+                        <h4 className={`text-sm font-bold ${step.done ? 'text-slate-500 line-through dark:text-slate-400' : 'text-slate-800 dark:text-white'}`}>
                           {step.text}
                         </h4>
-                        <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">{step.desc}</p>
-                        {!step.done && step.action && (
-                          <Link href={step.link} className="inline-block mt-3 px-4 py-2 bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-200 text-xs font-bold rounded-lg hover:shadow-sm transition-all">
-                            {step.action}
-                          </Link>
+                        {!step.done && (
+                          <div className="mt-2">
+                            <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">{step.desc}</p>
+                            {step.action && (
+                              <Link href={step.link} className="inline-flex items-center justify-center px-4 py-2 bg-slate-900 hover:bg-slate-800 dark:bg-slate-100 dark:hover:bg-slate-200 text-white dark:text-slate-900 text-sm font-bold rounded-lg transition-all shadow-sm">
+                                {step.action}
+                              </Link>
+                            )}
+                          </div>
                         )}
                       </div>
                     </div>
@@ -156,39 +170,14 @@ function BrandDashboard({ brandName, plan, brandLogo, currentTab, actualBrandSlu
           {currentTab === 'products' && (
             <div className="flex flex-col gap-8">
               
-              {/* Product Analytics Overview */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-                <div className="bg-white dark:bg-slate-800 p-6 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col justify-center relative overflow-hidden">
-                  <div className="flex items-center gap-4 mb-2 relative z-10">
-                    <div className="w-10 h-10 rounded-full bg-blue-50 dark:bg-blue-900/30 text-blue-500 flex items-center justify-center"><ShoppingBag className="w-5 h-5" /></div>
-                    <span className="text-sm font-bold text-slate-500 uppercase tracking-wider">Total Products</span>
-                  </div>
-                  <span className="text-4xl font-black text-slate-800 dark:text-white relative z-10">0</span>
-                </div>
-                <div className="bg-white dark:bg-slate-800 p-6 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col justify-center relative overflow-hidden">
-                  <div className="flex items-center gap-4 mb-2 relative z-10">
-                    <div className="w-10 h-10 rounded-full bg-green-50 dark:bg-green-900/30 text-green-500 flex items-center justify-center"><Check className="w-5 h-5" /></div>
-                    <span className="text-sm font-bold text-slate-500 uppercase tracking-wider">In Stock</span>
-                  </div>
-                  <span className="text-4xl font-black text-slate-800 dark:text-white relative z-10">0</span>
-                </div>
-                <div className="bg-white dark:bg-slate-800 p-6 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col justify-center relative overflow-hidden">
-                  <div className="flex items-center gap-4 mb-2 relative z-10">
-                    <div className="w-10 h-10 rounded-full bg-red-50 dark:bg-red-900/30 text-red-500 flex items-center justify-center"><Activity className="w-5 h-5" /></div>
-                    <span className="text-sm font-bold text-slate-500 uppercase tracking-wider">Out of Stock</span>
-                  </div>
-                  <span className="text-4xl font-black text-slate-800 dark:text-white relative z-10">0</span>
-                </div>
-              </div>
-
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 {/* Recent Products List */}
                 <div className="lg:col-span-2 bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
                   <div className="px-8 py-6 border-b border-slate-100 dark:border-slate-700/50 flex items-center justify-between bg-slate-50/50 dark:bg-slate-800/50">
                     <h2 className="text-xl font-bold text-slate-800 dark:text-white">Product Inventory</h2>
-                    <button className="bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-4 rounded-lg transition-transform active:scale-95 text-sm flex items-center gap-2">
+                    <Link href={`/${actualBrandSlug}-${plan}-add-product`} className="bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-4 rounded-lg transition-transform active:scale-95 text-sm flex items-center gap-2">
                       <Plus className="w-4 h-4" /> Add Product
-                    </button>
+                    </Link>
                   </div>
                   <div className="p-8 text-center py-20">
                     <div className="w-20 h-20 bg-slate-50 dark:bg-slate-800/50 rounded-full flex items-center justify-center mx-auto mb-4 border border-slate-100 dark:border-slate-700">
@@ -256,6 +245,92 @@ function BrandDashboard({ brandName, plan, brandLogo, currentTab, actualBrandSlu
                 </div>
               </div>
             </div>
+            
+            {/* Shifted Product Analytics Overview */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-8">
+              <div className="bg-white dark:bg-slate-800 p-6 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col justify-center relative overflow-hidden">
+                <div className="flex items-center gap-4 mb-2 relative z-10">
+                  <div className="w-10 h-10 rounded-full bg-blue-50 dark:bg-blue-900/30 text-blue-500 flex items-center justify-center"><ShoppingBag className="w-5 h-5" /></div>
+                  <span className="text-sm font-bold text-slate-500 uppercase tracking-wider">Total Products</span>
+                </div>
+                <span className="text-4xl font-black text-slate-800 dark:text-white relative z-10">0</span>
+              </div>
+              <div className="bg-white dark:bg-slate-800 p-6 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col justify-center relative overflow-hidden">
+                <div className="flex items-center gap-4 mb-2 relative z-10">
+                  <div className="w-10 h-10 rounded-full bg-green-50 dark:bg-green-900/30 text-green-500 flex items-center justify-center"><Check className="w-5 h-5" /></div>
+                  <span className="text-sm font-bold text-slate-500 uppercase tracking-wider">In Stock</span>
+                </div>
+                <span className="text-4xl font-black text-slate-800 dark:text-white relative z-10">0</span>
+              </div>
+            </div>
+          </div>
+          )}
+
+          {currentTab === 'add-product' && (
+            <div className="flex flex-col gap-8">
+              <div className="bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+                <div className="px-8 py-6 border-b border-slate-100 dark:border-slate-700/50 flex items-center justify-between bg-slate-50/50 dark:bg-slate-800/50">
+                  <h2 className="text-xl font-bold text-slate-800 dark:text-white">Add New Product</h2>
+                </div>
+                <form className="p-8 space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                      <label className="text-sm font-bold text-slate-700 dark:text-slate-300">Product Title</label>
+                      <input type="text" className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-800 dark:text-white focus:outline-none focus:border-pink-500 focus:ring-1 focus:ring-pink-500 transition-all" placeholder="e.g. Premium Wireless Headphones" />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-bold text-slate-700 dark:text-slate-300">Price (₹)</label>
+                      <input type="number" className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-800 dark:text-white focus:outline-none focus:border-pink-500 focus:ring-1 focus:ring-pink-500 transition-all" placeholder="0.00" />
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <label className="text-sm font-bold text-slate-700 dark:text-slate-300">Description</label>
+                    <textarea rows={4} className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-800 dark:text-white focus:outline-none focus:border-pink-500 focus:ring-1 focus:ring-pink-500 transition-all" placeholder="Describe your product..."></textarea>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                      <label className="text-sm font-bold text-slate-700 dark:text-slate-300">Stock Quantity</label>
+                      <input type="number" className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-800 dark:text-white focus:outline-none focus:border-pink-500 focus:ring-1 focus:ring-pink-500 transition-all" placeholder="0" />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-bold text-slate-700 dark:text-slate-300">Category</label>
+                      <select className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-800 dark:text-white focus:outline-none focus:border-pink-500 focus:ring-1 focus:ring-pink-500 transition-all">
+                        <option value="">Select a category</option>
+                        <option value="electronics">Electronics</option>
+                        <option value="fashion">Fashion</option>
+                        <option value="home">Home & Garden</option>
+                        <option value="beauty">Beauty & Health</option>
+                        <option value="sports">Sports</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-sm font-bold text-slate-700 dark:text-slate-300">Tags (comma separated)</label>
+                    <input type="text" className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-800 dark:text-white focus:outline-none focus:border-pink-500 focus:ring-1 focus:ring-pink-500 transition-all" placeholder="e.g. wireless, audio, premium" />
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <label className="text-sm font-bold text-slate-700 dark:text-slate-300">Product Images</label>
+                    <div className="w-full border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-xl p-8 flex flex-col items-center justify-center text-center hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors cursor-pointer">
+                      <Upload className="w-8 h-8 text-slate-400 mb-3" />
+                      <p className="text-sm font-medium text-slate-600 dark:text-slate-300">Click or drag images to upload</p>
+                      <p className="text-xs text-slate-500 mt-1">SVG, PNG, JPG or GIF (max. 800x400px)</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-3 pt-4">
+                    <button type="button" className="px-6 py-3 bg-pink-500 hover:bg-pink-600 text-white font-bold rounded-xl transition-all shadow-sm">
+                      Save Product
+                    </button>
+                    <button type="button" className="px-6 py-3 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold rounded-xl transition-all">
+                      Save as Draft
+                    </button>
+                  </div>
+                </form>
+              </div>
             </div>
           )}
 
@@ -315,13 +390,16 @@ export default function DynamicBrandRoute() {
   const [brandData, setBrandData] = useState<any | null>(null);
   const [loading, setLoading] = useState(true);
 
+  const userEmail = user?.primaryEmailAddress?.emailAddress;
+  const userId = user?.id;
+
   useEffect(() => {
     if (isLoaded && !isSignedIn) {
       router.push('/');
-    } else if (isLoaded && isSignedIn && user) {
+    } else if (isLoaded && isSignedIn && userId) {
       fetchBrandProfile();
     }
-  }, [actualBrandSlug, isLoaded, isSignedIn, user, router]);
+  }, [actualBrandSlug, isLoaded, isSignedIn, userId, userEmail, router]);
 
   const fetchBrandProfile = async () => {
     setLoading(true);
