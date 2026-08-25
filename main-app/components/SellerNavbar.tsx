@@ -28,6 +28,10 @@ export default function SellerNavbar() {
             Subscriptions
           </Link>
 
+          <Link href="/marketplace" className="text-sm font-medium text-slate-600 hover:text-primary dark:text-slate-300 transition-colors whitespace-nowrap">
+            Marketplace
+          </Link>
+
           <Link href="/seller-onboard" className="text-sm font-medium text-slate-600 hover:text-primary dark:text-slate-300 transition-colors whitespace-nowrap">
             Brand page
           </Link>
@@ -93,6 +97,10 @@ export default function SellerNavbar() {
             
             <Link href="/subscriptions" onClick={() => setIsMobileMenuOpen(false)} className="text-2xl font-bold text-slate-700 dark:text-slate-200 hover:text-primary transition-colors text-center">
               Subscriptions
+            </Link>
+
+            <Link href="/marketplace" onClick={() => setIsMobileMenuOpen(false)} className="text-2xl font-bold text-slate-700 dark:text-slate-200 hover:text-primary transition-colors text-center">
+              Marketplace
             </Link>
 
             <Link href="/seller-onboard" onClick={() => setIsMobileMenuOpen(false)} className="text-2xl font-bold text-slate-700 dark:text-slate-200 hover:text-primary transition-colors text-center">

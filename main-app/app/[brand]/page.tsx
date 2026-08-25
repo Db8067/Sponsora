@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
-import { useAuth } from '@clerk/nextjs';
+import { useAuth, useUser } from '@clerk/nextjs';
 import { Store, Plus, ArrowRight, ShieldCheck, ShoppingBag, Sparkles, Upload, LayoutDashboard, Users, Activity, Settings, Check, Loader2 } from 'lucide-react';
 import SellerNavbar from '@/components/SellerNavbar';
 import { supabase } from '@/lib/supabase';
@@ -65,20 +65,31 @@ function BrandDashboard({ brandName, plan, brandLogo, currentTab, actualBrandSlu
       <main className="flex-1 h-full overflow-y-auto p-4 md:p-8 pb-24 lg:pb-8">
         <div className="max-w-5xl mx-auto">
           
-          {/* Welcome Header */}
-          <div className="bg-gradient-to-r from-pink-500 to-rose-400 rounded-3xl p-6 md:p-10 text-white mb-8 shadow-lg relative overflow-hidden flex flex-col sm:flex-row items-center justify-between text-center sm:text-left gap-6">
-            <div className="relative z-10 max-w-xl">
-              <h1 className="text-3xl md:text-4xl font-black mb-3">Welcome to {planNames[plan]}! 🎉</h1>
-              <p className="text-pink-50 text-sm md:text-base leading-relaxed opacity-90">
-                Congratulations, {brandName}! Your brand dashboard is officially active for {planDuration[plan]}.
-                This is your new home to manage products, view analytics, and grow your sales.
-              </p>
+          {/* Professional Header */}
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8 mt-2">
+            <div className="flex items-center gap-5">
+              {/* Brand Logo in a clean circle */}
+              <div className="flex w-16 h-16 md:w-20 md:h-20 bg-white rounded-full p-1 shadow-sm shrink-0 items-center justify-center overflow-hidden border border-slate-200 dark:border-slate-700">
+                {brandLogo ? <img src={brandLogo} alt="" className="w-full h-full object-cover rounded-full" /> : <Store className="w-8 h-8 md:w-10 md:h-10 text-slate-400" />}
+              </div>
+              
+              {currentTab === 'dashboard' && (
+                <div>
+                  <h1 className="text-2xl md:text-3xl font-black text-slate-800 dark:text-white">Welcome back, {brandName}!</h1>
+                  <p className="text-slate-500 dark:text-slate-400 text-sm md:text-base mt-1">
+                    Manage your <span className="font-semibold text-pink-500">{planNames[plan]}</span> features.
+                  </p>
+                </div>
+              )}
             </div>
             
-            {/* Brand Logo inside the page */}
-            <div className="relative z-10 flex w-24 h-24 sm:w-28 sm:h-28 bg-white rounded-full p-1.5 shadow-xl shrink-0 items-center justify-center overflow-hidden border-4 border-pink-200/50">
-              {brandLogo ? <img src={brandLogo} alt="" className="w-full h-full object-cover rounded-full" /> : <Store className="w-10 h-10 sm:w-12 sm:h-12 text-pink-400" />}
-            </div>
+            {currentTab === 'dashboard' && (
+              <div className="hidden md:flex">
+                <Link href={`/${actualBrandSlug}-${plan}-products`} className="bg-slate-900 hover:bg-slate-800 dark:bg-pink-500 dark:hover:bg-pink-600 text-white font-bold py-2.5 px-5 rounded-xl transition-all shadow-sm flex items-center gap-2">
+                  <Plus className="w-4 h-4" /> Add Product
+                </Link>
+              </div>
+            )}
           </div>
 
           {currentTab === 'dashboard' && (
@@ -143,54 +154,50 @@ function BrandDashboard({ brandName, plan, brandLogo, currentTab, actualBrandSlu
           )}
 
           {currentTab === 'products' && (
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-              {/* Product Form Section */}
-              <div className="lg:col-span-2">
-                <div className="bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
-                  <div className="px-8 py-6 border-b border-slate-100 dark:border-slate-700/50 flex items-center justify-between bg-slate-50/50 dark:bg-slate-800/50">
-                    <h2 className="text-xl font-bold text-slate-800 dark:text-white flex items-center gap-2">
-                      <ShoppingBag className="w-6 h-6 text-pink-500" />
-                      Add New Product
-                    </h2>
+            <div className="flex flex-col gap-8">
+              
+              {/* Product Analytics Overview */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                <div className="bg-white dark:bg-slate-800 p-6 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col justify-center relative overflow-hidden">
+                  <div className="flex items-center gap-4 mb-2 relative z-10">
+                    <div className="w-10 h-10 rounded-full bg-blue-50 dark:bg-blue-900/30 text-blue-500 flex items-center justify-center"><ShoppingBag className="w-5 h-5" /></div>
+                    <span className="text-sm font-bold text-slate-500 uppercase tracking-wider">Total Products</span>
                   </div>
-                  <div className="p-8">
-                    <form className="space-y-6" onSubmit={(e) => { e.preventDefault(); alert('Product upload feature coming soon!'); }}>
-                      <div>
-                        <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Product Title</label>
-                        <input type="text" className="w-full px-5 py-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-pink-500 outline-none transition-all shadow-sm" placeholder="e.g., Premium Leather Jacket" required />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Description</label>
-                        <textarea rows={4} className="w-full px-5 py-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-pink-500 outline-none transition-all resize-none shadow-sm" placeholder="Describe the details, fabric, care instructions..."></textarea>
-                      </div>
-                      <div>
-                        <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Product Images</label>
-                        <div className="border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-2xl p-10 text-center bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700/50 transition-colors cursor-pointer group">
-                          <div className="w-16 h-16 bg-white dark:bg-slate-700 rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm group-hover:scale-110 transition-transform">
-                            <Upload className="w-8 h-8 text-slate-400 dark:text-slate-300" />
-                          </div>
-                          <span className="text-base font-bold text-slate-600 dark:text-slate-300 block">Click or drag images here</span>
-                          <span className="text-sm font-medium text-slate-400 dark:text-slate-500 mt-1 block">Maximum file size 5MB (PNG, JPG)</span>
-                        </div>
-                      </div>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                          <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Price (₹)</label>
-                          <input type="number" className="w-full px-5 py-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-pink-500 outline-none transition-all shadow-sm" placeholder="999" required />
-                        </div>
-                        <div>
-                          <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Inventory Stock</label>
-                          <input type="number" className="w-full px-5 py-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-pink-500 outline-none transition-all shadow-sm" placeholder="e.g. 50" required />
-                        </div>
-                      </div>
-                      <button type="submit" className="w-full mt-6 bg-pink-500 hover:bg-pink-600 text-white font-bold py-4 rounded-xl transition-transform active:scale-95 shadow-xl shadow-pink-500/20 flex items-center justify-center gap-2 text-lg">
-                        <Plus className="w-6 h-6" />
-                        Publish Product
-                      </button>
-                    </form>
+                  <span className="text-4xl font-black text-slate-800 dark:text-white relative z-10">0</span>
+                </div>
+                <div className="bg-white dark:bg-slate-800 p-6 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col justify-center relative overflow-hidden">
+                  <div className="flex items-center gap-4 mb-2 relative z-10">
+                    <div className="w-10 h-10 rounded-full bg-green-50 dark:bg-green-900/30 text-green-500 flex items-center justify-center"><Check className="w-5 h-5" /></div>
+                    <span className="text-sm font-bold text-slate-500 uppercase tracking-wider">In Stock</span>
                   </div>
+                  <span className="text-4xl font-black text-slate-800 dark:text-white relative z-10">0</span>
+                </div>
+                <div className="bg-white dark:bg-slate-800 p-6 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col justify-center relative overflow-hidden">
+                  <div className="flex items-center gap-4 mb-2 relative z-10">
+                    <div className="w-10 h-10 rounded-full bg-red-50 dark:bg-red-900/30 text-red-500 flex items-center justify-center"><Activity className="w-5 h-5" /></div>
+                    <span className="text-sm font-bold text-slate-500 uppercase tracking-wider">Out of Stock</span>
+                  </div>
+                  <span className="text-4xl font-black text-slate-800 dark:text-white relative z-10">0</span>
                 </div>
               </div>
+
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                {/* Recent Products List */}
+                <div className="lg:col-span-2 bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+                  <div className="px-8 py-6 border-b border-slate-100 dark:border-slate-700/50 flex items-center justify-between bg-slate-50/50 dark:bg-slate-800/50">
+                    <h2 className="text-xl font-bold text-slate-800 dark:text-white">Product Inventory</h2>
+                    <button className="bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-4 rounded-lg transition-transform active:scale-95 text-sm flex items-center gap-2">
+                      <Plus className="w-4 h-4" /> Add Product
+                    </button>
+                  </div>
+                  <div className="p-8 text-center py-20">
+                    <div className="w-20 h-20 bg-slate-50 dark:bg-slate-800/50 rounded-full flex items-center justify-center mx-auto mb-4 border border-slate-100 dark:border-slate-700">
+                      <ShoppingBag className="w-10 h-10 text-slate-300" />
+                    </div>
+                    <h3 className="text-lg font-bold text-slate-800 dark:text-white mb-2">No products found</h3>
+                    <p className="text-slate-500 text-sm max-w-sm mx-auto">You haven&apos;t uploaded any products yet. Click the button above to add your first item to the catalog.</p>
+                  </div>
+                </div>
 
               {/* Inventory details sidebar */}
               <div className="space-y-6">
@@ -249,6 +256,7 @@ function BrandDashboard({ brandName, plan, brandLogo, currentTab, actualBrandSlu
                 </div>
               </div>
             </div>
+            </div>
           )}
 
         </div>
@@ -302,6 +310,7 @@ export default function DynamicBrandRoute() {
     : rawBrandSlug;
 
   const { isLoaded, isSignedIn } = useAuth();
+  const { user } = useUser();
   const router = useRouter();
   const [brandData, setBrandData] = useState<any | null>(null);
   const [loading, setLoading] = useState(true);
@@ -309,10 +318,10 @@ export default function DynamicBrandRoute() {
   useEffect(() => {
     if (isLoaded && !isSignedIn) {
       router.push('/');
-    } else if (isLoaded && isSignedIn) {
+    } else if (isLoaded && isSignedIn && user) {
       fetchBrandProfile();
     }
-  }, [actualBrandSlug, isLoaded, isSignedIn, router]);
+  }, [actualBrandSlug, isLoaded, isSignedIn, user, router]);
 
   const fetchBrandProfile = async () => {
     setLoading(true);
@@ -334,7 +343,13 @@ export default function DynamicBrandRoute() {
         });
 
         if (match) {
-          setBrandData(match);
+          // Verify authorization: current logged-in user must own this brand profile
+          if (user?.primaryEmailAddress?.emailAddress && match.email_address !== user.primaryEmailAddress.emailAddress) {
+            console.error("Unauthorized access attempt to brand page.");
+            setBrandData(null);
+          } else {
+            setBrandData(match);
+          }
           setLoading(false);
           return;
         }
