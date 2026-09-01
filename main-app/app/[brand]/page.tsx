@@ -21,7 +21,7 @@ const demoProducts = [
   { name: 'Designer Lounge Chair', price: '₹12,999', img: 'https://images.unsplash.com/photo-1506459225024-1428097a7e18?w=500&q=80' },
 ];
 
-function BrandDashboard({ brandName, plan, brandLogo, currentTab, actualBrandSlug }: { brandName: string, plan: 99 | 499 | 1499, brandLogo: string, currentTab: 'dashboard' | 'products', actualBrandSlug: string }) {
+function BrandDashboard({ brandName, plan, brandLogo, currentTab, actualBrandSlug }: { brandName: string, plan: 99 | 499 | 1499, brandLogo: string, currentTab: 'dashboard' | 'products' | 'add-product', actualBrandSlug: string }) {
   const planNames = {
     99: 'Startup Package',
     499: 'Growth Pro',
@@ -368,12 +368,18 @@ export default function DynamicBrandRoute() {
   const isProducts99 = rawBrandSlug.endsWith('-99-products');
   const isProducts499 = rawBrandSlug.endsWith('-499-products');
   const isProducts1499 = rawBrandSlug.endsWith('-1499-products');
-
+  
   const isProducts = isProducts99 || isProducts499 || isProducts1499;
 
-  const isDashboard99 = rawBrandSlug.endsWith('-99') && !isProducts;
-  const isDashboard499 = rawBrandSlug.endsWith('-499') && !isProducts;
-  const isDashboard1499 = rawBrandSlug.endsWith('-1499') && !isProducts;
+  const isAddProduct99 = rawBrandSlug.endsWith('-99-add-product');
+  const isAddProduct499 = rawBrandSlug.endsWith('-499-add-product');
+  const isAddProduct1499 = rawBrandSlug.endsWith('-1499-add-product');
+  
+  const isAddProduct = isAddProduct99 || isAddProduct499 || isAddProduct1499;
+
+  const isDashboard99 = rawBrandSlug.endsWith('-99') && !isProducts && !isAddProduct;
+  const isDashboard499 = rawBrandSlug.endsWith('-499') && !isProducts && !isAddProduct;
+  const isDashboard1499 = rawBrandSlug.endsWith('-1499') && !isProducts && !isAddProduct;
   
   const isDashboard = isDashboard99 || isDashboard499 || isDashboard1499;
   
@@ -481,7 +487,6 @@ export default function DynamicBrandRoute() {
 
   const brandName = brandData?.brand_name || 'My Brand';
   const brandLogo = brandData?.brand_logo_url || '';
-
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-900 flex flex-col font-sans">
       <SellerNavbar />
@@ -491,7 +496,7 @@ export default function DynamicBrandRoute() {
           brandName={brandName} 
           plan={planType} 
           brandLogo={brandLogo} 
-          currentTab={isProducts ? 'products' : 'dashboard'} 
+          currentTab={isAddProduct ? 'add-product' : isProducts ? 'products' : 'dashboard'} 
           actualBrandSlug={actualBrandSlug} 
         />
       ) : (
