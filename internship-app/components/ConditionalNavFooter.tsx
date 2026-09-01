@@ -10,7 +10,7 @@ export default function ConditionalNavFooter({ children }: { children: React.Rea
   const isDashboard = pathname?.startsWith('/SIH-present');
 
   if (isDashboard) {
-    return <main className="flex-1 w-full h-full p-0 m-0 overflow-hidden">{children}</main>;
+    return <main className="flex-1 w-full h-full p-0 m-0">{children}</main>;
   }
 
   return (

@@ -69,8 +69,8 @@ export default function SIHPresentDeck() {
         <ChevronDown className="w-5 h-5" />
       </div>
 
-      {/* Media Container (Sticky) */}
-      <div className="sticky top-0 w-full h-screen overflow-hidden bg-black flex items-center justify-center">
+      {/* Media Container (Fixed to Viewport) */}
+      <div className="fixed top-0 left-0 w-full h-screen overflow-hidden bg-black flex items-center justify-center -z-10">
         
         {mediaList.map((media, idx) => {
           const isActive = idx === activeIndex;
@@ -78,7 +78,7 @@ export default function SIHPresentDeck() {
           return (
             <div
               key={idx}
-              className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${isActive ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
+              className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${isActive ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'}`}
             >
               {media.type === 'video' ? (
                 <video
@@ -90,9 +90,10 @@ export default function SIHPresentDeck() {
                   playsInline
                 />
               ) : (
-                <div 
-                  className="w-full h-full bg-center bg-cover bg-no-repeat"
-                  style={{ backgroundImage: `url(${media.src})` }}
+                <img 
+                  src={media.src}
+                  className="w-full h-full object-cover"
+                  alt="Presentation slide"
                 />
               )}
               
