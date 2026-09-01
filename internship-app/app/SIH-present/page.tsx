@@ -6,7 +6,7 @@ import {
   globalKPIs, stationsData, environmentHistory, alertsData, aiInsightsData 
 } from './data/mockData';
 import { 
-  Activity, ArrowUpRight, ArrowDownRight, Wind, Thermometer, Battery, 
+  Activity, ArrowUpRight, ArrowDownRight, Wind, Thermometer, Battery, ThermometerSnowflake,
   Zap, Fuel, ShieldAlert, CheckCircle2, ChevronRight, AlertTriangle, Box
 } from 'lucide-react';
 import { 
