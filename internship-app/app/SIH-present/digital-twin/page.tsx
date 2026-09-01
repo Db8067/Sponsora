@@ -65,12 +65,12 @@ export default function DigitalTwinPage() {
                 key={node.id}
                 onClick={() => setSelectedNode(node)}
                 className={`absolute w-12 h-12 -ml-6 -mt-6 rounded-xl flex items-center justify-center cursor-pointer transition-all ${selectedNode?.id === node.id ? 'scale-110 z-20 ring-2 ring-white' : 'hover:scale-105 z-10'}`}
-                style={{ left: \`\${node.x}%\`, top: \`\${node.y}%\`, backgroundColor: node.status === 'Healthy' ? 'rgba(15, 23, 42, 0.9)' : 'rgba(69, 26, 3, 0.9)', borderColor: node.status === 'Healthy' ? '#06b6d4' : '#f59e0b', borderWidth: '1px' }}
+                style={{ left: `${node.x}%`, top: `${node.y}%`, backgroundColor: node.status === 'Healthy' ? 'rgba(15, 23, 42, 0.9)' : 'rgba(69, 26, 3, 0.9)', borderColor: node.status === 'Healthy' ? '#06b6d4' : '#f59e0b', borderWidth: '1px' }}
               >
                 {node.status === 'Warning' && <span className="absolute -top-1 -right-1 w-3 h-3 bg-amber-500 rounded-full animate-ping"></span>}
                 {node.status === 'Warning' && <span className="absolute -top-1 -right-1 w-3 h-3 bg-amber-500 rounded-full"></span>}
                 
-                {node.type === 'Energy' && <Zap className={\`w-5 h-5 \${node.status === 'Warning' ? 'text-amber-500' : 'text-cyan-400'}\`} />}
+                {node.type === 'Energy' && <Zap className={`w-5 h-5 ${node.status === 'Warning' ? 'text-amber-500' : 'text-cyan-400'}`} />}
                 {node.type === 'Infrastructure' && <Box className="w-5 h-5 text-indigo-400" />}
                 {node.type === 'Environment' && <Thermometer className="w-5 h-5 text-emerald-400" />}
                 {node.type === 'Communication' && <Radio className="w-5 h-5 text-purple-400" />}
@@ -88,7 +88,7 @@ export default function DigitalTwinPage() {
             <div className="space-y-6">
               <div>
                 <div className="flex items-center gap-2 mb-2">
-                  <span className={\`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider \${selectedNode.status === 'Warning' ? 'bg-amber-950/50 text-amber-500 border border-amber-900/50' : 'bg-green-950/50 text-green-500 border border-green-900/50'}\`}>
+                  <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${selectedNode.status === 'Warning' ? 'bg-amber-950/50 text-amber-500 border border-amber-900/50' : 'bg-green-950/50 text-green-500 border border-green-900/50'}`}>
                     {selectedNode.status}
                   </span>
                   <span className="text-xs text-slate-500">{selectedNode.type}</span>

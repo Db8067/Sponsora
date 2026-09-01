@@ -7,13 +7,10 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 1,
 };
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import BackToTop from "@/components/BackToTop";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import PageTransitionProvider from "@/components/PageTransitionProvider";
 import { SubscriptionProvider } from "@/components/SubscriptionContext";
-import CountdownBanner from "@/components/CountdownBanner";
+import ConditionalNavFooter from "@/components/ConditionalNavFooter";
 import "./globals.css";
 
 const jakarta = Plus_Jakarta_Sans({
@@ -67,11 +64,9 @@ export default function RootLayout({
           >
             <SubscriptionProvider>
               <PageTransitionProvider>
-                <CountdownBanner />
-                <Navbar />
-                <main className="flex-1">{children}</main>
-                <Footer />
-                <BackToTop />
+                <ConditionalNavFooter>
+                  {children}
+                </ConditionalNavFooter>
               </PageTransitionProvider>
             </SubscriptionProvider>
           </ThemeProvider>

@@ -68,7 +68,7 @@ export default function AlertsPage() {
                   <td className="p-4">
                     <div className="flex items-center gap-2">
                       {alert.severity === 'CRITICAL' ? <AlertTriangle className="w-4 h-4 text-red-500" /> : alert.severity === 'WARNING' ? <AlertTriangle className="w-4 h-4 text-amber-500" /> : <Activity className="w-4 h-4 text-blue-500" />}
-                      <span className={\`text-xs font-bold \${alert.severity === 'CRITICAL' ? 'text-red-400' : alert.severity === 'WARNING' ? 'text-amber-400' : 'text-blue-400'}\`}>{alert.severity}</span>
+                      <span className={`text-xs font-bold ${alert.severity === 'CRITICAL' ? 'text-red-400' : alert.severity === 'WARNING' ? 'text-amber-400' : 'text-blue-400'}`}>{alert.severity}</span>
                     </div>
                   </td>
                   <td className="p-4 text-sm font-medium text-white">{alert.station}</td>
@@ -77,7 +77,7 @@ export default function AlertsPage() {
                   <td className="p-4 text-sm font-mono text-slate-400">{alert.detected}</td>
                   <td className="p-4 text-sm text-slate-400">{alert.duration}</td>
                   <td className="p-4">
-                    <span className={\`px-2 py-1 rounded text-xs font-bold uppercase tracking-wider \${alert.status === 'Open' ? 'bg-amber-950/50 text-amber-500 border border-amber-900/50' : alert.status === 'Investigating' ? 'bg-blue-950/50 text-blue-500 border border-blue-900/50' : 'bg-green-950/50 text-green-500 border border-green-900/50'}\`}>
+                    <span className={`px-2 py-1 rounded text-xs font-bold uppercase tracking-wider ${alert.status === 'Open' ? 'bg-amber-950/50 text-amber-500 border border-amber-900/50' : alert.status === 'Investigating' ? 'bg-blue-950/50 text-blue-500 border border-blue-900/50' : 'bg-green-950/50 text-green-500 border border-green-900/50'}`}>
                       {alert.status}
                     </span>
                   </td>
