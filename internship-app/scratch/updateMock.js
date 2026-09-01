@@ -1,4 +1,7 @@
-// app/SIH-present/data/mockData.ts
+const fs = require('fs');
+const path = require('path');
+
+const fileData = `// app/SIH-present/data/mockData.ts
 
 export interface Station {
   id: string;
@@ -73,7 +76,7 @@ export const globalKPIs: KPI[] = [
 ];
 
 export const environmentHistory = Array.from({ length: 24 }).map((_, i) => ({
-  time: `${String(i).padStart(2, '0')}:00`,
+  time: \`\${String(i).padStart(2, '0')}:00\`,
   temperatureMaitri: -25 - Math.random() * 5,
   temperatureBharati: -22 - Math.random() * 4,
   windSpeedMaitri: 20 + Math.random() * 15,
@@ -127,7 +130,11 @@ export const aiInsightsData = [
 ];
 
 export const energyForecast = Array.from({ length: 7 }).map((_, i) => ({
-  day: `Day ${i+1}`,
+  day: \`Day \${i+1}\`,
   expectedDemand: 380 + Math.random() * 40,
   expectedGeneration: 400 + Math.random() * 20
 }));
+`;
+
+fs.writeFileSync(path.join(__dirname, '../app/SIH-present/data/mockData.ts'), fileData);
+console.log('mockData updated!');

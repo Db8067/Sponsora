@@ -24,6 +24,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://www.intersponsora.space"),
   title: "Sponsora | Elite Internships & PPOs",
   description: "Land your dream role. Discover high-paying internships at top companies, fast-track your career, and secure pre-placement offers.",
   openGraph: {

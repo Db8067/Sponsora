@@ -1,25 +1,55 @@
 "use client";
 import React from 'react';
-import { ThermometerSnowflake } from 'lucide-react';
+import { environmentHistory } from '../data/mockData';
+import { ThermometerSnowflake, CloudRain, Wind, Gauge } from 'lucide-react';
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
-export default function Page() {
+export default function EnvironmentPage() {
   return (
     <div className="space-y-6 max-w-7xl mx-auto pb-10">
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+      <div className="flex items-end justify-between mb-8">
         <div>
-          <h1 className="text-2xl md:text-3xl font-bold text-white tracking-tight flex items-center gap-3">
-            <ThermometerSnowflake className="w-8 h-8 text-cyan-400" /> Environmental Monitoring
+          <h1 className="text-3xl font-bold text-white flex items-center gap-3">
+            <ThermometerSnowflake className="w-8 h-8 text-blue-400" /> Environment Monitoring
           </h1>
-          <p className="text-sm text-slate-400 mt-1">Antarctic remote operations prototype view.</p>
+          <p className="text-slate-400 mt-1">Real-time severe weather tracking for polar operations.</p>
         </div>
       </div>
       
-      <div className="bg-[#0B152A] border border-slate-800 rounded-2xl p-8 text-center flex flex-col items-center justify-center min-h-[400px]">
-        <div className="w-16 h-16 bg-slate-900 rounded-full flex items-center justify-center mb-4 border border-slate-800">
-          <ThermometerSnowflake className="w-8 h-8 text-slate-600" />
-        </div>
-        <h2 className="text-xl font-semibold text-slate-300 mb-2">Environmental Monitoring Module Active</h2>
-        <p className="text-slate-500 max-w-md mx-auto">This module connects to the centralized simulation data. Use the sidebar to navigate between operational domains.</p>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        {[
+          { title: 'Outside Temp', val: '-28.4°C', icon: ThermometerSnowflake, c: 'text-blue-400' },
+          { title: 'Wind Speed', val: '32.5 km/h', icon: Wind, c: 'text-cyan-400' },
+          { title: 'Air Pressure', val: '982 hPa', icon: Gauge, c: 'text-purple-400' },
+          { title: 'Snow Accum.', val: '14 cm', icon: CloudRain, c: 'text-white' },
+        ].map((k,i) => (
+          <div key={i} className="bg-[#0B152A] border border-slate-800 rounded-xl p-4 flex items-center gap-4">
+            <div className="p-3 bg-slate-900 rounded-lg"><k.icon className={`w-6 h-6 ${k.c}`} /></div>
+            <div>
+              <p className="text-xs text-slate-500 uppercase">{k.title}</p>
+              <p className="text-xl font-bold text-white">{k.val}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="bg-[#0B152A] border border-slate-800 rounded-2xl p-6 h-[400px]">
+        <h2 className="text-lg font-bold text-white mb-4">24-Hour Temperature Profile</h2>
+        <ResponsiveContainer width="100%" height="100%">
+          <AreaChart data={environmentHistory} margin={{ top: 10, right: 10, left: -20, bottom: 20 }}>
+            <defs>
+              <linearGradient id="colorTemp" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.4}/>
+                <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
+              </linearGradient>
+            </defs>
+            <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />
+            <XAxis dataKey="time" stroke="#475569" fontSize={12} tickLine={false} axisLine={false} />
+            <YAxis stroke="#475569" fontSize={12} tickLine={false} axisLine={false} />
+            <Tooltip contentStyle={{ backgroundColor: '#0f172a', borderColor: '#1e293b', borderRadius: '8px', color: '#fff' }} />
+            <Area type="monotone" dataKey="temperatureMaitri" name="Maitri °C" stroke="#3b82f6" strokeWidth={3} fillOpacity={1} fill="url(#colorTemp)" />
+          </AreaChart>
+        </ResponsiveContainer>
       </div>
     </div>
   );
