@@ -58,7 +58,7 @@ export default function SIHPresentDeck() {
           {mediaList.map((_, idx) => (
             <div 
               key={idx} 
-              className={\`h-1.5 rounded-full transition-all duration-500 \${idx === activeIndex ? 'w-8 bg-white' : 'w-2 bg-white/30'}\`}
+              className={`h-1.5 rounded-full transition-all duration-500 ${idx === activeIndex ? 'w-8 bg-white' : 'w-2 bg-white/30'}`}
             />
           ))}
         </div>
@@ -78,7 +78,7 @@ export default function SIHPresentDeck() {
           return (
             <div
               key={idx}
-              className={\`absolute inset-0 transition-opacity duration-1000 ease-in-out \${isActive ? 'opacity-100 z-10' : 'opacity-0 z-0'}\`}
+              className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${isActive ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
             >
               {media.type === 'video' ? (
                 <video
@@ -92,7 +92,7 @@ export default function SIHPresentDeck() {
               ) : (
                 <div 
                   className="w-full h-full bg-center bg-cover bg-no-repeat"
-                  style={{ backgroundImage: \`url(\${media.src})\` }}
+                  style={{ backgroundImage: `url(${media.src})` }}
                 />
               )}
               
@@ -104,22 +104,22 @@ export default function SIHPresentDeck() {
 
         {/* Narrative Text Overlays */}
         <div className="absolute inset-0 z-30 pointer-events-none flex flex-col justify-end pb-32 px-10 md:px-24">
-          <div className={\`transition-all duration-1000 max-w-3xl \${activeIndex === 0 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}\`}>
+          <div className={`transition-all duration-1000 max-w-3xl ${activeIndex === 0 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
             <h2 className="text-4xl md:text-6xl font-black text-white mb-4 drop-shadow-lg">Antarctic Operations Command</h2>
             <p className="text-lg md:text-2xl text-slate-200 drop-shadow-md border-l-4 border-cyan-400 pl-4">A digital twin ecosystem ensuring the survival and efficiency of India's Maitri and Bharati research stations.</p>
           </div>
           
-          <div className={\`absolute bottom-32 left-10 md:left-24 transition-all duration-1000 max-w-3xl \${activeIndex === 1 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}\`}>
+          <div className={`absolute bottom-32 left-10 md:left-24 transition-all duration-1000 max-w-3xl ${activeIndex === 1 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
             <h2 className="text-4xl md:text-6xl font-black text-white mb-4 drop-shadow-lg">Real-Time Situational Awareness</h2>
             <p className="text-lg md:text-2xl text-slate-200 drop-shadow-md border-l-4 border-blue-400 pl-4">Monitoring critical systems, telemetry, and environmental anomalies in the harshest continent on Earth.</p>
           </div>
           
-          <div className={\`absolute bottom-32 left-10 md:left-24 transition-all duration-1000 max-w-3xl \${activeIndex === 2 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}\`}>
+          <div className={`absolute bottom-32 left-10 md:left-24 transition-all duration-1000 max-w-3xl ${activeIndex === 2 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
             <h2 className="text-4xl md:text-6xl font-black text-white mb-4 drop-shadow-lg">AI-Driven Predictive Maintenance</h2>
             <p className="text-lg md:text-2xl text-slate-200 drop-shadow-md border-l-4 border-yellow-400 pl-4">Anticipating hardware failures before they happen, protecting personnel and mission integrity.</p>
           </div>
           
-          <div className={\`absolute bottom-32 left-10 md:left-24 transition-all duration-1000 max-w-3xl \${activeIndex === 3 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}\`}>
+          <div className={`absolute bottom-32 left-10 md:left-24 transition-all duration-1000 max-w-3xl ${activeIndex === 3 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
             <h2 className="text-4xl md:text-6xl font-black text-white mb-4 drop-shadow-lg">Seamless Logistics & Energy</h2>
             <p className="text-lg md:text-2xl text-slate-200 drop-shadow-md border-l-4 border-emerald-400 pl-4">Optimizing resource allocation and autonomous grid balancing for winter-over readiness.</p>
           </div>
