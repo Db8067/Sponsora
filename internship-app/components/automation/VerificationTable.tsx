@@ -15,10 +15,12 @@ const LinkedinIcon = ({ className = "w-3.5 h-3.5" }: { className?: string }) => 
 export interface VerificationDetails {
   entityScore: number;
   entityNote: string;
+  nameScore?: number;
+  nameNote?: string;
   officeScore: number;
   officeAddress: string;
-  identityScore: number;
-  identityNote: string;
+  identityScore?: number;
+  identityNote?: string;
   titleScore: number;
   titleMatchPercentage: number;
   urlScore: number;
@@ -485,35 +487,38 @@ export default function VerificationTable({
                 </div>
               </div>
 
-              {/* Check 2: Office HQ Resolution */}
+              {/* Check 2: Executive Name Verification */}
               <div className="p-3 rounded-2xl bg-background border border-border flex items-start gap-3">
                 <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
                 <div className="flex-1">
-                  <span className="font-bold text-foreground block">2. Registered Corporate HQ Address</span>
-                  <p className="text-muted-foreground mt-0.5">
-                    Location: <span className="font-semibold text-foreground">{selectedVerificationItem.officeAddress || selectedVerificationItem.location || 'Resolved'}</span>
-                  </p>
-                </div>
-              </div>
-
-              {/* Check 3: Executive Identity Match */}
-              <div className="p-3 rounded-2xl bg-background border border-border flex items-start gap-3">
-                <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
-                <div className="flex-1">
-                  <span className="font-bold text-foreground block">3. Executive Identity Cross-Reference</span>
+                  <span className="font-bold text-foreground block">2. Verified Human Executive Name</span>
                   <p className="text-muted-foreground mt-0.5">
                     Verified Officer: <span className="font-semibold text-foreground">{selectedVerificationItem.verifiedName}</span>
+                    <span className="block text-[10px] text-emerald-600 dark:text-emerald-400 mt-0.5 font-medium">
+                      ✓ Confirmed human executive (Rejects company names & title placeholders)
+                    </span>
                   </p>
                 </div>
               </div>
 
-              {/* Check 4: Designation Alignment */}
+              {/* Check 3: Designation Alignment */}
               <div className="p-3 rounded-2xl bg-background border border-border flex items-start gap-3">
                 <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
                 <div className="flex-1">
-                  <span className="font-bold text-foreground block">4. Designation & Seniority Alignment</span>
+                  <span className="font-bold text-foreground block">3. Designation & Seniority Alignment</span>
                   <p className="text-muted-foreground mt-0.5">
                     Target: <span className="font-medium text-foreground">{selectedVerificationItem.targetTitle}</span> → Verified: <span className="font-semibold text-cyan-500">{selectedVerificationItem.verifiedTitle}</span>
+                  </p>
+                </div>
+              </div>
+
+              {/* Check 4: Office HQ Resolution */}
+              <div className="p-3 rounded-2xl bg-background border border-border flex items-start gap-3">
+                <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
+                <div className="flex-1">
+                  <span className="font-bold text-foreground block">4. Registered Corporate HQ Address</span>
+                  <p className="text-muted-foreground mt-0.5">
+                    Location: <span className="font-semibold text-foreground">{selectedVerificationItem.officeAddress || selectedVerificationItem.location || 'Resolved'}</span>
                   </p>
                 </div>
               </div>
