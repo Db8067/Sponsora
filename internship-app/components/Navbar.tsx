@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Menu, X, Calendar, ChevronRight, Briefcase, Home, User } from "lucide-react";
+import { Menu, X, Calendar, ChevronRight, Briefcase, Home, User, Zap } from "lucide-react";
 import { UserButton, useUser } from "@clerk/nextjs";
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
@@ -72,6 +72,11 @@ export default function Navbar() {
 
             <Link href="/events" className="text-sm font-medium text-foreground/60 hover:text-foreground transition-colors">
               Discover Events
+            </Link>
+
+            <Link href="/automation" className="text-sm font-semibold text-cyan-400 hover:text-cyan-300 transition-colors flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-950/60 border border-cyan-800/80 shadow-[0_0_15px_rgba(6,182,212,0.15)]">
+              <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
+              Automation
             </Link>
           </div>
 
@@ -197,6 +202,18 @@ export default function Navbar() {
                       <ChevronRight className="w-4 h-4 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
                     </Link>
                   )}
+
+                  <Link 
+                    href="/automation"
+                    onClick={() => setIsOpen(false)}
+                    className="flex items-center justify-between px-4 py-3 rounded-2xl text-cyan-400 hover:text-cyan-300 hover:bg-cyan-500/10 transition-all font-semibold text-lg group mb-2"
+                  >
+                    <span className="flex items-center gap-3">
+                      <Zap className="w-5 h-5 text-cyan-400" />
+                      Executive Automation
+                    </span>
+                    <ChevronRight className="w-4 h-4 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
+                  </Link>
 
                   <Link 
                     href="/events"
