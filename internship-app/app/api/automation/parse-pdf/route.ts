@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { PDFParse } from 'pdf-parse';
+import * as xlsx from 'xlsx';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -15,10 +16,25 @@ export async function POST(req: NextRequest) {
 
     const arrayBuffer = await file.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
+    const fileName = file.name.toLowerCase();
 
-    const parser = new PDFParse({ data: buffer });
-    const parsedData = await parser.getText();
-    const rawText = parsedData.text || '';
+    let rawText = '';
+    let pageCount = 1;
+
+    if (fileName.endsWith('.pdf') || file.type === 'application/pdf') {
+      const parser = new PDFParse({ data: buffer });
+      const parsedData = await parser.getText();
+      rawText = parsedData.text || '';
+      pageCount = parsedData.total || 1;
+    } else if (fileName.endsWith('.xlsx') || fileName.endsWith('.xls')) {
+      const workbook = xlsx.read(buffer, { type: 'buffer' });
+      const firstSheetName = workbook.SheetNames[0];
+      const sheet = workbook.Sheets[firstSheetName];
+      rawText = xlsx.utils.sheet_to_csv(sheet);
+    } else {
+      // Treat as CSV or TXT
+      rawText = buffer.toString('utf-8');
+    }
 
     if (!rawText.trim()) {
       return NextResponse.json({
@@ -33,7 +49,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({
       success: true,
       filename: file.name,
-      pageCount: parsedData.total || 1,
+      pageCount: pageCount,
       totalExtracted: extractedPairs.length,
       items: extractedPairs,
     });

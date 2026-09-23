@@ -290,27 +290,27 @@ export default function AutomationPage() {
 
         {/* Hero Section */}
         <div className="text-center max-w-4xl mx-auto mb-10">
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[1.1] mb-6">
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-foreground tracking-tight leading-[1.1] mb-6">
             Extract, Find & Verify <br className="hidden sm:block" />
             <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-indigo-400 bg-clip-text text-transparent">
               Executive LinkedIn Profiles
             </span> in Bulk
           </h1>
-          <p className="text-base sm:text-lg text-slate-400 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-base sm:text-lg text-foreground/70 max-w-2xl mx-auto leading-relaxed">
             Upload any structured or unstructured PDF with 500 to 2,000 companies and designations (Founders, Directors, IT Heads). 
             Our 100% free search agent scans Google, Chrome, and LinkedIn to return verified profiles with 1-click PDF & CSV export.
           </p>
 
           {/* Key Metric Badges */}
-          <div className="flex flex-wrap items-center justify-center gap-4 mt-6 text-xs text-slate-300">
-            <span className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-slate-900/80 border border-slate-800">
-              <Zap className="w-3.5 h-3.5 text-cyan-400" /> 100% Free Search Proxy (No Token Cap)
+          <div className="flex flex-wrap items-center justify-center gap-4 mt-6 text-xs text-foreground/70">
+            <span className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-background/80 border border-border shadow-sm">
+              <Zap className="w-3.5 h-3.5 text-cyan-500" /> 100% Free Search Proxy (No Token Cap)
             </span>
-            <span className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-slate-900/80 border border-slate-800">
-              <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" /> Anti-Block Paced Queue (500–2000 Records)
+            <span className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-background/80 border border-border shadow-sm">
+              <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" /> Anti-Block Paced Queue (500–2000 Records)
             </span>
-            <span className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-slate-900/80 border border-slate-800">
-              <Users className="w-3.5 h-3.5 text-purple-400" /> Multi-Profile Co-Founder Extraction
+            <span className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-background/80 border border-border shadow-sm">
+              <Users className="w-3.5 h-3.5 text-purple-500" /> Multi-Profile Co-Founder Extraction
             </span>
           </div>
         </div>
@@ -331,7 +331,7 @@ export default function AutomationPage() {
               }
             }}
             onClick={() => fileInputRef.current?.click()}
-            className="group relative cursor-pointer rounded-3xl border-2 border-dashed border-cyan-500/40 hover:border-cyan-400 bg-slate-900/60 hover:bg-slate-900/90 p-8 sm:p-12 text-center transition-all duration-300 shadow-[0_0_40px_rgba(6,182,212,0.08)] hover:shadow-[0_0_50px_rgba(6,182,212,0.2)]"
+            className="group relative cursor-pointer rounded-3xl border-2 border-dashed border-cyan-500/40 hover:border-cyan-400 bg-foreground/5 hover:bg-foreground/10 p-8 sm:p-12 text-center transition-all duration-300 shadow-[0_0_40px_rgba(6,182,212,0.08)] hover:shadow-[0_0_50px_rgba(6,182,212,0.2)]"
           >
             <input
               type="file"
@@ -353,7 +353,7 @@ export default function AutomationPage() {
               )}
             </div>
 
-            <h3 className="text-xl font-bold text-white mb-2">
+            <h3 className="text-xl font-bold text-foreground mb-2">
               {isParsing 
                 ? 'Parsing Document & Extracting Entities...' 
                 : file 
@@ -361,7 +361,7 @@ export default function AutomationPage() {
                 : 'Drop your Company & Title Document here'}
             </h3>
 
-            <p className="text-xs sm:text-sm text-slate-400 max-w-md mx-auto mb-5">
+            <p className="text-xs sm:text-sm text-foreground/70 max-w-md mx-auto mb-5">
               Supports both structured tables and unstructured text (500 to 2,000 companies) in PDF, Excel, CSV, or Word formats. 
               Our parser automatically identifies Company Names and Target Designations.
             </p>
@@ -380,20 +380,19 @@ export default function AutomationPage() {
                   e.stopPropagation();
                   handleLoadSample();
                 }}
-                className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-cyan-300 border border-cyan-800 text-xs font-bold transition-all"
+                className="px-4 py-2.5 rounded-xl bg-background hover:bg-foreground/5 text-cyan-600 dark:text-cyan-300 border border-cyan-500/30 text-xs font-bold transition-all"
               >
                 ✨ Load 10 Sample Companies Demo
               </button>
             </div>
           </div>
 
-          {/* Uploaded File Info & Preview Pill */}
           {file && (
-            <div className="flex items-center justify-between mt-4 px-5 py-3 rounded-2xl bg-slate-900 border border-slate-800 text-xs">
+            <div className="flex items-center justify-between mt-4 px-5 py-3 rounded-2xl bg-background/60 backdrop-blur-sm border border-border shadow-sm text-xs">
               <div className="flex items-center gap-2.5">
                 <FileText className="w-4 h-4 text-cyan-400" />
-                <span className="font-semibold text-white truncate max-w-xs">{file.name}</span>
-                <span className="text-slate-500">({(file.size / 1024).toFixed(1)} KB)</span>
+                <span className="font-semibold text-foreground truncate max-w-xs">{file.name}</span>
+                <span className="text-foreground/60">({(file.size / 1024).toFixed(1)} KB)</span>
                 <span className="px-2 py-0.5 rounded bg-cyan-950 text-cyan-300 font-bold text-[10px]">
                   {parsedQueue.length} Entities Extracted
                 </span>
@@ -421,10 +420,10 @@ export default function AutomationPage() {
             
             {/* Start Button Banner if not started yet */}
             {!isSearching && verifiedList.length === 0 && (
-              <div className="p-6 rounded-3xl bg-gradient-to-r from-cyan-950/60 via-slate-900 to-blue-950/60 border border-cyan-500/30 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xl">
+              <div className="p-6 rounded-3xl bg-gradient-to-r from-cyan-500/10 via-background to-blue-500/10 border border-cyan-500/30 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xl">
                 <div>
-                  <h4 className="text-lg font-bold text-white">Ready to Execute Search Automation</h4>
-                  <p className="text-xs text-slate-400 mt-1">
+                  <h4 className="text-lg font-bold text-foreground">Ready to Execute Search Automation</h4>
+                  <p className="text-xs text-foreground/70 mt-1">
                     {parsedQueue.length} company-title pairs queued. Priority 1 (DuckDuckGo Search Proxy) will run with anti-block pacing.
                   </p>
                 </div>
@@ -471,10 +470,10 @@ export default function AutomationPage() {
               <div className="space-y-6">
                 
                 {/* Export Action Bar Above Table */}
-                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-5 rounded-2xl bg-slate-900/90 border border-slate-800">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-5 rounded-2xl bg-background/80 backdrop-blur-md border border-border shadow-sm">
                   <div>
-                    <h4 className="text-sm font-bold text-white">Step 2: Interactive Review & Final Export</h4>
-                    <p className="text-xs text-slate-400 mt-0.5">
+                    <h4 className="text-sm font-bold text-foreground">Step 2: Interactive Review & Final Export</h4>
+                    <p className="text-xs text-foreground/70 mt-0.5">
                       Verify candidate names and LinkedIn URLs. Click below to view the final report in your browser without downloading.
                     </p>
                   </div>
