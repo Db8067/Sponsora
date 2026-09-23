@@ -14,6 +14,7 @@ interface PdfReportPreviewProps {
 export default function PdfReportPreview({ items, isOpen, onClose }: PdfReportPreviewProps) {
   const [pdfDataUrl, setPdfDataUrl] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [pdfFormat, setPdfFormat] = useState<'clean' | 'detailed'>('clean');
 
   useEffect(() => {
     if (isOpen && items.length > 0) {
@@ -24,7 +25,7 @@ export default function PdfReportPreview({ items, isOpen, onClose }: PdfReportPr
         URL.revokeObjectURL(pdfDataUrl);
       }
     };
-  }, [isOpen, items]);
+  }, [isOpen, items, pdfFormat]);
 
   const generatePdfBlob = (): Blob => {
     const doc = new jsPDF({
@@ -56,19 +57,56 @@ export default function PdfReportPreview({ items, isOpen, onClose }: PdfReportPr
     const dateStr = `Generated: ${new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })} · Total Records: ${items.length}`;
     doc.text(dateStr, pageWidth - 40, 44, { align: 'right' });
 
-    // Table Data preparation (Strictly: Company Name | Verified Title | Executive Name | LinkedIn Profile URL)
-    const tableRows = items.map((item, index) => [
-      String(index + 1),
-      item.company,
-      item.verifiedTitle || item.targetTitle,
-      item.verifiedName,
-      item.linkedinUrl,
-    ]);
+    // Table Data preparation
+    let tableHead: string[][];
+    let tableRows: string[][];
+    let columnStyles: any;
+    let urlColumnIndex: number;
+
+    if (pdfFormat === 'clean') {
+      // Clean Executive Name & LinkedIn URL focused report (User Requested)
+      tableHead = [['#', 'Executive Name', 'Company Name', 'Verified Designation', 'Verified LinkedIn Profile URL']];
+      tableRows = items.map((item, index) => [
+        String(index + 1),
+        item.verifiedName,
+        item.company,
+        item.verifiedTitle || item.targetTitle,
+        item.linkedinUrl,
+      ]);
+      columnStyles = {
+        0: { cellWidth: 35, halign: 'center' },
+        1: { cellWidth: 160, fontStyle: 'bold' },
+        2: { cellWidth: 160 },
+        3: { cellWidth: 150 },
+        4: { cellWidth: 260, textColor: [3, 105, 161] },
+      };
+      urlColumnIndex = 4;
+    } else {
+      // Detailed Report with HQ Office Address
+      tableHead = [['#', 'Executive Name', 'Company Name', 'Verified Designation', 'Office Address / HQ', 'Verified LinkedIn URL']];
+      tableRows = items.map((item, index) => [
+        String(index + 1),
+        item.verifiedName,
+        item.company,
+        item.verifiedTitle || item.targetTitle,
+        item.officeAddress || item.location || 'India / Global HQ',
+        item.linkedinUrl,
+      ]);
+      columnStyles = {
+        0: { cellWidth: 30, halign: 'center' },
+        1: { cellWidth: 140, fontStyle: 'bold' },
+        2: { cellWidth: 140 },
+        3: { cellWidth: 130 },
+        4: { cellWidth: 130 },
+        5: { cellWidth: 190, textColor: [3, 105, 161] },
+      };
+      urlColumnIndex = 5;
+    }
 
     // Render AutoTable
     autoTable(doc, {
       startY: 90,
-      head: [['#', 'Company Name', 'Verified Designation', 'Executive Name', 'Verified LinkedIn URL']],
+      head: tableHead,
       body: tableRows,
       theme: 'grid',
       styles: {
@@ -87,16 +125,10 @@ export default function PdfReportPreview({ items, isOpen, onClose }: PdfReportPr
       alternateRowStyles: {
         fillColor: [248, 250, 252],
       },
-      columnStyles: {
-        0: { cellWidth: 30, halign: 'center' },
-        1: { cellWidth: 160, fontStyle: 'bold' },
-        2: { cellWidth: 150 },
-        3: { cellWidth: 150, fontStyle: 'bold' },
-        4: { cellWidth: 270, textColor: [3, 105, 161] }, // Blue hyperlink look
-      },
+      columnStyles,
       didDrawCell: (data) => {
         // Make the LinkedIn URL clickable in the generated PDF
-        if (data.section === 'body' && data.column.index === 4 && data.cell.text.length > 0) {
+        if (data.section === 'body' && data.column.index === urlColumnIndex && data.cell.text.length > 0) {
           const rawUrl = items[data.row.index]?.linkedinUrl;
           if (rawUrl && rawUrl.startsWith('http')) {
             doc.link(data.cell.x, data.cell.y, data.cell.width, data.cell.height, { url: rawUrl });
@@ -149,13 +181,14 @@ export default function PdfReportPreview({ items, isOpen, onClose }: PdfReportPr
   };
 
   const handleDownloadCsv = () => {
-    const headers = ['#', 'Company Name', 'Target Designation', 'Verified Executive Name', 'Verified Designation', 'LinkedIn URL', 'Confidence', 'Source'];
+    const headers = ['#', 'Company Name', 'Target Designation', 'Verified Executive Name', 'Verified Designation', 'Office Address / HQ', 'LinkedIn URL', 'Confidence', 'Source'];
     const rows = items.map((item, idx) => [
       idx + 1,
       `"${item.company.replace(/"/g, '""')}"`,
       `"${item.targetTitle.replace(/"/g, '""')}"`,
       `"${item.verifiedName.replace(/"/g, '""')}"`,
       `"${(item.verifiedTitle || item.targetTitle).replace(/"/g, '""')}"`,
+      `"${(item.officeAddress || item.location || '').replace(/"/g, '""')}"`,
       `"${item.linkedinUrl}"`,
       `"${item.confidence}"`,
       `"${item.source}"`,
@@ -198,11 +231,29 @@ export default function PdfReportPreview({ items, isOpen, onClose }: PdfReportPr
             </div>
           </div>
 
-          {/* Action Buttons */}
-          <div className="flex items-center gap-2.5 w-full sm:w-auto">
+          {/* Action Buttons & Format Selector */}
+          <div className="flex flex-wrap items-center gap-2.5 w-full sm:w-auto">
+            {/* Format Toggle */}
+            <div className="flex items-center bg-slate-800 p-1 rounded-xl border border-slate-700 text-[11px] font-semibold">
+              <button
+                onClick={() => setPdfFormat('clean')}
+                className={`px-2.5 py-1 rounded-lg transition-colors ${pdfFormat === 'clean' ? 'bg-cyan-600 text-white' : 'text-slate-400 hover:text-white'}`}
+                title="Focused on Executive Name and LinkedIn Profile"
+              >
+                Clean Report
+              </button>
+              <button
+                onClick={() => setPdfFormat('detailed')}
+                className={`px-2.5 py-1 rounded-lg transition-colors ${pdfFormat === 'detailed' ? 'bg-cyan-600 text-white' : 'text-slate-400 hover:text-white'}`}
+                title="Include Registered Office Address & Full Metadata"
+              >
+                Detailed (with HQ)
+              </button>
+            </div>
+
             <button
               onClick={handleDownloadCsv}
-              className="flex-1 sm:flex-initial flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold border border-slate-700 transition-all hover:scale-105"
+              className="flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold border border-slate-700 transition-all hover:scale-105"
             >
               <FileSpreadsheet className="w-4 h-4 text-emerald-400" />
               1-Click CSV
@@ -210,7 +261,7 @@ export default function PdfReportPreview({ items, isOpen, onClose }: PdfReportPr
 
             <button
               onClick={handleDownloadPdf}
-              className="flex-1 sm:flex-initial flex items-center justify-center gap-1.5 px-5 py-2 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white text-xs font-bold shadow-lg shadow-cyan-600/30 transition-all hover:scale-105"
+              className="flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white text-xs font-bold shadow-lg shadow-cyan-600/30 transition-all hover:scale-105"
             >
               <Download className="w-4 h-4" />
               Download Final PDF
@@ -250,7 +301,7 @@ export default function PdfReportPreview({ items, isOpen, onClose }: PdfReportPr
         <div className="px-6 py-2.5 bg-slate-950 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-500">
           <span className="flex items-center gap-1.5">
             <CheckCircle2 className="w-3.5 h-3.5 text-cyan-400" />
-            Verified format: Company Name · Verified Title · Executive Name · Direct LinkedIn URL
+            Verified format: Executive Name · Company Name · Verified Designation · Direct Clickable LinkedIn URL
           </span>
           <button 
             onClick={onClose}

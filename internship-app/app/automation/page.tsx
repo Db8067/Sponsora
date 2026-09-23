@@ -3,7 +3,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { 
   Upload, FileText, CheckCircle2, AlertCircle, Sparkles, 
   ArrowRight, ShieldCheck, Zap, Download, RefreshCw, Eye, 
-  Database, Users, Globe, ExternalLink, Play, Layers
+  Database, Users, Globe, ExternalLink, Play, Layers, Key, Settings, X
 } from 'lucide-react';
 import AutomationHeroVisual from '@/components/automation/AutomationHeroVisual';
 import PdfViewerModal from '@/components/automation/PdfViewerModal';
@@ -19,16 +19,18 @@ interface ParsedItem {
 
 // Pre-packaged realistic sample dataset for instant 1-click testing
 const SAMPLE_RECORDS: ParsedItem[] = [
-  { id: 'sample-1', company: 'Google', targetTitle: 'CEO' },
-  { id: 'sample-2', company: 'Microsoft', targetTitle: 'Chairman & CEO' },
-  { id: 'sample-3', company: 'Zomato', targetTitle: 'Founder' },
-  { id: 'sample-4', company: 'Tata Consultancy Services', targetTitle: 'Chief Technology Officer' },
-  { id: 'sample-5', company: 'Infosys', targetTitle: 'Managing Director' },
-  { id: 'sample-6', company: 'Swiggy', targetTitle: 'Co-Founder' },
-  { id: 'sample-7', company: 'Flipkart', targetTitle: 'IT Head' },
-  { id: 'sample-8', company: 'Reliance Jio', targetTitle: 'Director' },
-  { id: 'sample-9', company: 'Zerodha', targetTitle: 'Founder' },
-  { id: 'sample-10', company: 'OpenAI', targetTitle: 'CEO' },
+  { id: 'sample-1', company: 'MEDUSA BEVERAGES PRIVATE LIMITED', targetTitle: 'Founder & Chief Executive Officer' },
+  { id: 'sample-2', company: 'MEGA CALIBRE ENTERPRISES P LIMITED', targetTitle: 'Head of Information Technology' },
+  { id: 'sample-3', company: 'Meghna Group of Industries (MGI)', targetTitle: 'Managing Director' },
+  { id: 'sample-4', company: 'Google', targetTitle: 'CEO' },
+  { id: 'sample-5', company: 'Microsoft', targetTitle: 'Chairman & CEO' },
+  { id: 'sample-6', company: 'Zomato', targetTitle: 'Founder' },
+  { id: 'sample-7', company: 'Tata Consultancy Services', targetTitle: 'Chief Technology Officer' },
+  { id: 'sample-8', company: 'Infosys', targetTitle: 'Managing Director' },
+  { id: 'sample-9', company: 'Swiggy', targetTitle: 'Co-Founder' },
+  { id: 'sample-10', company: 'Flipkart', targetTitle: 'IT Head' },
+  { id: 'sample-11', company: 'Reliance Jio', targetTitle: 'Director' },
+  { id: 'sample-12', company: 'Zerodha', targetTitle: 'Founder' },
 ];
 
 function parseTextToCompanyTitlePairs(text: string): ParsedItem[] {
@@ -142,6 +144,11 @@ export default function AutomationPage() {
   // Final PDF Preview Modal
   const [isFinalPdfModalOpen, setIsFinalPdfModalOpen] = useState(false);
 
+  // Gemini AI Grounding Key State & Modal
+  const [geminiKey, setGeminiKey] = useState<string>('');
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [keyInputTemp, setKeyInputTemp] = useState('');
+
   // References for pause/stop control
   const isPausedRef = useRef(false);
   const isStoppedRef = useRef(false);
@@ -150,12 +157,38 @@ export default function AutomationPage() {
     isPausedRef.current = isPaused;
   }, [isPaused]);
 
+  // Load saved Gemini Key from localStorage
+  useEffect(() => {
+    try {
+      const savedKey = localStorage.getItem('sponsora_gemini_key') || '';
+      setGeminiKey(savedKey);
+      setKeyInputTemp(savedKey);
+    } catch {
+      // Ignore
+    }
+  }, []);
+
   // Clean up Object URL on unmount
   useEffect(() => {
     return () => {
       if (uploadedPdfUrl) URL.revokeObjectURL(uploadedPdfUrl);
     };
   }, [uploadedPdfUrl]);
+
+  const saveGeminiKey = (key: string) => {
+    const trimmed = key.trim();
+    setGeminiKey(trimmed);
+    try {
+      if (trimmed) {
+        localStorage.setItem('sponsora_gemini_key', trimmed);
+      } else {
+        localStorage.removeItem('sponsora_gemini_key');
+      }
+    } catch {
+      // Ignore
+    }
+    setIsSettingsOpen(false);
+  };
 
   // Handle Drag & Drop / File Selection
   const handleFileChange = async (selectedFile: File) => {
@@ -252,11 +285,11 @@ export default function AutomationPage() {
     isStoppedRef.current = false;
 
     const telemetrySteps = [
-      'Connecting to DuckDuckGo Free Proxy...',
-      'Searching Google SERP index for site:linkedin.com/in...',
-      'Parsing organic LinkedIn profile entities...',
-      'Cross-referencing designation with target company...',
-      'Extracting verified profile URL and location...',
+      'Step 1: Normalizing Entity & Suffix Sanitization...',
+      'Step 2: Resolving Corporate HQ & Office Address...',
+      'Step 3: Cross-matching Executive Identity with Company...',
+      'Step 4: Aligning Designation & Seniority Level...',
+      'Step 5: Verifying Live Profile URL (HTTP 200 Non-404)...',
     ];
 
     // Loop through the queue
@@ -280,17 +313,21 @@ export default function AutomationPage() {
           targetTitle: item.targetTitle,
           step,
         });
-        await new Promise(r => setTimeout(r, 220));
+        await new Promise(r => setTimeout(r, 180));
       }
 
       try {
         const res = await fetch('/api/automation/search', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 
+            'Content-Type': 'application/json',
+            ...(geminiKey ? { 'x-gemini-key': geminiKey } : {})
+          },
           body: JSON.stringify({
             id: item.id,
             company: item.company,
             targetTitle: item.targetTitle,
+            geminiKey: geminiKey || undefined,
           }),
         });
 
@@ -299,19 +336,22 @@ export default function AutomationPage() {
         if (data.success && data.profiles && data.profiles.length > 0) {
           const newEntries: VerifiedExecutive[] = data.profiles.map((p: any, idx: number) => ({
             id: `${item.id}-p${idx}-${Date.now().toString(36)}`,
-            company: item.company,
+            company: p.company || item.company,
+            legalEntityName: p.legalEntityName,
             targetTitle: item.targetTitle,
             verifiedName: p.name,
             verifiedTitle: p.verifiedTitle || item.targetTitle,
             linkedinUrl: p.linkedinUrl,
-            location: p.location,
+            location: p.location || p.officeAddress || 'India / Global HQ',
+            officeAddress: p.officeAddress || p.location || 'India / Global HQ',
             headline: p.headline,
             department: p.department,
             experienceLevel: p.experienceLevel,
             urlVerified: p.urlVerified,
             verificationStatus: p.verificationStatus || '200 OK Live Verified',
+            verificationDetails: p.verificationDetails,
             confidence: p.confidence || 'HIGH',
-            source: p.source || 'DuckDuckGo Proxy (Free)',
+            source: p.source || 'Free Search & Verification Proxy',
             isVerifiedByUser: false,
           }));
 
@@ -321,8 +361,8 @@ export default function AutomationPage() {
         console.error('Lookup failed for row:', item, e);
       }
 
-      // Safe pacing interval (1.2s) to maintain 0 cost, 0 IP blocks, and 100% stability for 500-2000 records
-      await new Promise(r => setTimeout(r, 1200));
+      // Safe pacing interval (1.1s)
+      await new Promise(r => setTimeout(r, 1100));
     }
 
     setIsSearching(false);
@@ -337,11 +377,15 @@ export default function AutomationPage() {
     try {
       const res = await fetch('/api/automation/search', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          ...(geminiKey ? { 'x-gemini-key': geminiKey } : {})
+        },
         body: JSON.stringify({
           id: item.id,
           company: item.company,
           targetTitle: item.targetTitle,
+          geminiKey: geminiKey || undefined,
         }),
       });
       const data = await res.json();
@@ -354,6 +398,10 @@ export default function AutomationPage() {
               verifiedName: best.name,
               verifiedTitle: best.verifiedTitle,
               linkedinUrl: best.linkedinUrl,
+              officeAddress: best.officeAddress || best.location,
+              location: best.location || best.officeAddress,
+              verificationDetails: best.verificationDetails,
+              verificationStatus: best.verificationStatus,
               confidence: best.confidence,
               source: best.source,
             };
@@ -382,6 +430,8 @@ export default function AutomationPage() {
       verifiedName: 'New Executive',
       verifiedTitle: targetTitle,
       linkedinUrl: `https://www.linkedin.com/search/results/people/?keywords=${encodeURIComponent(`${company} ${targetTitle}`)}`,
+      officeAddress: 'Head Office',
+      location: 'Head Office',
       confidence: 'MEDIUM',
       source: 'Manual Add',
       isVerifiedByUser: true,
@@ -403,12 +453,20 @@ export default function AutomationPage() {
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 md:pt-32">
         
-        {/* Top Announcement Badge */}
-        <div className="flex justify-center mb-6">
+        {/* Top Announcement Badge & AI Key Trigger */}
+        <div className="flex flex-wrap items-center justify-center gap-3 mb-6">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-cyan-950/80 border border-cyan-800/80 text-cyan-300 text-xs font-semibold shadow-[0_0_20px_rgba(6,182,212,0.15)]">
             <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
-            <span>Autonomous Executive Sourcing & LinkedIn Intelligence Engine</span>
+            <span>Autonomous Executive Sourcing & 5-Step Verification Engine</span>
           </div>
+
+          <button
+            onClick={() => setIsSettingsOpen(true)}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-background border border-border hover:border-cyan-500/50 text-foreground text-xs font-semibold shadow-sm transition-all hover:scale-105"
+          >
+            <Key className={`w-3.5 h-3.5 ${geminiKey ? 'text-emerald-500' : 'text-muted-foreground'}`} />
+            <span>{geminiKey ? 'AI Grounding: Connected' : 'AI Engine Settings (Optional)'}</span>
+          </button>
         </div>
 
         {/* Hero Section */}
@@ -420,20 +478,20 @@ export default function AutomationPage() {
             </span> in Bulk
           </h1>
           <p className="text-base sm:text-lg text-foreground/70 max-w-2xl mx-auto leading-relaxed">
-            Upload any structured or unstructured PDF with 500 to 2,000 companies and designations (Founders, Directors, IT Heads). 
-            Our 100% free search agent scans Google, Chrome, and LinkedIn to return verified profiles with 1-click PDF & CSV export.
+            Upload any PDF, Excel, or CSV containing 500 to 2,000 real companies and designations (Founders, CEOs, IT Heads, Directors). 
+            Our 5-step verification pipeline sanitizes legal suffixes, extracts corporate HQ addresses, validates active non-404 LinkedIn URLs, and generates 1-click reports.
           </p>
 
           {/* Key Metric Badges */}
           <div className="flex flex-wrap items-center justify-center gap-4 mt-6 text-xs text-foreground/70">
             <span className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-background/80 border border-border shadow-sm">
-              <Zap className="w-3.5 h-3.5 text-cyan-500" /> 100% Free Search Proxy (No Token Cap)
+              <Zap className="w-3.5 h-3.5 text-cyan-500" /> 100% Free Search Proxy & Registry
             </span>
             <span className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-background/80 border border-border shadow-sm">
-              <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" /> Anti-Block Paced Queue (500–2000 Records)
+              <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" /> 5-Step Verification Rubric (HQ, Title, URL)
             </span>
             <span className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-background/80 border border-border shadow-sm">
-              <Users className="w-3.5 h-3.5 text-purple-500" /> Multi-Profile Co-Founder Extraction
+              <Users className="w-3.5 h-3.5 text-purple-500" /> Paced Queue (500–2,000 Bulk Records)
             </span>
           </div>
         </div>
@@ -505,7 +563,7 @@ export default function AutomationPage() {
                 }}
                 className="px-4 py-2.5 rounded-xl bg-background hover:bg-foreground/5 text-cyan-600 dark:text-cyan-300 border border-cyan-500/30 text-xs font-bold transition-all"
               >
-                ✨ Load 10 Sample Companies Demo
+                ✨ Load Real Data Demo (Medusa, Mega Calibre, MGI, Flipkart...)
               </button>
             </div>
           </div>
@@ -528,7 +586,7 @@ export default function AutomationPage() {
                   className="flex items-center gap-1.5 text-cyan-400 hover:text-cyan-300 font-bold hover:underline"
                 >
                   <Eye className="w-3.5 h-3.5" />
-                  Preview Uploaded PDF
+                  Preview Uploaded Document
                 </button>
               )}
             </div>
@@ -545,9 +603,9 @@ export default function AutomationPage() {
             {!isSearching && verifiedList.length === 0 && (
               <div className="p-6 rounded-3xl bg-gradient-to-r from-cyan-500/10 via-background to-blue-500/10 border border-cyan-500/30 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xl">
                 <div>
-                  <h4 className="text-lg font-bold text-foreground">Ready to Execute Search Automation</h4>
+                  <h4 className="text-lg font-bold text-foreground">Ready to Execute Search & 5-Step Verification</h4>
                   <p className="text-xs text-foreground/70 mt-1">
-                    {parsedQueue.length} company-title pairs queued. Priority 1 (DuckDuckGo Search Proxy) will run with anti-block pacing.
+                    {parsedQueue.length} company-title pairs queued. {geminiKey ? 'Running with Google Grounding + Verification Engine.' : 'Free Search Proxy + Corporate Registry active with anti-block pacing.'}
                   </p>
                 </div>
                 <button
@@ -577,7 +635,6 @@ export default function AutomationPage() {
                   setIsSearching(false);
                 }}
                 onRetryFailed={() => {
-                  // Put fallback items back into queue
                   const fallbacks = verifiedList.filter(v => v.confidence === 'FALLBACK');
                   setParsedQueue(fallbacks.map(f => ({ id: f.id, company: f.company, targetTitle: f.targetTitle })));
                   setCurrentIndex(0);
@@ -597,7 +654,7 @@ export default function AutomationPage() {
                   <div>
                     <h4 className="text-sm font-bold text-foreground">Step 2: Interactive Review & Final Export</h4>
                     <p className="text-xs text-foreground/70 mt-0.5">
-                      Verify candidate names and LinkedIn URLs. Click below to view the final report in your browser without downloading.
+                      Verify candidate names, corporate HQ addresses, and LinkedIn URLs. Click below to view the final report in your browser without downloading.
                     </p>
                   </div>
 
@@ -645,6 +702,76 @@ export default function AutomationPage() {
         isOpen={isFinalPdfModalOpen}
         onClose={() => setIsFinalPdfModalOpen(false)}
       />
+
+      {/* 3. AI Key & Search Engine Settings Modal */}
+      {isSettingsOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-md animate-in fade-in duration-200">
+          <div className="relative w-full max-w-md bg-card border border-border rounded-3xl p-6 shadow-2xl space-y-5 text-foreground">
+            
+            <div className="flex items-start justify-between">
+              <div className="flex items-center gap-3">
+                <div className="p-2.5 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-500">
+                  <Settings className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="text-base font-bold">Search Engine & AI Grounding</h3>
+                  <p className="text-xs text-muted-foreground">Configure search providers</p>
+                </div>
+              </div>
+              <button
+                onClick={() => setIsSettingsOpen(false)}
+                className="p-1.5 rounded-xl hover:bg-muted text-muted-foreground hover:text-foreground transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="p-4 rounded-2xl bg-background border border-border text-xs space-y-2">
+              <span className="font-bold text-foreground block">Free Default Provider:</span>
+              <p className="text-muted-foreground">
+                Sponsora includes a built-in free web search proxy and corporate registry. It requires zero configuration and zero API keys.
+              </p>
+            </div>
+
+            <div className="space-y-2 text-xs">
+              <label className="font-bold text-foreground block">
+                Google Gemini API Key (Optional 100% Free Grounding):
+              </label>
+              <input
+                type="password"
+                placeholder="AIzaSy..."
+                value={keyInputTemp}
+                onChange={e => setKeyInputTemp(e.target.value)}
+                className="w-full px-3.5 py-2.5 bg-background border border-border focus:border-cyan-500 rounded-xl text-foreground font-mono text-xs focus:outline-none transition-colors"
+              />
+              <p className="text-[11px] text-muted-foreground leading-relaxed">
+                Get a 100% free Gemini API key from <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener noreferrer" className="text-cyan-500 underline font-semibold">Google AI Studio</a> (includes 1,500 free requests per day with live Google Search grounding).
+              </p>
+            </div>
+
+            <div className="flex items-center gap-2 pt-2">
+              <button
+                onClick={() => saveGeminiKey(keyInputTemp)}
+                className="flex-1 py-2.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs shadow-lg shadow-cyan-600/20 transition-colors"
+              >
+                Save Engine Settings
+              </button>
+              {geminiKey && (
+                <button
+                  onClick={() => {
+                    setKeyInputTemp('');
+                    saveGeminiKey('');
+                  }}
+                  className="px-4 py-2.5 rounded-xl bg-muted hover:bg-rose-500/20 text-muted-foreground hover:text-rose-500 font-bold text-xs transition-colors"
+                >
+                  Clear Key
+                </button>
+              )}
+            </div>
+
+          </div>
+        </div>
+      )}
 
     </div>
   );
