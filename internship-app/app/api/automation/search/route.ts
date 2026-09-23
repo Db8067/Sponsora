@@ -11,7 +11,7 @@ interface SearchResultItem {
   location?: string;
   headline?: string;
   confidence: 'HIGH' | 'MEDIUM' | 'FALLBACK';
-  source: 'DuckDuckGo Proxy (Free)' | 'Google Serper' | 'Gemini Search' | 'Company Directory Fallback';
+  source: 'DuckDuckGo Proxy (Free)' | 'Google Serper' | 'Gemini Search' | 'Company Directory Fallback' | 'Google Scraper (Free)' | 'Verified Demo Dataset';
   isFallback?: boolean;
 }
 
