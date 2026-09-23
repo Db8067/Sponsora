@@ -77,8 +77,10 @@ export default function AutomationPage() {
   const handleFileChange = async (selectedFile: File) => {
     if (!selectedFile) return;
 
-    if (selectedFile.type !== 'application/pdf' && !selectedFile.name.endsWith('.pdf')) {
-      alert('Please upload a valid PDF document.');
+    const allowedExts = ['.pdf', '.csv', '.xls', '.xlsx', '.txt', '.doc', '.docx'];
+    const hasValidExt = allowedExts.some(ext => selectedFile.name.toLowerCase().endsWith(ext));
+    if (!hasValidExt && selectedFile.type !== 'application/pdf') {
+      alert('Please upload a valid Document (PDF, Excel, CSV, Word, TXT).');
       return;
     }
 
@@ -268,12 +270,12 @@ export default function AutomationPage() {
   const fallbackCount = verifiedList.filter(v => v.confidence === 'FALLBACK').length;
 
   return (
-    <div className="min-h-screen bg-[#050A15] text-slate-100 font-sans selection:bg-cyan-900 selection:text-white pb-24">
+    <div className="min-h-screen bg-transparent text-foreground font-sans selection:bg-primary/30 pb-24">
       
-      {/* Background Ambience & Grid */}
-      <div className="fixed inset-0 pointer-events-none z-0">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[450px] bg-gradient-to-b from-cyan-600/10 via-blue-600/5 to-transparent blur-3xl" />
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#1e293b12_1px,transparent_1px),linear-gradient(to_bottom,#1e293b12_1px,transparent_1px)] bg-[size:32px_32px]" />
+      {/* Background Ambience & Snow Theme */}
+      <div className="absolute inset-0 z-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/20 via-background to-background pointer-events-none hidden dark:block"></div>
+      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden opacity-30">
+        <div className="absolute top-[-10%] left-[-10%] w-[120%] h-[120%] bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-20 animate-snow"></div>
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 md:pt-32">
@@ -339,7 +341,7 @@ export default function AutomationPage() {
                   handleFileChange(e.target.files[0]);
                 }
               }}
-              accept=".pdf"
+              accept=".pdf,.csv,.xlsx,.xls,.txt,.doc,.docx"
               className="hidden"
             />
 
@@ -353,14 +355,14 @@ export default function AutomationPage() {
 
             <h3 className="text-xl font-bold text-white mb-2">
               {isParsing 
-                ? 'Parsing PDF & Extracting Entities...' 
+                ? 'Parsing Document & Extracting Entities...' 
                 : file 
                 ? `Loaded: ${file.name}` 
-                : 'Drop your Company & Title PDF here'}
+                : 'Drop your Company & Title Document here'}
             </h3>
 
             <p className="text-xs sm:text-sm text-slate-400 max-w-md mx-auto mb-5">
-              Supports both structured tables and unstructured text (500 to 2,000 companies). 
+              Supports both structured tables and unstructured text (500 to 2,000 companies) in PDF, Excel, CSV, or Word formats. 
               Our parser automatically identifies Company Names and Target Designations.
             </p>
 
@@ -369,7 +371,7 @@ export default function AutomationPage() {
                 type="button" 
                 className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 text-white text-xs font-bold shadow-lg shadow-cyan-600/30 group-hover:from-cyan-500 group-hover:to-blue-500 transition-all"
               >
-                Browse PDF File
+                Browse File
               </button>
 
               <button
