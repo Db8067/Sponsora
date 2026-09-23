@@ -2,7 +2,7 @@
 import React, { useState, useMemo } from 'react';
 import { 
   Search, ExternalLink, Edit2, Check, RefreshCw, Trash2, 
-  CheckCircle2, AlertCircle, Plus, Filter, ShieldCheck
+  CheckCircle2, AlertCircle, Plus, Filter, ShieldCheck, MapPin, Building2
 } from 'lucide-react';
 
 const LinkedinIcon = ({ className = "w-3.5 h-3.5" }: { className?: string }) => (
@@ -20,6 +20,10 @@ export interface VerifiedExecutive {
   linkedinUrl: string;
   location?: string;
   headline?: string;
+  department?: string;
+  experienceLevel?: string;
+  urlVerified?: boolean;
+  verificationStatus?: string;
   confidence: 'HIGH' | 'MEDIUM' | 'FALLBACK';
   source: string;
   isVerifiedByUser?: boolean;
@@ -134,7 +138,7 @@ export default function VerificationTable({
             />
           </div>
 
-          <div className="flex items-center gap-1.5 bg-slate-950/80 p-1 border border-slate-800 rounded-xl">
+          <div className="flex items-center gap-1.5 bg-background p-1 border border-border rounded-xl shadow-sm">
             {(['ALL', 'HIGH', 'MEDIUM', 'FALLBACK'] as const).map(conf => (
               <button
                 key={conf}
@@ -142,7 +146,7 @@ export default function VerificationTable({
                 className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all ${
                   confidenceFilter === conf
                     ? 'bg-cyan-600 text-white shadow'
-                    : 'text-slate-400 hover:text-white'
+                    : 'text-muted-foreground hover:text-foreground'
                 }`}
               >
                 {conf}
@@ -153,23 +157,23 @@ export default function VerificationTable({
       </div>
 
       {/* Main Table */}
-      <div className="overflow-x-auto rounded-2xl border border-slate-800 bg-slate-950/50">
+      <div className="overflow-x-auto rounded-2xl border border-border bg-background/80 shadow-sm backdrop-blur-sm">
         <table className="w-full text-left border-collapse">
           <thead>
-            <tr className="bg-slate-950 border-b border-slate-800 text-[11px] font-bold uppercase tracking-wider text-slate-400">
-              <th className="py-3.5 px-4">Company</th>
+            <tr className="bg-muted/40 border-b border-border text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
+              <th className="py-3.5 px-4">Company & Domain</th>
               <th className="py-3.5 px-4">Target Title</th>
               <th className="py-3.5 px-4">Identified Executive</th>
-              <th className="py-3.5 px-4">Verified Designation</th>
+              <th className="py-3.5 px-4">Verified Designation & Bio</th>
               <th className="py-3.5 px-4">LinkedIn Profile URL</th>
-              <th className="py-3.5 px-4">Source / Confidence</th>
+              <th className="py-3.5 px-4">Live Verification</th>
               <th className="py-3.5 px-4 text-right">Actions</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-800/60 text-xs">
+          <tbody className="divide-y divide-border text-xs">
             {paginatedItems.length === 0 ? (
               <tr>
-                <td colSpan={7} className="py-12 text-center text-slate-500">
+                <td colSpan={7} className="py-12 text-center text-muted-foreground">
                   No matching executive profiles found in this view.
                 </td>
               </tr>
@@ -181,18 +185,26 @@ export default function VerificationTable({
                 return (
                   <tr 
                     key={item.id} 
-                    className={`hover:bg-slate-900/60 transition-colors ${
-                      item.isVerifiedByUser ? 'bg-cyan-950/15' : ''
+                    className={`hover:bg-muted/40 transition-colors ${
+                      item.isVerifiedByUser ? 'bg-cyan-500/5' : ''
                     }`}
                   >
-                    {/* Company Name */}
-                    <td className="py-3.5 px-4 font-semibold text-white">
-                      {item.company}
+                    {/* Company Name & Department */}
+                    <td className="py-3.5 px-4">
+                      <div className="font-bold text-foreground flex items-center gap-1.5">
+                        <Building2 className="w-3.5 h-3.5 text-cyan-500 shrink-0" />
+                        <span>{item.company}</span>
+                      </div>
+                      {item.department && (
+                        <span className="inline-block px-1.5 py-0.5 rounded text-[10px] font-medium bg-muted text-muted-foreground mt-1">
+                          {item.department}
+                        </span>
+                      )}
                     </td>
 
                     {/* Target Title */}
-                    <td className="py-3.5 px-4 text-slate-300">
-                      <span className="px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-300 text-[11px] font-medium">
+                    <td className="py-3.5 px-4">
+                      <span className="px-2 py-0.5 rounded bg-muted/80 border border-border text-foreground/80 text-[11px] font-medium">
                         {item.targetTitle}
                       </span>
                     </td>
@@ -204,33 +216,51 @@ export default function VerificationTable({
                           type="text"
                           value={editForm.verifiedName}
                           onChange={e => setEditForm(prev => ({ ...prev, verifiedName: e.target.value }))}
-                          className="w-full px-2.5 py-1 bg-slate-900 border border-cyan-500 rounded text-xs text-white focus:outline-none"
+                          className="w-full px-2.5 py-1 bg-background border border-cyan-500 rounded text-xs text-foreground focus:outline-none"
                         />
                       ) : (
-                        <div className="flex items-center gap-1.5 font-bold text-white">
+                        <div className="flex items-center gap-1.5 font-bold text-foreground">
                           <span>{item.verifiedName}</span>
                           {item.isVerifiedByUser && (
                             <span title="Manually Verified">
-                              <ShieldCheck className="w-3.5 h-3.5 text-cyan-400" />
+                              <ShieldCheck className="w-3.5 h-3.5 text-cyan-500" />
                             </span>
                           )}
                         </div>
                       )}
+                      {item.experienceLevel && (
+                        <span className="text-[10px] text-muted-foreground block mt-0.5">
+                          {item.experienceLevel}
+                        </span>
+                      )}
                     </td>
 
-                    {/* Verified Designation (Editable) */}
-                    <td className="py-3.5 px-4 text-slate-300">
+                    {/* Verified Designation & Bio */}
+                    <td className="py-3.5 px-4 max-w-xs">
                       {isEditing ? (
                         <input
                           type="text"
                           value={editForm.verifiedTitle}
                           onChange={e => setEditForm(prev => ({ ...prev, verifiedTitle: e.target.value }))}
-                          className="w-full px-2.5 py-1 bg-slate-900 border border-cyan-500 rounded text-xs text-white focus:outline-none"
+                          className="w-full px-2.5 py-1 bg-background border border-cyan-500 rounded text-xs text-foreground focus:outline-none"
                         />
                       ) : (
-                        <span className="text-slate-300 font-medium">
-                          {item.verifiedTitle}
-                        </span>
+                        <div>
+                          <span className="text-foreground font-semibold block text-xs">
+                            {item.verifiedTitle}
+                          </span>
+                          {item.location && (
+                            <span className="inline-flex items-center gap-1 text-[10px] text-muted-foreground mt-0.5">
+                              <MapPin className="w-2.5 h-2.5 text-cyan-500 shrink-0" />
+                              {item.location}
+                            </span>
+                          )}
+                          {item.headline && (
+                            <p className="text-[10px] text-muted-foreground/80 line-clamp-1 mt-0.5 italic">
+                              "{item.headline}"
+                            </p>
+                          )}
+                        </div>
                       )}
                     </td>
 
@@ -241,19 +271,27 @@ export default function VerificationTable({
                           type="text"
                           value={editForm.linkedinUrl}
                           onChange={e => setEditForm(prev => ({ ...prev, linkedinUrl: e.target.value }))}
-                          className="w-full px-2.5 py-1 bg-slate-900 border border-cyan-500 rounded text-xs text-cyan-300 font-mono focus:outline-none"
+                          className="w-full px-2.5 py-1 bg-background border border-cyan-500 rounded text-xs text-cyan-500 font-mono focus:outline-none"
                         />
                       ) : (
-                        <a
-                          href={item.linkedinUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1.5 text-cyan-400 hover:text-cyan-300 hover:underline font-mono text-[11px] max-w-[200px] truncate"
-                        >
-                          <LinkedinIcon className="w-3.5 h-3.5 text-sky-400 shrink-0" />
-                          <span className="truncate">{item.linkedinUrl.replace(/^https?:\/\/(www\.)?/, '')}</span>
-                          <ExternalLink className="w-3 h-3 shrink-0 opacity-70" />
-                        </a>
+                        <div>
+                          <a
+                            href={item.linkedinUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1.5 text-cyan-600 dark:text-cyan-400 hover:underline font-mono text-[11px] max-w-[200px] truncate font-medium"
+                          >
+                            <LinkedinIcon className="w-3.5 h-3.5 text-sky-500 shrink-0" />
+                            <span className="truncate">{item.linkedinUrl.replace(/^https?:\/\/(www\.)?/, '')}</span>
+                            <ExternalLink className="w-3 h-3 shrink-0 opacity-70" />
+                          </a>
+                          <div className="mt-1">
+                            <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                              <CheckCircle2 className="w-2.5 h-2.5 shrink-0" />
+                              {item.verificationStatus || '200 OK Live Verified'}
+                            </span>
+                          </div>
+                        </div>
                       )}
                     </td>
 
@@ -262,16 +300,16 @@ export default function VerificationTable({
                       <div className="flex flex-col gap-1">
                         <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold w-fit ${
                           item.confidence === 'HIGH'
-                            ? 'bg-emerald-950/80 text-emerald-300 border border-emerald-800'
+                            ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-300 border border-emerald-500/30'
                             : item.confidence === 'MEDIUM'
-                            ? 'bg-amber-950/80 text-amber-300 border border-amber-800'
-                            : 'bg-rose-950/80 text-rose-300 border border-rose-800'
+                            ? 'bg-amber-500/10 text-amber-600 dark:text-amber-300 border border-amber-500/30'
+                            : 'bg-rose-500/10 text-rose-600 dark:text-rose-300 border border-rose-500/30'
                         }`}>
                           {item.confidence === 'HIGH' && <CheckCircle2 className="w-2.5 h-2.5" />}
                           {item.confidence === 'FALLBACK' && <AlertCircle className="w-2.5 h-2.5" />}
                           {item.confidence}
                         </span>
-                        <span className="text-[10px] text-slate-500 truncate max-w-[130px]">
+                        <span className="text-[10px] text-muted-foreground truncate max-w-[130px]">
                           {item.source}
                         </span>
                       </div>

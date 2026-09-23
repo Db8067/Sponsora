@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { PDFParse } from 'pdf-parse';
 import * as xlsx from 'xlsx';
+import zlib from 'zlib';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -21,25 +21,63 @@ export async function POST(req: NextRequest) {
     let rawText = '';
     let pageCount = 1;
 
-    if (fileName.endsWith('.pdf') || file.type === 'application/pdf') {
-      const parser = new PDFParse({ data: buffer });
-      const parsedData = await parser.getText();
-      rawText = parsedData.text || '';
-      pageCount = parsedData.total || 1;
-    } else if (fileName.endsWith('.xlsx') || fileName.endsWith('.xls')) {
-      const workbook = xlsx.read(buffer, { type: 'buffer' });
-      const firstSheetName = workbook.SheetNames[0];
-      const sheet = workbook.Sheets[firstSheetName];
-      rawText = xlsx.utils.sheet_to_csv(sheet);
-    } else {
-      // Treat as CSV or TXT
-      rawText = buffer.toString('utf-8');
+    // 1. Excel Spreadsheets (.xlsx, .xls)
+    if (fileName.endsWith('.xlsx') || fileName.endsWith('.xls')) {
+      try {
+        const workbook = xlsx.read(buffer, { type: 'buffer' });
+        const sheetLines: string[] = [];
+        for (const sName of workbook.SheetNames) {
+          const sheet = workbook.Sheets[sName];
+          const csvData = xlsx.utils.sheet_to_csv(sheet);
+          if (csvData && csvData.trim()) {
+            sheetLines.push(csvData);
+          }
+        }
+        rawText = sheetLines.join('\n');
+        pageCount = workbook.SheetNames.length || 1;
+      } catch (e: any) {
+        console.warn('Excel parse fallback:', e);
+        rawText = buffer.toString('utf-8');
+      }
+    }
+    // 2. PDF Documents (.pdf) - Pure JS Zero-Crash Extractor
+    else if (fileName.endsWith('.pdf') || file.type === 'application/pdf') {
+      try {
+        rawText = extractPdfTextPure(buffer);
+        const pageMatches = buffer.toString('binary').match(/\/Type\s*\/Page[^s]/g);
+        pageCount = pageMatches ? pageMatches.length : 1;
+      } catch (pdfErr) {
+        console.warn('PDF extraction error:', pdfErr);
+        rawText = buffer.toString('binary').replace(/[^\x20-\x7E\n]/g, ' ');
+      }
+    }
+    // 3. Word Documents (.docx)
+    else if (fileName.endsWith('.docx')) {
+      try {
+        const str = buffer.toString('binary');
+        const xmlMatch = str.match(/<w:t[^>]*>([\s\S]*?)<\/w:t>/g);
+        if (xmlMatch) {
+          rawText = xmlMatch.map(t => t.replace(/<[^>]+>/g, '').trim()).filter(Boolean).join(' ');
+        } else {
+          rawText = buffer.toString('utf-8');
+        }
+      } catch {
+        rawText = buffer.toString('utf-8');
+      }
+    }
+    // 4. CSV, TSV, TXT, JSON, etc.
+    else {
+      let textStr = buffer.toString('utf-8');
+      if (textStr.charCodeAt(0) === 0xFEFF) {
+        textStr = textStr.slice(1);
+      }
+      rawText = textStr;
     }
 
     if (!rawText.trim()) {
       return NextResponse.json({
         success: false,
-        error: 'PDF appears to be empty or contains only scanned images without selectable text.',
+        error: 'Document appears to be empty or contains no extractable text.',
       }, { status: 400 });
     }
 
@@ -54,12 +92,73 @@ export async function POST(req: NextRequest) {
       items: extractedPairs,
     });
   } catch (error: any) {
-    console.error('PDF parsing error:', error);
+    console.error('Universal document parsing error:', error);
     return NextResponse.json({
       success: false,
-      error: error?.message || 'Failed to parse PDF document.',
-    }, { status: 500 });
+      error: error?.message || 'Failed to parse uploaded document.',
+    }, { status: 200 });
   }
+}
+
+// -------------------------------------------------------------
+// Pure JavaScript PDF Text Extractor (Zero Native Dependencies)
+// -------------------------------------------------------------
+function extractPdfTextPure(buffer: Buffer): string {
+  const binary = buffer.toString('binary');
+  const tokens: string[] = [];
+
+  // Match stream ... endstream blocks
+  const streamRegex = /stream\r?\n([\s\S]*?)\r?\nendstream/g;
+  let match;
+
+  while ((match = streamRegex.exec(binary)) !== null) {
+    const rawStream = Buffer.from(match[1], 'binary');
+    let decompressed: Buffer;
+
+    try {
+      decompressed = zlib.inflateSync(rawStream);
+    } catch {
+      try {
+        decompressed = zlib.inflateRawSync(rawStream);
+      } catch {
+        decompressed = rawStream;
+      }
+    }
+
+    const textContent = decompressed.toString('utf-8');
+
+    // Match (Text) Tj or (Text) ' or (Text) "
+    const tjRegex = /\(([^)]+)\)\s*(?:Tj|'|")/g;
+    let tj;
+    while ((tj = tjRegex.exec(textContent)) !== null) {
+      if (tj[1] && tj[1].trim()) tokens.push(tj[1].trim());
+    }
+
+    // Match [(Part1) -20 (Part2)] TJ
+    const arrayTjRegex = /\[([\s\S]*?)\]\s*TJ/g;
+    let arrMatch;
+    while ((arrMatch = arrayTjRegex.exec(textContent)) !== null) {
+      const parts = arrMatch[1].match(/\(([^)]*)\)/g);
+      if (parts) {
+        const fullString = parts.map(p => p.slice(1, -1)).join('').trim();
+        if (fullString) tokens.push(fullString);
+      }
+    }
+  }
+
+  // Fallback: search for parenthesized text tokens in the PDF body
+  if (tokens.length < 5) {
+    const parenRegex = /\(([A-Za-z0-9\s,.\-&|@/]{2,80})\)/g;
+    let p;
+    while ((p = parenRegex.exec(binary)) !== null) {
+      const val = p[1].trim();
+      if (val && !val.startsWith('/') && !val.includes('Adobe') && !val.includes('Font')) {
+        tokens.push(val);
+      }
+    }
+  }
+
+  return tokens.join('\n');
 }
 
 interface ExtractedItem {
