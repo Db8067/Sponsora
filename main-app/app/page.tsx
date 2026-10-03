@@ -19,8 +19,8 @@ export default function SellerLandingPage() {
           <div className="hidden md:flex flex-row items-center gap-12">
             {/* Text Content */}
             <div className="flex-1 text-left mt-0">
-              <h1 className="text-5xl lg:text-6xl font-black text-slate-800 dark:text-white leading-tight mb-4">
-                Get Direct Customers For Your Brand. No Marketplace Cuts. Get Own Brand Page.
+              <h1 className="text-4xl lg:text-5xl font-black text-slate-800 dark:text-white leading-tight mb-4">
+                Sell Direct. Keep 100%.<br className="hidden lg:block" /> Your Brand. Your Customers.
               </h1>
 
               {/* 4 USP points */}
@@ -69,8 +69,8 @@ export default function SellerLandingPage() {
           <div className="flex md:hidden flex-col items-center text-center gap-6">
             {/* Top text */}
             <div className="flex-1 w-full pt-4">
-              <h1 className="text-3xl font-black text-slate-800 dark:text-white leading-tight mb-4">
-                Get Direct Customers For Your Brand. No Marketplace Cuts. Get Own Brand Page.
+              <h1 className="text-2xl sm:text-3xl font-black text-slate-800 dark:text-white leading-tight mb-4">
+                Sell Direct. Keep 100%.<br /> Your Brand. Your Customers.
               </h1>
 
               {/* 4 USP points */}
