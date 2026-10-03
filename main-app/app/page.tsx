@@ -20,7 +20,7 @@ export default function SellerLandingPage() {
             {/* Text Content */}
             <div className="flex-1 text-left mt-0">
               <h1 className="text-4xl lg:text-5xl font-black text-slate-800 dark:text-white leading-tight mb-4">
-                Get Direct Customers For Your Brand.<br className="hidden lg:block" /> 
+                Get Direct Customers For Your Brand<br className="hidden lg:block" /> A Place For Everyone
               </h1>
 
               {/* 4 USP points */}
@@ -70,7 +70,7 @@ export default function SellerLandingPage() {
             {/* Top text */}
             <div className="flex-1 w-full pt-4">
               <h1 className="text-2xl sm:text-3xl font-black text-slate-800 dark:text-white leading-tight mb-4">
-                Sell Direct. Keep 100%.<br /> Your Brand. Your Customers.
+                Get Customers For Your Brand<br /> A Place For Everyone
               </h1>
 
               {/* 4 USP points */}
