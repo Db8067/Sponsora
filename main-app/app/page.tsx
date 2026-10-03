@@ -1,7 +1,7 @@
 import SellerNavbar from '@/components/SellerNavbar';
 import React from 'react';
 import Link from 'next/link';
-import { LineChart, MessageCircle, ShieldCheck, Percent, CheckCircle2 } from 'lucide-react';
+import { LineChart, MessageCircle, ShieldCheck, Percent, CheckCircle2, Scissors, Phone, Banknote, Zap } from 'lucide-react';
 
 export default function SellerLandingPage() {
   return (
@@ -19,17 +19,33 @@ export default function SellerLandingPage() {
           <div className="hidden md:flex flex-row items-center gap-12">
             {/* Text Content */}
             <div className="flex-1 text-left mt-0">
-              <h1 className="text-5xl lg:text-6xl font-black text-slate-800 dark:text-white leading-tight mb-6">
-                Get customers for your Brand from all over India.
+              <h1 className="text-5xl lg:text-6xl font-black text-slate-800 dark:text-white leading-tight mb-4">
+                Get Direct Customers For Your Brand. No Marketplace Cuts. Get Own Brand Page.
               </h1>
-              <p className="text-xl text-slate-600 dark:text-slate-300 mb-8 max-w-lg mx-0">
-                Register and get your own Dashboard and Customers from all over India.
-              </p>
+
+              {/* 4 USP points */}
+              <ul className="grid grid-cols-2 gap-x-6 gap-y-3 mb-8 mt-6">
+                <li className="flex items-center gap-2 text-slate-700 dark:text-slate-300 font-medium">
+                  <Scissors className="w-4 h-4 text-pink-500 flex-shrink-0" />
+                  Zero marketplace cuts
+                </li>
+                <li className="flex items-center gap-2 text-slate-700 dark:text-slate-300 font-medium">
+                  <Phone className="w-4 h-4 text-green-500 flex-shrink-0" />
+                  Direct WhatsApp chat
+                </li>
+                <li className="flex items-center gap-2 text-slate-700 dark:text-slate-300 font-medium">
+                  <Banknote className="w-4 h-4 text-blue-500 flex-shrink-0" />
+                  100% money in bank
+                </li>
+                <li className="flex items-center gap-2 text-slate-700 dark:text-slate-300 font-medium">
+                  <Zap className="w-4 h-4 text-orange-500 flex-shrink-0" />
+                  Setup under 5 mins
+                </li>
+              </ul>
               
               <div className="flex flex-row items-center gap-4 mb-10 bg-white/60 dark:bg-slate-800/60 p-3 rounded-2xl border border-pink-100 dark:border-white/10 max-w-xl mx-0 shadow-sm backdrop-blur-sm">
-                <span className="bg-pink-500 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">New</span>
-                <span className="text-slate-700 dark:text-slate-300 font-medium">Don't have Website? You can get your own in just 2 minutes.</span>
-                
+                <span className="bg-pink-500 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider flex-shrink-0">New</span>
+                <span className="text-slate-700 dark:text-slate-300 font-medium">Don't have Website? Get in just 2 minutes.</span>
               </div>
               
               <Link href="/seller-onboard">
@@ -54,21 +70,32 @@ export default function SellerLandingPage() {
             {/* Top text */}
             <div className="flex-1 w-full pt-4">
               <h1 className="text-3xl font-black text-slate-800 dark:text-white leading-tight mb-4">
-                Get customers for your Brand from all over India.
+                Get Direct Customers For Your Brand. No Marketplace Cuts. Get Own Brand Page.
               </h1>
-              <p className="text-sm text-slate-600 dark:text-slate-300 mb-6 px-2">
-                Register and get your own Dashboard and Customers from all over India.
-              </p>
+
+              {/* 4 USP points */}
+              <ul className="grid grid-cols-2 gap-x-4 gap-y-3 mb-6 mt-4 text-left max-w-xs mx-auto">
+                <li className="flex items-center gap-2 text-slate-700 dark:text-slate-300 text-sm font-medium">
+                  <Scissors className="w-4 h-4 text-pink-500 flex-shrink-0" />
+                  Zero marketplace cuts
+                </li>
+                <li className="flex items-center gap-2 text-slate-700 dark:text-slate-300 text-sm font-medium">
+                  <Phone className="w-4 h-4 text-green-500 flex-shrink-0" />
+                  Direct WhatsApp chat
+                </li>
+                <li className="flex items-center gap-2 text-slate-700 dark:text-slate-300 text-sm font-medium">
+                  <Banknote className="w-4 h-4 text-blue-500 flex-shrink-0" />
+                  100% money in bank
+                </li>
+                <li className="flex items-center gap-2 text-slate-700 dark:text-slate-300 text-sm font-medium">
+                  <Zap className="w-4 h-4 text-orange-500 flex-shrink-0" />
+                  Setup under 5 mins
+                </li>
+              </ul>
               
-              <div className="flex flex-col items-center justify-center gap-1 mb-8 mx-2 text-sm text-slate-700 dark:text-slate-300">
-                <div>
-                  <span className="text-pink-500 font-bold mr-1">New</span> 
-                  <span>Don't have Website?</span>
-                </div>
-                <div>
-                  <span>You can get your own in just 2 minutes.</span>
-                  
-                </div>
+              <div className="flex items-center justify-center gap-2 mb-8 mx-2 text-sm text-slate-700 dark:text-slate-300">
+                <span className="text-pink-500 font-bold flex-shrink-0">New</span>
+                <span>Don't have Website? Get in just 2 minutes.</span>
               </div>
               
               <Link href="/seller-onboard">
