@@ -97,61 +97,20 @@ export default function SellerLandingPage() {
                 </Link>
                 <Link href="#how-it-works">
                   <button className="flex items-center gap-2 text-slate-600 dark:text-slate-300 font-semibold text-sm hover:text-primary transition-colors">
-                    <span className="w-8 h-8 rounded-full bg-pink-100 dark:bg-pink-900/30 flex items-center justify-center">�-�</span>
+                    <span className="w-8 h-8 rounded-full bg-pink-100 dark:bg-pink-900/30 flex items-center justify-center text-xs">&#9654;</span>
                     See How It Works
                   </button>
                 </Link>
               </div>
             </div>
 
-            {/* right — mock card */}
-            <div className="flex-1 flex justify-end relative">
-              <div className="w-full max-w-md bg-white/80 dark:bg-slate-800/80 backdrop-blur-md rounded-2xl shadow-2xl border border-pink-100 dark:border-white/10 p-5 flex flex-col gap-4 relative z-10">
-                {/* store preview header */}
-                <div className="flex items-center justify-between bg-pink-50 dark:bg-slate-700/60 px-4 py-3 rounded-xl">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-pink-200 dark:bg-pink-900/40 flex items-center justify-center text-lg">🌿</div>
-                    <div>
-                      <p className="font-bold text-sm text-slate-800 dark:text-white leading-none">Mitti Botanics</p>
-                      <p className="text-xs text-slate-500 dark:text-slate-400">Verified Artisan · Jaipur</p>
-                    </div>
-                  </div>
-                  <span className="bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-400 text-xs font-bold px-3 py-1 rounded-full">Active Deal</span>
-                </div>
-
-                {/* voucher pill */}
-                <div className="flex items-center gap-3 bg-pink-50 dark:bg-pink-900/20 border border-pink-200 dark:border-pink-800/40 rounded-xl px-4 py-3">
-                  <Gift className="w-5 h-5 text-pink-500 flex-shrink-0" />
-                  <div>
-                    <p className="text-xs font-bold text-slate-800 dark:text-white">₹10 Micro-Voucher → ₹120 Off Sampler Kit</p>
-                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Customer pays ₹10 token · Lands on your WhatsApp</p>
-                  </div>
-                </div>
-
-                {/* simulated WhatsApp message */}
-                <div className="bg-slate-50 dark:bg-slate-700/40 rounded-xl p-3 border border-slate-100 dark:border-white/10">
-                  <p className="text-xs text-slate-500 dark:text-slate-400 mb-1 font-semibold uppercase tracking-wider">Pre-filled WhatsApp Message</p>
-                  <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
-                    "Hi Mitti Botanics! I paid the ₹10 token for the ₹120 Off Sampler Kit (Code: <span className="text-pink-600 font-bold">INDIE-942</span>). Here's my delivery address in Pune!"
-                  </p>
-                </div>
-
-                {/* metrics row */}
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="bg-pink-50 dark:bg-slate-700/40 rounded-xl p-3">
-                    <p className="text-xs text-slate-500 dark:text-slate-400">Your Margin Kept</p>
-                    <p className="text-xl font-black text-primary">100%</p>
-                    <p className="text-xs text-slate-400">Zero cut taken</p>
-                  </div>
-                  <div className="bg-pink-50 dark:bg-slate-700/40 rounded-xl p-3">
-                    <p className="text-xs text-slate-500 dark:text-slate-400">Avg. Intent Rate</p>
-                    <p className="text-xl font-black text-slate-800 dark:text-white">94.2%</p>
-                    <p className="text-xs text-slate-400">Token-filtered leads</p>
-                  </div>
-                </div>
-              </div>
-              {/* decorative card backdrop */}
-              <div className="absolute -bottom-3 -right-3 w-full h-full max-w-md bg-pink-200/50 dark:bg-pink-900/20 rounded-2xl -z-0" />
+            {/* right — original banner image (restored to its original position) */}
+            <div className="flex-1 flex justify-end w-full relative">
+              <img
+                src="/images/seller_banner_doodle.png"
+                alt="Seller Doodle Banner"
+                className="w-full lg:max-w-xl object-contain drop-shadow-2xl hover:scale-105 transition-transform duration-500"
+              />
             </div>
           </div>
 
@@ -194,6 +153,88 @@ export default function SellerLandingPage() {
                 alt="Seller Doodle Banner"
                 className="w-full max-w-[300px] sm:max-w-sm object-contain drop-shadow-2xl"
               />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════
+          1b. HOW A CUSTOMER REACHES YOU (voucher flow walkthrough)
+      ══════════════════════════════════════════ */}
+      <section className="py-14 md:py-20 px-4 bg-transparent">
+        <div className="container mx-auto max-w-6xl">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 items-center">
+            {/* Left: explanatory copy */}
+            <div className="order-2 lg:order-1">
+              <span className="inline-block text-xs font-bold uppercase tracking-widest text-primary mb-3">
+                Real Customer Journey
+              </span>
+              <h2 className="text-2xl md:text-3xl font-bold text-slate-800 dark:text-white leading-snug">
+                From a ₹10 voucher to a confirmed order on your WhatsApp
+              </h2>
+              <p className="text-sm md:text-base text-slate-600 dark:text-slate-400 leading-relaxed mt-3">
+                A customer pays a small ₹10 commitment voucher to unlock your offer. That single step
+                filters out browsers, bots and window-shoppers, so the message that lands in your
+                WhatsApp is someone who is genuinely ready to buy.
+              </p>
+              <ul className="mt-5 space-y-3">
+                {[
+                  { icon: <Gift className="w-4 h-4 text-pink-500 flex-shrink-0" />, text: 'Customer pays ₹10 and receives a unique voucher code.' },
+                  { icon: <Users className="w-4 h-4 text-blue-500 flex-shrink-0" />, text: 'Their message opens pre-filled with your code and offer details.' },
+                  { icon: <Banknote className="w-4 h-4 text-green-500 flex-shrink-0" />, text: 'You collect the full product payment directly via UPI.' },
+                  { icon: <Phone className="w-4 h-4 text-orange-500 flex-shrink-0" />, text: 'You ship via your courier and keep 100% of the margin.' },
+                ].map(({ icon, text }) => (
+                  <li key={text} className="flex items-start gap-3 text-sm md:text-base text-slate-700 dark:text-slate-300">
+                    {icon}
+                    <span>{text}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Right: mock store card */}
+            <div className="order-1 lg:order-2 relative">
+              <div className="w-full max-w-md mx-auto lg:mx-0 lg:ml-auto bg-white/80 dark:bg-slate-800/80 backdrop-blur-md rounded-2xl shadow-2xl border border-pink-100 dark:border-white/10 p-5 flex flex-col gap-4 relative z-10">
+                <div className="flex items-center justify-between bg-pink-50 dark:bg-slate-700/60 px-4 py-3 rounded-xl">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-pink-200 dark:bg-pink-900/40 flex items-center justify-center text-lg">🌿</div>
+                    <div>
+                      <p className="font-bold text-sm text-slate-800 dark:text-white leading-none">Mitti Botanics</p>
+                      <p className="text-xs text-slate-500 dark:text-slate-400">Verified Artisan · Jaipur</p>
+                    </div>
+                  </div>
+                  <span className="bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-400 text-xs font-bold px-3 py-1 rounded-full">Active Deal</span>
+                </div>
+
+                <div className="flex items-center gap-3 bg-pink-50 dark:bg-pink-900/20 border border-pink-200 dark:border-pink-800/40 rounded-xl px-4 py-3">
+                  <Gift className="w-5 h-5 text-pink-500 flex-shrink-0" />
+                  <div>
+                    <p className="text-xs font-bold text-slate-800 dark:text-white">₹10 Micro-Voucher → ₹120 Off Sampler Kit</p>
+                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Customer pays ₹10 token · Lands on your WhatsApp</p>
+                  </div>
+                </div>
+
+                <div className="bg-slate-50 dark:bg-slate-700/40 rounded-xl p-3 border border-slate-100 dark:border-white/10">
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mb-1 font-semibold uppercase tracking-wider">Pre-filled WhatsApp Message</p>
+                  <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
+                    "Hi Mitti Botanics! I paid the ₹10 token for the ₹120 Off Sampler Kit (Code: <span className="text-pink-600 font-bold">INDIE-942</span>). Here's my delivery address in Pune!"
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="bg-pink-50 dark:bg-slate-700/40 rounded-xl p-3">
+                    <p className="text-xs text-slate-500 dark:text-slate-400">Your Margin Kept</p>
+                    <p className="text-xl font-black text-primary">100%</p>
+                    <p className="text-xs text-slate-400">Zero cut taken</p>
+                  </div>
+                  <div className="bg-pink-50 dark:bg-slate-700/40 rounded-xl p-3">
+                    <p className="text-xs text-slate-500 dark:text-slate-400">Avg. Intent Rate</p>
+                    <p className="text-xl font-black text-slate-800 dark:text-white">94.2%</p>
+                    <p className="text-xs text-slate-400">Token-filtered leads</p>
+                  </div>
+                </div>
+              </div>
+              <div className="absolute -bottom-3 -right-3 w-full h-full max-w-md bg-pink-200/50 dark:bg-pink-900/20 rounded-2xl -z-0 hidden lg:block" />
             </div>
           </div>
         </div>
