@@ -89,7 +89,7 @@ export default function SellerLandingPage() {
               </div>
 
               <div className="flex flex-wrap items-center gap-4">
-                <Link href="/seller-onboard">
+                <Link href="/brand-register">
                   <button className="bg-primary text-white px-8 py-4 rounded-xl font-bold text-base hover:bg-primary-dark transition-all shadow-xl shadow-primary/30 hover:scale-105 duration-300 flex items-center gap-2">
                     Start Getting Customers
                     <ArrowRight className="w-4 h-4" />
@@ -140,7 +140,7 @@ export default function SellerLandingPage() {
                 ))}
               </ul>
 
-              <Link href="/seller-onboard">
+              <Link href="/brand-register">
                 <button className="bg-primary hover:bg-primary-dark text-white px-8 py-3.5 w-[90%] sm:w-auto rounded-xl font-bold text-sm shadow-xl shadow-primary/30 active:scale-95 transition-all">
                   Start Getting Customers
                 </button>
@@ -302,7 +302,7 @@ export default function SellerLandingPage() {
           </div>
 
           <div className="mt-10 text-center">
-            <Link href="/seller-onboard">
+            <Link href="/brand-register">
               <button className="bg-primary text-white px-8 py-3.5 rounded-xl font-bold text-sm hover:bg-primary-dark transition-all shadow-lg shadow-primary/20 hover:scale-105">
                 Get Started for Free
               </button>
@@ -653,7 +653,7 @@ export default function SellerLandingPage() {
                   placeholder="Your Brand Name or WhatsApp Number"
                   className="flex-1 h-12 px-4 rounded-xl bg-white/90 dark:bg-white text-slate-800 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-white/60 shadow-sm"
                 />
-                <Link href="/seller-onboard">
+                <Link href="/brand-register">
                   <button className="h-12 px-6 rounded-xl bg-white text-primary font-bold text-sm hover:bg-pink-50 transition-all shadow-md flex items-center gap-2 whitespace-nowrap w-full sm:w-auto justify-center">
                     Start Free Trial <Zap className="w-4 h-4" />
                   </button>
