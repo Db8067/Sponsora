@@ -1,7 +1,19 @@
 import { Webhook } from 'svix';
 import { headers } from 'next/headers';
-import { WebhookEvent } from '@clerk/nextjs/server';
 import { supabase } from '@/lib/supabase';
+
+// Local shape of the Clerk webhook payload (avoids depending on Clerk SDK types,
+// since authentication has been removed from this app).
+type WebhookEvent = {
+  type: string;
+  data: {
+    id: string;
+    email_addresses?: { email_address: string }[];
+    first_name?: string | null;
+    last_name?: string | null;
+    unsafe_metadata?: Record<string, unknown> | null;
+  };
+};
 
 export async function POST(req: Request) {
   const WEBHOOK_SECRET = process.env.CLERK_WEBHOOK_SECRET;
@@ -52,7 +64,7 @@ export async function POST(req: Request) {
   if (eventType === 'user.created') {
     const { id, email_addresses, first_name, last_name, unsafe_metadata } = evt.data;
 
-    const email = email_addresses[0]?.email_address;
+    const email = email_addresses?.[0]?.email_address;
     const name = [first_name, last_name].filter(Boolean).join(' ');
     const role = unsafe_metadata?.role || 'participant'; // Default to participant if no role was provided
 

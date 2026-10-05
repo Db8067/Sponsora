@@ -1,13 +1,10 @@
 import { NextResponse } from 'next/server';
 import { supabaseServer } from '@/lib/supabase-server';
-import { auth, currentUser } from '@clerk/nextjs/server';
 
 export async function POST(req: Request) {
   try {
-    // We try to get the clerk userId, but if it fails we don't block the submission.
-    // This allows you to collect details without strictly depending on Clerk auth.
-    const { userId } = await auth().catch(() => ({ userId: null }));
-    const clerkId = userId || 'unauthenticated';
+    // Authentication removed: use 'guest' when unauthenticated.
+    const clerkId = 'guest';
 
     const body = await req.json();
     const { 
@@ -48,28 +45,20 @@ export async function POST(req: Request) {
 
 export async function GET(req: Request) {
   try {
-    const { userId } = await auth().catch(() => ({ userId: null }));
-    const user = await currentUser().catch(() => null);
-    
     const { searchParams } = new URL(req.url);
     const emailQuery = searchParams.get('email');
-    const userEmail = user?.emailAddresses?.[0]?.emailAddress || emailQuery;
+    const userEmail = emailQuery;
 
-    if (!userId && !userEmail) {
+    if (!userEmail) {
       return NextResponse.json({ profile: null }, { status: 200 });
     }
 
-    let query = supabaseServer.from('vendor_profiles').select('*');
-
-    if (userId && userEmail) {
-      query = query.or(`clerk_id.eq.${userId},email_address.ilike.${userEmail.trim()}`);
-    } else if (userId) {
-      query = query.eq('clerk_id', userId);
-    } else if (userEmail) {
-      query = query.ilike('email_address', userEmail.trim());
-    }
-
-    const { data, error } = await query.order('created_at', { ascending: false }).limit(1);
+    const { data, error } = await supabaseServer
+      .from('vendor_profiles')
+      .select('*')
+      .ilike('email_address', userEmail.trim())
+      .order('created_at', { ascending: false })
+      .limit(1);
 
     if (error) {
       console.error('Supabase fetch error:', error);

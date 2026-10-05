@@ -9,7 +9,7 @@ import {
   Image as ImageIcon, ExternalLink, Rocket
 } from 'lucide-react';
 import SellerNavbar from '@/components/SellerNavbar';
-import { useUser, useClerk, RedirectToSignIn } from '@clerk/nextjs';
+import { useUser, useClerk } from '@/lib/mock-auth';
 
 export default function SellerOnboardPage() {
   const { isLoaded, isSignedIn, user } = useUser();
@@ -358,10 +358,6 @@ export default function SellerOnboardPage() {
     );
   }
 
-  // If not signed in, redirect to sign in immediately
-  if (isLoaded && !isSignedIn) {
-    return <RedirectToSignIn redirectUrl="/seller-onboard" />;
-  }
-
+  // Authentication removed: onboarding is publicly accessible.
   return null; // Fallback in case none of the above conditions hit
 }

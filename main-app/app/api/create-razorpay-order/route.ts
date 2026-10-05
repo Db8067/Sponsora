@@ -1,13 +1,10 @@
 import { NextResponse } from 'next/server';
 import Razorpay from 'razorpay';
-import { auth } from '@clerk/nextjs/server';
 
 export async function POST(req: Request) {
   try {
-    const { userId } = await auth();
-    if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    // Authentication removed: anyone can create an order.
+    const userId = 'guest';
 
     const body = await req.json();
     const { amount, planId } = body; // amount in INR

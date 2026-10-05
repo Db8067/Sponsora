@@ -1,68 +1,82 @@
 'use server';
 
-import { clerkClient } from '@clerk/nextjs/server';
+import { supabaseServer } from '@/lib/supabase-server';
+
+/**
+ * Authentication has been removed from this app, so there is no external
+ * user directory to sync with. These server actions operate on the local
+ * `users` table in Supabase instead of Clerk.
+ */
 
 export async function getMainAppUsers() {
     try {
-        const client = await clerkClient();
-        const response = await client.users.getUserList({
-            limit: 100,
-            orderBy: '-created_at'
-        });
-        
-        const users = response.data.map(user => {
-            const email = user.emailAddresses[0]?.emailAddress || '';
-            const name = [user.firstName, user.lastName].filter(Boolean).join(' ');
-            
+        const { data, error } = await supabaseServer
+            .from('users')
+            .select('*')
+            .order('created_at', { ascending: false })
+            .limit(100);
+
+        if (error) {
+            console.error('Error fetching users:', error);
+            return [];
+        }
+
+        return (data || []).map((user: any) => {
+            const rawRole = user.role;
             let roles: string[] = [];
-            const rawRole = user.unsafeMetadata?.role;
             if (Array.isArray(rawRole)) {
                 roles = rawRole;
             } else if (typeof rawRole === 'string') {
                 roles = [rawRole];
             } else {
-                roles = ['participant']; // Default fallback
+                roles = ['participant'];
             }
-            
+
             return {
-                id: user.id,
-                email,
-                name: name || 'Unnamed User',
+                id: user.clerk_id || user.id,
+                email: user.email || '',
+                name: user.name || 'Unnamed User',
                 roles,
-                imageUrl: user.imageUrl,
-                created_at: user.createdAt
+                imageUrl: user.image_url || '',
+                created_at: user.created_at
             };
         });
-        
-        return users;
     } catch (error) {
-        console.error('Error fetching main app users from Clerk:', error);
+        console.error('Error fetching users:', error);
         return [];
     }
 }
 
 export async function deleteMainAppUser(userId: string) {
     try {
-        const client = await clerkClient();
-        await client.users.deleteUser(userId);
+        const { error } = await supabaseServer
+            .from('users')
+            .delete()
+            .eq('clerk_id', userId);
+
+        if (error) {
+            throw error;
+        }
         return true;
     } catch (error) {
-        console.error('Error deleting user from Clerk:', error);
+        console.error('Error deleting user:', error);
         throw error;
     }
 }
 
 export async function updateMainAppUserRole(userId: string, newRoles: string[]) {
     try {
-        const client = await clerkClient();
-        await client.users.updateUserMetadata(userId, {
-            unsafeMetadata: {
-                role: newRoles
-            }
-        });
+        const { error } = await supabaseServer
+            .from('users')
+            .update({ role: newRoles })
+            .eq('clerk_id', userId);
+
+        if (error) {
+            throw error;
+        }
         return true;
     } catch (error) {
-        console.error('Error updating user role in Clerk:', error);
+        console.error('Error updating user role:', error);
         throw error;
     }
 }

@@ -6,7 +6,7 @@ import Script from 'next/script';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { Check, Sparkles, Zap, ShieldCheck, HelpCircle, X, Loader2 } from 'lucide-react';
 import SellerNavbar from '@/components/SellerNavbar';
-import { useUser } from '@clerk/nextjs';
+import { useUser } from '@/lib/mock-auth';
 
 function PopupModal() {
   const searchParams = useSearchParams();
