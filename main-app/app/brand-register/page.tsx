@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import SellerNavbar from '@/components/SellerNavbar';
 import {
   CheckCircle2, ArrowRight, Loader2, Rocket,
@@ -21,6 +22,7 @@ const CATEGORIES = [
 ];
 
 export default function BrandRegisterPage() {
+  const router = useRouter();
   const [founderName, setFounderName] = useState('');
   const [brandName, setBrandName] = useState('');
   const [email, setEmail] = useState('');
@@ -30,7 +32,6 @@ export default function BrandRegisterPage() {
   const [selectedCategory, setSelectedCategory] = useState('');
   const [storeLink, setStoreLink] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
   const [error, setError] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -51,41 +52,22 @@ export default function BrandRegisterPage() {
       });
 
       if (dbError) throw dbError;
-      setIsSubmitted(true);
+
+      // Redirect to the /brand-subscriptions page with registered brand info
+      const params = new URLSearchParams({
+        brand: brandName.trim(),
+        founder: founderName.trim(),
+        category: selectedCategory || 'D2C Brand',
+        phone: phone.trim(),
+        email: email.trim(),
+      });
+      router.push(`/brand-subscriptions?${params.toString()}`);
     } catch (err: any) {
       console.error('Registration error:', err);
       setError('Something went wrong. Please try again or contact support.');
-    } finally {
       setIsSubmitting(false);
     }
   };
-
-  if (isSubmitted) {
-    return (
-      <div className="flex flex-col min-h-screen">
-        <SellerNavbar />
-        <div className="flex-1 flex items-center justify-center px-4 py-20">
-          <div className="text-center max-w-md mx-auto bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm border border-pink-100 dark:border-white/10 rounded-3xl p-10 shadow-xl">
-            <div className="w-20 h-20 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center mx-auto mb-6">
-              <CheckCircle2 className="w-10 h-10 text-green-600 dark:text-green-400" />
-            </div>
-            <h2 className="text-2xl font-black text-slate-800 dark:text-white mb-3">
-              You&apos;re on the Launchpad! 🚀
-            </h2>
-            <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-2">
-              <span className="font-bold text-primary">{brandName}</span> has been registered. Our team will reach you on WhatsApp within 24 hours to set up your ₹10 micro-offer.
-            </p>
-            <p className="text-xs text-slate-500 dark:text-slate-500 mb-8">
-              Zero platform commission. 100% of every rupee goes straight to your UPI.
-            </p>
-            <Link href="/" className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-xl font-bold text-sm hover:bg-primary-dark transition-all shadow-lg shadow-primary/25">
-              Back to Homepage <ArrowRight className="w-4 h-4" />
-            </Link>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="flex flex-col min-h-screen">
