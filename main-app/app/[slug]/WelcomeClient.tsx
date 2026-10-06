@@ -1,8 +1,7 @@
 'use client';
 
-import React, { useState, use, Suspense } from 'react';
+import React, { useState, Suspense } from 'react';
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
 import SellerNavbar from '@/components/SellerNavbar';
 import {
   CheckCircle2, ArrowRight, Zap, Shield, Users, MessageCircle,
@@ -10,25 +9,34 @@ import {
   Smartphone, Award, QrCode, FileText, Lock, Star, Clock, HeartHandshake, TrendingUp
 } from 'lucide-react';
 
-function Welcome99Content({ params }: { params: Promise<{ slug: string }> }) {
-  const resolvedParams = use(params);
-  const searchParams = useSearchParams();
+export interface Welcome99ClientProps {
+  slug: string;
+  brand?: string;
+  founder?: string;
+  email?: string;
+  phone?: string;
+  plan?: string;
+  amount?: string;
+}
 
-  // Extract raw slug from URL params or search params
-  const rawSlug = resolvedParams.slug?.toLowerCase() || 'mitti-herbals';
-  
+export function Welcome99Client({ 
+  slug, 
+  brand, 
+  founder = 'Founder', 
+  email = 'radhika@mittiherbals.com', 
+  phone = '98765 43210', 
+  plan = 'Starter Maker', 
+  amount = '99' 
+}: Welcome99ClientProps) {
   // Format brand name from slug: e.g. "mitti-herbals" -> "Mitti Herbals"
-  const formattedBrand = rawSlug
+  const formattedBrand = slug
     .split('-')
     .map(word => word.charAt(0).toUpperCase() + word.slice(1))
     .join(' ');
 
-  const brandName = searchParams.get('brand') || formattedBrand;
-  const founderName = searchParams.get('founder') || 'Founder';
-  const email = searchParams.get('email') || 'radhika@mittiherbals.com';
-  const phone = searchParams.get('phone') || '98765 43210';
-  const planName = searchParams.get('plan') || 'Starter Maker';
-  const amount = searchParams.get('amount') || '99';
+  const brandName = brand || formattedBrand;
+  const founderName = founder;
+  const planName = plan;
 
   const brandInitials = brandName
     .split(' ')
@@ -37,7 +45,7 @@ function Welcome99Content({ params }: { params: Promise<{ slug: string }> }) {
     .substring(0, 2)
     .toUpperCase() || 'MH';
 
-  const cleanSlug = rawSlug.toLowerCase().replace(/[^a-z0-9-]/g, '');
+  const cleanSlug = slug.toLowerCase().replace(/[^a-z0-9-]/g, '');
 
   const [copied, setCopied] = useState(false);
   const [offerText, setOfferText] = useState('₹100 Off + Free Herbal Lip Balm');
@@ -657,18 +665,6 @@ function Welcome99Content({ params }: { params: Promise<{ slug: string }> }) {
 
       </main>
     </div>
-  );
-}
-
-export default function Welcome99Page({ params }: { params: Promise<{ slug: string }> }) {
-  return (
-    <Suspense fallback={
-      <div className="min-h-screen flex items-center justify-center bg-transparent">
-        <div className="w-8 h-8 rounded-full border-4 border-primary border-t-transparent animate-spin" />
-      </div>
-    }>
-      <Welcome99Content params={params} />
-    </Suspense>
   );
 }
 
