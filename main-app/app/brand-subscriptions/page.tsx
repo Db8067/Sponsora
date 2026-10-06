@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import {
   Check, X, Loader2, CheckCircle2, ArrowRight,
   Zap, Star, TrendingUp, Shield, Users, MessageCircle
@@ -210,6 +210,7 @@ function BrandPassport() {
 
 /* ─── Main Page ─── */
 export default function BrandSubscriptionsPage() {
+  const router = useRouter();
   const [selectedPlan, setSelectedPlan] = useState<number>(2);
   const [billing, setBilling] = useState<'monthly' | 'annual'>('monthly');
   const [isProcessing, setIsProcessing] = useState<number | null>(null);
@@ -217,10 +218,26 @@ export default function BrandSubscriptionsPage() {
   const discountedPrice = (price: number) =>
     billing === 'annual' ? Math.round(price * 0.83) : price;
 
+  // Helper function to get secure cookie data
+  const getSecureCookie = (name: string): any => {
+    const match = document.cookie.match(/brand_welcome_data=([^;])/);
+    return match ? JSON.parse(decodeURIComponent(match[1])) : null;
+  };
+
   const handlePayment = (planId: number, planName: string, amount: number) => {
     setIsProcessing(planId);
-    // Razorpay integration — same flow as /subscriptions
-    setTimeout(() => setIsProcessing(null), 1500);
+    
+    // Read brand data from secure cookie
+    const cookieData = getSecureCookie('brand_welcome_data');
+    if (!cookieData) {
+      // Fallback or redirect if no cookie data
+      router.push('/');
+      return;
+    }
+
+    // Redirect to /[slug]-welcome-99 with the brand slug from cookie data
+    const slug = cookieData.brand.toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '') || 'mitti-herbals';
+    window.location.href = `/${slug}-welcome-99`;
   };
 
   return (

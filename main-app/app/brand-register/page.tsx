@@ -34,6 +34,13 @@ export default function BrandRegisterPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
 
+  // Helper function to set secure cookie
+  const setSecureCookie = (name: string, value: string, days: number = 7) => {
+    const expires = new Date();
+    expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000);
+    document.cookie = `${name}=${encodeURIComponent(value)};expires=${expires.toUTCString()};path=/;SameSite=Lax;Secure`;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
@@ -53,15 +60,22 @@ export default function BrandRegisterPage() {
 
       if (dbError) throw dbError;
 
-      // Redirect to the /brand-subscriptions page with registered brand info
-      const params = new URLSearchParams({
+      // Store brand data in secure cookie instead of URL params
+      const brandData = {
         brand: brandName.trim(),
         founder: founderName.trim(),
         category: selectedCategory || 'D2C Brand',
         phone: phone.trim(),
         email: email.trim(),
-      });
-      router.push(`/brand-subscriptions?${params.toString()}`);
+        plan: 'Starter Maker',
+        amount: '99',
+      };
+      
+      // Set cookie with 7 day expiry
+      setSecureCookie('brand_welcome_data', JSON.stringify(brandData), 7);
+      
+      // Redirect to /brand-subscriptions without personal data in URL
+      router.push('/brand-subscriptions');
     } catch (err: any) {
       console.error('Registration error:', err);
       setError('Something went wrong. Please try again or contact support.');
