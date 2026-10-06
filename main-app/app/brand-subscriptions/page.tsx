@@ -220,7 +220,7 @@ export default function BrandSubscriptionsPage() {
 
   // Helper function to get secure cookie data
   const getSecureCookie = (name: string): any => {
-    const match = document.cookie.match(/brand_welcome_data=([^;])/);
+    const match = document.cookie.match(/brand_welcome_data=([^;]+)/);
     return match ? JSON.parse(decodeURIComponent(match[1])) : null;
   };
 
