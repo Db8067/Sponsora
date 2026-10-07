@@ -122,14 +122,38 @@ const STORIES = [
 /* ─── Brand Passport pulled from URL params ─── */
 function BrandPassport() {
   const searchParams = useSearchParams();
-  const brandName = searchParams.get('brand') || 'Your Brand';
-  const founderName = searchParams.get('founder') || 'Founder';
-  const category = searchParams.get('category') || 'D2C Brand';
-  const phone = searchParams.get('phone') || '';
-  const email = searchParams.get('email') || '';
-  const initials = brandName.slice(0, 2).toUpperCase();
+  const [brandData, setBrandData] = useState({
+    brandName: searchParams.get('brand') || '',
+    founderName: searchParams.get('founder') || '',
+    category: searchParams.get('category') || '',
+    phone: searchParams.get('phone') || '',
+    email: searchParams.get('email') || ''
+  });
 
-  return (
+  useEffect(() => {
+    if (!brandData.brandName) {
+      try {
+        const match = document.cookie.match(/brand_welcome_data=([^;]+)/);
+        if (match) {
+          const cookieData = JSON.parse(decodeURIComponent(match[1]));
+          setBrandData({
+            brandName: cookieData.brand || 'Your Brand',
+            founderName: cookieData.founder || 'Founder',
+            category: cookieData.category || 'D2C Brand',
+            phone: cookieData.phone || '',
+            email: cookieData.email || ''
+          });
+        } else {
+          setBrandData({ brandName: 'Your Brand', founderName: 'Founder', category: 'D2C Brand', phone: '', email: '' });
+        }
+      } catch (e) {
+        setBrandData({ brandName: 'Your Brand', founderName: 'Founder', category: 'D2C Brand', phone: '', email: '' });
+      }
+    }
+  }, []);
+
+  const { brandName, founderName, category, phone, email } = brandData;
+  const initials = (brandName || 'YB').slice(0, 2).toUpperCase();  return (
     <section className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl border border-pink-100 dark:border-white/10 shadow-sm overflow-hidden">
       {/* colour bar */}
       <div className="h-1.5 bg-gradient-to-r from-primary via-pink-400 to-pink-300" />
@@ -223,6 +247,11 @@ export default function BrandSubscriptionsPage() {
     const match = document.cookie.match(/brand_welcome_data=([^;]+)/);
     return match ? JSON.parse(decodeURIComponent(match[1])) : null;
   };
+
+  // Reset isProcessing when returning to this page
+  useEffect(() => {
+    setIsProcessing(null);
+  }, []);
 
   const handlePayment = (planId: number, planName: string, amount: number) => {
     setIsProcessing(planId);
@@ -509,3 +538,5 @@ export default function BrandSubscriptionsPage() {
     </div>
   );
 }
+
+
