@@ -149,7 +149,7 @@ export default function CreatorsSetupPage() {
 
 <label className="relative flex flex-col p-space-md rounded-xl bg-surface-container-low cursor-pointer transition-all hover:shadow-sm" id="fee-option-10">
 
-<input checked="" className="peer sr-only" name="token_fee"  type="radio" value="10" />
+<input defaultChecked className="peer sr-only" name="token_fee"  type="radio" value="10" />
 
 <div className="flex items-start justify-between">
 
@@ -227,7 +227,7 @@ export default function CreatorsSetupPage() {
 
 <div className="relative">
 
-<input className="w-full h-12 px-4 rounded-xl bg-surface-container-low text-on-surface font-body-lg text-body-lg focus:outline-none focus:bg-surface-container-lowest transition-all" id="discount-input" oninput="updateDiscountText(this.value)" type="text" value="₹120 OFF on orders above ₹499" />
+<input className="w-full h-12 px-4 rounded-xl bg-surface-container-low text-on-surface font-body-lg text-body-lg focus:outline-none focus:bg-surface-container-lowest transition-all" id="discount-input"  type="text" value="₹120 OFF on orders above ₹499" />
 
 <span className="absolute right-4 top-3 text-secondary material-symbols-outlined text-[20px]">edit</span>
 
@@ -249,7 +249,7 @@ export default function CreatorsSetupPage() {
 
 <label className="flex items-start gap-space-sm p-space-md bg-tertiary-fixed/20 rounded-xl cursor-pointer hover:bg-tertiary-fixed/30 transition-colors">
 
-<input checked="" className="mt-1 w-5 h-5 rounded text-primary accent-primary cursor-pointer" id="perk-checkbox"  type="checkbox" />
+<input defaultChecked className="mt-1 w-5 h-5 rounded text-primary accent-primary cursor-pointer" id="perk-checkbox"  type="checkbox" />
 
 <div className="space-y-0.5">
 
@@ -333,7 +333,7 @@ export default function CreatorsSetupPage() {
 
 </div>
 
-<input className="w-full accent-primary h-2 bg-surface-container-high rounded-lg cursor-pointer" id="creator-slider" max="10" min="1" oninput="updateMilestone(this.value)" type="range" value="3" />
+<input className="w-full accent-primary h-2 bg-surface-container-high rounded-lg cursor-pointer" id="creator-slider" max="10" min="1"  type="range" value="3" />
 
 <div className="flex justify-between font-label-sm text-label-sm text-secondary">
 
