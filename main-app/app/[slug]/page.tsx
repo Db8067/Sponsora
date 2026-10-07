@@ -27,9 +27,9 @@ export default async function WelcomePage({ params }: { params: Promise<{ slug: 
   const fullSlug = resolvedParams.slug;
   
   let amount = '';
-  if (fullSlug.endsWith('-welcome-99')) amount = '99';
+  if (fullSlug.endsWith('-welcome-1499')) amount = '1499';
   else if (fullSlug.endsWith('-welcome-499')) amount = '499';
-  else if (fullSlug.endsWith('-welcome-1499')) amount = '1499';
+  else if (fullSlug.endsWith('-welcome-99')) amount = '99';
   else return notFound();
   
   const brandSlug = fullSlug.replace(`-welcome-${amount}`, '').toLowerCase();
@@ -61,3 +61,4 @@ export default async function WelcomePage({ params }: { params: Promise<{ slug: 
   if (amount === '1499') return <Welcome1499Client {...props} />;
   return <Welcome99Client {...props} />;
 }
+

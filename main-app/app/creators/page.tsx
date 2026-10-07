@@ -1,11 +1,13 @@
 'use client';
 import React from 'react';
 import Link from 'next/link';
+import Snowfall from '@/components/Snowfall';
 
 export default function Creators() {
   return (
     <>
-      <div className="bg-background font-body-md text-body-md text-on-surface antialiased"><header className="fixed top-0 left-0 right-0 z-50 bg-surface/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div className="h-16 w-full px-margin-mobile md:px-margin lg:px-margin-desktop flex items-center justify-between gap-space-md"><div className="flex items-center gap-space-lg"><a className="flex items-center gap-space-sm" data-path="brand-dashboard" href="#"><img alt="Modern minimalist geometric infinity loop emblem combined with a growth spark or shopping tag, vibrant coral red-orange and deep indigo navy colors, vector icon, transparent background. Design context: - Primary color: #f05a36
+      <Snowfall />
+<div className="relative z-10 bg-background font-body-md text-body-md text-on-surface antialiased"><header className="fixed top-0 left-0 right-0 z-50 bg-surface/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div className="h-16 w-full px-margin-mobile md:px-margin lg:px-margin-desktop flex items-center justify-between gap-space-md"><div className="flex items-center gap-space-lg"><a className="flex items-center gap-space-sm" data-path="brand-dashboard" href="#"><img alt="Modern minimalist geometric infinity loop emblem combined with a growth spark or shopping tag, vibrant coral red-orange and deep indigo navy colors, vector icon, transparent background. Design context: - Primary color: #f05a36
 - Font: plusJakartaSans
 - Mode: light
 - Roundness: rounded-md
@@ -623,3 +625,4 @@ export default function Creators() {
     </>
   );
 }
+
