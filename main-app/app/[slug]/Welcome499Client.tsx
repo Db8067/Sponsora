@@ -654,7 +654,7 @@ export function Welcome499Client({
               <div className="flex items-center gap-6 pt-2">
                 <div>
                   <div className="text-2xl sm:text-3xl font-extrabold text-emerald-400">₹42,500/mo</div>
-                  <div class="text-xs text-stone-400">Estimated Net Savings for {brandName}</div>
+                  <div className="text-xs text-stone-400">Estimated Net Savings for {brandName}</div>
                 </div>
                 <div className="border-l border-stone-700 pl-6">
                   <div className="text-2xl sm:text-3xl font-extrabold text-orange-400">0%</div>
