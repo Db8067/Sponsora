@@ -235,9 +235,16 @@ export default function BrandSubscriptionsPage() {
       return;
     }
 
-    // Redirect to /[slug]-welcome-99 with the brand slug from cookie data
+    // Redirect to /[slug]-welcome-[amount] with the brand slug from cookie data
     const slug = cookieData.brand.toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '') || 'mitti-herbals';
-    window.location.href = `/${slug}-welcome-99`;
+    
+    if (amount === 499) {
+      window.location.href = `/${slug}-welcome-499`;
+    } else if (amount === 1499) {
+      window.location.href = `/${slug}-welcome-1499`;
+    } else {
+      window.location.href = `/${slug}-welcome-99`;
+    }
   };
 
   return (
