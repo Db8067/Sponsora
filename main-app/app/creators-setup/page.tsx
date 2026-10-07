@@ -149,7 +149,7 @@ export default function CreatorsSetupPage() {
 
 <label className="relative flex flex-col p-space-md rounded-xl bg-surface-container-low cursor-pointer transition-all hover:shadow-sm" id="fee-option-10">
 
-<input checked="" className="peer sr-only" name="token_fee" onchange="updateTokenFee(10)" type="radio" value="10" />
+<input checked="" className="peer sr-only" name="token_fee"  type="radio" value="10" />
 
 <div className="flex items-start justify-between">
 
@@ -173,7 +173,7 @@ export default function CreatorsSetupPage() {
 
 <label className="relative flex flex-col p-space-md rounded-xl bg-surface-container-lowest hover:bg-surface-container-low cursor-pointer transition-all" id="fee-option-25">
 
-<input className="peer sr-only" name="token_fee" onchange="updateTokenFee(25)" type="radio" value="25" />
+<input className="peer sr-only" name="token_fee"  type="radio" value="25" />
 
 <div className="flex items-start justify-between">
 
@@ -235,11 +235,11 @@ export default function CreatorsSetupPage() {
 
 <div className="flex flex-wrap gap-2 mt-2">
 
-<button className="px-2.5 py-1 bg-surface-container rounded-full font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" onclick="quickFillDiscount('₹100 OFF on orders above ₹399')" type="button">₹100 OFF on ₹399</button>
+<button className="px-2.5 py-1 bg-surface-container rounded-full font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors"  type="button">₹100 OFF on ₹399</button>
 
-<button className="px-2.5 py-1 bg-surface-container rounded-full font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" onclick="quickFillDiscount('₹150 OFF on orders above ₹599')" type="button">₹150 OFF on ₹599</button>
+<button className="px-2.5 py-1 bg-surface-container rounded-full font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors"  type="button">₹150 OFF on ₹599</button>
 
-<button className="px-2.5 py-1 bg-surface-container rounded-full font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" onclick="quickFillDiscount('Flat 20% OFF sitewide')" type="button">Flat 20% OFF</button>
+<button className="px-2.5 py-1 bg-surface-container rounded-full font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors"  type="button">Flat 20% OFF</button>
 
 </div>
 
@@ -249,7 +249,7 @@ export default function CreatorsSetupPage() {
 
 <label className="flex items-start gap-space-sm p-space-md bg-tertiary-fixed/20 rounded-xl cursor-pointer hover:bg-tertiary-fixed/30 transition-colors">
 
-<input checked="" className="mt-1 w-5 h-5 rounded text-primary accent-primary cursor-pointer" id="perk-checkbox" onchange="togglePerk(this.checked)" type="checkbox" />
+<input checked="" className="mt-1 w-5 h-5 rounded text-primary accent-primary cursor-pointer" id="perk-checkbox"  type="checkbox" />
 
 <div className="space-y-0.5">
 
@@ -629,7 +629,7 @@ export default function CreatorsSetupPage() {
 
 </div>
 
-<button className="w-full sm:w-auto h-12 px-space-xl rounded-xl bg-primary text-on-primary hover:bg-primary-container font-title-md text-title-md font-bold shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 group active:scale-[0.98]" onclick="handlePublish()" type="button">
+<button className="w-full sm:w-auto h-12 px-space-xl rounded-xl bg-primary text-on-primary hover:bg-primary-container font-title-md text-title-md font-bold shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 group active:scale-[0.98]"  type="button">
 
 <span>Publish Offer &amp; Start Getting Orders</span>
 
@@ -645,147 +645,7 @@ export default function CreatorsSetupPage() {
 
 {/*  Inline Logic for Realtime Syncing  */}
 
-<script>
 
-    let currentFee = 10;
-
-    let currentDiscount = "₹120 OFF on orders above ₹499";
-
-    let hasPerk = true;
-
-    let creatorMilestone = 3;
-
-
-
-    function updateTokenFee(val) {
-
-      currentFee = val;
-
-      const opt10 = document.getElementById('fee-option-10');
-
-      const opt25 = document.getElementById('fee-option-25');
-
-      const badge = document.getElementById('preview-token-badge');
-
-      const ctaBtn = document.getElementById('preview-cta-btn');
-
-
-
-      if (val === 10) {
-
-        opt10.classList.remove('bg-surface-container-lowest');
-
-        opt10.classList.add('bg-surface-container-low');
-
-        opt25.classList.remove('bg-surface-container-low');
-
-        opt25.classList.add('bg-surface-container-lowest');
-
-      } else {
-
-        opt25.classList.remove('bg-surface-container-lowest');
-
-        opt25.classList.add('bg-surface-container-low');
-
-        opt10.classList.remove('bg-surface-container-low');
-
-        opt10.classList.add('bg-surface-container-lowest');
-
-      }
-
-
-
-      badge.textContent = `₹${val} Token`;
-
-      ctaBtn.textContent = `Claim for ₹${val}`;
-
-      refreshText();
-
-    }
-
-
-
-    function updateDiscountText(val) {
-
-      currentDiscount = val;
-
-      refreshText();
-
-    }
-
-
-
-    function quickFillDiscount(val) {
-
-      document.getElementById('discount-input').value = val;
-
-      currentDiscount = val;
-
-      refreshText();
-
-    }
-
-
-
-    function togglePerk(checked) {
-
-      hasPerk = checked;
-
-      const previewPerk = document.getElementById('preview-perk-item');
-
-      if (checked) {
-
-        previewPerk.classList.remove('hidden');
-
-      } else {
-
-        previewPerk.classList.add('hidden');
-
-      }
-
-      refreshText();
-
-    }
-
-
-
-    function updateMilestone(val) {
-
-      creatorMilestone = val;
-
-      document.getElementById('creator-orders-count').textContent = `${val} Friend Order${val > 1 ? 's' : ''}`;
-
-      document.getElementById('preview-creator-badge').textContent = `1 Free Hamper @ ${val} Orders`;
-
-    }
-
-
-
-    function refreshText() {
-
-      const perkText = hasPerk ? ' + Free Lip Butter' : '';
-
-      const headline = `Pay ₹${currentFee} to Get ${currentDiscount}${perkText}`;
-
-      document.getElementById('preview-discount-headline').textContent = headline;
-
-      
-
-      const waMsg = `Hi Mitti Herbals! 🌿 I just secured my ₹${currentFee} IndieLoop pass for ${currentDiscount}${perkText} (Code: MITTI-7892). I'd like to place an order for delivery in Mumbai. Could you share your catalog?`;
-
-      document.getElementById('wa-text-preview').textContent = waMsg;
-
-    }
-
-
-
-    function handlePublish() {
-
-      alert("🎉 Congratulations Ananya! Your offer for Mitti Herbals is now live on IndieLoop Explore. You'll receive real-time notifications on WhatsApp when shoppers claim passes.");
-
-    }
-
-  </script>
 
 </div></main><footer className="w-full bg-surface-container-low mt-space-xl shadow-[0_-1px_6px_rgba(0,0,0,0.02)]"><div className="max-w-7xl mx-auto px-margin md:px-margin-desktop py-space-xl"><div className="flex flex-col md:flex-row items-center justify-between gap-space-lg"><div className="flex items-center gap-space-sm"><span className="font-title-md text-title-md text-on-surface">IndieLoop</span><span className="font-body-sm text-body-sm text-on-surface-variant">• Simplified commerce for modern Indian creators</span></div><div className="flex flex-wrap items-center justify-center gap-space-lg"><a className="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" data-path="creator-hub" href="#">Creator Guide</a><a className="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" data-path="explore-offers" href="#">Offer Guidelines</a><a className="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Payouts &amp; Terms</a><a className="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Support</a></div></div><div className="mt-space-lg pt-space-md flex flex-col sm:flex-row items-center justify-between gap-space-sm text-center sm:text-left"><p className="font-body-sm text-body-sm text-on-surface-variant">© 2025 IndieLoop Technologies Pvt. Ltd. All rights reserved.</p><p className="font-body-sm text-body-sm text-on-surface-variant">Crafted for effortless D2C simplicity</p></div></div></footer></>
       </div>

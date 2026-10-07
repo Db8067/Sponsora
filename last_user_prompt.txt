@@ -1,0 +1,2561 @@
+<USER_REQUEST>
+my /creators page code is cracked - see in first attached image - fix this issue properly... 
+
+my /brand-marketplace code is also cracked - see in second attached image - fix this issue 
+
+i think the issue the code that i have pasted earlier is of the html,css only but as we are building on next.js so that's code is cracking. 
+
+i want you to just use content for page and make my page with css, js and animation and with images. 
+
+create a new page name as /creators-program code for page is below: 
+
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0" name="viewport"><meta content="web_standard" name="shell-type"><link href="https://fonts.googleapis.com" rel="preconnect"><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={"darkMode":"class","theme":{"extend":{"colors":{"surface-tint":"#b12d0b","surface":"#f9f9ff","on-tertiary":"#ffffff","on-secondary":"#ffffff","on-error":"#ffffff","secondary-fixed":"#6ffbbe","on-secondary-fixed-variant":"#005236","surface-container-highest":"#dce2f7","outline":"#8e7069","primary-fixed":"#ffdad2","secondary-container":"#6cf8bb","surface-bright":"#f9f9ff","surface-container-high":"#e1e8fd","on-secondary-fixed":"#002113","inverse-surface":"#293040","inverse-on-surface":"#edf0ff","tertiary":"#4648d4","surface-dim":"#d3daef","secondary":"#006c49","surface-container-low":"#f1f3ff","on-primary":"#ffffff","primary-fixed-dim":"#ffb4a2","surface-container-lowest":"#ffffff","tertiary-container":"#6063ee","tertiary-fixed-dim":"#c0c1ff","on-background":"#141b2b","on-error-container":"#93000a","outline-variant":"#e2bfb7","error":"#ba1a1a","on-tertiary-container":"#fffbff","primary":"#ad2b09","on-secondary-container":"#00714d","secondary-fixed-dim":"#4edea3","on-primary-fixed":"#3d0700","tertiary-fixed":"#e1e0ff","on-primary-container":"#fffbff","surface-container":"#e9edff","on-surface-variant":"#5a413b","on-tertiary-fixed-variant":"#2f2ebe","inverse-primary":"#ffb4a2","primary-container":"#d04321","on-tertiary-fixed":"#07006c","on-surface":"#141b2b","background":"#f9f9ff","error-container":"#ffdad6","surface-variant":"#dce2f7","on-primary-fixed-variant":"#8a1c00"},"borderRadius":{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},"spacing":{"space-xs":"0.25rem","margin":"2rem","margin-lg":"3rem","space-md":"1rem","gutter-lg":"2rem","margin-sm":"1rem","gutter-sm":"1rem","gutter":"1.5rem","space-xl":"2.5rem","space-lg":"1.5rem","space-sm":"0.5rem"},"fontFamily":{"headline-lg":["Plus Jakarta Sans"],"headline-lg-mobile":["Plus Jakarta Sans"],"label-lg":["Plus Jakarta Sans"],"body-sm":["Plus Jakarta Sans"],"headline-sm":["Plus Jakarta Sans"],"body-md":["Plus Jakarta Sans"],"headline-md":["Plus Jakarta Sans"],"display-mobile":["Plus Jakarta Sans"],"title-md":["Plus Jakarta Sans"],"title-lg":["Plus Jakarta Sans"],"body-lg":["Plus Jakarta Sans"],"label-md":["Plus Jakarta Sans"],"display":["Plus Jakarta Sans"],"label-sm":["Plus Jakarta Sans"]},"fontSize":{"headline-lg":["32px",{"lineHeight":"40px","letterSpacing":"-0.02em","fontWeight":"700"}],"headline-lg-mobile":["26px",{"lineHeight":"34px","letterSpacing":"-0.015em","fontWeight":"700"}],"label-lg":["14px",{"lineHeight":"20px","letterSpacing":"0.01em","fontWeight":"600"}],"body-sm":["12px",{"lineHeight":"18px","fontWeight":"400"}],"headline-sm":["20px",{"lineHeight":"28px","letterSpacing":"-0.01em","fontWeight":"600"}],"body-md":["14px",{"lineHeight":"20px","fontWeight":"400"}],"headline-md":["24px",{"lineHeight":"32px","letterSpacing":"-0.015em","fontWeight":"700"}],"display-mobile":["32px",{"lineHeight":"40px","letterSpacing":"-0.025em","fontWeight":"800"}],"title-md":["16px",{"lineHeight":"24px","fontWeight":"600"}],"title-lg":["18px",{"lineHeight":"26px","letterSpacing":"-0.005em","fontWeight":"600"}],"body-lg":["16px",{"lineHeight":"24px","fontWeight":"400"}],"label-md":["12px",{"lineHeight":"16px","letterSpacing":"0.02em","fontWeight":"600"}],"display":["44px",{"lineHeight":"52px","letterSpacing":"-0.03em","fontWeight":"800"}],"label-sm":["10px",{"lineHeight":"14px","letterSpacing":"0.04em","fontWeight":"700"}]}}}};</script></head><body class="bg-surface font-body-md text-body-md text-on-surface"><header class="fixed top-0 left-0 w-full z-50 bg-surface/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-20 w-full px-margin flex items-center justify-between gap-space-lg"><div class="flex items-center gap-space-xl flex-shrink-0"><div class="flex items-center gap-space-sm"><img alt="IndieLoop Brand Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBemqeaDCLEhwHK0P6xA6Glo5bFyKHLdekyClddOgX3evfGCcHlPFr2DdIfoPFSdPpLrRV7uf-wQSaTiGaHCotQCUCGznXG_epaQMGmowMeyw-PYWrEfYy3VzZNcXb0MwCsci31sGDbk-Vu_xy6q3W_QRos0UQbrFDDKDUVkQhVi8GZ7OCgp2uVZMxXnYUz6EGta7oug6APCSjzq4VU4UQN3UE_o99peJRXMBY_44abKKU73gFy9zl7"><span class="font-title-lg text-title-lg tracking-tight text-on-surface">IndieLoop</span></div><nav class="hidden xl:flex items-center gap-space-xs" data-active-classes="bg-surface-container-high text-on-surface rounded-lg"><a class="px-space-md py-space-sm font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors" data-path="overview-pricing" href="#">Overview &amp; Pricing</a><a aria-current="page" class="px-space-md py-space-sm font-label-lg transition-colors bg-surface-container-high text-on-surface rounded-lg" data-path="brand-discovery-arcade" href="#">Brand Discovery Arcade</a><a class="px-space-md py-space-sm font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors" data-path="brand-growth-dashboard" href="#">Brand Growth Dashboard</a><a class="px-space-md py-space-sm font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors" data-path="creator-referral-hub" href="#">Creator &amp; Referral Hub</a></nav></div><div class="flex items-center gap-space-md flex-shrink-0"><div class="hidden sm:flex items-center gap-space-xs px-space-sm py-space-xs rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-sm text-label-sm uppercase"><span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span><span>Live Campaigns: 142 Active</span></div><button class="flex items-center gap-space-sm px-space-md py-space-xs rounded-lg bg-surface-container-low text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors" type="button"><span class="material-symbols-outlined text-[18px]">search</span><span class="hidden md:inline font-body-sm text-body-sm">Search micro-vouchers...</span><kbd class="hidden lg:inline px-space-xs py-0.5 rounded bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm">⌘K</kbd></button><button aria-label="Notifications" class="relative p-space-xs rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors" type="button"><span class="material-symbols-outlined text-[22px]">notifications</span><span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-primary"></span></button><div class="relative flex items-center pl-space-xs"><div class="relative"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><span class="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-secondary ring-2 ring-surface"></span></div></div></div></div></header><main class="w-full pt-20 bg-surface"><div class="flex flex-col w-full">
+<!-- Live Community Marquee / Ticker -->
+<section class="w-full bg-surface-container py-space-xs px-margin overflow-hidden shadow-sm relative">
+<div class="flex items-center gap-space-md">
+<div class="flex items-center gap-space-xs text-primary font-label-sm uppercase flex-shrink-0 z-10 bg-surface-container pr-space-sm">
+<span class="w-2 h-2 rounded-full bg-primary animate-ping"></span>
+<span class="tracking-widest">Live Arcade Activity</span>
+</div>
+<div class="flex-1 overflow-hidden whitespace-nowrap">
+<div class="inline-flex gap-space-xl items-center animate-[marquee_28s_linear_infinite]">
+<span class="flex items-center gap-space-xs text-on-surface-variant font-body-sm">
+<span class="material-symbols-outlined text-[15px] text-secondary">verified</span>
+<strong>Pooja from Pune</strong> just unlocked ₹120 off at <span class="text-on-surface font-semibold">Mitti Herbals</span> via Creator Priya's link
+          </span>
+<span class="text-on-surface-variant/40">•</span>
+<span class="flex items-center gap-space-xs text-on-surface-variant font-body-sm">
+<span class="material-symbols-outlined text-[15px] text-primary">local_activity</span>
+<strong>Rohan from Bengaluru</strong> claimed ₹25 voucher for <span class="text-on-surface font-semibold">BeanCraft Coffee</span> (Free Ceramic Cup included)
+          </span>
+<span class="text-on-surface-variant/40">•</span>
+<span class="flex items-center gap-space-xs text-on-surface-variant font-body-sm">
+<span class="material-symbols-outlined text-[15px] text-secondary">shopping_bag</span>
+<strong>Tanvi from Mumbai</strong> unlocked 20% off handmade choker at <span class="text-on-surface font-semibold">Kaari Silver</span>
+</span>
+<span class="text-on-surface-variant/40">•</span>
+<span class="flex items-center gap-space-xs text-on-surface-variant font-body-sm">
+<span class="material-symbols-outlined text-[15px] text-secondary">verified</span>
+<strong>Aarav from Jaipur</strong> used a ₹10 micro-voucher at <span class="text-on-surface font-semibold">Sanskriti Studios</span>
+</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Editorial Hero Banner & Value Mechanism Block -->
+<section class="px-margin pt-space-xl pb-space-lg">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter items-stretch">
+<!-- Main Pitch Spotlight -->
+<div class="lg:col-span-8 bg-surface-container-lowest p-space-xl rounded-xl shadow-md flex flex-col justify-between relative overflow-hidden">
+<div class="absolute -right-16 -top-16 w-80 h-80 bg-primary/5 rounded-full blur-3xl pointer-events-none"></div>
+<div class="relative z-10">
+<div class="inline-flex items-center gap-space-xs px-space-sm py-0.5 rounded-full bg-primary-fixed text-on-primary-fixed font-label-sm uppercase mb-space-md">
+<span class="material-symbols-outlined text-[14px]">flag</span>
+            Support Homegrown India
+          </div>
+<h1 class="font-display text-display text-on-surface tracking-tight max-w-2xl">
+            Buy <span class="text-primary underline decoration-primary-fixed underline-offset-8">₹10 Micro-Vouchers</span> to Unlock ₹100+ Off &amp; Free Surprise Gifts.
+          </h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant mt-space-md max-w-xl">
+            Empower indie artisans directly. Micro-commitments bypass platform ad markups, giving you unreleased batch discounts and hand-packed goodies.
+          </p>
+</div>
+<div class="relative z-10 pt-space-lg mt-space-lg flex flex-wrap items-center gap-space-lg">
+<div class="flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded-full bg-secondary-fixed flex items-center justify-center text-on-secondary-fixed">
+<span class="material-symbols-outlined text-[20px]">package_2</span>
+</div>
+<div>
+<p class="font-title-sm text-title-sm text-on-surface">Guaranteed Gift Box</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Packed by indie founders</p>
+</div>
+</div>
+<div class="flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[20px]">currency_rupee</span>
+</div>
+<div>
+<p class="font-title-sm text-title-sm text-on-surface">10x ROI Minimum</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Spend ₹10, save ₹100+</p>
+</div>
+</div>
+<div class="flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface">
+<span class="material-symbols-outlined text-[20px]">chat</span>
+</div>
+<div>
+<p class="font-title-sm text-title-sm text-on-surface">WhatsApp Direct</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Chat with artisan owners</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Why ₹10 Mechanism Clarifier Card -->
+<div class="lg:col-span-4 bg-surface-container-high p-space-xl rounded-xl shadow-sm flex flex-col justify-between relative">
+<div>
+<div class="flex items-center justify-between mb-space-sm">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant">Transparency Protocol</span>
+<span class="material-symbols-outlined text-primary text-[20px]">info</span>
+</div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Why pay ₹10?</h2>
+<div class="mt-space-md space-y-space-md text-on-surface-variant font-body-md">
+<p class="leading-relaxed">
+<strong class="text-on-surface">It eliminates spam bot claims.</strong> Generic free coupon codes are abused by coupon aggregators. A nominal ₹10 deposit signals genuine high-intent shoppers.
+            </p>
+<p class="leading-relaxed">
+              In exchange, founders personally pack an <strong class="text-primary font-title-sm">exclusive surprise gift</strong> (like artisanal lip butters, seed papers, or drip bags) inside your dispatch box!
+            </p>
+</div>
+</div>
+<div class="mt-space-lg p-space-md rounded-lg bg-surface-container-lowest shadow-sm flex items-center justify-between">
+<div class="flex items-center gap-space-xs text-secondary font-label-md">
+<span class="material-symbols-outlined text-[18px]">verified_user</span>
+<span>100% Refundable if unused</span>
+</div>
+<span class="font-label-sm text-on-surface-variant">7-day lock</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Filter, Category & City Navigation Bar -->
+<section class="sticky top-20 z-30 bg-surface/95 backdrop-blur-md px-margin py-space-sm shadow-sm">
+<div class="flex flex-col gap-space-sm">
+<!-- Main Category Pills & Search Highlights -->
+<div class="flex items-center justify-between gap-space-md overflow-x-auto no-scrollbar py-1">
+<div class="flex items-center gap-space-xs flex-shrink-0" id="categoryGroup">
+<button class="category-btn active px-space-md py-space-xs rounded-full bg-primary text-on-primary font-label-md transition-all shadow-sm" type="button">
+            All Brands
+          </button>
+<button class="category-btn px-space-md py-space-xs rounded-full bg-surface-container text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high font-label-md transition-all" type="button">
+            Artisanal Skincare
+          </button>
+<button class="category-btn px-space-md py-space-xs rounded-full bg-surface-container text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high font-label-md transition-all" type="button">
+            Handmade Jewelry
+          </button>
+<button class="category-btn px-space-md py-space-xs rounded-full bg-surface-container text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high font-label-md transition-all" type="button">
+            Gourmet Snacks &amp; Coffee
+          </button>
+<button class="category-btn px-space-md py-space-xs rounded-full bg-surface-container text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high font-label-md transition-all" type="button">
+            Eco Fashion
+          </button>
+<button class="category-btn px-space-md py-space-xs rounded-full bg-surface-container text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high font-label-md transition-all" type="button">
+            Home Decor
+          </button>
+</div>
+<div class="flex items-center gap-space-sm flex-shrink-0">
+<button class="flex items-center gap-space-xs px-space-md py-space-xs rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-md shadow-sm hover:brightness-105 transition-all" type="button">
+<span class="material-symbols-outlined text-[16px]">local_fire_department</span>
+<span>Trending Under ₹499</span>
+</button>
+</div>
+</div>
+<!-- City Hub Bar & Sort Order -->
+<div class="flex items-center justify-between gap-space-md pt-space-xs text-on-surface-variant font-label-sm uppercase tracking-wider">
+<div class="flex items-center gap-space-xs overflow-x-auto">
+<span class="flex items-center gap-1 text-on-surface font-title-sm capitalize mr-2">
+<span class="material-symbols-outlined text-[16px] text-primary">pin_drop</span> City Hubs:
+          </span>
+<button class="px-space-sm py-0.5 rounded-md bg-surface-container hover:bg-primary hover:text-on-primary transition-colors" type="button">Mumbai</button>
+<button class="px-space-sm py-0.5 rounded-md bg-surface-container hover:bg-primary hover:text-on-primary transition-colors" type="button">Bengaluru</button>
+<button class="px-space-sm py-0.5 rounded-md bg-surface-container hover:bg-primary hover:text-on-primary transition-colors" type="button">Jaipur</button>
+<button class="px-space-sm py-0.5 rounded-md bg-surface-container hover:bg-primary hover:text-on-primary transition-colors" type="button">Delhi NCR</button>
+<button class="px-space-sm py-0.5 rounded-md bg-surface-container hover:bg-primary hover:text-on-primary transition-colors" type="button">Kochi</button>
+</div>
+<div class="hidden sm:flex items-center gap-space-sm">
+<span>Sort:</span>
+<select class="bg-surface-container-lowest text-on-surface px-space-sm py-1 rounded text-body-sm focus:outline-none cursor-pointer">
+<option>Most Claimed This Week</option>
+<option>Highest Gift Value</option>
+<option>Voucher Price (Low to High)</option>
+<option>Recently Added</option>
+</select>
+</div>
+</div>
+</div>
+</section>
+<!-- Marketplace Canvas: Main Brand Arcade Grid + Interactive Drawer Toggle -->
+<section class="px-margin py-space-xl">
+<div class="flex items-center justify-between mb-space-lg">
+<div>
+<h2 class="font-headline-md text-headline-md text-on-surface">Curated Indie Roster</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Direct verified partnerships with artisan ateliers across India.</p>
+</div>
+<button class="flex items-center gap-space-xs px-space-md py-space-sm rounded-lg bg-surface-container-highest text-on-surface hover:bg-surface-container-high transition-colors font-label-md shadow-sm" onclick="toggleVoucherDrawer()">
+<span class="material-symbols-outlined text-[20px] text-primary">wallet</span>
+<span>My Claimed Pass (<span id="claimedCountBadge">2</span>)</span>
+</button>
+</div>
+<!-- 8 Distinct Brand Cards Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-gutter">
+<!-- Brand Card 1: Mitti Herbals -->
+<div class="bg-surface-container-lowest rounded-xl shadow-md overflow-hidden flex flex-col justify-between group hover:shadow-xl transition-all duration-300">
+<div>
+<div class="relative h-48 w-full overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Close up aesthetic shot of raw terracotta jars and natural Ayurvedic skincare ingredients like sandalwood, rose petals, and turmeric paste arranged in soft morning light on a beige textured studio surface." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAnnQGQ4nsPBHa5121PcJgclKIRphySg2sNBQkK_7NFZiDoehfwt4A5nqi5Pda3wxBM_PnfAbNqhES47DMiCxAAke9zKH0tyjSGUkLZytINcTS-8e3qPdkRuXsDO6OI_6RPQ5D-LQwU8c3xtS_S5VGJ5ALfEEsiXUmReWzcAhE7rmJjYy5uqHNjqZdLoA49o11SUEf_te74tFILQ5LgVrZmqFX7a9644_V3DISZsic824BZZ90-UMhb">
+<div class="absolute top-space-sm left-space-sm flex gap-space-xs">
+<span class="px-space-sm py-0.5 rounded-full bg-secondary text-on-secondary font-label-sm">Artisanal Skincare</span>
+<span class="px-space-sm py-0.5 rounded-full bg-surface-container-lowest/90 backdrop-blur-sm text-on-surface font-label-sm">Jaipur</span>
+</div>
+<div class="absolute bottom-space-sm right-space-sm px-space-sm py-0.5 rounded-md bg-inverse-surface/85 backdrop-blur-sm text-inverse-on-surface font-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-secondary-fixed">trending_up</span> 428 claimed
+            </div>
+</div>
+<div class="p-space-md">
+<div class="flex items-start justify-between">
+<div>
+<div class="flex items-center gap-space-xs">
+<h3 class="font-title-lg text-title-lg text-on-surface">Mitti Herbals</h3>
+<span class="material-symbols-outlined text-primary text-[18px]" title="Verified Indie Maker">verified</span>
+</div>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">@mittiherbals</a>
+</div>
+<span class="px-space-sm py-1 rounded bg-primary text-on-primary font-headline-sm text-[16px] leading-tight font-bold shadow-sm">
+                ₹10
+              </span>
+</div>
+<!-- Perk Callout Banner -->
+<div class="mt-space-md p-space-sm rounded-lg bg-surface-container-low">
+<div class="flex items-start gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[18px] flex-shrink-0 mt-0.5">redeem</span>
+<p class="font-label-md text-label-md text-on-surface">
+                  Pay ₹10 get ₹120 Off + <span class="text-primary font-bold">Free Lip Butter</span> on orders &gt; ₹399
+                </p>
+</div>
+</div>
+</div>
+</div>
+<div class="p-space-md pt-0 flex flex-col gap-space-xs">
+<button class="w-full py-space-sm px-space-md rounded-lg bg-primary hover:bg-primary-container text-on-primary font-label-lg transition-colors flex items-center justify-center gap-space-xs shadow-sm" onclick="claimVoucher('Mitti Herbals', 'MITTI120', '₹10', 'Free Beetroot Lip Butter')">
+<span class="material-symbols-outlined text-[18px]">shopping_cart_checkout</span>
+<span>Buy ₹10 Voucher</span>
+</button>
+<a class="w-full py-space-xs px-space-md rounded-lg bg-surface-container text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high font-label-md transition-colors flex items-center justify-center gap-space-xs" href="https://wa.me/?text=Hi%20Mitti%20Herbals,%20I%20found%20you%20on%20IndieLoop!" target="_blank">
+<span class="material-symbols-outlined text-[16px] text-secondary">chat</span>
+<span>Direct WhatsApp Chat</span>
+</a>
+</div>
+</div>
+<!-- Brand Card 2: Kaari Silver -->
+<div class="bg-surface-container-lowest rounded-xl shadow-md overflow-hidden flex flex-col justify-between group hover:shadow-xl transition-all duration-300">
+<div>
+<div class="relative h-48 w-full overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Artisan silver jewelry pieces including delicate filigree earrings and oxidized rings resting over raw slate stone and velvet silk fabric with dramatic side studio illumination." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBk0CZUBDrivyigXN7XmVuERpZlo34FNTeCZVLkmhNSdqhJVV_jfVZgvEN67gNarNff_XuMKSxdSDhfcrcmWPyaiN3h7LXdJZV1cJIWJkBVaenusE2TzkzKRldJ9WdTwyEp-RHY3phAbheL4NpMzS3pxKfSdyUNfffcmi7Uwy_FjQX0IM8lun00KqiQ0OMSc2m832-fLFLtHxg9Pz_2WylnHi-id_WkT-nxB1q7Nrf5odRZr4M6GB5K">
+<div class="absolute top-space-sm left-space-sm flex gap-space-xs">
+<span class="px-space-sm py-0.5 rounded-full bg-secondary text-on-secondary font-label-sm">Handmade Jewelry</span>
+<span class="px-space-sm py-0.5 rounded-full bg-surface-container-lowest/90 backdrop-blur-sm text-on-surface font-label-sm">Mumbai</span>
+</div>
+<div class="absolute bottom-space-sm right-space-sm px-space-sm py-0.5 rounded-md bg-inverse-surface/85 backdrop-blur-sm text-inverse-on-surface font-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-secondary-fixed">trending_up</span> 312 claimed
+            </div>
+</div>
+<div class="p-space-md">
+<div class="flex items-start justify-between">
+<div>
+<div class="flex items-center gap-space-xs">
+<h3 class="font-title-lg text-title-lg text-on-surface">Kaari Silver</h3>
+<span class="material-symbols-outlined text-primary text-[18px]">verified</span>
+</div>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">@kaaricraft</a>
+</div>
+<span class="px-space-sm py-1 rounded bg-primary text-on-primary font-headline-sm text-[16px] leading-tight font-bold shadow-sm">
+                ₹25
+              </span>
+</div>
+<!-- Perk Callout Banner -->
+<div class="mt-space-md p-space-sm rounded-lg bg-surface-container-low">
+<div class="flex items-start gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[18px] flex-shrink-0 mt-0.5">redeem</span>
+<p class="font-label-md text-label-md text-on-surface">
+                  Pay ₹25 get ₹250 Off + <span class="text-primary font-bold">Silver Polishing Cloth</span> on &gt; ₹899
+                </p>
+</div>
+</div>
+</div>
+</div>
+<div class="p-space-md pt-0 flex flex-col gap-space-xs">
+<button class="w-full py-space-sm px-space-md rounded-lg bg-primary hover:bg-primary-container text-on-primary font-label-lg transition-colors flex items-center justify-center gap-space-xs shadow-sm" onclick="claimVoucher('Kaari Silver', 'KAARI250', '₹25', 'Silver Polish Cloth Kit')">
+<span class="material-symbols-outlined text-[18px]">shopping_cart_checkout</span>
+<span>Buy ₹25 Voucher</span>
+</button>
+<a class="w-full py-space-xs px-space-md rounded-lg bg-surface-container text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high font-label-md transition-colors flex items-center justify-center gap-space-xs" href="https://wa.me/?text=Hi%20Kaari%20Silver,%20checking%20out%20your%20ring%20collection!" target="_blank">
+<span class="material-symbols-outlined text-[16px] text-secondary">chat</span>
+<span>Direct WhatsApp Chat</span>
+</a>
+</div>
+</div>
+<!-- Brand Card 3: BeanCraft Coffee -->
+<div class="bg-surface-container-lowest rounded-xl shadow-md overflow-hidden flex flex-col justify-between group hover:shadow-xl transition-all duration-300">
+<div>
+<div class="relative h-48 w-full overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Freshly roasted specialty coffee beans pouring out from a kraft paper pouch into a manual ceramic grinder, warm amber tones, cafe ambiance, roasted aroma atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCmRBMQRhtukNtGGpcGLrimiKs1wzUrz6k1OWmkCrKVqqghkfLy-ZQqeuPJcxPAOky6bOOmZoy7R4w9sksR8tkGZ4dpHDMZCx-H4G0gq7beeMu6pbYqshNB-5YIjLXs69xZ0eggEKoRgXATxAvRpjTxmOf6KjZxAUO_Xq9hjZDElc6L4wGRP8tczFb8EZxjcsipyGOKgUa3b8N5FmC9SUZivIZefyz0MFuasq-oMfxhgGDqCk5RLCCG">
+<div class="absolute top-space-sm left-space-sm flex gap-space-xs">
+<span class="px-space-sm py-0.5 rounded-full bg-secondary text-on-secondary font-label-sm">Coffee &amp; Snacks</span>
+<span class="px-space-sm py-0.5 rounded-full bg-surface-container-lowest/90 backdrop-blur-sm text-on-surface font-label-sm">Bengaluru</span>
+</div>
+<div class="absolute bottom-space-sm right-space-sm px-space-sm py-0.5 rounded-md bg-inverse-surface/85 backdrop-blur-sm text-inverse-on-surface font-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-secondary-fixed">trending_up</span> 640 claimed
+            </div>
+</div>
+<div class="p-space-md">
+<div class="flex items-start justify-between">
+<div>
+<div class="flex items-center gap-space-xs">
+<h3 class="font-title-lg text-title-lg text-on-surface">BeanCraft Coffee</h3>
+<span class="material-symbols-outlined text-primary text-[18px]">verified</span>
+</div>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">@beancraft.in</a>
+</div>
+<span class="px-space-sm py-1 rounded bg-primary text-on-primary font-headline-sm text-[16px] leading-tight font-bold shadow-sm">
+                ₹10
+              </span>
+</div>
+<!-- Perk Callout Banner -->
+<div class="mt-space-md p-space-sm rounded-lg bg-surface-container-low">
+<div class="flex items-start gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[18px] flex-shrink-0 mt-0.5">redeem</span>
+<p class="font-label-md text-label-md text-on-surface">
+                  Pay ₹10 get ₹100 Off + <span class="text-primary font-bold">2 Pour-over Drip Bags</span>
+</p>
+</div>
+</div>
+</div>
+</div>
+<div class="p-space-md pt-0 flex flex-col gap-space-xs">
+<button class="w-full py-space-sm px-space-md rounded-lg bg-primary hover:bg-primary-container text-on-primary font-label-lg transition-colors flex items-center justify-center gap-space-xs shadow-sm" onclick="claimVoucher('BeanCraft Coffee', 'BEAN100', '₹10', '2 Signature Drip Filter Pouches')">
+<span class="material-symbols-outlined text-[18px]">shopping_cart_checkout</span>
+<span>Buy ₹10 Voucher</span>
+</button>
+<a class="w-full py-space-xs px-space-md rounded-lg bg-surface-container text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high font-label-md transition-colors flex items-center justify-center gap-space-xs" href="https://wa.me/?text=Hi%20BeanCraft,%20inquiry%20on%20single%20origin%20roasts" target="_blank">
+<span class="material-symbols-outlined text-[16px] text-secondary">chat</span>
+<span>Direct WhatsApp Chat</span>
+</a>
+</div>
+</div>
+<!-- Brand Card 4: Sanskriti Studios -->
+<div class="bg-surface-container-lowest rounded-xl shadow-md overflow-hidden flex flex-col justify-between group hover:shadow-xl transition-all duration-300">
+<div>
+<div class="relative h-48 w-full overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Handcrafted ceramic mug and minimal clay planter with textured earthy glaze sitting on raw wooden console table beside sunny window plants." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBnARruD2X4hm6anmMkwBXRLfkwi8-bqBKtDMM6v0Ohis79vQA6sV_AsqlNQHK1lMamGz1QTa6xZtZWUKO5kta5w-sHt_PCrGC6W8qzkct7bDHCC2JApuq13kSCJGkI3ZPGmhdqoZhxBN3sQsSqF6QPfF9c8Z2Kdyk40Ay1mAE_CskNunag1o9kB7bI63R8OIVhvjtEqZf0D_6otRF5l2zO8Dm8rx7lP4BhSvwihMJX3tIZFxmnZ_hu">
+<div class="absolute top-space-sm left-space-sm flex gap-space-xs">
+<span class="px-space-sm py-0.5 rounded-full bg-secondary text-on-secondary font-label-sm">Home Decor</span>
+<span class="px-space-sm py-0.5 rounded-full bg-surface-container-lowest/90 backdrop-blur-sm text-on-surface font-label-sm">Delhi NCR</span>
+</div>
+<div class="absolute bottom-space-sm right-space-sm px-space-sm py-0.5 rounded-md bg-inverse-surface/85 backdrop-blur-sm text-inverse-on-surface font-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-secondary-fixed">trending_up</span> 190 claimed
+            </div>
+</div>
+<div class="p-space-md">
+<div class="flex items-start justify-between">
+<div>
+<div class="flex items-center gap-space-xs">
+<h3 class="font-title-lg text-title-lg text-on-surface">Sanskriti Studios</h3>
+<span class="material-symbols-outlined text-primary text-[18px]">verified</span>
+</div>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">@sanskriti.clay</a>
+</div>
+<span class="px-space-sm py-1 rounded bg-primary text-on-primary font-headline-sm text-[16px] leading-tight font-bold shadow-sm">
+                ₹50
+              </span>
+</div>
+<!-- Perk Callout Banner -->
+<div class="mt-space-md p-space-sm rounded-lg bg-surface-container-low">
+<div class="flex items-start gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[18px] flex-shrink-0 mt-0.5">redeem</span>
+<p class="font-label-md text-label-md text-on-surface">
+                  Pay ₹50 get ₹350 Off + <span class="text-primary font-bold">Mini Terrazzo Coaster</span>
+</p>
+</div>
+</div>
+</div>
+</div>
+<div class="p-space-md pt-0 flex flex-col gap-space-xs">
+<button class="w-full py-space-sm px-space-md rounded-lg bg-primary hover:bg-primary-container text-on-primary font-label-lg transition-colors flex items-center justify-center gap-space-xs shadow-sm" onclick="claimVoucher('Sanskriti Studios', 'SANSKRITI350', '₹50', 'Hand-poured Terrazzo Coaster')">
+<span class="material-symbols-outlined text-[18px]">shopping_cart_checkout</span>
+<span>Buy ₹50 Voucher</span>
+</button>
+<a class="w-full py-space-xs px-space-md rounded-lg bg-surface-container text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high font-label-md transition-colors flex items-center justify-center gap-space-xs" href="https://wa.me/?text=Hi%20Sanskriti%20Studios,%20custom%20order%20inquiry" target="_blank">
+<span class="material-symbols-outlined text-[16px] text-secondary">chat</span>
+<span>Direct WhatsApp Chat</span>
+</a>
+</div>
+</div>
+<!-- Brand Card 5: Dhaga & Co. -->
+<div class="bg-surface-container-lowest rounded-xl shadow-md overflow-hidden flex flex-col justify-between group hover:shadow-xl transition-all duration-300">
+<div>
+<div class="relative h-48 w-full overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Eco-friendly raw khadi cotton shirt dyed with indigo botanical extracts hanging in a bright airy boutique with sun flare and woven jute backdrops." src="https://lh3.googleusercontent.com/aida-public/AB6AXuABDvCgXtg7LgLBaIO-feA0bl8SlutI3CAtuoQKeHGJcIfCzOJgwimsrbS6ndciAgFptNEtz4QMK1AtNDsbn2SDKTH-W2k1xEK9Y2WTh7-eeWD50TnnwKXBjtow1stUD9jlXWzAl6MR-MLPXSHvOyCTqhZN1lD1pGf-nh7t8ykLyjNtvSZTX06B2QpuhX2QsgElKAPI21MNtxonCBzENqpa1CPtYeR81cHWVbdw174abGdnf8tzwVGu">
+<div class="absolute top-space-sm left-space-sm flex gap-space-xs">
+<span class="px-space-sm py-0.5 rounded-full bg-secondary text-on-secondary font-label-sm">Eco Fashion</span>
+<span class="px-space-sm py-0.5 rounded-full bg-surface-container-lowest/90 backdrop-blur-sm text-on-surface font-label-sm">Kochi</span>
+</div>
+<div class="absolute bottom-space-sm right-space-sm px-space-sm py-0.5 rounded-md bg-inverse-surface/85 backdrop-blur-sm text-inverse-on-surface font-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-secondary-fixed">trending_up</span> 284 claimed
+            </div>
+</div>
+<div class="p-space-md">
+<div class="flex items-start justify-between">
+<div>
+<div class="flex items-center gap-space-xs">
+<h3 class="font-title-lg text-title-lg text-on-surface">Dhaga &amp; Co.</h3>
+<span class="material-symbols-outlined text-primary text-[18px]">verified</span>
+</div>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">@dhaga.threads</a>
+</div>
+<span class="px-space-sm py-1 rounded bg-primary text-on-primary font-headline-sm text-[16px] leading-tight font-bold shadow-sm">
+                ₹25
+              </span>
+</div>
+<!-- Perk Callout Banner -->
+<div class="mt-space-md p-space-sm rounded-lg bg-surface-container-low">
+<div class="flex items-start gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[18px] flex-shrink-0 mt-0.5">redeem</span>
+<p class="font-label-md text-label-md text-on-surface">
+                  Pay ₹25 get ₹200 Off + <span class="text-primary font-bold">Botanical Fabric Tote</span>
+</p>
+</div>
+</div>
+</div>
+</div>
+<div class="p-space-md pt-0 flex flex-col gap-space-xs">
+<button class="w-full py-space-sm px-space-md rounded-lg bg-primary hover:bg-primary-container text-on-primary font-label-lg transition-colors flex items-center justify-center gap-space-xs shadow-sm" onclick="claimVoucher('Dhaga &amp; Co.', 'DHAGA200', '₹25', 'Organic Linen Tote Bag')">
+<span class="material-symbols-outlined text-[18px]">shopping_cart_checkout</span>
+<span>Buy ₹25 Voucher</span>
+</button>
+<a class="w-full py-space-xs px-space-md rounded-lg bg-surface-container text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high font-label-md transition-colors flex items-center justify-center gap-space-xs" href="https://wa.me/?text=Hi%20Dhaga,%20need%20size%20guide%20assistance" target="_blank">
+<span class="material-symbols-outlined text-[16px] text-secondary">chat</span>
+<span>Direct WhatsApp Chat</span>
+</a>
+</div>
+</div>
+<!-- Brand Card 6: Bageecha Teas -->
+<div class="bg-surface-container-lowest rounded-xl shadow-md overflow-hidden flex flex-col justify-between group hover:shadow-xl transition-all duration-300">
+<div>
+<div class="relative h-48 w-full overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Loose whole-leaf Darjeeling golden tea tips with dried marigold buds in a glass brewing kettle with sunlight refraction in warm tea liquor." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCcBkHwn26C4KoZDwWNyIKkS4_hGtn4tERv9NOanuJxgIqH-2AZBCmtrQ23RDoojn468jm2knrDJmhw6fOK0pjMBIVoimawz6GnW7Jbn8EPp-guwlgC7qSbrWoMhbImqx1s3PeFeek6vlm_gN_nENk9ehDhH1mGP0RoVRB41cSOtMdVaMAHtggXWTXf7WtpD9656-kkbfZKyyDAb7cTfLnKj8JrnhuPNOn9iTasxxdmOsb4WxXx3UWM">
+<div class="absolute top-space-sm left-space-sm flex gap-space-xs">
+<span class="px-space-sm py-0.5 rounded-full bg-secondary text-on-secondary font-label-sm">Gourmet Teas</span>
+<span class="px-space-sm py-0.5 rounded-full bg-surface-container-lowest/90 backdrop-blur-sm text-on-surface font-label-sm">Bengaluru</span>
+</div>
+<div class="absolute bottom-space-sm right-space-sm px-space-sm py-0.5 rounded-md bg-inverse-surface/85 backdrop-blur-sm text-inverse-on-surface font-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-secondary-fixed">trending_up</span> 512 claimed
+            </div>
+</div>
+<div class="p-space-md">
+<div class="flex items-start justify-between">
+<div>
+<div class="flex items-center gap-space-xs">
+<h3 class="font-title-lg text-title-lg text-on-surface">Bageecha Teas</h3>
+<span class="material-symbols-outlined text-primary text-[18px]">verified</span>
+</div>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">@bageechatea</a>
+</div>
+<span class="px-space-sm py-1 rounded bg-primary text-on-primary font-headline-sm text-[16px] leading-tight font-bold shadow-sm">
+                ₹10
+              </span>
+</div>
+<!-- Perk Callout Banner -->
+<div class="mt-space-md p-space-sm rounded-lg bg-surface-container-low">
+<div class="flex items-start gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[18px] flex-shrink-0 mt-0.5">redeem</span>
+<p class="font-label-md text-label-md text-on-surface">
+                  Pay ₹10 get ₹150 Off + <span class="text-primary font-bold">Brass Tea Strainer</span>
+</p>
+</div>
+</div>
+</div>
+</div>
+<div class="p-space-md pt-0 flex flex-col gap-space-xs">
+<button class="w-full py-space-sm px-space-md rounded-lg bg-primary hover:bg-primary-container text-on-primary font-label-lg transition-colors flex items-center justify-center gap-space-xs shadow-sm" onclick="claimVoucher('Bageecha Teas', 'BAGEECHA150', '₹10', 'Artisanal Brass Strainer')">
+<span class="material-symbols-outlined text-[18px]">shopping_cart_checkout</span>
+<span>Buy ₹10 Voucher</span>
+</button>
+<a class="w-full py-space-xs px-space-md rounded-lg bg-surface-container text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high font-label-md transition-colors flex items-center justify-center gap-space-xs" href="https://wa.me/?text=Hi%20Bageecha,%20do%20you%20have%20cold%20brew%20blends?" target="_blank">
+<span class="material-symbols-outlined text-[16px] text-secondary">chat</span>
+<span>Direct WhatsApp Chat</span>
+</a>
+</div>
+</div>
+<!-- Brand Card 7: Pavitra Naturals -->
+<div class="bg-surface-container-lowest rounded-xl shadow-md overflow-hidden flex flex-col justify-between group hover:shadow-xl transition-all duration-300">
+<div>
+<div class="relative h-48 w-full overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Cold pressed organic virgin coconut and almond oil bottles in dark amber glass with fresh botanicals, clean crisp bathroom countertop setting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCMfshhLTlB0r0cWN47hf7mSGa7sEwUBr5sQ-uTMfDgI9Ie-WlXFBuqOVDstTGDSQMNOJEIct5DQ48qPrjbf1VEA9qoy8bKa6hIITsKcfoQSQWn95ugopsqHJwm6ofJVzHAVHenk0HaIiF-jtSB7Do9yie6JQYcG7XeTjW5kinxpg4PC5kFFGMktkLX4vNerX19vcg31MaYdWSczmtu3C_Vtb92Gp-gJlLoWahSvLHa-twCbvW_ulO9">
+<div class="absolute top-space-sm left-space-sm flex gap-space-xs">
+<span class="px-space-sm py-0.5 rounded-full bg-secondary text-on-secondary font-label-sm">Clean Care</span>
+<span class="px-space-sm py-0.5 rounded-full bg-surface-container-lowest/90 backdrop-blur-sm text-on-surface font-label-sm">Mumbai</span>
+</div>
+<div class="absolute bottom-space-sm right-space-sm px-space-sm py-0.5 rounded-md bg-inverse-surface/85 backdrop-blur-sm text-inverse-on-surface font-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-secondary-fixed">trending_up</span> 376 claimed
+            </div>
+</div>
+<div class="p-space-md">
+<div class="flex items-start justify-between">
+<div>
+<div class="flex items-center gap-space-xs">
+<h3 class="font-title-lg text-title-lg text-on-surface">Pavitra Naturals</h3>
+<span class="material-symbols-outlined text-primary text-[18px]">verified</span>
+</div>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">@pavitra.wellness</a>
+</div>
+<span class="px-space-sm py-1 rounded bg-primary text-on-primary font-headline-sm text-[16px] leading-tight font-bold shadow-sm">
+                ₹10
+              </span>
+</div>
+<!-- Perk Callout Banner -->
+<div class="mt-space-md p-space-sm rounded-lg bg-surface-container-low">
+<div class="flex items-start gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[18px] flex-shrink-0 mt-0.5">redeem</span>
+<p class="font-label-md text-label-md text-on-surface">
+                  Pay ₹10 get ₹100 Off + <span class="text-primary font-bold">Rosewater Mist Mini</span>
+</p>
+</div>
+</div>
+</div>
+</div>
+<div class="p-space-md pt-0 flex flex-col gap-space-xs">
+<button class="w-full py-space-sm px-space-md rounded-lg bg-primary hover:bg-primary-container text-on-primary font-label-lg transition-colors flex items-center justify-center gap-space-xs shadow-sm" onclick="claimVoucher('Pavitra Naturals', 'PAVITRA100', '₹10', 'Steam Distilled Rose Mist')">
+<span class="material-symbols-outlined text-[18px]">shopping_cart_checkout</span>
+<span>Buy ₹10 Voucher</span>
+</button>
+<a class="w-full py-space-xs px-space-md rounded-lg bg-surface-container text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high font-label-md transition-colors flex items-center justify-center gap-space-xs" href="https://wa.me/?text=Hi%20Pavitra,%20is%20the%20kumkumadi%20oil%20in%20stock?" target="_blank">
+<span class="material-symbols-outlined text-[16px] text-secondary">chat</span>
+<span>Direct WhatsApp Chat</span>
+</a>
+</div>
+</div>
+<!-- Brand Card 8: Rangrej Karkhana -->
+<div class="bg-surface-container-lowest rounded-xl shadow-md overflow-hidden flex flex-col justify-between group hover:shadow-xl transition-all duration-300">
+<div>
+<div class="relative h-48 w-full overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Traditional Indian hand block wooden stamps on carved teak table alongside block printed indigo textiles and pigment bowls." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBEx6N6h5ymTERstRxxGYJe9j0loVa7r23SjxiL3SjGQvUcnRy-4aJuUWjeklLyAnuoF7T9pMW8Is76wmokkc1lRTd1PsIKiMFmy2axSO4TpDSCo-ZU9TtJfBKpvAxmT-r2yet9rY4qxB2nSTISCT_4ZC7Ox6k9FgUTEFWbqlwUk5Y6WRzgQa7qAJCgvz39B7CG5ETQ20VaLxv8YrPV0WLHKToXrXw80JeXxygzsB934n0IRVsjTSc8">
+<div class="absolute top-space-sm left-space-sm flex gap-space-xs">
+<span class="px-space-sm py-0.5 rounded-full bg-secondary text-on-secondary font-label-sm">Home &amp; Living</span>
+<span class="px-space-sm py-0.5 rounded-full bg-surface-container-lowest/90 backdrop-blur-sm text-on-surface font-label-sm">Jaipur</span>
+</div>
+<div class="absolute bottom-space-sm right-space-sm px-space-sm py-0.5 rounded-md bg-inverse-surface/85 backdrop-blur-sm text-inverse-on-surface font-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-secondary-fixed">trending_up</span> 229 claimed
+            </div>
+</div>
+<div class="p-space-md">
+<div class="flex items-start justify-between">
+<div>
+<div class="flex items-center gap-space-xs">
+<h3 class="font-title-lg text-title-lg text-on-surface">Rangrej Karkhana</h3>
+<span class="material-symbols-outlined text-primary text-[18px]">verified</span>
+</div>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">@rangrej.jaipur</a>
+</div>
+<span class="px-space-sm py-1 rounded bg-primary text-on-primary font-headline-sm text-[16px] leading-tight font-bold shadow-sm">
+                ₹25
+              </span>
+</div>
+<!-- Perk Callout Banner -->
+<div class="mt-space-md p-space-sm rounded-lg bg-surface-container-low">
+<div class="flex items-start gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[18px] flex-shrink-0 mt-0.5">redeem</span>
+<p class="font-label-md text-label-md text-on-surface">
+                  Pay ₹25 get ₹220 Off + <span class="text-primary font-bold">Hand-blocked Table Mat</span>
+</p>
+</div>
+</div>
+</div>
+</div>
+<div class="p-space-md pt-0 flex flex-col gap-space-xs">
+<button class="w-full py-space-sm px-space-md rounded-lg bg-primary hover:bg-primary-container text-on-primary font-label-lg transition-colors flex items-center justify-center gap-space-xs shadow-sm" onclick="claimVoucher('Rangrej Karkhana', 'RANGREJ220', '₹25', 'Handblock Cotton Mat')">
+<span class="material-symbols-outlined text-[18px]">shopping_cart_checkout</span>
+<span>Buy ₹25 Voucher</span>
+</button>
+<a class="w-full py-space-xs px-space-md rounded-lg bg-surface-container text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high font-label-md transition-colors flex items-center justify-center gap-space-xs" href="https://wa.me/?text=Hi%20Rangrej,%20custom%20cushion%20order%20inquiry" target="_blank">
+<span class="material-symbols-outlined text-[16px] text-secondary">chat</span>
+<span>Direct WhatsApp Chat</span>
+</a>
+</div>
+</div>
+</div>
+</section>
+<!-- Creator Co-op Callout Bar -->
+<section class="px-margin pb-space-xl">
+<div class="bg-surface-container p-space-xl rounded-xl shadow-sm flex flex-col lg:flex-row items-center justify-between gap-space-lg relative overflow-hidden">
+<div class="max-w-xl">
+<span class="px-space-sm py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-sm uppercase">Creator Micro-Affiliate Loop</span>
+<h3 class="font-headline-md text-headline-md text-on-surface mt-space-sm">Are you an Instagram creator or micro-influencer?</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mt-space-xs">
+          Distribute these ₹10 micro-vouchers to your community. Earn ₹5 cash instantly per redeemed voucher + 12% revenue share on the final merchant basket.
+        </p>
+</div>
+<div class="flex items-center gap-space-md flex-shrink-0">
+<button class="px-space-lg py-space-md rounded-lg bg-inverse-surface text-inverse-on-surface hover:bg-on-surface transition-colors font-label-lg shadow-md flex items-center gap-space-xs" type="button">
+<span class="material-symbols-outlined text-[20px]">share</span>
+<span>Generate Creator Link</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Floating / Collapsible Drawer: 'My Claimed Vouchers' -->
+<aside class="fixed right-0 top-20 bottom-0 w-full sm:w-96 bg-surface-container-lowest shadow-2xl z-40 transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col" id="voucherDrawer">
+<!-- Drawer Header -->
+<div class="p-space-lg bg-surface-container flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[24px]">wallet</span>
+<div>
+<h3 class="font-title-lg text-title-lg text-on-surface">Claimed Vouchers</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Ready for instant WhatsApp or Web checkout</p>
+</div>
+</div>
+<button class="p-space-xs rounded-full hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface" onclick="toggleVoucherDrawer()">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<!-- Active List -->
+<div class="flex-1 overflow-y-auto p-space-md space-y-space-md" id="voucherList">
+<!-- Preloaded Demo Voucher 1 -->
+<div class="p-space-md rounded-lg bg-surface-container-low shadow-sm relative group">
+<div class="flex items-center justify-between">
+<span class="font-title-md text-title-md text-on-surface">Mitti Herbals</span>
+<span class="px-space-xs py-0.5 rounded bg-secondary-fixed text-on-secondary-fixed font-label-sm">Active • 6d left</span>
+</div>
+<p class="font-body-sm text-on-surface-variant mt-1">₹120 Off + Free Beetroot Lip Butter</p>
+<div class="mt-space-sm p-space-xs px-space-sm rounded bg-surface-container-lowest flex items-center justify-between">
+<code class="font-title-sm text-primary tracking-wider font-mono">MITTI120-LOOP</code>
+<button class="text-on-surface-variant hover:text-primary flex items-center gap-1 font-label-sm" onclick="copyVoucherCode(this, 'MITTI120-LOOP')">
+<span class="material-symbols-outlined text-[16px]">content_copy</span>
+<span>Copy</span>
+</button>
+</div>
+<div class="mt-space-sm pt-space-xs flex items-center justify-between">
+<span class="text-label-sm text-on-surface-variant">Includes gift packaging note</span>
+<a class="font-label-sm text-secondary hover:underline flex items-center gap-1" href="https://wa.me/?text=Hi%20Mitti%20Herbals,%20redeeming%20code%20MITTI120-LOOP%20for%20my%20order" target="_blank">
+<span class="material-symbols-outlined text-[15px]">send</span> WhatsApp Order
+          </a>
+</div>
+</div>
+<!-- Preloaded Demo Voucher 2 -->
+<div class="p-space-md rounded-lg bg-surface-container-low shadow-sm relative group">
+<div class="flex items-center justify-between">
+<span class="font-title-md text-title-md text-on-surface">BeanCraft Coffee</span>
+<span class="px-space-xs py-0.5 rounded bg-secondary-fixed text-on-secondary-fixed font-label-sm">Active • 4d left</span>
+</div>
+<p class="font-body-sm text-on-surface-variant mt-1">₹100 Off + 2 Pour-Over Drip Bags</p>
+<div class="mt-space-sm p-space-xs px-space-sm rounded bg-surface-container-lowest flex items-center justify-between">
+<code class="font-title-sm text-primary tracking-wider font-mono">BEAN100-ARTISAN</code>
+<button class="text-on-surface-variant hover:text-primary flex items-center gap-1 font-label-sm" onclick="copyVoucherCode(this, 'BEAN100-ARTISAN')">
+<span class="material-symbols-outlined text-[16px]">content_copy</span>
+<span>Copy</span>
+</button>
+</div>
+<div class="mt-space-sm pt-space-xs flex items-center justify-between">
+<span class="text-label-sm text-on-surface-variant">Founder-packed batch</span>
+<a class="font-label-sm text-secondary hover:underline flex items-center gap-1" href="https://wa.me/?text=Hi%20BeanCraft,%20redeeming%20voucher%20BEAN100-ARTISAN" target="_blank">
+<span class="material-symbols-outlined text-[15px]">send</span> WhatsApp Order
+          </a>
+</div>
+</div>
+</div>
+<!-- Drawer Footer -->
+<div class="p-space-md bg-surface-container-low shadow-sm">
+<div class="flex items-center justify-between text-body-sm text-on-surface-variant mb-space-sm">
+<span>Total Savings Claimed:</span>
+<span class="font-title-md text-secondary font-bold">₹220 + 2 Gifts</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant text-center">
+        Show this pass on brand website checkout or artisan chat.
+      </p>
+</div>
+</aside>
+<!-- Notification Toast for Voucher Purchase -->
+<div class="fixed bottom-6 right-6 z-50 transform translate-y-24 opacity-0 transition-all duration-300 pointer-events-none bg-inverse-surface text-inverse-on-surface px-space-lg py-space-sm rounded-xl shadow-2xl flex items-center gap-space-sm" id="toastNotification">
+<span class="material-symbols-outlined text-secondary-fixed text-[22px]">check_circle</span>
+<div>
+<p class="font-label-md text-white" id="toastTitle">Voucher Added!</p>
+<p class="font-body-sm text-surface-variant" id="toastMessage">Check My Claimed Pass drawer.</p>
+</div>
+</div>
+<!-- Interactive Logic script -->
+<script>
+    let drawerOpen = false;
+    let claimedCount = 2;
+
+    function toggleVoucherDrawer() {
+      const drawer = document.getElementById('voucherDrawer');
+      drawerOpen = !drawerOpen;
+      if (drawerOpen) {
+        drawer.classList.remove('translate-x-full');
+      } else {
+        drawer.classList.add('translate-x-full');
+      }
+    }
+
+    function claimVoucher(brand, baseCode, price, giftDesc) {
+      const randomSuffix = Math.floor(1000 + Math.random() * 9000);
+      const fullCode = `${baseCode}-${randomSuffix}`;
+      claimedCount++;
+      document.getElementById('claimedCountBadge').textContent = claimedCount;
+
+      const list = document.getElementById('voucherList');
+      const newCard = document.createElement('div');
+      newCard.className = "p-space-md rounded-lg bg-surface-container-low shadow-sm relative group animate-[fadeIn_0.3s_ease]";
+      newCard.innerHTML = `
+        <div class="flex items-center justify-between">
+          <span class="font-title-md text-title-md text-on-surface">${brand}</span>
+          <span class="px-space-xs py-0.5 rounded bg-secondary-fixed text-on-secondary-fixed font-label-sm">Just Claimed</span>
+        </div>
+        <p class="font-body-sm text-on-surface-variant mt-1">Paid ${price} • Includes ${giftDesc}</p>
+        
+        <div class="mt-space-sm p-space-xs px-space-sm rounded bg-surface-container-lowest flex items-center justify-between">
+          <code class="font-title-sm text-primary tracking-wider font-mono">${fullCode}</code>
+          <button onclick="copyVoucherCode(this, '${fullCode}')" class="text-on-surface-variant hover:text-primary flex items-center gap-1 font-label-sm">
+            <span class="material-symbols-outlined text-[16px]">content_copy</span>
+            <span>Copy</span>
+          </button>
+        </div>
+
+        <div class="mt-space-sm pt-space-xs flex items-center justify-between">
+          <span class="text-label-sm text-secondary font-medium">Founder notified</span>
+          <a href="https://wa.me/?text=Hi%20${encodeURIComponent(brand)},%20I%20just%20claimed%20my%20voucher%20${fullCode}%20on%20IndieLoop!" target="_blank" class="font-label-sm text-secondary hover:underline flex items-center gap-1">
+            <span class="material-symbols-outlined text-[15px]">send</span> WhatsApp Order
+          </a>
+        </div>
+      `;
+      list.prepend(newCard);
+
+      // Trigger Toast
+      const toast = document.getElementById('toastNotification');
+      document.getElementById('toastTitle').textContent = `₹${price.replace('₹','')} Voucher Unlocked!`;
+      document.getElementById('toastMessage').textContent = `Pass code ready for ${brand}`;
+      toast.classList.remove('translate-y-24', 'opacity-0');
+      setTimeout(() => {
+        toast.classList.add('translate-y-24', 'opacity-0');
+      }, 3500);
+
+      // Open drawer on claim
+      if (!drawerOpen) {
+        toggleVoucherDrawer();
+      }
+    }
+
+    function copyVoucherCode(button, text) {
+      navigator.clipboard.writeText(text);
+      const span = button.querySelector('span:last-child');
+      const originalText = span.textContent;
+      span.textContent = 'Copied!';
+      button.classList.add('text-secondary');
+      setTimeout(() => {
+        span.textContent = originalText;
+        button.classList.remove('text-secondary');
+      }, 2000);
+    }
+
+    // Category button toggles
+    document.querySelectorAll('#categoryGroup .category-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('#categoryGroup .category-btn').forEach(b => {
+          b.classList.remove('bg-primary', 'text-on-primary', 'active');
+          b.classList.add('bg-surface-container', 'text-on-surface-variant');
+        });
+        this.classList.remove('bg-surface-container', 'text-on-surface-variant');
+        this.classList.add('bg-primary', 'text-on-primary', 'active');
+      });
+    });
+  </script>
+</div></main><footer class="w-full bg-surface-container-low py-space-xl mt-space-xl shadow-[0_-1px_6px_rgba(0,0,0,0.02)]"><div class="w-full px-margin flex flex-col md:flex-row items-center justify-between gap-space-md"><div class="flex items-center gap-space-sm"><span class="font-title-md text-title-md text-on-surface">IndieLoop</span><span class="font-body-sm text-body-sm text-on-surface-variant">— Micro-voucher acquisition ecosystem</span></div><div class="flex items-center gap-space-lg font-label-md text-label-md text-on-surface-variant"><a class="hover:text-on-surface transition-colors" href="#">Platform Rules</a><a class="hover:text-on-surface transition-colors" href="#">Merchant Standards</a><a class="hover:text-on-surface transition-colors" href="#">Creator Terms</a><a class="hover:text-on-surface transition-colors" href="#">Privacy Policy</a></div><div class="font-body-sm text-body-sm text-on-surface-variant">© 2025 IndieLoop Network Inc. All rights reserved.</div></div></footer></body></html>
+
+create a new page name as /creator-dashboard code for page is below: 
+
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0" name="viewport"><meta content="web_standard" name="shell-type"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"><link href="https://fonts.googleapis.com" rel="preconnect"><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+          "on-surface": "#1a1c1c",
+          "error-container": "#ffdad6",
+          "secondary": "#535f6f",
+          "surface-tint": "#af300e",
+          "surface-container": "#eeeeed",
+          "tertiary-fixed": "#ffdcc4",
+          "on-primary-fixed": "#3c0700",
+          "primary-container": "#ce4623",
+          "on-surface-variant": "#59413b",
+          "on-secondary": "#ffffff",
+          "on-tertiary-fixed-variant": "#6f3800",
+          "on-tertiary-container": "#fffbff",
+          "primary-fixed": "#ffdad2",
+          "secondary-container": "#d4e1f4",
+          "surface-container-high": "#e8e8e7",
+          "primary": "#ac2d0b",
+          "inverse-surface": "#2f3130",
+          "surface-bright": "#f9f9f8",
+          "on-secondary-fixed-variant": "#3c4857",
+          "tertiary-fixed-dim": "#ffb780",
+          "surface-variant": "#e2e2e2",
+          "outline-variant": "#e1bfb7",
+          "surface-container-lowest": "#ffffff",
+          "tertiary-container": "#a96428",
+          "inverse-on-surface": "#f1f1f0",
+          "on-primary": "#ffffff",
+          "surface-container-low": "#f3f4f3",
+          "outline": "#8d706a",
+          "on-error": "#ffffff",
+          "tertiary": "#8b4c11",
+          "inverse-primary": "#ffb4a2",
+          "secondary-fixed": "#d7e3f6",
+          "secondary-fixed-dim": "#bbc7da",
+          "primary-fixed-dim": "#ffb4a2",
+          "on-tertiary-fixed": "#2f1400",
+          "on-background": "#1a1c1c",
+          "surface": "#f9f9f8",
+          "on-primary-fixed-variant": "#8a1d00",
+          "on-error-container": "#93000a",
+          "surface-container-highest": "#e2e2e2",
+          "on-primary-container": "#fffbff",
+          "on-tertiary": "#ffffff",
+          "background": "#f9f9f8",
+          "on-secondary-fixed": "#101c2a",
+          "surface-dim": "#dadad9",
+          "error": "#ba1a1a",
+          "on-secondary-container": "#576474"
+        },
+        "borderRadius": {
+          "DEFAULT": "0.25rem",
+          "lg": "0.5rem",
+          "xl": "0.75rem",
+          "full": "9999px"
+        },
+        "spacing": {
+          "margin-desktop": "3rem",
+          "space-md": "1rem",
+          "gutter-lg": "1.75rem",
+          "gutter": "1.25rem",
+          "space-xl": "2.5rem",
+          "gutter-sm": "0.75rem",
+          "space-lg": "1.5rem",
+          "space-sm": "0.5rem",
+          "space-xs": "0.25rem",
+          "margin-mobile": "1rem",
+          "margin": "1.5rem"
+        },
+        "fontFamily": {
+          "body-lg": [
+            "Plus Jakarta Sans"
+          ],
+          "title-lg": [
+            "Plus Jakarta Sans"
+          ],
+          "headline-sm": [
+            "Plus Jakarta Sans"
+          ],
+          "title-md": [
+            "Plus Jakarta Sans"
+          ],
+          "body-md": [
+            "Plus Jakarta Sans"
+          ],
+          "display": [
+            "Plus Jakarta Sans"
+          ],
+          "body-sm": [
+            "Plus Jakarta Sans"
+          ],
+          "label-lg": [
+            "Plus Jakarta Sans"
+          ],
+          "headline-lg-mobile": [
+            "Plus Jakarta Sans"
+          ],
+          "label-sm": [
+            "Plus Jakarta Sans"
+          ],
+          "label-md": [
+            "Plus Jakarta Sans"
+          ],
+          "headline-md": [
+            "Plus Jakarta Sans"
+          ],
+          "headline-lg": [
+            "Plus Jakarta Sans"
+          ]
+        },
+        "fontSize": {
+          "body-lg": [
+            "16px",
+            {
+              "lineHeight": "26px",
+              "fontWeight": "400"
+            }
+          ],
+          "title-lg": [
+            "18px",
+            {
+              "lineHeight": "26px",
+              "fontWeight": "600"
+            }
+          ],
+          "headline-sm": [
+            "20px",
+            {
+              "lineHeight": "28px",
+              "letterSpacing": "-0.005em",
+              "fontWeight": "600"
+            }
+          ],
+          "title-md": [
+            "16px",
+            {
+              "lineHeight": "24px",
+              "fontWeight": "600"
+            }
+          ],
+          "body-md": [
+            "14px",
+            {
+              "lineHeight": "22px",
+              "fontWeight": "400"
+            }
+          ],
+          "display": [
+            "40px",
+            {
+              "lineHeight": "48px",
+              "letterSpacing": "-0.02em",
+              "fontWeight": "700"
+            }
+          ],
+          "body-sm": [
+            "13px",
+            {
+              "lineHeight": "18px",
+              "fontWeight": "400"
+            }
+          ],
+          "label-lg": [
+            "14px",
+            {
+              "lineHeight": "20px",
+              "fontWeight": "500"
+            }
+          ],
+          "headline-lg-mobile": [
+            "26px",
+            {
+              "lineHeight": "34px",
+              "letterSpacing": "-0.01em",
+              "fontWeight": "600"
+            }
+          ],
+          "label-sm": [
+            "11px",
+            {
+              "lineHeight": "14px",
+              "letterSpacing": "0.02em",
+              "fontWeight": "600"
+            }
+          ],
+          "label-md": [
+            "12px",
+            {
+              "lineHeight": "16px",
+              "letterSpacing": "0.01em",
+              "fontWeight": "500"
+            }
+          ],
+          "headline-md": [
+            "24px",
+            {
+              "lineHeight": "32px",
+              "letterSpacing": "-0.01em",
+              "fontWeight": "600"
+            }
+          ],
+          "headline-lg": [
+            "32px",
+            {
+              "lineHeight": "40px",
+              "letterSpacing": "-0.015em",
+              "fontWeight": "600"
+            }
+          ]
+        }
+      }
+    }
+  }</script></head><body class="bg-surface font-body-md text-on-surface antialiased"><header class="fixed top-0 left-0 right-0 z-50 bg-surface/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-16 max-w-7xl mx-auto px-margin md:px-margin-desktop flex items-center justify-between gap-gutter"><div class="flex items-center gap-space-lg"><a class="flex items-center gap-space-sm group" data-path="brand-dashboard" href="#"><img alt="Modern minimalist geometric infinity loop emblem combined with a growth spark or shopping tag, vibrant coral red-orange and deep indigo navy colors, vector icon, transparent background. Design context: - Primary color: #f05a36
+- Font: plusJakartaSans
+- Mode: light
+- Roundness: rounded-md
+. The logo should be visually consistent with these brand tokens." class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1W8t9ipAx9DBN32zqPdbqJjc4-UrXfLTSj3j97pN1xElgPoYdr1Y-DXe8yNQpAkTMiyCEREXrCgLqHdFCV5uXONLAsRFIzWa0T-cJ2xJoeGQ6z078ftFMQLUszrf3GfpzuZhpDlUx1tvYjpPpoOcspBZ0ODg20-_vtGJKdX-xmkPV7k-0NqJHGdHQ3PS_if9x2e-2qiw2L7oQr_S1jSnGuOWVTPCsQz5tn2gRUqtPPTXTvDYuEEPQLmsL0"><span class="font-title-lg text-title-lg text-on-surface tracking-tight group-hover:text-primary transition-colors">IndieLoop</span></a><nav class="hidden lg:flex items-center gap-space-xs" data-active-classes="bg-primary-container text-on-primary-container rounded-xl font-label-lg"><a class="px-space-md py-space-sm font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all" data-path="brand-dashboard" href="#">Brand Dashboard</a><a aria-current="page" class="px-space-md py-space-sm transition-all bg-primary-container text-on-primary-container rounded-xl font-label-lg" data-path="creator-hub" href="#">Creator Hub</a><a class="px-space-md py-space-sm font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all" data-path="explore-offers" href="#">Explore Offers</a><a class="px-space-md py-space-sm font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all" data-path="platform-admin" href="#">Platform Admin</a></nav></div><div class="flex items-center gap-space-sm"><button aria-label="Help &amp; Resources" class="flex items-center gap-space-xs px-space-sm py-space-xs rounded-xl font-label-md text-label-md text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all" type="button"><span class="material-symbols-outlined text-[20px]">help_outline</span><span class="hidden sm:inline">Help</span></button><button aria-label="Notifications" class="w-9 h-9 flex items-center justify-center rounded-xl text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all relative" type="button"><span class="material-symbols-outlined text-[20px]">notifications</span><span class="absolute top-2 right-2 w-2 h-2 rounded-full bg-primary"></span></button><div class="flex items-center gap-space-sm pl-space-xs"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><span class="font-label-lg text-label-lg text-on-surface hidden md:inline font-medium">Ananya</span></div></div></div></header><main class="w-full pt-16 bg-surface"><div class="flex flex-col w-full">
+<!-- Dynamic Notification / Status Toast Banner -->
+<div class="fixed bottom-6 right-6 z-50 transform translate-y-24 opacity-0 transition-all duration-300 pointer-events-none flex items-center gap-space-sm bg-inverse-surface text-inverse-on-surface px-space-md py-space-sm rounded-xl shadow-xl" id="toastNotification">
+<span class="material-symbols-outlined text-primary-fixed" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="font-label-lg text-label-lg font-medium" id="toastText">Link copied to clipboard!</span>
+</div>
+<div class="max-w-7xl mx-auto w-full px-margin md:px-margin-desktop py-space-xl">
+<!-- Hero / Greeting Header -->
+<div class="relative overflow-hidden rounded-xl bg-gradient-to-r from-tertiary-fixed/30 via-surface-container to-primary-fixed/20 p-space-lg md:p-space-xl mb-space-xl">
+<div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-space-md">
+<div>
+<div class="flex items-center gap-space-sm mb-space-xs">
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary font-label-sm text-label-sm">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+              Active Creator
+            </span>
+<span class="text-on-surface-variant font-label-md text-label-md">Student Ambassador • Bangalore</span>
+</div>
+<h1 class="font-display text-display text-on-surface tracking-tight">Welcome, Ananya! ✨</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant mt-1">Here is your fun creator corner. Share with your friends, unlock organic treats, and pocket instant pocket money.</p>
+</div>
+<div class="flex items-center gap-space-sm bg-surface-container-lowest/80 backdrop-blur-md px-space-md py-space-sm rounded-xl shadow-sm self-start md:self-auto">
+<div class="w-10 h-10 rounded-full bg-tertiary-fixed flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined text-[24px]">celebration</span>
+</div>
+<div>
+<span class="block font-label-sm text-label-sm text-on-surface-variant uppercase">Current Streak</span>
+<span class="font-title-md text-title-md text-on-surface">5 Weeks Active 🚀</span>
+</div>
+</div>
+</div>
+</div>
+<!-- 2-Card Primary Highlight -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-space-lg mb-space-xl">
+<!-- Card 1: Your Earnings -->
+<div class="relative overflow-hidden rounded-xl bg-surface-container-lowest p-space-lg md:p-space-xl shadow-md flex flex-col justify-between group hover:shadow-xl transition-all duration-300">
+<div class="absolute -right-8 -top-8 w-36 h-36 bg-primary-fixed/30 rounded-full blur-2xl group-hover:scale-125 transition-transform duration-500"></div>
+<div>
+<div class="flex items-center justify-between mb-space-sm">
+<div class="flex items-center gap-space-xs text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px] text-primary">account_balance_wallet</span>
+<span class="font-label-lg text-label-lg">Your Earnings</span>
+</div>
+<span class="px-2.5 py-1 rounded-full bg-surface-container text-secondary font-label-sm text-label-sm">No Fees • Instant</span>
+</div>
+<div class="flex items-baseline gap-space-xs mt-2">
+<span class="font-display text-[44px] leading-tight text-on-surface font-bold tracking-tight">₹4,320</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant font-medium">ready to transfer</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mt-2">Earned from 48 friend checkouts this semester. Straight to your pocket.</p>
+</div>
+<div class="mt-space-lg pt-space-md">
+<button class="w-full flex items-center justify-center gap-space-sm bg-primary text-on-primary py-3.5 px-space-md rounded-xl font-title-md text-title-md shadow-md hover:bg-primary-container active:scale-[0.985] transition-all" id="payoutBtn" type="button">
+<span class="material-symbols-outlined text-[22px]">bolt</span>
+<span>Send to GPay / PhonePe / UPI</span>
+</button>
+<div class="flex items-center justify-center gap-space-xs mt-space-xs text-on-surface-variant font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[15px] text-tertiary">lock</span>
+<span>Zero wait time • Instant verified bank payout</span>
+</div>
+</div>
+</div>
+<!-- Card 2: Free Gifts Won -->
+<div class="relative overflow-hidden rounded-xl bg-surface-container-lowest p-space-lg md:p-space-xl shadow-md flex flex-col justify-between group hover:shadow-xl transition-all duration-300">
+<div class="absolute -right-8 -top-8 w-36 h-36 bg-secondary-container/40 rounded-full blur-2xl group-hover:scale-125 transition-transform duration-500"></div>
+<div>
+<div class="flex items-center justify-between mb-space-sm">
+<div class="flex items-center gap-space-xs text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px] text-tertiary">featured_seasonal_and_gifts</span>
+<span class="font-label-lg text-label-lg">Free Gifts Won</span>
+</div>
+<span class="px-2.5 py-1 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-label-sm text-label-sm">100% Complimentary</span>
+</div>
+<div class="flex items-baseline gap-space-xs mt-2">
+<span class="font-display text-[44px] leading-tight text-on-surface font-bold tracking-tight">3 Brand Hampers</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mt-2">Delivered straight to your doorstep without paying shipping fees.</p>
+</div>
+<div class="mt-space-lg pt-space-md">
+<div class="bg-surface-container-low rounded-xl p-space-md space-y-space-sm">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<span class="w-2.5 h-2.5 rounded-full bg-secondary"></span>
+<span class="font-body-sm text-body-sm text-on-surface font-medium">1 Delivered</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Plum BodyLovin' Box</span>
+</div>
+<div class="w-full bg-surface-container-high h-1.5 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 33%"></div>
+</div>
+<div class="flex items-center justify-between text-on-surface-variant">
+<div class="flex items-center gap-space-sm">
+<span class="w-2.5 h-2.5 rounded-full bg-tertiary animate-pulse"></span>
+<span class="font-body-sm text-body-sm text-on-surface font-medium">2 on the way</span>
+</div>
+<span class="font-label-sm text-label-sm text-tertiary font-semibold">Arriving by Friday 📦</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Your Secret Magic Link (Hero Highlight Card) -->
+<div class="rounded-xl bg-surface-container-lowest p-space-lg md:p-space-xl shadow-md mb-space-xl relative overflow-hidden">
+<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-space-lg">
+<div class="max-w-xl">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary-fixed text-on-primary-fixed-variant font-label-md text-label-md mb-space-sm">
+<span class="material-symbols-outlined text-[16px]">magic_button</span>
+<span>Your Personal Pass</span>
+</div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface tracking-tight">Your Secret Magic Link</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant mt-2 leading-relaxed">
+            Share this link. When 2 friends use your ₹10 discount voucher, you get a free gift hamper + ₹15 cash!
+          </p>
+<!-- The Link Pill Container -->
+<div class="mt-space-md flex flex-col sm:flex-row items-stretch sm:items-center gap-space-sm bg-surface-container-low p-2 rounded-xl">
+<div class="flex items-center gap-space-sm px-space-md py-2 flex-grow overflow-hidden">
+<span class="material-symbols-outlined text-primary text-[22px]">link</span>
+<span class="font-title-lg text-title-lg text-on-surface font-mono tracking-tight select-all truncate" id="magicLinkText">indieloop.com/ananya</span>
+</div>
+<button class="flex items-center justify-center gap-space-xs bg-on-surface text-surface py-3 px-space-lg rounded-xl font-label-lg text-label-lg hover:bg-on-surface-variant active:scale-95 transition-all" id="copyBtn" type="button">
+<span class="material-symbols-outlined text-[18px]">content_copy</span>
+<span>Copy Link</span>
+</button>
+</div>
+</div>
+<!-- Sharing Shortcuts Actions -->
+<div class="flex flex-col sm:flex-row lg:flex-col gap-space-sm min-w-[260px]">
+<button class="w-full flex items-center justify-center gap-space-sm bg-surface-container-high hover:bg-secondary-container text-on-surface py-3.5 px-space-md rounded-xl font-title-md text-title-md transition-all active:scale-98" id="shareWhatsappBtn" type="button">
+<span class="material-symbols-outlined text-[22px] text-tertiary">chat</span>
+<span>Share directly to WhatsApp</span>
+</button>
+<button class="w-full flex items-center justify-center gap-space-sm bg-surface-container hover:bg-surface-container-high text-on-surface py-3.5 px-space-md rounded-xl font-title-md text-title-md transition-all active:scale-98" id="downloadStoryBtn" type="button">
+<span class="material-symbols-outlined text-[22px] text-primary">photo_camera</span>
+<span>Download Instagram Story Image</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Free Gifts You Can Unlock Next -->
+<div class="mb-space-xl">
+<div class="flex flex-col sm:flex-row sm:items-end justify-between gap-space-xs mb-space-lg">
+<div>
+<span class="text-primary font-label-md text-label-md uppercase tracking-wider font-semibold">Tier Rewards</span>
+<h2 class="font-headline-lg text-headline-lg text-on-surface tracking-tight mt-1">Free Gifts You Can Unlock Next</h2>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">Simple milestone gifts • Handpicked homegrown Indian indie labels</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-space-lg">
+<!-- Gift Card 1: Kaari Silver (Ready to claim) -->
+<div class="rounded-xl bg-surface-container-lowest overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+<div>
+<div class="relative h-52 w-full overflow-hidden bg-surface-container">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Close-up delicate artisanal Indian silver stud earrings with natural tribal embossing on warm linen textured fabric, morning gentle diffused natural sunlight, minimalist aesthetic, terracotta tones" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD1MuJUizrka15ai11gMtJnrXHbUsPWadBM4B6ccMwGud0Pelal_wxm_C-MX4V4UYQuHzUsGAkNwhZIBeufh7FJhE99X8EKc1JuYdk_n0rVrAgZQFg1shjehJrHYbPZ4JBMYvAMdTCEdNq0s1wNwb76ONvTHpHB8QYlygpOR8mt1ftAmTxD1xHa5ubqTX_t6Vhr5U3-U5iMhPXRN0nmGImjWFUMvY8Vcvr9--uYB7YyXMHvv4Tjj2A3">
+<div class="absolute top-3 left-3 bg-surface-container-lowest/90 backdrop-blur-md px-3 py-1 rounded-full text-primary font-label-sm text-label-sm font-bold shadow-sm">
+                Target Reached! 🎉
+              </div>
+</div>
+<div class="p-space-lg">
+<span class="text-tertiary font-label-sm text-label-sm uppercase tracking-wide font-semibold">Kaari Silver</span>
+<h3 class="font-title-lg text-title-lg text-on-surface mt-1">Handcrafted Pure Silver Studs</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1.5">Hypoallergenic 92.5 sterling silver studs, hand-beaten by artisans in Jaipur.</p>
+<!-- Progress Indicator -->
+<div class="mt-space-md pt-space-xs">
+<div class="flex items-center justify-between font-label-sm text-label-sm mb-1.5">
+<span class="text-primary font-semibold">2 of 2 friends joined!</span>
+<span class="text-on-surface-variant font-medium">100%</span>
+</div>
+<div class="w-full bg-surface-container h-2 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full transition-all duration-500" style="width: 100%"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="p-space-lg pt-0">
+<button class="w-full py-3 px-space-md rounded-xl bg-primary text-on-primary font-title-md text-title-md shadow-sm hover:bg-primary-container active:scale-95 transition-all flex items-center justify-center gap-space-xs" id="claimGiftBtn" type="button">
+<span class="material-symbols-outlined text-[20px]">redeem</span>
+<span>Claim Gift Now</span>
+</button>
+</div>
+</div>
+<!-- Gift Card 2: Ayurvedic Glow Box by Mitti Herbals (1 more needed) -->
+<div class="rounded-xl bg-surface-container-lowest overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+<div>
+<div class="relative h-52 w-full overflow-hidden bg-surface-container">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Eco-friendly glass jars and bottles filled with organic saffron turmeric face oil and clay masks resting on textured raw stone, warm earth hues, subtle botanical sprigs, editorial light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC9y7IWYiohKjRkuUzmXyt_dlTfBlP3woxVo57db4aas4ujKeCJRcufFzKcptowP8kn-hQCC-UQJ15AsVkd4_HJkvrsYyxRV_M8SfOdyptWOp5lyISZGAuRC4BxfLsZcmuBo7QFJ3XZBnU9HS5MvQZsxrBruz_MbI9Km0W7YZxoaHSmzYb8QacFhiusS42jRgt_AlpjwI2Busnm25s4gC9cKeXhQDj_eko8Uh58sVAj4V7zkx9RdCHl">
+<div class="absolute top-3 left-3 bg-surface-container-lowest/90 backdrop-blur-md px-3 py-1 rounded-full text-secondary font-label-sm text-label-sm font-semibold shadow-sm">
+                Almost Unlocked
+              </div>
+</div>
+<div class="p-space-lg">
+<span class="text-tertiary font-label-sm text-label-sm uppercase tracking-wide font-semibold">Mitti Herbals</span>
+<h3 class="font-title-lg text-title-lg text-on-surface mt-1">Ayurvedic Glow Box</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1.5">Cold-pressed Kumkumadi face elixir and volcanic bentonite clay scrub.</p>
+<!-- Progress Indicator -->
+<div class="mt-space-md pt-space-xs">
+<div class="flex items-center justify-between font-label-sm text-label-sm mb-1.5">
+<span class="text-on-surface font-semibold">1 of 2 friends joined</span>
+<span class="text-tertiary font-medium">1 more needed</span>
+</div>
+<div class="w-full bg-surface-container h-2 rounded-full overflow-hidden">
+<div class="bg-tertiary-container h-full rounded-full transition-all duration-500" style="width: 50%"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="p-space-lg pt-0">
+<button class="w-full py-3 px-space-md rounded-xl bg-surface-container text-on-surface font-title-md text-title-md hover:bg-surface-container-high active:scale-95 transition-all flex items-center justify-center gap-space-xs" onclick="document.getElementById('copyBtn').click()" type="button">
+<span class="material-symbols-outlined text-[20px] text-tertiary">share</span>
+<span>Invite 1 Friend to Unlock</span>
+</button>
+</div>
+</div>
+<!-- Gift Card 3: BeanCraft Artisan Coffee (0 of 2) -->
+<div class="rounded-xl bg-surface-container-lowest overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+<div>
+<div class="relative h-52 w-full overflow-hidden bg-surface-container">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Chikmagalur shade-grown coffee beans spilling from a natural kraft paper pouch next to an authentic south indian brass filter coffee dabarah cup, warm ambient shadows" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAm2K1XHFbHQzXaDX1MqmLK_xu0y2tWSjky3vF8b7YVcbqTuA04gFOoaeefCdwDw7oN2BA-A_yIgywP8HzXvhUm88ov9TD-PedURTgn_XMzilKQVJaP3XAHuCD9Eq6_hQP_s3ES6ydRWPYUZuwP9xMLdiy9NPlr3UPVZkQuxJZ6HC3MF_uwDQ48vqb27v88nLA4IgBW43hnw34kE6hJOtHBVvaNowI-OZnkw5lAducyc3ziR5lUkEtB">
+<div class="absolute top-3 left-3 bg-surface-container-lowest/90 backdrop-blur-md px-3 py-1 rounded-full text-secondary font-label-sm text-label-sm font-semibold shadow-sm">
+                Next in Line
+              </div>
+</div>
+<div class="p-space-lg">
+<span class="text-tertiary font-label-sm text-label-sm uppercase tracking-wide font-semibold">BeanCraft</span>
+<h3 class="font-title-lg text-title-lg text-on-surface mt-1">Artisan Roasted Coffee</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1.5">Estate-grown medium roast Arabica batch from Chikmagalur hills with caramel undertones.</p>
+<!-- Progress Indicator -->
+<div class="mt-space-md pt-space-xs">
+<div class="flex items-center justify-between font-label-sm text-label-sm mb-1.5">
+<span class="text-on-surface-variant font-medium">0 of 2 friends joined</span>
+<span class="text-on-surface-variant font-medium">2 needed</span>
+</div>
+<div class="w-full bg-surface-container h-2 rounded-full overflow-hidden">
+<div class="bg-surface-variant h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="p-space-lg pt-0">
+<button class="w-full py-3 px-space-md rounded-xl bg-surface-container-low text-on-surface-variant opacity-70 font-title-md text-title-md cursor-not-allowed flex items-center justify-center gap-space-xs" disabled="" type="button">
+<span class="material-symbols-outlined text-[20px]">lock</span>
+<span>Locked for Now</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Recent Friends Who Used Your Code -->
+<div class="rounded-xl bg-surface-container-lowest p-space-lg md:p-space-xl shadow-md">
+<div class="flex items-center justify-between mb-space-lg">
+<div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface tracking-tight">Recent Friends Who Used Your Code</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Real-time reward tally from your college &amp; Instagram circle</p>
+</div>
+<span class="hidden sm:inline-flex items-center gap-1 text-primary font-label-md text-label-md">
+<span class="material-symbols-outlined text-[18px]">verified</span>
+          Live Activity
+        </span>
+</div>
+<div class="space-y-space-sm">
+<!-- Friend 1 -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm p-space-md rounded-xl bg-surface-container-low/70 hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-space-md">
+<div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container font-title-md text-title-md font-bold">
+              R
+            </div>
+<div>
+<div class="flex items-center gap-space-xs">
+<span class="font-title-md text-title-md text-on-surface font-semibold">Rhea</span>
+<span class="material-symbols-outlined text-primary text-[18px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">claimed Mitti Herbals</span>
+</div>
+<p class="font-body-sm text-body-sm text-primary font-medium mt-0.5">You earned ₹15 + 1 progress point!</p>
+</div>
+</div>
+<div class="flex items-center gap-space-md sm:text-right">
+<span class="font-label-sm text-label-sm text-on-surface-variant">12 mins ago</span>
+<span class="px-2.5 py-1 rounded-full bg-surface-container-lowest text-secondary font-label-sm text-label-sm shadow-xs">+₹15 Added</span>
+</div>
+</div>
+<!-- Friend 2 -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm p-space-md rounded-xl bg-surface-container-low/70 hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-space-md">
+<div class="w-10 h-10 rounded-full bg-primary-fixed flex items-center justify-center text-on-primary-fixed-variant font-title-md text-title-md font-bold">
+              K
+            </div>
+<div>
+<div class="flex items-center gap-space-xs">
+<span class="font-title-md text-title-md text-on-surface font-semibold">Kabir</span>
+<span class="material-symbols-outlined text-primary text-[18px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">ordered Kaari Silver</span>
+</div>
+<p class="font-body-sm text-body-sm text-primary font-medium mt-0.5">You earned ₹15 + 1 progress point!</p>
+</div>
+</div>
+<div class="flex items-center gap-space-md sm:text-right">
+<span class="font-label-sm text-label-sm text-on-surface-variant">2 hours ago</span>
+<span class="px-2.5 py-1 rounded-full bg-surface-container-lowest text-secondary font-label-sm text-label-sm shadow-xs">+₹15 Added</span>
+</div>
+</div>
+<!-- Friend 3 -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm p-space-md rounded-xl bg-surface-container-low/70 hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-space-md">
+<div class="w-10 h-10 rounded-full bg-tertiary-fixed flex items-center justify-center text-on-tertiary-fixed font-title-md text-title-md font-bold">
+              T
+            </div>
+<div>
+<div class="flex items-center gap-space-xs">
+<span class="font-title-md text-title-md text-on-surface font-semibold">Tanvi S.</span>
+<span class="material-symbols-outlined text-primary text-[18px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">shopped Plum BodyLovin'</span>
+</div>
+<p class="font-body-sm text-body-sm text-primary font-medium mt-0.5">You earned ₹15 + 1 progress point!</p>
+</div>
+</div>
+<div class="flex items-center gap-space-md sm:text-right">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Yesterday</span>
+<span class="px-2.5 py-1 rounded-full bg-surface-container-lowest text-secondary font-label-sm text-label-sm shadow-xs">+₹15 Added</span>
+</div>
+</div>
+<!-- Friend 4 -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm p-space-md rounded-xl bg-surface-container-low/70 hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-space-md">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface-variant font-title-md text-title-md font-bold">
+              A
+            </div>
+<div>
+<div class="flex items-center gap-space-xs">
+<span class="font-title-md text-title-md text-on-surface font-semibold">Aarav M.</span>
+<span class="material-symbols-outlined text-primary text-[18px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">ordered Drip Project Chains</span>
+</div>
+<p class="font-body-sm text-body-sm text-primary font-medium mt-0.5">You earned ₹15 + 1 progress point!</p>
+</div>
+</div>
+<div class="flex items-center gap-space-md sm:text-right">
+<span class="font-label-sm text-label-sm text-on-surface-variant">3 days ago</span>
+<span class="px-2.5 py-1 rounded-full bg-surface-container-lowest text-secondary font-label-sm text-label-sm shadow-xs">+₹15 Added</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Interactive JavaScript logic -->
+<script>
+    (function() {
+      const toast = document.getElementById('toastNotification');
+      const toastText = document.getElementById('toastText');
+
+      function showToast(msg) {
+        if (!toast || !toastText) return;
+        toastText.textContent = msg;
+        toast.classList.remove('translate-y-24', 'opacity-0');
+        toast.classList.add('translate-y-0', 'opacity-100');
+        setTimeout(() => {
+          toast.classList.remove('translate-y-0', 'opacity-100');
+          toast.classList.add('translate-y-24', 'opacity-0');
+        }, 2800);
+      }
+
+      // Copy Link Button
+      const copyBtn = document.getElementById('copyBtn');
+      if (copyBtn) {
+        copyBtn.addEventListener('click', function() {
+          const link = 'https://indieloop.com/ananya';
+          navigator.clipboard.writeText(link).then(() => {
+            showToast('Copied indieloop.com/ananya! Share it now 🎉');
+          }).catch(() => {
+            showToast('Link ready: indieloop.com/ananya');
+          });
+        });
+      }
+
+      // WhatsApp Share
+      const shareWhatsapp = document.getElementById('shareWhatsappBtn');
+      if (shareWhatsapp) {
+        shareWhatsapp.addEventListener('click', function() {
+          const text = encodeURIComponent('Hey! Grab ₹10 off any homegrown indie brand here: https://indieloop.com/ananya (and I get coffee perks too!)');
+          window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
+        });
+      }
+
+      // Story Card Download Simulation
+      const downloadStoryBtn = document.getElementById('downloadStoryBtn');
+      if (downloadStoryBtn) {
+        downloadStoryBtn.addEventListener('click', function() {
+          showToast('Generating your customized Instagram Story card... 📸');
+          setTimeout(() => {
+            showToast('Story sticker saved to your camera roll!');
+          }, 1200);
+        });
+      }
+
+      // UPI Payout Simulation
+      const payoutBtn = document.getElementById('payoutBtn');
+      if (payoutBtn) {
+        payoutBtn.addEventListener('click', function() {
+          showToast('Transferring ₹4,320 to linked UPI (ananya@okaxis)... ⚡');
+          setTimeout(() => {
+            showToast('Success! ₹4,320 credited to your bank account!');
+          }, 1500);
+        });
+      }
+
+      // Claim Gift Button
+      const claimGiftBtn = document.getElementById('claimGiftBtn');
+      if (claimGiftBtn) {
+        claimGiftBtn.addEventListener('click', function() {
+          showToast('Yay! Shipping Kaari Silver Studs to your campus address 🎁');
+          this.textContent = 'Hamper Claimed! 📦';
+          this.disabled = true;
+          this.classList.replace('bg-primary', 'bg-surface-container-high');
+          this.classList.replace('text-on-primary', 'text-on-surface-variant');
+        });
+      }
+    })();
+  </script>
+</div></main><footer class="w-full bg-surface-container-low mt-space-xl shadow-[0_-1px_6px_rgba(0,0,0,0.02)]"><div class="max-w-7xl mx-auto px-margin md:px-margin-desktop py-space-xl"><div class="flex flex-col md:flex-row items-center justify-between gap-space-lg"><div class="flex items-center gap-space-sm"><span class="font-title-md text-title-md text-on-surface">IndieLoop</span><span class="font-body-sm text-body-sm text-on-surface-variant">• Simplified commerce for modern Indian creators</span></div><div class="flex flex-wrap items-center justify-center gap-space-lg"><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" data-path="creator-hub" href="#">Creator Guide</a><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" data-path="explore-offers" href="#">Offer Guidelines</a><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Payouts &amp; Terms</a><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Support</a></div></div><div class="mt-space-lg pt-space-md flex flex-col sm:flex-row items-center justify-between gap-space-sm text-center sm:text-left"><p class="font-body-sm text-body-sm text-on-surface-variant">© 2025 IndieLoop Technologies Pvt. Ltd. All rights reserved.</p><p class="font-body-sm text-body-sm text-on-surface-variant">Crafted for effortless D2C simplicity</p></div></div></footer></body></html>
+
+create a new page name as /creators-setup code for page is below: 
+
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0" name="viewport"><meta content="web_standard" name="shell-type"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"><link href="https://fonts.googleapis.com" rel="preconnect"><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+          "on-surface": "#1a1c1c",
+          "error-container": "#ffdad6",
+          "secondary": "#535f6f",
+          "surface-tint": "#af300e",
+          "surface-container": "#eeeeed",
+          "tertiary-fixed": "#ffdcc4",
+          "on-primary-fixed": "#3c0700",
+          "primary-container": "#ce4623",
+          "on-surface-variant": "#59413b",
+          "on-secondary": "#ffffff",
+          "on-tertiary-fixed-variant": "#6f3800",
+          "on-tertiary-container": "#fffbff",
+          "primary-fixed": "#ffdad2",
+          "secondary-container": "#d4e1f4",
+          "surface-container-high": "#e8e8e7",
+          "primary": "#ac2d0b",
+          "inverse-surface": "#2f3130",
+          "surface-bright": "#f9f9f8",
+          "on-secondary-fixed-variant": "#3c4857",
+          "tertiary-fixed-dim": "#ffb780",
+          "surface-variant": "#e2e2e2",
+          "outline-variant": "#e1bfb7",
+          "surface-container-lowest": "#ffffff",
+          "tertiary-container": "#a96428",
+          "inverse-on-surface": "#f1f1f0",
+          "on-primary": "#ffffff",
+          "surface-container-low": "#f3f4f3",
+          "outline": "#8d706a",
+          "on-error": "#ffffff",
+          "tertiary": "#8b4c11",
+          "inverse-primary": "#ffb4a2",
+          "secondary-fixed": "#d7e3f6",
+          "secondary-fixed-dim": "#bbc7da",
+          "primary-fixed-dim": "#ffb4a2",
+          "on-tertiary-fixed": "#2f1400",
+          "on-background": "#1a1c1c",
+          "surface": "#f9f9f8",
+          "on-primary-fixed-variant": "#8a1d00",
+          "on-error-container": "#93000a",
+          "surface-container-highest": "#e2e2e2",
+          "on-primary-container": "#fffbff",
+          "on-tertiary": "#ffffff",
+          "background": "#f9f9f8",
+          "on-secondary-fixed": "#101c2a",
+          "surface-dim": "#dadad9",
+          "error": "#ba1a1a",
+          "on-secondary-container": "#576474"
+        },
+        "borderRadius": {
+          "DEFAULT": "0.25rem",
+          "lg": "0.5rem",
+          "xl": "0.75rem",
+          "full": "9999px"
+        },
+        "spacing": {
+          "margin-desktop": "3rem",
+          "space-md": "1rem",
+          "gutter-lg": "1.75rem",
+          "gutter": "1.25rem",
+          "space-xl": "2.5rem",
+          "gutter-sm": "0.75rem",
+          "space-lg": "1.5rem",
+          "space-sm": "0.5rem",
+          "space-xs": "0.25rem",
+          "margin-mobile": "1rem",
+          "margin": "1.5rem"
+        },
+        "fontFamily": {
+          "body-lg": [
+            "Plus Jakarta Sans"
+          ],
+          "title-lg": [
+            "Plus Jakarta Sans"
+          ],
+          "headline-sm": [
+            "Plus Jakarta Sans"
+          ],
+          "title-md": [
+            "Plus Jakarta Sans"
+          ],
+          "body-md": [
+            "Plus Jakarta Sans"
+          ],
+          "display": [
+            "Plus Jakarta Sans"
+          ],
+          "body-sm": [
+            "Plus Jakarta Sans"
+          ],
+          "label-lg": [
+            "Plus Jakarta Sans"
+          ],
+          "headline-lg-mobile": [
+            "Plus Jakarta Sans"
+          ],
+          "label-sm": [
+            "Plus Jakarta Sans"
+          ],
+          "label-md": [
+            "Plus Jakarta Sans"
+          ],
+          "headline-md": [
+            "Plus Jakarta Sans"
+          ],
+          "headline-lg": [
+            "Plus Jakarta Sans"
+          ]
+        },
+        "fontSize": {
+          "body-lg": [
+            "16px",
+            {
+              "lineHeight": "26px",
+              "fontWeight": "400"
+            }
+          ],
+          "title-lg": [
+            "18px",
+            {
+              "lineHeight": "26px",
+              "fontWeight": "600"
+            }
+          ],
+          "headline-sm": [
+            "20px",
+            {
+              "lineHeight": "28px",
+              "letterSpacing": "-0.005em",
+              "fontWeight": "600"
+            }
+          ],
+          "title-md": [
+            "16px",
+            {
+              "lineHeight": "24px",
+              "fontWeight": "600"
+            }
+          ],
+          "body-md": [
+            "14px",
+            {
+              "lineHeight": "22px",
+              "fontWeight": "400"
+            }
+          ],
+          "display": [
+            "40px",
+            {
+              "lineHeight": "48px",
+              "letterSpacing": "-0.02em",
+              "fontWeight": "700"
+            }
+          ],
+          "body-sm": [
+            "13px",
+            {
+              "lineHeight": "18px",
+              "fontWeight": "400"
+            }
+          ],
+          "label-lg": [
+            "14px",
+            {
+              "lineHeight": "20px",
+              "fontWeight": "500"
+            }
+          ],
+          "headline-lg-mobile": [
+            "26px",
+            {
+              "lineHeight": "34px",
+              "letterSpacing": "-0.01em",
+              "fontWeight": "600"
+            }
+          ],
+          "label-sm": [
+            "11px",
+            {
+              "lineHeight": "14px",
+              "letterSpacing": "0.02em",
+              "fontWeight": "600"
+            }
+          ],
+          "label-md": [
+            "12px",
+            {
+              "lineHeight": "16px",
+              "letterSpacing": "0.01em",
+              "fontWeight": "500"
+            }
+          ],
+          "headline-md": [
+            "24px",
+            {
+              "lineHeight": "32px",
+              "letterSpacing": "-0.01em",
+              "fontWeight": "600"
+            }
+          ],
+          "headline-lg": [
+            "32px",
+            {
+              "lineHeight": "40px",
+              "letterSpacing": "-0.015em",
+              "fontWeight": "600"
+            }
+          ]
+        }
+      }
+    }
+  }</script></head><body class="bg-surface font-body-md text-on-surface antialiased"><header class="fixed top-0 left-0 right-0 z-50 bg-surface/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-16 max-w-7xl mx-auto px-margin md:px-margin-desktop flex items-center justify-between gap-gutter"><div class="flex items-center gap-space-lg"><a class="flex items-center gap-space-sm group" data-path="brand-dashboard" href="#"><img alt="Modern minimalist geometric infinity loop emblem combined with a growth spark or shopping tag, vibrant coral red-orange and deep indigo navy colors, vector icon, transparent background. Design context: - Primary color: #f05a36
+- Font: plusJakartaSans
+- Mode: light
+- Roundness: rounded-md
+. The logo should be visually consistent with these brand tokens." class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1W8t9ipAx9DBN32zqPdbqJjc4-UrXfLTSj3j97pN1xElgPoYdr1Y-DXe8yNQpAkTMiyCEREXrCgLqHdFCV5uXONLAsRFIzWa0T-cJ2xJoeGQ6z078ftFMQLUszrf3GfpzuZhpDlUx1tvYjpPpoOcspBZ0ODg20-_vtGJKdX-xmkPV7k-0NqJHGdHQ3PS_if9x2e-2qiw2L7oQr_S1jSnGuOWVTPCsQz5tn2gRUqtPPTXTvDYuEEPQLmsL0"><span class="font-title-lg text-title-lg text-on-surface tracking-tight group-hover:text-primary transition-colors">IndieLoop</span></a><nav class="hidden lg:flex items-center gap-space-xs" data-active-classes="bg-primary-container text-on-primary-container rounded-xl font-label-lg"><a class="px-space-md py-space-sm font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all" data-path="brand-dashboard" href="#">Brand Dashboard</a><a class="px-space-md py-space-sm font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all" data-path="creator-hub" href="#">Creator Hub</a><a class="px-space-md py-space-sm font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all" data-path="explore-offers" href="#">Explore Offers</a><a class="px-space-md py-space-sm font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all" data-path="platform-admin" href="#">Platform Admin</a></nav></div><div class="flex items-center gap-space-sm"><button aria-label="Help &amp; Resources" class="flex items-center gap-space-xs px-space-sm py-space-xs rounded-xl font-label-md text-label-md text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all" type="button"><span class="material-symbols-outlined text-[20px]">help_outline</span><span class="hidden sm:inline">Help</span></button><button aria-label="Notifications" class="w-9 h-9 flex items-center justify-center rounded-xl text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all relative" type="button"><span class="material-symbols-outlined text-[20px]">notifications</span><span class="absolute top-2 right-2 w-2 h-2 rounded-full bg-primary"></span></button><div class="flex items-center gap-space-sm pl-space-xs"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><span class="font-label-lg text-label-lg text-on-surface hidden md:inline font-medium">Ananya</span></div></div></div></header><main class="w-full pt-16 bg-surface"><div class="flex flex-col w-full">
+<div class="w-full max-w-7xl mx-auto px-margin md:px-margin-desktop py-space-lg">
+<!-- Top Stepper & Helper Guidance Banner -->
+<div class="w-full bg-surface-container-low rounded-xl p-space-md md:p-space-lg mb-space-lg shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-space-md">
+<div class="space-y-1">
+<div class="flex items-center gap-space-xs text-primary">
+<span class="material-symbols-outlined text-[18px]">verified</span>
+<span class="font-label-md text-label-md uppercase tracking-wide">Quick Setup • 3 Minutes</span>
+</div>
+<h1 class="font-headline-md text-headline-md text-on-surface">Step 2 of 2: Create Your Customer Welcome Offer</h1>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-2xl">
+          Keep it simple! Offers with a ₹10 token fee and ₹100–₹150 discount get the highest redemptions.
+        </p>
+</div>
+<!-- Compact Step Dots -->
+<div class="flex items-center gap-space-sm bg-surface-container-lowest px-space-md py-space-sm rounded-full shadow-sm self-start md:self-auto">
+<div class="flex items-center gap-1.5">
+<span class="w-2.5 h-2.5 rounded-full bg-primary-container"></span>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-medium">Store Profile</span>
+</div>
+<span class="material-symbols-outlined text-[14px] text-secondary">chevron_right</span>
+<div class="flex items-center gap-1.5">
+<span class="w-2.5 h-2.5 rounded-full bg-primary animate-pulse"></span>
+<span class="font-label-sm text-label-sm text-primary font-semibold">Welcome Offer</span>
+</div>
+</div>
+</div>
+<!-- Main 2-Column Split: Builder Form + Live Shopper Preview -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg lg:gap-gutter-lg items-start">
+<!-- Left Column: Simple 4-Step Builder -->
+<div class="lg:col-span-7 space-y-space-lg">
+<!-- Brand Profile Verified Snapshot Card -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex flex-wrap items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded-full overflow-hidden bg-surface-container flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="Warm aesthetic top-down photograph of hand-poured Ayurvedic kumkumadi tailam glass bottle and raw herbal ingredients like saffron and turmeric on natural limestone surface, warm ambient studio lighting, terracotta and earthy tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBGC7AqZ4UzGtAfKZdznui6ByYpnlthuB67uUNin4c2GhF-CVf8AuZ6HBRyX31AP0SNSytHPm_Y71DC3cs-ItorA3YhfLX6VacAblgR3NeoAHLZznZ7ScDHdqMUNsPOxtTBIELuestIuW4D8FWf7WX9QifsUsHaqCNNtxcJQLMQAv4CUcc6w8nUqiOTkbFJpH7GLHF4mzQL3DdwFFERNE9Z7iu6v2QXZoqVyLMQlKVoHRY-DotptmN9">
+</div>
+<div>
+<div class="flex items-center gap-1">
+<span class="font-title-md text-title-md text-on-surface font-semibold">Mitti Herbals</span>
+<span class="material-symbols-outlined text-primary text-[18px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Handcrafted Skincare, Jaipur</p>
+</div>
+</div>
+<div class="flex items-center gap-1.5 bg-secondary-container/40 text-on-secondary-container px-3 py-1.5 rounded-full font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[16px]">chat</span>
+<span>+91 98201 44521</span>
+</div>
+</div>
+<!-- Field 1: Token Fee Selection -->
+<div class="bg-surface-container-lowest p-space-lg rounded-xl shadow-sm space-y-space-md">
+<div class="space-y-1">
+<div class="flex items-center justify-between">
+<label class="font-title-md text-title-md text-on-surface font-semibold flex items-center gap-2">
+<span class="w-6 h-6 rounded-full bg-primary-fixed text-on-primary-fixed font-label-md text-label-md flex items-center justify-center font-bold">1</span>
+                What token fee should shoppers pay?
+              </label>
+<span class="font-label-sm text-label-sm text-primary bg-primary-fixed/50 px-2 py-0.5 rounded-md font-medium">Zero Risk</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant pl-8">
+              Token fees filter high-intent buyers who intend to finish their purchase on WhatsApp.
+            </p>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-space-sm pl-0 sm:pl-8">
+<!-- Option 1: ₹10 (Recommended) -->
+<label class="relative flex flex-col p-space-md rounded-xl bg-surface-container-low cursor-pointer transition-all hover:shadow-sm" id="fee-option-10">
+<input checked="" class="peer sr-only" name="token_fee" onchange="updateTokenFee(10)" type="radio" value="10">
+<div class="flex items-start justify-between">
+<div>
+<span class="font-title-lg text-title-lg font-bold text-on-surface">₹10</span>
+<p class="font-label-md text-label-md text-primary font-medium mt-0.5">Recommended</p>
+</div>
+<div class="w-5 h-5 rounded-full bg-primary flex items-center justify-center text-on-primary text-[14px]">✓</div>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-2">Highest conversion rate. Impulse friendly for fast customer acquisition.</p>
+</label>
+<!-- Option 2: ₹25 -->
+<label class="relative flex flex-col p-space-md rounded-xl bg-surface-container-lowest hover:bg-surface-container-low cursor-pointer transition-all" id="fee-option-25">
+<input class="peer sr-only" name="token_fee" onchange="updateTokenFee(25)" type="radio" value="25">
+<div class="flex items-start justify-between">
+<div>
+<span class="font-title-lg text-title-lg font-bold text-on-surface">₹25</span>
+<p class="font-label-md text-label-md text-secondary font-medium mt-0.5">High Basket Value</p>
+</div>
+<div class="w-5 h-5 rounded-full bg-surface-container flex items-center justify-center text-transparent text-[14px]">✓</div>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-2">Best for luxury bundles or orders above ₹1,499 to filter premium leads.</p>
+</label>
+</div>
+</div>
+<!-- Field 2: Discount & Perk -->
+<div class="bg-surface-container-lowest p-space-lg rounded-xl shadow-sm space-y-space-md">
+<div class="space-y-1">
+<label class="font-title-md text-title-md text-on-surface font-semibold flex items-center gap-2">
+<span class="w-6 h-6 rounded-full bg-primary-fixed text-on-primary-fixed font-label-md text-label-md flex items-center justify-center font-bold">2</span>
+              What discount or perk will the customer receive?
+            </label>
+<p class="font-body-sm text-body-sm text-on-surface-variant pl-8">
+              Founders see optimal repeat orders when pairing a direct rupee discount with a complimentary sample.
+            </p>
+</div>
+<div class="space-y-space-md pl-0 sm:pl-8">
+<div>
+<span class="font-label-md text-label-md text-on-surface-variant block mb-1">Offer headline text</span>
+<div class="relative">
+<input class="w-full h-12 px-4 rounded-xl bg-surface-container-low text-on-surface font-body-lg text-body-lg focus:outline-none focus:bg-surface-container-lowest transition-all" id="discount-input" oninput="updateDiscountText(this.value)" type="text" value="₹120 OFF on orders above ₹499">
+<span class="absolute right-4 top-3 text-secondary material-symbols-outlined text-[20px]">edit</span>
+</div>
+<div class="flex flex-wrap gap-2 mt-2">
+<button class="px-2.5 py-1 bg-surface-container rounded-full font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" onclick="quickFillDiscount('₹100 OFF on orders above ₹399')" type="button">₹100 OFF on ₹399</button>
+<button class="px-2.5 py-1 bg-surface-container rounded-full font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" onclick="quickFillDiscount('₹150 OFF on orders above ₹599')" type="button">₹150 OFF on ₹599</button>
+<button class="px-2.5 py-1 bg-surface-container rounded-full font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" onclick="quickFillDiscount('Flat 20% OFF sitewide')" type="button">Flat 20% OFF</button>
+</div>
+</div>
+<!-- Quick Perk Checkbox -->
+<label class="flex items-start gap-space-sm p-space-md bg-tertiary-fixed/20 rounded-xl cursor-pointer hover:bg-tertiary-fixed/30 transition-colors">
+<input checked="" class="mt-1 w-5 h-5 rounded text-primary accent-primary cursor-pointer" id="perk-checkbox" onchange="togglePerk(this.checked)" type="checkbox">
+<div class="space-y-0.5">
+<span class="font-title-md text-title-md text-on-surface font-semibold flex items-center gap-1.5">
+                  Include a free miniature/surprise gift in parcel
+                  <span class="material-symbols-outlined text-tertiary text-[18px]">redeem</span>
+</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                  E.g., Free mini organic lip butter or rosewater sample tester. Skyrockets unboxing shares on Instagram!
+                </p>
+</div>
+</label>
+</div>
+</div>
+<!-- Field 3: Creator Barter Milestone (Optional) -->
+<div class="bg-surface-container-lowest p-space-lg rounded-xl shadow-sm space-y-space-md">
+<div class="space-y-1">
+<div class="flex items-center justify-between">
+<label class="font-title-md text-title-md text-on-surface font-semibold flex items-center gap-2">
+<span class="w-6 h-6 rounded-full bg-primary-fixed text-on-primary-fixed font-label-md text-label-md flex items-center justify-center font-bold">3</span>
+                Creator Barter Milestone
+              </label>
+<span class="font-label-sm text-label-sm text-secondary bg-surface-container px-2 py-0.5 rounded-md font-medium">Optional Growth Engine</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant pl-8">
+              Want Instagram lifestyle micro-creators to share your offer? Set an auto-reward milestone gift:
+            </p>
+</div>
+<div class="pl-0 sm:pl-8 space-y-3">
+<div class="p-space-md bg-surface-container-low rounded-xl space-y-3">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+<span class="font-label-lg text-label-lg text-on-surface font-semibold">Hamper to send creator:</span>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[18px]">card_giftcard</span>
+<span class="font-body-md text-body-md text-primary font-medium">1 Free Kumkumadi Glow Hamper (Worth ₹890)</span>
+</div>
+</div>
+<!-- Milestone Step Controls -->
+<div class="space-y-1.5">
+<div class="flex justify-between items-center text-body-sm text-on-surface-variant">
+<span>When creator drives:</span>
+<span class="font-title-md text-title-md text-primary font-bold" id="creator-orders-count">3 Friend Orders</span>
+</div>
+<input class="w-full accent-primary h-2 bg-surface-container-high rounded-lg cursor-pointer" id="creator-slider" max="10" min="1" oninput="updateMilestone(this.value)" type="range" value="3">
+<div class="flex justify-between font-label-sm text-label-sm text-secondary">
+<span>1 Order (Aggressive)</span>
+<span>3 Orders (Sweet Spot)</span>
+<span>5+ Orders (High Margin)</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Field 4: Direct WhatsApp Message Preview -->
+<div class="bg-surface-container-lowest p-space-lg rounded-xl shadow-sm space-y-space-md">
+<div class="space-y-1">
+<label class="font-title-md text-title-md text-on-surface font-semibold flex items-center gap-2">
+<span class="w-6 h-6 rounded-full bg-primary-fixed text-on-primary-fixed font-label-md text-label-md flex items-center justify-center font-bold">4</span>
+              Direct WhatsApp Message Preview
+            </label>
+<p class="font-body-sm text-body-sm text-on-surface-variant pl-8">
+              Shoppers unlock this pre-filled message instantly after paying their token fee.
+            </p>
+</div>
+<div class="pl-0 sm:pl-8">
+<div class="relative bg-surface-container-low p-space-md rounded-xl font-body-sm text-body-sm text-on-surface space-y-2">
+<div class="flex items-center gap-2 text-primary font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-[16px]">lock_open</span>
+<span>Auto-generated customer greeting on your WhatsApp</span>
+</div>
+<p class="leading-relaxed bg-surface-container-lowest p-3 rounded-lg text-on-surface" id="wa-text-preview">
+                Hi Mitti Herbals! 🌿 I just secured my ₹10 IndieLoop pass for ₹120 OFF + Free Lip Butter (Code: MITTI-7892). I'd like to place an order for delivery in Mumbai. Could you share your catalog?
+              </p>
+<div class="flex items-center justify-between text-secondary font-label-sm text-label-sm pt-1">
+<span>Verified delivery via +91 98201 44521</span>
+<span class="flex items-center gap-1 text-primary cursor-pointer hover:underline">
+<span class="material-symbols-outlined text-[14px]">tune</span> Customize template
+                </span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Sticky Live Offer Card Preview -->
+<div class="lg:col-span-5 lg:sticky lg:top-24 space-y-space-md">
+<div class="flex items-center justify-between px-1">
+<div class="flex items-center gap-1.5 text-on-surface-variant font-label-lg text-label-lg font-medium">
+<span class="material-symbols-outlined text-[20px] text-primary">visibility</span>
+<span>Live Shopper Perspective</span>
+</div>
+<span class="bg-primary/10 text-primary px-2.5 py-0.5 rounded-full font-label-sm text-label-sm font-semibold flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-primary animate-ping"></span> Ready to Launch
+          </span>
+</div>
+<!-- The Shopper Card -->
+<div class="w-full bg-surface-container-lowest rounded-xl overflow-hidden shadow-md transition-all hover:shadow-xl relative">
+<!-- Hero Product Image -->
+<div class="relative h-64 w-full bg-surface-container">
+<img class="w-full h-full object-cover" data-alt="Close up artisanal skincare unboxing flatlay showing amber glass dropper bottles, handcrafted organic lip butter jar, raw botanical herbs, and a thank you note from Mitti Herbals founder, natural sunlight, warm linen background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAs8vzNDun4yi2UltXUcJCF8voJWsb1JxROfcldj53f5dwUF3LrCvOAA0iOivlaf5Ys4kLwDqCYgEaiJVigz2RpOC4x4oT47gOH-0eZQcj4c3iGe_QZiKUXgctQ_XPkUk9zeTAW6ajqPTabBW3_p342-Yr0ZlYeQPPg2amM1ufW3Er_CDwjrR-WmYVJtx0M5KlFarA4dL7hhxARqqQlW658ck8HEwH1PXKWNEjtHp0jYw6hPaVXfgEP">
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+<!-- Top Badges -->
+<div class="absolute top-3 left-3 right-3 flex items-center justify-between">
+<span class="bg-surface/95 backdrop-blur-md text-on-surface px-2.5 py-1 rounded-full font-label-sm text-label-sm font-semibold flex items-center gap-1 shadow-sm">
+<span class="material-symbols-outlined text-primary text-[15px]" style="font-variation-settings: 'FILL' 1;">local_florist</span>
+                Handcrafted Clean Skincare
+              </span>
+<span class="bg-primary text-on-primary px-3 py-1 rounded-full font-label-md text-label-md font-bold shadow-md" id="preview-token-badge">
+                ₹10 Token
+              </span>
+</div>
+<!-- Overlaid Brand Bar -->
+<div class="absolute bottom-3 left-3 right-3 flex items-center justify-between text-white">
+<div>
+<h3 class="font-headline-sm text-headline-sm font-bold text-white flex items-center gap-1.5">
+                  Mitti Herbals
+                  <span class="material-symbols-outlined text-[18px] text-tertiary-fixed-dim" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</h3>
+<p class="font-body-sm text-body-sm text-white/90">Jaipur, Rajasthan • 4.9 ★ (240+ reviews)</p>
+</div>
+</div>
+</div>
+<!-- Card Content Body -->
+<div class="p-space-lg space-y-space-md">
+<!-- Offer Deal Line -->
+<div>
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-primary font-bold">Founder Welcome Deal</span>
+<h4 class="font-headline-sm text-headline-sm text-on-surface font-bold mt-0.5 leading-snug" id="preview-discount-headline">
+                Pay ₹10 to Get ₹120 OFF on orders above ₹499
+              </h4>
+</div>
+<!-- Perks Pill Box -->
+<div class="p-space-sm bg-surface-container-low rounded-xl space-y-2">
+<div class="flex items-center gap-2 font-body-sm text-body-sm text-on-surface" id="preview-perk-item">
+<span class="material-symbols-outlined text-tertiary text-[18px]">redeem</span>
+<span class="font-medium">+ Free Handcrafted Lip Butter in package</span>
+</div>
+<div class="flex items-center gap-2 font-body-sm text-body-sm text-on-surface">
+<span class="material-symbols-outlined text-primary text-[18px]">chat</span>
+<span>Direct WhatsApp connection with Founder Ananya</span>
+</div>
+<div class="flex items-center gap-2 font-body-sm text-body-sm text-secondary">
+<span class="material-symbols-outlined text-[18px]">local_shipping</span>
+<span>Ships within 24 hours across India</span>
+</div>
+</div>
+<!-- Creator Barter Incentive Indicator in Card -->
+<div class="p-2.5 bg-secondary-container/30 rounded-xl flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-on-secondary-container text-[18px]">group_add</span>
+<span class="font-label-sm text-label-sm text-on-secondary-container font-medium">Creator Barter: Share with friends</span>
+</div>
+<span class="font-label-sm text-label-sm text-primary font-bold" id="preview-creator-badge">1 Free Hamper @ 3 Orders</span>
+</div>
+<!-- Mock Action Button -->
+<div class="pt-2">
+<button class="w-full h-12 bg-primary text-on-primary rounded-xl font-title-md text-title-md font-semibold flex items-center justify-center gap-2 shadow-sm pointer-events-none opacity-90" type="button">
+<span id="preview-cta-btn">Claim for ₹10</span>
+<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+<p class="font-body-sm text-body-sm text-center text-on-surface-variant mt-2">
+                Token refunded immediately if you cancel your order.
+              </p>
+</div>
+</div>
+</div>
+<!-- Conversion Projection Mini-Widget -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded-full bg-primary-fixed flex items-center justify-center text-on-primary-fixed">
+<span class="material-symbols-outlined text-[20px]">trending_up</span>
+</div>
+<div>
+<p class="font-title-md text-title-md text-on-surface font-semibold">Avg. 18–24 Orders</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">projected in your first 7 days</p>
+</div>
+</div>
+<span class="font-label-sm text-label-sm text-primary bg-primary/10 px-2.5 py-1 rounded-full font-bold">92% Claim Rate</span>
+</div>
+</div>
+</div>
+<!-- Sticky Bottom Navigation & Action Bar -->
+<div class="mt-space-xl pt-space-md bg-surface border-t-0 flex flex-col sm:flex-row items-center justify-between gap-space-md">
+<a class="w-full sm:w-auto h-12 px-space-lg rounded-xl bg-surface-container text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high font-title-md text-title-md font-medium transition-all flex items-center justify-center gap-2" href="#">
+<span class="material-symbols-outlined text-[20px]">arrow_back</span>
+        Back to Dashboard
+      </a>
+<div class="w-full sm:w-auto flex flex-col sm:flex-row items-center gap-space-md">
+<div class="flex items-center gap-1.5 text-on-surface-variant font-body-sm text-body-sm text-center sm:text-left">
+<span class="material-symbols-outlined text-secondary text-[18px]">lock_reset</span>
+<span>Pause or edit anytime with 1 click</span>
+</div>
+<button class="w-full sm:w-auto h-12 px-space-xl rounded-xl bg-primary text-on-primary hover:bg-primary-container font-title-md text-title-md font-bold shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 group active:scale-[0.98]" onclick="handlePublish()" type="button">
+<span>Publish Offer &amp; Start Getting Orders</span>
+<span class="material-symbols-outlined text-[20px] group-hover:translate-x-1 transition-transform">rocket_launch</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Inline Logic for Realtime Syncing -->
+<script>
+    let currentFee = 10;
+    let currentDiscount = "₹120 OFF on orders above ₹499";
+    let hasPerk = true;
+    let creatorMilestone = 3;
+
+    function updateTokenFee(val) {
+      currentFee = val;
+      const opt10 = document.getElementById('fee-option-10');
+      const opt25 = document.getElementById('fee-option-25');
+      const badge = document.getElementById('preview-token-badge');
+      const ctaBtn = document.getElementById('preview-cta-btn');
+
+      if (val === 10) {
+        opt10.classList.remove('bg-surface-container-lowest');
+        opt10.classList.add('bg-surface-container-low');
+        opt25.classList.remove('bg-surface-container-low');
+        opt25.classList.add('bg-surface-container-lowest');
+      } else {
+        opt25.classList.remove('bg-surface-container-lowest');
+        opt25.classList.add('bg-surface-container-low');
+        opt10.classList.remove('bg-surface-container-low');
+        opt10.classList.add('bg-surface-container-lowest');
+      }
+
+      badge.textContent = `₹${val} Token`;
+      ctaBtn.textContent = `Claim for ₹${val}`;
+      refreshText();
+    }
+
+    function updateDiscountText(val) {
+      currentDiscount = val;
+      refreshText();
+    }
+
+    function quickFillDiscount(val) {
+      document.getElementById('discount-input').value = val;
+      currentDiscount = val;
+      refreshText();
+    }
+
+    function togglePerk(checked) {
+      hasPerk = checked;
+      const previewPerk = document.getElementById('preview-perk-item');
+      if (checked) {
+        previewPerk.classList.remove('hidden');
+      } else {
+        previewPerk.classList.add('hidden');
+      }
+      refreshText();
+    }
+
+    function updateMilestone(val) {
+      creatorMilestone = val;
+      document.getElementById('creator-orders-count').textContent = `${val} Friend Order${val > 1 ? 's' : ''}`;
+      document.getElementById('preview-creator-badge').textContent = `1 Free Hamper @ ${val} Orders`;
+    }
+
+    function refreshText() {
+      const perkText = hasPerk ? ' + Free Lip Butter' : '';
+      const headline = `Pay ₹${currentFee} to Get ${currentDiscount}${perkText}`;
+      document.getElementById('preview-discount-headline').textContent = headline;
+      
+      const waMsg = `Hi Mitti Herbals! 🌿 I just secured my ₹${currentFee} IndieLoop pass for ${currentDiscount}${perkText} (Code: MITTI-7892). I'd like to place an order for delivery in Mumbai. Could you share your catalog?`;
+      document.getElementById('wa-text-preview').textContent = waMsg;
+    }
+
+    function handlePublish() {
+      alert("🎉 Congratulations Ananya! Your offer for Mitti Herbals is now live on IndieLoop Explore. You'll receive real-time notifications on WhatsApp when shoppers claim passes.");
+    }
+  </script>
+</div></main><footer class="w-full bg-surface-container-low mt-space-xl shadow-[0_-1px_6px_rgba(0,0,0,0.02)]"><div class="max-w-7xl mx-auto px-margin md:px-margin-desktop py-space-xl"><div class="flex flex-col md:flex-row items-center justify-between gap-space-lg"><div class="flex items-center gap-space-sm"><span class="font-title-md text-title-md text-on-surface">IndieLoop</span><span class="font-body-sm text-body-sm text-on-surface-variant">• Simplified commerce for modern Indian creators</span></div><div class="flex flex-wrap items-center justify-center gap-space-lg"><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" data-path="creator-hub" href="#">Creator Guide</a><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" data-path="explore-offers" href="#">Offer Guidelines</a><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Payouts &amp; Terms</a><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Support</a></div></div><div class="mt-space-lg pt-space-md flex flex-col sm:flex-row items-center justify-between gap-space-sm text-center sm:text-left"><p class="font-body-sm text-body-sm text-on-surface-variant">© 2025 IndieLoop Technologies Pvt. Ltd. All rights reserved.</p><p class="font-body-sm text-body-sm text-on-surface-variant">Crafted for effortless D2C simplicity</p></div></div></footer></body></html>
+
+create a new page name as /creators-voucher code for page is below: 
+
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0" name="viewport"><meta content="web_standard" name="shell-type"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"><link href="https://fonts.googleapis.com" rel="preconnect"><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+          "on-surface": "#1a1c1c",
+          "error-container": "#ffdad6",
+          "secondary": "#535f6f",
+          "surface-tint": "#af300e",
+          "surface-container": "#eeeeed",
+          "tertiary-fixed": "#ffdcc4",
+          "on-primary-fixed": "#3c0700",
+          "primary-container": "#ce4623",
+          "on-surface-variant": "#59413b",
+          "on-secondary": "#ffffff",
+          "on-tertiary-fixed-variant": "#6f3800",
+          "on-tertiary-container": "#fffbff",
+          "primary-fixed": "#ffdad2",
+          "secondary-container": "#d4e1f4",
+          "surface-container-high": "#e8e8e7",
+          "primary": "#ac2d0b",
+          "inverse-surface": "#2f3130",
+          "surface-bright": "#f9f9f8",
+          "on-secondary-fixed-variant": "#3c4857",
+          "tertiary-fixed-dim": "#ffb780",
+          "surface-variant": "#e2e2e2",
+          "outline-variant": "#e1bfb7",
+          "surface-container-lowest": "#ffffff",
+          "tertiary-container": "#a96428",
+          "inverse-on-surface": "#f1f1f0",
+          "on-primary": "#ffffff",
+          "surface-container-low": "#f3f4f3",
+          "outline": "#8d706a",
+          "on-error": "#ffffff",
+          "tertiary": "#8b4c11",
+          "inverse-primary": "#ffb4a2",
+          "secondary-fixed": "#d7e3f6",
+          "secondary-fixed-dim": "#bbc7da",
+          "primary-fixed-dim": "#ffb4a2",
+          "on-tertiary-fixed": "#2f1400",
+          "on-background": "#1a1c1c",
+          "surface": "#f9f9f8",
+          "on-primary-fixed-variant": "#8a1d00",
+          "on-error-container": "#93000a",
+          "surface-container-highest": "#e2e2e2",
+          "on-primary-container": "#fffbff",
+          "on-tertiary": "#ffffff",
+          "background": "#f9f9f8",
+          "on-secondary-fixed": "#101c2a",
+          "surface-dim": "#dadad9",
+          "error": "#ba1a1a",
+          "on-secondary-container": "#576474"
+        },
+        "borderRadius": {
+          "DEFAULT": "0.25rem",
+          "lg": "0.5rem",
+          "xl": "0.75rem",
+          "full": "9999px"
+        },
+        "spacing": {
+          "margin-desktop": "3rem",
+          "space-md": "1rem",
+          "gutter-lg": "1.75rem",
+          "gutter": "1.25rem",
+          "space-xl": "2.5rem",
+          "gutter-sm": "0.75rem",
+          "space-lg": "1.5rem",
+          "space-sm": "0.5rem",
+          "space-xs": "0.25rem",
+          "margin-mobile": "1rem",
+          "margin": "1.5rem"
+        },
+        "fontFamily": {
+          "body-lg": [
+            "Plus Jakarta Sans"
+          ],
+          "title-lg": [
+            "Plus Jakarta Sans"
+          ],
+          "headline-sm": [
+            "Plus Jakarta Sans"
+          ],
+          "title-md": [
+            "Plus Jakarta Sans"
+          ],
+          "body-md": [
+            "Plus Jakarta Sans"
+          ],
+          "display": [
+            "Plus Jakarta Sans"
+          ],
+          "body-sm": [
+            "Plus Jakarta Sans"
+          ],
+          "label-lg": [
+            "Plus Jakarta Sans"
+          ],
+          "headline-lg-mobile": [
+            "Plus Jakarta Sans"
+          ],
+          "label-sm": [
+            "Plus Jakarta Sans"
+          ],
+          "label-md": [
+            "Plus Jakarta Sans"
+          ],
+          "headline-md": [
+            "Plus Jakarta Sans"
+          ],
+          "headline-lg": [
+            "Plus Jakarta Sans"
+          ]
+        },
+        "fontSize": {
+          "body-lg": [
+            "16px",
+            {
+              "lineHeight": "26px",
+              "fontWeight": "400"
+            }
+          ],
+          "title-lg": [
+            "18px",
+            {
+              "lineHeight": "26px",
+              "fontWeight": "600"
+            }
+          ],
+          "headline-sm": [
+            "20px",
+            {
+              "lineHeight": "28px",
+              "letterSpacing": "-0.005em",
+              "fontWeight": "600"
+            }
+          ],
+          "title-md": [
+            "16px",
+            {
+              "lineHeight": "24px",
+              "fontWeight": "600"
+            }
+          ],
+          "body-md": [
+            "14px",
+            {
+              "lineHeight": "22px",
+              "fontWeight": "400"
+            }
+          ],
+          "display": [
+            "40px",
+            {
+              "lineHeight": "48px",
+              "letterSpacing": "-0.02em",
+              "fontWeight": "700"
+            }
+          ],
+          "body-sm": [
+            "13px",
+            {
+              "lineHeight": "18px",
+              "fontWeight": "400"
+            }
+          ],
+          "label-lg": [
+            "14px",
+            {
+              "lineHeight": "20px",
+              "fontWeight": "500"
+            }
+          ],
+          "headline-lg-mobile": [
+            "26px",
+            {
+              "lineHeight": "34px",
+              "letterSpacing": "-0.01em",
+              "fontWeight": "600"
+            }
+          ],
+          "label-sm": [
+            "11px",
+            {
+              "lineHeight": "14px",
+              "letterSpacing": "0.02em",
+              "fontWeight": "600"
+            }
+          ],
+          "label-md": [
+            "12px",
+            {
+              "lineHeight": "16px",
+              "letterSpacing": "0.01em",
+              "fontWeight": "500"
+            }
+          ],
+          "headline-md": [
+            "24px",
+            {
+              "lineHeight": "32px",
+              "letterSpacing": "-0.01em",
+              "fontWeight": "600"
+            }
+          ],
+          "headline-lg": [
+            "32px",
+            {
+              "lineHeight": "40px",
+              "letterSpacing": "-0.015em",
+              "fontWeight": "600"
+            }
+          ]
+        }
+      }
+    }
+  }</script></head><body class="bg-surface font-body-md text-on-surface antialiased"><header class="fixed top-0 left-0 right-0 z-50 bg-surface/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-16 max-w-7xl mx-auto px-margin md:px-margin-desktop flex items-center justify-between gap-gutter"><div class="flex items-center gap-space-lg"><a class="flex items-center gap-space-sm group" data-path="brand-dashboard" href="#"><img alt="Modern minimalist geometric infinity loop emblem combined with a growth spark or shopping tag, vibrant coral red-orange and deep indigo navy colors, vector icon, transparent background. Design context: - Primary color: #f05a36
+- Font: plusJakartaSans
+- Mode: light
+- Roundness: rounded-md
+. The logo should be visually consistent with these brand tokens." class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1W8t9ipAx9DBN32zqPdbqJjc4-UrXfLTSj3j97pN1xElgPoYdr1Y-DXe8yNQpAkTMiyCEREXrCgLqHdFCV5uXONLAsRFIzWa0T-cJ2xJoeGQ6z078ftFMQLUszrf3GfpzuZhpDlUx1tvYjpPpoOcspBZ0ODg20-_vtGJKdX-xmkPV7k-0NqJHGdHQ3PS_if9x2e-2qiw2L7oQr_S1jSnGuOWVTPCsQz5tn2gRUqtPPTXTvDYuEEPQLmsL0"><span class="font-title-lg text-title-lg text-on-surface tracking-tight group-hover:text-primary transition-colors">IndieLoop</span></a><nav class="hidden lg:flex items-center gap-space-xs" data-active-classes="bg-primary-container text-on-primary-container rounded-xl font-label-lg"><a class="px-space-md py-space-sm font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all" data-path="brand-dashboard" href="#">Brand Dashboard</a><a class="px-space-md py-space-sm font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all" data-path="creator-hub" href="#">Creator Hub</a><a class="px-space-md py-space-sm font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all" data-path="explore-offers" href="#">Explore Offers</a><a class="px-space-md py-space-sm font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all" data-path="platform-admin" href="#">Platform Admin</a></nav></div><div class="flex items-center gap-space-sm"><button aria-label="Help &amp; Resources" class="flex items-center gap-space-xs px-space-sm py-space-xs rounded-xl font-label-md text-label-md text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all" type="button"><span class="material-symbols-outlined text-[20px]">help_outline</span><span class="hidden sm:inline">Help</span></button><button aria-label="Notifications" class="w-9 h-9 flex items-center justify-center rounded-xl text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all relative" type="button"><span class="material-symbols-outlined text-[20px]">notifications</span><span class="absolute top-2 right-2 w-2 h-2 rounded-full bg-primary"></span></button><div class="flex items-center gap-space-sm pl-space-xs"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><span class="font-label-lg text-label-lg text-on-surface hidden md:inline font-medium">Ananya</span></div></div></div></header><main class="w-full pt-16 bg-surface"><div class="flex flex-col w-full">
+<div class="max-w-5xl mx-auto w-full px-margin md:px-margin-desktop py-space-lg flex flex-col gap-space-xl">
+<!-- Toast Feedback Notification -->
+<div class="fixed bottom-6 right-6 z-50 transform translate-y-16 opacity-0 transition-all duration-300 pointer-events-none flex items-center gap-space-sm bg-inverse-surface text-inverse-on-surface px-space-md py-space-sm rounded-xl shadow-xl" id="copy-toast">
+<span class="material-symbols-outlined text-[20px] text-tertiary-fixed">check_circle</span>
+<span class="font-label-md text-label-md">Voucher code copied to clipboard!</span>
+</div>
+<!-- Celebration & Status Banner -->
+<div class="relative overflow-hidden bg-surface-container-lowest rounded-xl p-space-lg md:p-space-xl shadow-sm">
+<div class="absolute -top-12 -right-12 w-48 h-48 bg-primary-fixed rounded-full blur-2xl opacity-40 pointer-events-none"></div>
+<div class="absolute -bottom-8 -left-8 w-36 h-36 bg-tertiary-fixed rounded-full blur-xl opacity-35 pointer-events-none"></div>
+<div class="relative z-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-space-md">
+<div class="flex items-start sm:items-center gap-space-md">
+<div class="w-14 h-14 rounded-full bg-secondary-container flex items-center justify-center shrink-0 text-on-secondary-container">
+<span class="material-symbols-outlined text-[30px]" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs">
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-primary-fixed text-on-primary-fixed font-label-sm text-label-sm">
+                Token Payment Verified • ₹10
+              </span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Order #IL-79401</span>
+</div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface tracking-tight mt-1">
+              Voucher Unlocked Successfully! 🎉
+            </h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant mt-0.5">
+              Your ₹10 token fee is confirmed. Save ₹120 directly on your order with Mitti Herbals.
+            </p>
+</div>
+</div>
+<div class="shrink-0 flex items-center self-stretch sm:self-center justify-end">
+<div class="px-space-md py-space-xs rounded-xl bg-surface-container-low text-center flex flex-col items-center sm:items-end">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Expiry Clock</span>
+<span class="font-title-md text-title-md text-primary font-bold">5d 23h remaining</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Main Dual Column Handoff Section -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-start">
+<!-- Left Column: The Voucher Pass & Details -->
+<div class="lg:col-span-7 flex flex-col gap-space-lg">
+<!-- Physical Style Pass Ticket -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm flex flex-col relative overflow-hidden">
+<!-- Brand Badge Header -->
+<div class="flex items-center justify-between pb-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-12 h-12 rounded-xl bg-surface-container-high overflow-hidden shrink-0">
+<img class="w-full h-full object-cover" data-alt="Warm terracotta organic pottery studio shelf with artisanal Ayurvedic amber glass bottles, organic cold pressed herb extracts in sunlight, clean minimal Indian craft apothecary setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuATfBK8xOOdijaqZwo3mLVepbLsSnI0JuaJKx-UCvh-9SiOHHd_1mlC0Uo7Guxz_20Ug6S4P3TYEP9a4J9jB4ngxwHnYgX6NaHmLrDeN4jnAAPon4CsU4SejUiFOWv4c9fXL5s5O0VnCmEzQ3peLEWsKUlEYEWPL4lVtGB_a0LUx1DR3Sf8qGIagb4Ztm-rBcKxKzhRK6bDgHlTYgcTaxyE0eScsUe2z_bk6CimbDcYFNTQJWVwaFzo">
+</div>
+<div>
+<div class="flex items-center gap-1.5">
+<span class="font-title-md text-title-md text-on-surface">Mitti Herbals</span>
+<span class="material-symbols-outlined text-[16px] text-tertiary" title="Verified Artisan Brand">check_circle</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Artisan Skincare • Jaipur, Rajasthan</p>
+</div>
+</div>
+<span class="px-2.5 py-1 rounded-full bg-surface-container text-on-surface font-label-sm text-label-sm flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+              Verified Maker
+            </span>
+</div>
+<!-- Perforated Notch Visual -->
+<div class="relative py-space-sm my-space-xs flex items-center">
+<div class="w-full h-px bg-surface-container-highest"></div>
+<div class="absolute -left-10 w-6 h-6 rounded-full bg-surface"></div>
+<div class="absolute -right-10 w-6 h-6 rounded-full bg-surface"></div>
+</div>
+<!-- Code Display Block -->
+<div class="flex flex-col items-center justify-center p-space-md my-space-xs bg-surface-container-low rounded-xl text-center">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest font-semibold">
+              Exclusive Shopper Passcode
+            </span>
+<div class="mt-space-xs flex items-center gap-space-sm flex-wrap justify-center">
+<div class="font-display text-display font-mono text-primary tracking-widest bg-surface-container-lowest px-space-md py-space-xs rounded-lg shadow-sm select-all" id="voucherCode">
+                MITTI-8921
+              </div>
+<button class="flex items-center gap-1 px-space-md py-2.5 rounded-lg bg-surface-container-highest hover:bg-surface-container-high text-on-surface font-label-md text-label-md transition-all active:scale-95" id="copyBtn" onclick="copyVoucherCode()" type="button">
+<span class="material-symbols-outlined text-[18px]">content_copy</span>
+<span id="copyText">Copy</span>
+</button>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-space-xs">
+              Single-use verified token tied to your phone number (+91 98*** **421)
+            </p>
+</div>
+<!-- Offer Breakdown Specs -->
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-space-sm mt-space-sm pt-space-xs">
+<div class="p-space-sm rounded-lg bg-surface-container-low flex items-start gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[20px] shrink-0 mt-0.5">percent</span>
+<div>
+<p class="font-label-md text-label-md text-on-surface font-semibold">Flat ₹120 Instant Off</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Valid on minimum catalog order of ₹499</p>
+</div>
+</div>
+<div class="p-space-sm rounded-lg bg-surface-container-low flex items-start gap-space-xs">
+<span class="material-symbols-outlined text-tertiary text-[20px] shrink-0 mt-0.5">redeem</span>
+<div>
+<p class="font-label-md text-label-md text-on-surface font-semibold">Free Gift Miniature</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Handcrafted Kumkumadi Oil (10ml vial)</p>
+</div>
+</div>
+</div>
+<div class="mt-space-md pt-space-sm flex items-center justify-between text-on-surface-variant font-body-sm text-body-sm">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-primary">security</span>
+              Full ₹10 refund automatically if unredeemed
+            </span>
+<span class="text-primary font-medium">Valid till Nov 28</span>
+</div>
+</div>
+<!-- 3-Step Guided Roadmap -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm flex flex-col gap-space-md">
+<h2 class="font-title-lg text-title-lg text-on-surface">How to Claim in 60 Seconds</h2>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-space-md">
+<div class="flex flex-col gap-space-xs p-space-sm rounded-lg bg-surface-container-low">
+<div class="w-8 h-8 rounded-full bg-primary-fixed text-on-primary-fixed flex items-center justify-center font-bold font-label-md text-label-md">
+                1
+              </div>
+<h3 class="font-title-md text-title-md text-on-surface mt-1">Tap WhatsApp</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                We've pre-filled your code and greeting. Simply send the message directly to the founder.
+              </p>
+</div>
+<div class="flex flex-col gap-space-xs p-space-sm rounded-lg bg-surface-container-low">
+<div class="w-8 h-8 rounded-full bg-secondary-fixed text-on-secondary-fixed flex items-center justify-center font-bold font-label-md text-label-md">
+                2
+              </div>
+<h3 class="font-title-md text-title-md text-on-surface mt-1">Select Skincare</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                Ask for their winter product catalog or tell them your exact skin concerns for advice.
+              </p>
+</div>
+<div class="flex flex-col gap-space-xs p-space-sm rounded-lg bg-surface-container-low">
+<div class="w-8 h-8 rounded-full bg-tertiary-fixed text-on-tertiary-fixed flex items-center justify-center font-bold font-label-md text-label-md">
+                3
+              </div>
+<h3 class="font-title-md text-title-md text-on-surface mt-1">Direct UPI Pay</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                Pay directly to the maker minus ₹120. Receive real-time dispatch tracking straight on chat.
+              </p>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: WhatsApp Handoff & Pre-filled Launcher -->
+<div class="lg:col-span-5 flex flex-col gap-space-md">
+<!-- WhatsApp Direct Card -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<span class="font-label-lg text-label-lg text-on-surface font-semibold flex items-center gap-1.5">
+<span class="w-2.5 h-2.5 rounded-full bg-secondary"></span>
+              Founder Chat Window
+            </span>
+<span class="font-body-sm text-body-sm text-secondary">Typically replies in 15 mins</span>
+</div>
+<!-- Chat simulation preview bubble -->
+<div class="bg-surface-container-low p-space-md rounded-xl flex flex-col gap-space-xs relative">
+<div class="flex items-center gap-space-xs text-on-surface-variant font-label-sm text-label-sm pb-1">
+<span class="material-symbols-outlined text-[16px] text-primary">chat_bubble</span>
+<span>Pre-composed WhatsApp Draft:</span>
+</div>
+<div class="bg-surface-container-lowest p-space-sm rounded-lg text-on-surface font-body-sm text-body-sm shadow-sm leading-relaxed">
+              "Hi Mitti Herbals! 👋 I just unlocked voucher code <strong class="text-primary font-semibold">#MITTI-8921</strong> on IndieLoop for ₹120 OFF + free miniature gift. Could you please share your winter catalog so I can place my order?"
+            </div>
+<div class="flex items-center justify-between pt-1 text-on-surface-variant font-body-sm text-body-sm">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">bolt</span>
+                Zero setup needed
+              </span>
+<span class="text-[11px]">Includes unique voucher token</span>
+</div>
+</div>
+<!-- Primary WhatsApp CTA Button -->
+<a class="w-full py-3.5 px-space-md rounded-xl bg-primary text-on-primary hover:bg-primary-container transition-all flex items-center justify-center gap-space-sm font-title-md text-title-md font-semibold shadow-md active:scale-98" href="https://api.whatsapp.com/send?phone=919876543210&amp;text=Hi%20Mitti%20Herbals!%20%F0%9F%91%8B%20I%20just%20unlocked%20voucher%20code%20%23MITTI-8921%20on%20IndieLoop%20for%20%E2%82%B9120%20OFF%20%2B%20free%20miniature%20gift.%20Could%20you%20please%20share%20your%20winter%20catalog%20so%20I%20can%20place%20my%20order%3F" rel="noopener noreferrer" target="_blank">
+<span class="material-symbols-outlined text-[24px]">forum</span>
+            Chat with Founder on WhatsApp
+          </a>
+<!-- Secondary Alternative CTA -->
+<a class="w-full py-3 px-space-md rounded-xl bg-surface-container hover:bg-surface-container-high text-on-surface font-label-lg text-label-lg transition-all flex items-center justify-center gap-space-xs text-center" href="#">
+<span>Or browse Mitti Herbals Webstore</span>
+<span class="material-symbols-outlined text-[18px]">open_in_new</span>
+</a>
+<div class="flex items-center justify-center gap-space-xs text-center text-on-surface-variant font-body-sm text-body-sm pt-space-xs">
+<span class="material-symbols-outlined text-[16px] text-tertiary">lock</span>
+<span>No spam guaranteed. IndieLoop never sells phone numbers.</span>
+</div>
+</div>
+<!-- Founder Spotlight Mini Snippet -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex items-center gap-space-md">
+<div class="w-16 h-16 rounded-xl bg-surface-container overflow-hidden shrink-0">
+<img class="w-full h-full object-cover" data-alt="Portrait of an Indian woman founder and Ayurvedic herbalist smiling in her workshop studio surrounded by apothecary jars and fresh botanicals, natural soft warm lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAljojc-SBNQTDlzAt8aDIplbyM_ldDDTexiRkiTVO4gt5fqlu2N9EX7yQ6ICtWnmY9BDZuu6UnnYLRUf9nxrqHifrfOUyWyK-A6c4CeB1l3jaeDK4RmMmRwVME8kuo-EYuPgq9z-t5Pnm5foKK2Z85xL3-TlXgmsm3WCHvaiUvS-sv-TgHJValHyN5kYcLYQpI5Ogsrv8EOjQXr3vFR08PBW27OmwxA881cm01CnquQooKfqGSCyIV">
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-1">
+<span class="font-title-md text-title-md text-on-surface">Meet Radhika</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">• Founder</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2 mt-0.5">
+              "We brew our face serums in micro-batches every Tuesday using solar-infused botanical oils. Excited to pack your order!"
+            </p>
+</div>
+</div>
+<!-- Trust Pillars Card -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col gap-space-sm">
+<span class="font-label-md text-label-md text-on-surface font-semibold">The IndieLoop Shopper Assurance</span>
+<div class="flex items-start gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[18px] shrink-0 mt-0.5">currency_exchange</span>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface font-medium">100% Refundable ₹10 Token</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Didn't find anything you like? We auto-refund your ₹10 in 7 days back to source account.</span>
+</div>
+</div>
+<div class="flex items-start gap-space-xs pt-space-xs">
+<span class="material-symbols-outlined text-secondary text-[18px] shrink-0 mt-0.5">local_shipping</span>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface font-medium">No Hidden Markups</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Direct workshop prices without marketplace 35% commission fees tacked on.</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Suggested Artisan Companion Offers Section -->
+<div class="flex flex-col gap-space-md pt-space-md">
+<div class="flex items-center justify-between">
+<div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Other Indie Treats You Might Like</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Unlock another maker pass for just ₹10</p>
+</div>
+<a class="font-label-md text-label-md text-primary hover:text-primary-container flex items-center gap-1 font-semibold" href="#">
+<span>Explore all 48 offers</span>
+<span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</a>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-space-lg">
+<!-- Companion Offer 1 -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col sm:flex-row gap-space-md group hover:shadow-md transition-all">
+<div class="w-full sm:w-32 h-36 rounded-lg bg-surface-container overflow-hidden shrink-0">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="Handcrafted sterling silver minimalist floral earrings resting on raw linen textured cloth with soft shadows, delicate artisan jewelry craft from Jaipur India" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD4X-QaFU6YUcwJ8FRbsvmsqXw3x7-AJMpCtwBOGojRtbaVex2g5Ws8A4W1h6XT_DWPjRjdpAebVSB_X0jkihQox2DLEVdOD7pPsMvYQG-fIIMB7TA5R-K_rJ3MOhRytznf3pfmO8puwRbLSbW-xC7It3xRJDKxHdGYlxmmZcsho-8PZvxZomdoU_-YrItjibnF4jf5nDkPmoXvK-IB9QVfiGbnFGfbHlY2j76Ox4BA0XfJl0o7_3O-">
+</div>
+<div class="flex flex-col justify-between flex-1">
+<div>
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded-full bg-surface-container text-on-surface-variant">Silver Jewellery</span>
+<span class="font-label-md text-label-md text-primary font-bold">₹150 OFF</span>
+</div>
+<h3 class="font-title-md text-title-md text-on-surface mt-1">Kaari 925 Silver</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2 mt-0.5">
+                Hallmarked handmade silver ear-studs &amp; rings directly from master silversmiths in Cuttack.
+              </p>
+</div>
+<div class="flex items-center justify-between mt-space-sm pt-space-xs">
+<span class="font-label-sm text-label-sm text-secondary font-medium">Min. order ₹699</span>
+<button class="px-space-md py-1.5 rounded-lg bg-primary-fixed text-on-primary-fixed hover:bg-primary hover:text-on-primary font-label-md text-label-md font-semibold transition-all" type="button">
+                Unlock for ₹10
+              </button>
+</div>
+</div>
+</div>
+<!-- Companion Offer 2 -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col sm:flex-row gap-space-md group hover:shadow-md transition-all">
+<div class="w-full sm:w-32 h-36 rounded-lg bg-surface-container overflow-hidden shrink-0">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="Roasted whole specialty coffee beans spilling from a natural kraft paper pouch next to an espresso cup, Chikmagalur plantation harvest, warm morning light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBmEvHa6AP37XJihSIOG0SDCMbmLlkosqzgcqCW26JR2Qhw1ME9UPGK_51CDQoLAFrKFpQVUR5kgmgTbn1n5QAI6nGHiKTbx4hGtby6FLEYywDYeMb-S8zw_nqDsTA36L44_66xdvvdTASRW3FSyoGIiytTAmxiGqMzpX_gQpnN154IP9UH4zsT3QKeDQhtP7Y_xGvDktfeisvuCVxOph3Qa-KWJauU2_KppWuZQ-np6yXR6r7ht8oz">
+</div>
+<div class="flex flex-col justify-between flex-1">
+<div>
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded-full bg-surface-container text-on-surface-variant">Single Origin Coffee</span>
+<span class="font-label-md text-label-md text-primary font-bold">20% OFF</span>
+</div>
+<h3 class="font-title-md text-title-md text-on-surface mt-1">BeanCraft Roasters</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2 mt-0.5">
+                Freshly roasted estate Arabica beans from Chikmagalur hills. Ground to your exact brew device.
+              </p>
+</div>
+<div class="flex items-center justify-between mt-space-sm pt-space-xs">
+<span class="font-label-sm text-label-sm text-secondary font-medium">Free tasting drip bag</span>
+<button class="px-space-md py-1.5 rounded-lg bg-primary-fixed text-on-primary-fixed hover:bg-primary hover:text-on-primary font-label-md text-label-md font-semibold transition-all" type="button">
+                Unlock for ₹10
+              </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script>
+  function copyVoucherCode() {
+    const code = document.getElementById('voucherCode').innerText.trim();
+    navigator.clipboard.writeText(code).then(() => {
+      const copyText = document.getElementById('copyText');
+      const toast = document.getElementById('copy-toast');
+      
+      copyText.innerText = 'Copied!';
+      toast.classList.remove('translate-y-16', 'opacity-0');
+      toast.classList.add('translate-y-0', 'opacity-100');
+
+      setTimeout(() => {
+        copyText.innerText = 'Copy';
+        toast.classList.remove('translate-y-0', 'opacity-100');
+        toast.classList.add('translate-y-16', 'opacity-0');
+      }, 2500);
+    }).catch(err => {
+      console.error('Failed to copy code: ', err);
+    });
+  }
+</script></main><footer class="w-full bg-surface-container-low mt-space-xl shadow-[0_-1px_6px_rgba(0,0,0,0.02)]"><div class="max-w-7xl mx-auto px-margin md:px-margin-desktop py-space-xl"><div class="flex flex-col md:flex-row items-center justify-between gap-space-lg"><div class="flex items-center gap-space-sm"><span class="font-title-md text-title-md text-on-surface">IndieLoop</span><span class="font-body-sm text-body-sm text-on-surface-variant">• Simplified commerce for modern Indian creators</span></div><div class="flex flex-wrap items-center justify-center gap-space-lg"><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" data-path="creator-hub" href="#">Creator Guide</a><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" data-path="explore-offers" href="#">Offer Guidelines</a><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Payouts &amp; Terms</a><a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Support</a></div></div><div class="mt-space-lg pt-space-md flex flex-col sm:flex-row items-center justify-between gap-space-sm text-center sm:text-left"><p class="font-body-sm text-body-sm text-on-surface-variant">© 2025 IndieLoop Technologies Pvt. Ltd. All rights reserved.</p><p class="font-body-sm text-body-sm text-on-surface-variant">Crafted for effortless D2C simplicity</p></div></div></footer></body></html>
+
+for these page i have pasted the code above - i want you to go through it and build a page and also ensure that theme of the page must be of the snow animation theme same as the landing page theme.
+and i don't want you to add html, css of the below code. i want you to just add the content of code on my new pages. and as we are using next.js so make the frontend by you by adding css, js, animation, images by you and just keep the content provided in the code. 
+
+do these changes and upload on git 
+</USER_REQUEST>
+<ADDITIONAL_METADATA>
+The current local time is: 2026-10-07T23:46:22+05:30.
+
+The user has uploaded 2 image(s):
+- C:/Users/DEVANSH BHARDWAJ/.gemini/antigravity/brain/9f00371e-3bb0-4ddd-b656-ed04d698c82f/.user_uploaded/media_1791395300712.png
+- C:/Users/DEVANSH BHARDWAJ/.gemini/antigravity/brain/9f00371e-3bb0-4ddd-b656-ed04d698c82f/.user_uploaded/media_1791395512441.png
+You can embed these images in an artifact if you need the USER to review them.
+</ADDITIONAL_METADATA>

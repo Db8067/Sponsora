@@ -427,7 +427,7 @@ export default function CreatorDashboardPage() {
 
 <div className="p-space-lg pt-0">
 
-<button className="w-full py-3 px-space-md rounded-xl bg-surface-container text-on-surface font-title-md text-title-md hover:bg-surface-container-high active:scale-95 transition-all flex items-center justify-center gap-space-xs" onclick="document.getElementById('copyBtn').click()" type="button">
+<button className="w-full py-3 px-space-md rounded-xl bg-surface-container text-on-surface font-title-md text-title-md hover:bg-surface-container-high active:scale-95 transition-all flex items-center justify-center gap-space-xs"  type="button">
 
 <span className="material-symbols-outlined text-[20px] text-tertiary">share</span>
 
@@ -491,7 +491,7 @@ export default function CreatorDashboardPage() {
 
 <div className="p-space-lg pt-0">
 
-<button className="w-full py-3 px-space-md rounded-xl bg-surface-container-low text-on-surface-variant opacity-70 font-title-md text-title-md cursor-not-allowed flex items-center justify-center gap-space-xs" disabled="" type="button">
+<button className="w-full py-3 px-space-md rounded-xl bg-surface-container-low text-on-surface-variant opacity-70 font-title-md text-title-md cursor-not-allowed flex items-center justify-center gap-space-xs" disabled type="button">
 
 <span className="material-symbols-outlined text-[20px]">lock</span>
 
@@ -701,151 +701,7 @@ export default function CreatorDashboardPage() {
 
 {/*  Interactive JavaScript logic  */}
 
-<script>
 
-    (function() {
-
-      const toast = document.getElementById('toastNotification');
-
-      const toastText = document.getElementById('toastText');
-
-
-
-      function showToast(msg) {
-
-        if (!toast || !toastText) return;
-
-        toastText.textContent = msg;
-
-        toast.classList.remove('translate-y-24', 'opacity-0');
-
-        toast.classList.add('translate-y-0', 'opacity-100');
-
-        setTimeout(() => {
-
-          toast.classList.remove('translate-y-0', 'opacity-100');
-
-          toast.classList.add('translate-y-24', 'opacity-0');
-
-        }, 2800);
-
-      }
-
-
-
-      // Copy Link Button
-
-      const copyBtn = document.getElementById('copyBtn');
-
-      if (copyBtn) {
-
-        copyBtn.addEventListener('click', function() {
-
-          const link = 'https://indieloop.com/ananya';
-
-          navigator.clipboard.writeText(link).then(() => {
-
-            showToast('Copied indieloop.com/ananya! Share it now 🎉');
-
-          }).catch(() => {
-
-            showToast('Link ready: indieloop.com/ananya');
-
-          });
-
-        });
-
-      }
-
-
-
-      // WhatsApp Share
-
-      const shareWhatsapp = document.getElementById('shareWhatsappBtn');
-
-      if (shareWhatsapp) {
-
-        shareWhatsapp.addEventListener('click', function() {
-
-          const text = encodeURIComponent('Hey! Grab ₹10 off any homegrown indie brand here: https://indieloop.com/ananya (and I get coffee perks too!)');
-
-          window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
-
-        });
-
-      }
-
-
-
-      // Story Card Download Simulation
-
-      const downloadStoryBtn = document.getElementById('downloadStoryBtn');
-
-      if (downloadStoryBtn) {
-
-        downloadStoryBtn.addEventListener('click', function() {
-
-          showToast('Generating your customized Instagram Story card... 📸');
-
-          setTimeout(() => {
-
-            showToast('Story sticker saved to your camera roll!');
-
-          }, 1200);
-
-        });
-
-      }
-
-
-
-      // UPI Payout Simulation
-
-      const payoutBtn = document.getElementById('payoutBtn');
-
-      if (payoutBtn) {
-
-        payoutBtn.addEventListener('click', function() {
-
-          showToast('Transferring ₹4,320 to linked UPI (ananya@okaxis)... ⚡');
-
-          setTimeout(() => {
-
-            showToast('Success! ₹4,320 credited to your bank account!');
-
-          }, 1500);
-
-        });
-
-      }
-
-
-
-      // Claim Gift Button
-
-      const claimGiftBtn = document.getElementById('claimGiftBtn');
-
-      if (claimGiftBtn) {
-
-        claimGiftBtn.addEventListener('click', function() {
-
-          showToast('Yay! Shipping Kaari Silver Studs to your campus address 🎁');
-
-          this.textContent = 'Hamper Claimed! 📦';
-
-          this.disabled = true;
-
-          this.classList.replace('bg-primary', 'bg-surface-container-high');
-
-          this.classList.replace('text-on-primary', 'text-on-surface-variant');
-
-        });
-
-      }
-
-    })();
-
-  </script>
 
 </div></main><footer className="w-full bg-surface-container-low mt-space-xl shadow-[0_-1px_6px_rgba(0,0,0,0.02)]"><div className="max-w-7xl mx-auto px-margin md:px-margin-desktop py-space-xl"><div className="flex flex-col md:flex-row items-center justify-between gap-space-lg"><div className="flex items-center gap-space-sm"><span className="font-title-md text-title-md text-on-surface">IndieLoop</span><span className="font-body-sm text-body-sm text-on-surface-variant">• Simplified commerce for modern Indian creators</span></div><div className="flex flex-wrap items-center justify-center gap-space-lg"><a className="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" data-path="creator-hub" href="#">Creator Guide</a><a className="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" data-path="explore-offers" href="#">Offer Guidelines</a><a className="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Payouts &amp; Terms</a><a className="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Support</a></div></div><div className="mt-space-lg pt-space-md flex flex-col sm:flex-row items-center justify-between gap-space-sm text-center sm:text-left"><p className="font-body-sm text-body-sm text-on-surface-variant">© 2025 IndieLoop Technologies Pvt. Ltd. All rights reserved.</p><p className="font-body-sm text-body-sm text-on-surface-variant">Crafted for effortless D2C simplicity</p></div></div></footer></>
       </div>

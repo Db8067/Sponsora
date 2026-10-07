@@ -349,7 +349,7 @@ export default function CreatorsProgramPage() {
 
 </div>
 
-<button className="flex items-center gap-space-xs px-space-md py-space-sm rounded-lg bg-surface-container-highest text-on-surface hover:bg-surface-container-high transition-colors font-label-md shadow-sm" onclick="toggleVoucherDrawer()">
+<button className="flex items-center gap-space-xs px-space-md py-space-sm rounded-lg bg-surface-container-highest text-on-surface hover:bg-surface-container-high transition-colors font-label-md shadow-sm" >
 
 <span className="material-symbols-outlined text-[20px] text-primary">wallet</span>
 
@@ -439,7 +439,7 @@ export default function CreatorsProgramPage() {
 
 <div className="p-space-md pt-0 flex flex-col gap-space-xs">
 
-<button className="w-full py-space-sm px-space-md rounded-lg bg-primary hover:bg-primary-container text-on-primary font-label-lg transition-colors flex items-center justify-center gap-space-xs shadow-sm" onclick="claimVoucher('Mitti Herbals', 'MITTI120', '₹10', 'Free Beetroot Lip Butter')">
+<button className="w-full py-space-sm px-space-md rounded-lg bg-primary hover:bg-primary-container text-on-primary font-label-lg transition-colors flex items-center justify-center gap-space-xs shadow-sm" >
 
 <span className="material-symbols-outlined text-[18px]">shopping_cart_checkout</span>
 
@@ -535,7 +535,7 @@ export default function CreatorsProgramPage() {
 
 <div className="p-space-md pt-0 flex flex-col gap-space-xs">
 
-<button className="w-full py-space-sm px-space-md rounded-lg bg-primary hover:bg-primary-container text-on-primary font-label-lg transition-colors flex items-center justify-center gap-space-xs shadow-sm" onclick="claimVoucher('Kaari Silver', 'KAARI250', '₹25', 'Silver Polish Cloth Kit')">
+<button className="w-full py-space-sm px-space-md rounded-lg bg-primary hover:bg-primary-container text-on-primary font-label-lg transition-colors flex items-center justify-center gap-space-xs shadow-sm" >
 
 <span className="material-symbols-outlined text-[18px]">shopping_cart_checkout</span>
 
@@ -631,7 +631,7 @@ export default function CreatorsProgramPage() {
 
 <div className="p-space-md pt-0 flex flex-col gap-space-xs">
 
-<button className="w-full py-space-sm px-space-md rounded-lg bg-primary hover:bg-primary-container text-on-primary font-label-lg transition-colors flex items-center justify-center gap-space-xs shadow-sm" onclick="claimVoucher('BeanCraft Coffee', 'BEAN100', '₹10', '2 Signature Drip Filter Pouches')">
+<button className="w-full py-space-sm px-space-md rounded-lg bg-primary hover:bg-primary-container text-on-primary font-label-lg transition-colors flex items-center justify-center gap-space-xs shadow-sm" >
 
 <span className="material-symbols-outlined text-[18px]">shopping_cart_checkout</span>
 
@@ -727,7 +727,7 @@ export default function CreatorsProgramPage() {
 
 <div className="p-space-md pt-0 flex flex-col gap-space-xs">
 
-<button className="w-full py-space-sm px-space-md rounded-lg bg-primary hover:bg-primary-container text-on-primary font-label-lg transition-colors flex items-center justify-center gap-space-xs shadow-sm" onclick="claimVoucher('Sanskriti Studios', 'SANSKRITI350', '₹50', 'Hand-poured Terrazzo Coaster')">
+<button className="w-full py-space-sm px-space-md rounded-lg bg-primary hover:bg-primary-container text-on-primary font-label-lg transition-colors flex items-center justify-center gap-space-xs shadow-sm" >
 
 <span className="material-symbols-outlined text-[18px]">shopping_cart_checkout</span>
 
@@ -823,7 +823,7 @@ export default function CreatorsProgramPage() {
 
 <div className="p-space-md pt-0 flex flex-col gap-space-xs">
 
-<button className="w-full py-space-sm px-space-md rounded-lg bg-primary hover:bg-primary-container text-on-primary font-label-lg transition-colors flex items-center justify-center gap-space-xs shadow-sm" onclick="claimVoucher('Dhaga &amp; Co.', 'DHAGA200', '₹25', 'Organic Linen Tote Bag')">
+<button className="w-full py-space-sm px-space-md rounded-lg bg-primary hover:bg-primary-container text-on-primary font-label-lg transition-colors flex items-center justify-center gap-space-xs shadow-sm" >
 
 <span className="material-symbols-outlined text-[18px]">shopping_cart_checkout</span>
 
@@ -919,7 +919,7 @@ export default function CreatorsProgramPage() {
 
 <div className="p-space-md pt-0 flex flex-col gap-space-xs">
 
-<button className="w-full py-space-sm px-space-md rounded-lg bg-primary hover:bg-primary-container text-on-primary font-label-lg transition-colors flex items-center justify-center gap-space-xs shadow-sm" onclick="claimVoucher('Bageecha Teas', 'BAGEECHA150', '₹10', 'Artisanal Brass Strainer')">
+<button className="w-full py-space-sm px-space-md rounded-lg bg-primary hover:bg-primary-container text-on-primary font-label-lg transition-colors flex items-center justify-center gap-space-xs shadow-sm" >
 
 <span className="material-symbols-outlined text-[18px]">shopping_cart_checkout</span>
 
@@ -1015,7 +1015,7 @@ export default function CreatorsProgramPage() {
 
 <div className="p-space-md pt-0 flex flex-col gap-space-xs">
 
-<button className="w-full py-space-sm px-space-md rounded-lg bg-primary hover:bg-primary-container text-on-primary font-label-lg transition-colors flex items-center justify-center gap-space-xs shadow-sm" onclick="claimVoucher('Pavitra Naturals', 'PAVITRA100', '₹10', 'Steam Distilled Rose Mist')">
+<button className="w-full py-space-sm px-space-md rounded-lg bg-primary hover:bg-primary-container text-on-primary font-label-lg transition-colors flex items-center justify-center gap-space-xs shadow-sm" >
 
 <span className="material-symbols-outlined text-[18px]">shopping_cart_checkout</span>
 
@@ -1111,7 +1111,7 @@ export default function CreatorsProgramPage() {
 
 <div className="p-space-md pt-0 flex flex-col gap-space-xs">
 
-<button className="w-full py-space-sm px-space-md rounded-lg bg-primary hover:bg-primary-container text-on-primary font-label-lg transition-colors flex items-center justify-center gap-space-xs shadow-sm" onclick="claimVoucher('Rangrej Karkhana', 'RANGREJ220', '₹25', 'Handblock Cotton Mat')">
+<button className="w-full py-space-sm px-space-md rounded-lg bg-primary hover:bg-primary-container text-on-primary font-label-lg transition-colors flex items-center justify-center gap-space-xs shadow-sm" >
 
 <span className="material-symbols-outlined text-[18px]">shopping_cart_checkout</span>
 
@@ -1193,7 +1193,7 @@ export default function CreatorsProgramPage() {
 
 </div>
 
-<button className="p-space-xs rounded-full hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface" onclick="toggleVoucherDrawer()">
+<button className="p-space-xs rounded-full hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface" >
 
 <span className="material-symbols-outlined">close</span>
 
@@ -1223,7 +1223,7 @@ export default function CreatorsProgramPage() {
 
 <code className="font-title-sm text-primary tracking-wider font-mono">MITTI120-LOOP</code>
 
-<button className="text-on-surface-variant hover:text-primary flex items-center gap-1 font-label-sm" onclick="copyVoucherCode(this, 'MITTI120-LOOP')">
+<button className="text-on-surface-variant hover:text-primary flex items-center gap-1 font-label-sm" >
 
 <span className="material-symbols-outlined text-[16px]">content_copy</span>
 
@@ -1265,7 +1265,7 @@ export default function CreatorsProgramPage() {
 
 <code className="font-title-sm text-primary tracking-wider font-mono">BEAN100-ARTISAN</code>
 
-<button className="text-on-surface-variant hover:text-primary flex items-center gap-1 font-label-sm" onclick="copyVoucherCode(this, 'BEAN100-ARTISAN')">
+<button className="text-on-surface-variant hover:text-primary flex items-center gap-1 font-label-sm" >
 
 <span className="material-symbols-outlined text-[16px]">content_copy</span>
 
@@ -1331,177 +1331,7 @@ export default function CreatorsProgramPage() {
 
 {/*  Interactive Logic script  */}
 
-<script>
 
-    let drawerOpen = false;
-
-    let claimedCount = 2;
-
-
-
-    function toggleVoucherDrawer() {
-
-      const drawer = document.getElementById('voucherDrawer');
-
-      drawerOpen = !drawerOpen;
-
-      if (drawerOpen) {
-
-        drawer.classList.remove('translate-x-full');
-
-      } else {
-
-        drawer.classList.add('translate-x-full');
-
-      }
-
-    }
-
-
-
-    function claimVoucher(brand, baseCode, price, giftDesc) {
-
-      const randomSuffix = Math.floor(1000 + Math.random() * 9000);
-
-      const fullCode = `${baseCode}-${randomSuffix}`;
-
-      claimedCount++;
-
-      document.getElementById('claimedCountBadge').textContent = claimedCount;
-
-
-
-      const list = document.getElementById('voucherList');
-
-      const newCard = document.createElement('div');
-
-      newCard.className = "p-space-md rounded-lg bg-surface-container-low shadow-sm relative group animate-[fadeIn_0.3s_ease]";
-
-      newCard.innerHTML = `
-
-        <div className="flex items-center justify-between">
-
-          <span className="font-title-md text-title-md text-on-surface">${brand}</span>
-
-          <span className="px-space-xs py-0.5 rounded bg-secondary-fixed text-on-secondary-fixed font-label-sm">Just Claimed</span>
-
-        </div>
-
-        <p className="font-body-sm text-on-surface-variant mt-1">Paid ${price} • Includes ${giftDesc}</p>
-
-        
-
-        <div className="mt-space-sm p-space-xs px-space-sm rounded bg-surface-container-lowest flex items-center justify-between">
-
-          <code className="font-title-sm text-primary tracking-wider font-mono">${fullCode}</code>
-
-          <button onclick="copyVoucherCode(this, '${fullCode}')" className="text-on-surface-variant hover:text-primary flex items-center gap-1 font-label-sm">
-
-            <span className="material-symbols-outlined text-[16px]">content_copy</span>
-
-            <span>Copy</span>
-
-          </button>
-
-        </div>
-
-
-
-        <div className="mt-space-sm pt-space-xs flex items-center justify-between">
-
-          <span className="text-label-sm text-secondary font-medium">Founder notified</span>
-
-          <a href="https://wa.me/?text=Hi%20${encodeURIComponent(brand)},%20I%20just%20claimed%20my%20voucher%20${fullCode}%20on%20IndieLoop!" target="_blank" className="font-label-sm text-secondary hover:underline flex items-center gap-1">
-
-            <span className="material-symbols-outlined text-[15px]">send</span> WhatsApp Order
-
-          </a>
-
-        </div>
-
-      `;
-
-      list.prepend(newCard);
-
-
-
-      // Trigger Toast
-
-      const toast = document.getElementById('toastNotification');
-
-      document.getElementById('toastTitle').textContent = `₹${price.replace('₹','')} Voucher Unlocked!`;
-
-      document.getElementById('toastMessage').textContent = `Pass code ready for ${brand}`;
-
-      toast.classList.remove('translate-y-24', 'opacity-0');
-
-      setTimeout(() => {
-
-        toast.classList.add('translate-y-24', 'opacity-0');
-
-      }, 3500);
-
-
-
-      // Open drawer on claim
-
-      if (!drawerOpen) {
-
-        toggleVoucherDrawer();
-
-      }
-
-    }
-
-
-
-    function copyVoucherCode(button, text) {
-
-      navigator.clipboard.writeText(text);
-
-      const span = button.querySelector('span:last-child');
-
-      const originalText = span.textContent;
-
-      span.textContent = 'Copied!';
-
-      button.classList.add('text-secondary');
-
-      setTimeout(() => {
-
-        span.textContent = originalText;
-
-        button.classList.remove('text-secondary');
-
-      }, 2000);
-
-    }
-
-
-
-    // Category button toggles
-
-    document.querySelectorAll('#categoryGroup .category-btn').forEach(btn => {
-
-      btn.addEventListener('click', function() {
-
-        document.querySelectorAll('#categoryGroup .category-btn').forEach(b => {
-
-          b.classList.remove('bg-primary', 'text-on-primary', 'active');
-
-          b.classList.add('bg-surface-container', 'text-on-surface-variant');
-
-        });
-
-        this.classList.remove('bg-surface-container', 'text-on-surface-variant');
-
-        this.classList.add('bg-primary', 'text-on-primary', 'active');
-
-      });
-
-    });
-
-  </script>
 
 </div></main><footer className="w-full bg-surface-container-low py-space-xl mt-space-xl shadow-[0_-1px_6px_rgba(0,0,0,0.02)]"><div className="w-full px-margin flex flex-col md:flex-row items-center justify-between gap-space-md"><div className="flex items-center gap-space-sm"><span className="font-title-md text-title-md text-on-surface">IndieLoop</span><span className="font-body-sm text-body-sm text-on-surface-variant">— Micro-voucher acquisition ecosystem</span></div><div className="flex items-center gap-space-lg font-label-md text-label-md text-on-surface-variant"><a className="hover:text-on-surface transition-colors" href="#">Platform Rules</a><a className="hover:text-on-surface transition-colors" href="#">Merchant Standards</a><a className="hover:text-on-surface transition-colors" href="#">Creator Terms</a><a className="hover:text-on-surface transition-colors" href="#">Privacy Policy</a></div><div className="font-body-sm text-body-sm text-on-surface-variant">© 2025 IndieLoop Network Inc. All rights reserved.</div></div></footer></>
       </div>
