@@ -1123,7 +1123,7 @@ export default function LearnerOnboardPage() {
 
 <div>
 
-<label className="block font-label-md text-label-md text-on-surface font-semibold mb-1.5" for="pitch-message">
+<label className="block font-label-md text-label-md text-on-surface font-semibold mb-1.5" htmlFor="pitch-message">
 
           Your Direct Pitch to Founder
 
