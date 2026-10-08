@@ -340,7 +340,7 @@ export default function BrandSubscriptionsPage() {
               return (
                 <div
                   key={plan.id}
-                  onClick={() => setSelectedPlan(plan.id)}
+                  onClick={() => setSelectedPlan(plan.id)} onMouseEnter={() => setSelectedPlan(plan.id)} onTouchStart={() => setSelectedPlan(plan.id)}
                   className={`relative cursor-pointer flex flex-col justify-between p-6 rounded-3xl backdrop-blur-sm transition-all duration-200
                     ${plan.highlight ? 'md:-translate-y-2' : ''}
                     ${active

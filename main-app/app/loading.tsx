@@ -1,10 +1,14 @@
 import React from 'react';
 import Image from 'next/image';
+import Snowfall from '@/components/Snowfall';
 
 export default function Loading() {
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-background/80 backdrop-blur-md transition-all">
-      <div className="relative w-32 h-32 sm:w-48 sm:h-48 md:w-64 md:h-64 animate-pulse">
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-background/80 backdrop-blur-md transition-all overflow-hidden">
+      <div className="absolute inset-0 z-0">
+        <Snowfall />
+      </div>
+      <div className="relative z-10 w-32 h-32 sm:w-48 sm:h-48 md:w-64 md:h-64 animate-pulse">
         <Image
           src="/loading-anim.png"
           alt="Loading GrahakSetu..."
