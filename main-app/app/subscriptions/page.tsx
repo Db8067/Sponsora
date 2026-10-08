@@ -87,7 +87,7 @@ export default function SubscriptionsPage() {
         key: orderData.key_id,
         amount: orderData.amount,
         currency: orderData.currency,
-        name: "Sponsora",
+        name: "GrahakSetu",
         description: `Subscription for ${planName}`,
         order_id: orderData.id,
         handler: function (response: any) {
@@ -96,7 +96,7 @@ export default function SubscriptionsPage() {
           router.push('/seller-onboard?payment=success');
         },
         prefill: {
-          name: user?.fullName || "Sponsora Seller",
+          name: user?.fullName || "GrahakSetu Seller",
           email: user?.primaryEmailAddress?.emailAddress || "seller@example.com",
         },
         theme: {

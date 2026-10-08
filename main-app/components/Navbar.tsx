@@ -29,8 +29,8 @@ export default function Navbar() {
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? 'bg-background/80 backdrop-blur-xl py-4' : 'bg-transparent py-6'}`}>
       <div className="max-w-[1400px] mx-auto px-6 lg:px-12 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2 group">
-          <img src="/images/logo-light.png" alt="Sponsora Logo" className="h-10 md:h-12 w-auto dark:hidden block" />
-          <img src="/images/logo-dark.png" alt="Sponsora Logo" className="h-10 md:h-12 w-auto hidden dark:block" />
+          <img src="/images/logo-light.png" alt="GrahakSetu Logo" className="h-10 md:h-12 w-auto dark:hidden block" />
+          <img src="/images/logo-dark.png" alt="GrahakSetu Logo" className="h-10 md:h-12 w-auto hidden dark:block" />
         </Link>
         
         {/* Desktop Nav */}
@@ -111,8 +111,8 @@ export default function Navbar() {
             >
               <div className="flex items-center justify-between mb-8">
                 <div className="flex items-center gap-2">
-                  <img src="/images/logo-light.png" alt="Sponsora Logo" className="h-10 w-auto dark:hidden block" />
-                  <img src="/images/logo-dark.png" alt="Sponsora Logo" className="h-10 w-auto hidden dark:block" />
+                  <img src="/images/logo-light.png" alt="GrahakSetu Logo" className="h-10 w-auto dark:hidden block" />
+                  <img src="/images/logo-dark.png" alt="GrahakSetu Logo" className="h-10 w-auto hidden dark:block" />
                 </div>
                 <button onClick={() => setIsOpen(false)} className="p-2">
                   <X className="w-6 h-6" />

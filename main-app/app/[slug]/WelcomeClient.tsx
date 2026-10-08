@@ -51,7 +51,7 @@ export function Welcome99Client({
   const [offerText, setOfferText] = useState('₹100 Off + Free Herbal Lip Balm');
 
   const handleCopyLink = () => {
-    navigator.clipboard.writeText(`sponsora.in/${cleanSlug}`);
+    navigator.clipboard.writeText(`grahaksetu.in/${cleanSlug}`);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -254,7 +254,7 @@ export function Welcome99Client({
               {
                 icon: <QrCode className="w-6 h-6 text-blue-600" />,
                 title: 'Starter Link & QR Kit',
-                badge: `sponsora.in/${cleanSlug}`,
+                badge: `grahaksetu.in/${cleanSlug}`,
                 badgeStyle: 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 font-mono',
                 desc: 'Your personalized mobile microsite, high-res printable flyer QR codes for parcel inserts, and clean shareable bio link.',
                 sub: 'Instagram Bio Ready',
@@ -364,12 +364,12 @@ export function Welcome99Client({
                   Paste Magic Link in Instagram Bio &amp; Story
                 </h3>
                 <p className="text-xs text-slate-600 dark:text-slate-400 mt-2 leading-relaxed">
-                  Replace standard link trees with your direct Sponsora link. Pin it to your Instagram bio and post an announcement Story today.
+                  Replace standard link trees with your direct GrahakSetu link. Pin it to your Instagram bio and post an announcement Story today.
                 </p>
                 <div className="mt-4 p-3 bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-pink-100 dark:border-white/10 text-xs space-y-1.5">
                   <div className="text-[11px] font-semibold text-slate-500 dark:text-slate-400">Your Storefront URL:</div>
                   <div className="flex items-center justify-between gap-2 bg-white dark:bg-slate-800 px-2.5 py-2 rounded-lg border border-pink-100 dark:border-white/10 font-mono text-[11px] text-slate-800 dark:text-white">
-                    <span className="truncate">sponsora.in/{cleanSlug}</span>
+                    <span className="truncate">grahaksetu.in/{cleanSlug}</span>
                     <button
                       type="button"
                       onClick={handleCopyLink}
@@ -454,7 +454,7 @@ export function Welcome99Client({
 
               <div className="space-y-3 pt-2">
                 {[
-                  { icon: '🌐', title: 'Personalized Bio Storefront', desc: `sponsora.in/${cleanSlug} (Mobile optimized & indexed)` },
+                  { icon: '🌐', title: 'Personalized Bio Storefront', desc: `grahaksetu.in/${cleanSlug} (Mobile optimized & indexed)` },
                   { icon: '💬', title: 'Zero Friction Validation', desc: 'Only serious shoppers pay the ₹10 token, eliminating spam bots' },
                   { icon: '💳', title: 'Instant Payment to Your UPI', desc: 'Direct settlement within seconds, zero waiting on marketplace payouts' },
                 ].map((item, i) => (
@@ -490,7 +490,7 @@ export function Welcome99Client({
                           {brandName}
                           <CheckCircle2 className="w-3.5 h-3.5 text-emerald-300" />
                         </div>
-                        <div className="text-[10px] text-emerald-200 mt-0.5">Online &bull; Sponsora Verified Brand</div>
+                        <div className="text-[10px] text-emerald-200 mt-0.5">Online &bull; GrahakSetu Verified Brand</div>
                       </div>
                     </div>
                   </div>
@@ -498,7 +498,7 @@ export function Welcome99Client({
                   <div className="bg-[#ECE5DD] dark:bg-slate-800 p-3.5 space-y-3 min-h-[300px] text-xs flex flex-col justify-end">
                     <div className="text-center my-1">
                       <span className="bg-white/80 dark:bg-slate-900/80 backdrop-blur px-2.5 py-0.5 rounded-full text-[10px] text-slate-600 dark:text-slate-300 font-medium shadow-sm">
-                        Voucher Claimed via Sponsora &bull; Today
+                        Voucher Claimed via GrahakSetu &bull; Today
                       </span>
                     </div>
                     {/* Incoming */}
@@ -565,7 +565,7 @@ export function Welcome99Client({
                 initials: 'VS',
                 name: 'Varun Soni',
                 brand: 'The Terracotta Project (Kolkata)',
-                quote: '"Marketplace return scams almost shut down our pottery studio. On Sponsora, every customer who pays ₹10 speaks with me directly. 99% fulfillment rate!"',
+                quote: '"Marketplace return scams almost shut down our pottery studio. On GrahakSetu, every customer who pays ₹10 speaks with me directly. 99% fulfillment rate!"',
                 badge: '0% Return Losses',
                 sub: 'Saved ₹32,000 / mo',
               },
@@ -600,7 +600,7 @@ export function Welcome99Client({
                     <MessageCircle className="w-5 h-5" />
                   </div>
                   <div>
-                    <h4 className="text-xs font-bold text-slate-800 dark:text-white">Your Sponsora Concierge</h4>
+                    <h4 className="text-xs font-bold text-slate-800 dark:text-white">Your GrahakSetu Concierge</h4>
                     <p className="text-[10px] text-green-700 dark:text-green-400 font-semibold">Available for {brandName}</p>
                   </div>
                 </div>

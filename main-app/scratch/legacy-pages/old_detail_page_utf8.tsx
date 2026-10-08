@@ -226,7 +226,7 @@ export default function InternshipDetailPage() {
                 Apply Now <ShieldCheck className="w-5 h-5" />
               </button>
               <p className="text-center text-xs text-foreground/50 mt-3 flex items-center justify-center gap-1">
-                Sponsora Premium Required
+                GrahakSetu Premium Required
               </p>
             </div>
 

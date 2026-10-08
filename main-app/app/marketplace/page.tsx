@@ -136,7 +136,7 @@ export default function MarketplacePage() {
           <div className="text-center mb-12">
             <h2 className="text-2xl md:text-3xl font-black text-slate-800 dark:text-white mb-4">Shop by Verified Brands</h2>
             <p className="text-slate-500 font-medium max-w-2xl mx-auto">
-              Every brand on Sponsora is verified and committed to quality. Discover unique stores that match your style.
+              Every brand on GrahakSetu is verified and committed to quality. Discover unique stores that match your style.
             </p>
           </div>
 

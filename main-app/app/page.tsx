@@ -319,7 +319,7 @@ export default function SellerLandingPage() {
           <div className="text-center max-w-2xl mx-auto mb-12">
             <span className="text-xs font-bold uppercase tracking-widest text-primary">Honest Comparison</span>
             <h2 className="text-2xl md:text-3xl font-bold text-slate-800 dark:text-white mt-2">
-              Old Marketplaces vs. Sponsora Direct
+              Old Marketplaces vs. GrahakSetu Direct
             </h2>
             <p className="text-sm md:text-base text-slate-500 dark:text-slate-400 mt-2">
               Stop giving away a third of your hard-earned revenue just to sell your own products.
@@ -355,12 +355,12 @@ export default function SellerLandingPage() {
               </div>
             </div>
 
-            {/* Sponsora */}
+            {/* GrahakSetu */}
             <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm border-2 border-primary/40 rounded-2xl p-6 shadow-xl relative overflow-hidden">
               <div className="absolute top-0 right-0 w-28 h-28 bg-pink-200/40 dark:bg-pink-900/20 rounded-bl-full pointer-events-none" />
               <div className="flex items-center justify-between mb-1">
                 <h3 className="font-bold text-base text-slate-800 dark:text-white flex items-center gap-1.5">
-                  Sponsora Direct <CheckCircle2 className="w-4 h-4 text-primary" />
+                  GrahakSetu Direct <CheckCircle2 className="w-4 h-4 text-primary" />
                 </h3>
                 <span className="bg-primary text-white text-xs font-bold px-2.5 py-1 rounded-full">The Better Way</span>
               </div>
@@ -396,7 +396,7 @@ export default function SellerLandingPage() {
         <div className="container mx-auto max-w-6xl">
           <div className="text-center max-w-2xl mx-auto mb-12">
             <span className="text-xs font-bold uppercase tracking-widest text-primary">Platform Benefits</span>
-            <h2 className="text-2xl md:text-3xl font-bold text-slate-800 dark:text-white mt-2">Why Sell on Sponsora?</h2>
+            <h2 className="text-2xl md:text-3xl font-bold text-slate-800 dark:text-white mt-2">Why Sell on GrahakSetu?</h2>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
@@ -549,7 +549,7 @@ export default function SellerLandingPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
               {
-                quote: '"We were paying almost 32% on marketplace portals. With Sponsora, customers arrive right in our WhatsApp after paying ₹10. Our repeat order rate skyrocketed because we actually talk with them."',
+                quote: '"We were paying almost 32% on marketplace portals. With GrahakSetu, customers arrive right in our WhatsApp after paying ₹10. Our repeat order rate skyrocketed because we actually talk with them."',
                 name: 'Pooja Sharma',
                 brand: 'Mitti Herbals · Jaipur',
                 emoji: '🌿',
@@ -561,7 +561,7 @@ export default function SellerLandingPage() {
                 emoji: '💍',
               },
               {
-                quote: '"The ₹10 token commitment is brilliant psychology. Before, visitors would abandon carts. On Sponsora, every person pinging us on WhatsApp transfers UPI right away. Game changer."',
+                quote: '"The ₹10 token commitment is brilliant psychology. Before, visitors would abandon carts. On GrahakSetu, every person pinging us on WhatsApp transfers UPI right away. Game changer."',
                 name: 'Karthik Menon',
                 brand: 'BeanCraft Coffee · Chikmagalur',
                 emoji: '☕',
@@ -595,12 +595,12 @@ export default function SellerLandingPage() {
           <div className="text-center mb-10">
             <span className="text-xs font-bold uppercase tracking-widest text-primary">Clear Answers</span>
             <h2 className="text-2xl md:text-3xl font-bold text-slate-800 dark:text-white mt-2">Frequently Asked Questions</h2>
-            <p className="text-sm md:text-base text-slate-500 dark:text-slate-400 mt-2">Everything you need to know about getting direct customers on Sponsora.</p>
+            <p className="text-sm md:text-base text-slate-500 dark:text-slate-400 mt-2">Everything you need to know about getting direct customers on GrahakSetu.</p>
           </div>
           <div className="flex flex-col gap-3">
             <FaqItem
               q="Do you take any percentage of my product sales?"
-              a="No! You keep 100% of your sales money. Sponsora charges zero commission on your orders. You only pay the flat monthly subscription fee. The ₹10 voucher commitment paid by the customer covers the platform's lead verification engine."
+              a="No! You keep 100% of your sales money. GrahakSetu charges zero commission on your orders. You only pay the flat monthly subscription fee. The ₹10 voucher commitment paid by the customer covers the platform's lead verification engine."
             />
             <FaqItem
               q="How does the ₹10 voucher system work exactly?"

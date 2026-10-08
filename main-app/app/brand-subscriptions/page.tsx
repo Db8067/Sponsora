@@ -106,7 +106,7 @@ const STORIES = [
     gmv: '0% Fee Savings',
     gmvColor: 'text-green-700 bg-green-50 dark:bg-green-900/20',
     headline: 'Specialty Coffee Direct to Kitchens with 0% Commission',
-    quote: '"The ₹10 token commitment is brilliant psychology. Before, visitors would abandon carts. On Sponsora, every person pinging us transfers UPI right away."',
+    quote: '"The ₹10 token commitment is brilliant psychology. Before, visitors would abandon carts. On GrahakSetu, every person pinging us transfers UPI right away."',
     initials: 'KM',
     avatarBg: 'bg-amber-100 dark:bg-amber-900/30 text-amber-800',
     name: 'Karthik Menon',
@@ -114,7 +114,7 @@ const STORIES = [
     breakdown: [
       { label: 'Avg. Basket Size', value: '₹850', color: 'text-slate-800 dark:text-white' },
       { label: 'Aggregator Fee (28%)', value: '- ₹238 lost', color: 'text-red-500' },
-      { label: 'Sponsora Retained', value: '₹850 (100%)', color: 'text-green-600 font-extrabold' },
+      { label: 'GrahakSetu Retained', value: '₹850 (100%)', color: 'text-green-600 font-extrabold' },
     ],
   },
 ];
@@ -458,7 +458,7 @@ export default function BrandSubscriptionsPage() {
                 Real Metrics, Zero Fluff
               </span>
               <h2 className="text-2xl sm:text-3xl font-black text-slate-800 dark:text-white tracking-tight mt-2">
-                How Homegrown Brands Thrive on Sponsora
+                How Homegrown Brands Thrive on GrahakSetu
               </h2>
               <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
                 Real founders who liberated their brand from 30% platform cuts.

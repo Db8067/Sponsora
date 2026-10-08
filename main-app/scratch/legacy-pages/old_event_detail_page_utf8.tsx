@@ -16,7 +16,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     .single();
 
   return {
-    title: event ? `${event.title} | Sponsora` : "Event Not Found | Sponsora",
+    title: event ? `${event.title} | GrahakSetu` : "Event Not Found | GrahakSetu",
     description: event?.short_summary || "Event details",
   };
 }

@@ -85,7 +85,7 @@ export default function PrivacyPolicyPage() {
               <li>Right to withdraw consent at any time</li>
             </ul>
             <p className="text-slate-600 dark:text-slate-300 mt-4">
-              To exercise these rights, contact us at <a href="mailto:privacy@sponsora.in" className="text-primary hover:underline">privacy@sponsora.in</a>.
+              To exercise these rights, contact us at <a href="mailto:privacy@grahaksetu.in" className="text-primary hover:underline">privacy@grahaksetu.in</a>.
             </p>
           </section>
 
@@ -130,9 +130,9 @@ export default function PrivacyPolicyPage() {
             </p>
             <div className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-6">
               <p className="text-slate-600 dark:text-slate-300">
-                <strong>Sponsora (IndieLoop)</strong><br />
-                Email: <a href="mailto:privacy@sponsora.in" className="text-primary hover:underline">privacy@sponsora.in</a><br />
-                Support: <a href="mailto:support@sponsora.in" className="text-primary hover:underline">support@sponsora.in</a>
+                <strong>GrahakSetu (IndieLoop)</strong><br />
+                Email: <a href="mailto:privacy@grahaksetu.in" className="text-primary hover:underline">privacy@grahaksetu.in</a><br />
+                Support: <a href="mailto:support@grahaksetu.in" className="text-primary hover:underline">support@grahaksetu.in</a>
               </p>
             </div>
           </section>

@@ -16,7 +16,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Sponsora | Find and Sponsor The Best Events",
+  title: "GrahakSetu | Find and Sponsor The Best Events",
   description: "The ultimate platform connecting event organizers with sponsors and participants.",
 };
 

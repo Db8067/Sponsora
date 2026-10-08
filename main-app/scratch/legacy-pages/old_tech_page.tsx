@@ -4,8 +4,8 @@ import { ChevronRight, Calendar, MapPin, ArrowUp, Zap, Users, Code } from "lucid
 import BackToTop from "@/components/BackToTop";
 
 export const metadata: Metadata = {
-  title: "Tech Events & Hackathons | Sponsora",
-  description: "Discover upcoming hackathons, coding competitions, and AI summits. Find sponsorships or participate in the biggest tech events on Sponsora.",
+  title: "Tech Events & Hackathons | GrahakSetu",
+  description: "Discover upcoming hackathons, coding competitions, and AI summits. Find sponsorships or participate in the biggest tech events on GrahakSetu.",
 };
 
 const mockTechEvents = [
