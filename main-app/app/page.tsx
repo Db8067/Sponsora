@@ -11,7 +11,18 @@ import {
   PhoneForwarded,
   PhoneIncomingIcon,
   SquareArrowOutUpRight,
-  SquareArrowOutUpRightIcon
+  SquareArrowOutUpRightIcon,
+  PenLine,
+  LucideSpeaker,
+  SpeakerIcon,
+  Speaker,
+  SeparatorVerticalIcon,
+  DiscAlbumIcon,
+  StarIcon,
+  PhoneForwardedIcon,
+  PhoneCall,
+  GiftIcon,
+  DollarSignIcon
 } from 'lucide-react';
 
 /* ─── FAQ Accordion item ─── */
@@ -174,22 +185,20 @@ export default function SellerLandingPage() {
             {/* Left: explanatory copy */}
             <div className="order-2 lg:order-1">
               <span className="inline-block text-xs font-bold uppercase tracking-widest text-primary mb-3">
-                Real Customer Journey
+                How You will Gets Customers
               </span>
               <h2 className="text-2xl md:text-3xl font-bold text-slate-800 dark:text-white leading-snug">
-                From a ₹10 voucher to a confirmed order on your WhatsApp
+                From GharakSetu to Real Customers on Your WhatsApp
               </h2>
               <p className="text-sm md:text-base text-slate-600 dark:text-slate-400 leading-relaxed mt-3">
-                A customer pays a small ₹10 commitment voucher to unlock your offer. That single step
-                filters out browsers, bots and window-shoppers, so the message that lands in your
-                WhatsApp is someone who is genuinely ready to buy.
+                We bring interested customers to your brand through micro-creators, referrals and exclusive offers. You receive the customer directly on WhatsApp, collect payment yourself, and fulfil the order—while keeping control of your business.
               </p>
               <ul className="mt-5 space-y-3">
                 {[
-                  { icon: <Gift className="w-4 h-4 text-pink-500 flex-shrink-0" />, text: 'Customer pays ₹10 and receives a unique voucher code.' },
-                  { icon: <Users className="w-4 h-4 text-blue-500 flex-shrink-0" />, text: 'Their message opens pre-filled with your code and offer details.' },
-                  { icon: <Banknote className="w-4 h-4 text-green-500 flex-shrink-0" />, text: 'You collect the full product payment directly via UPI.' },
-                  { icon: <Phone className="w-4 h-4 text-orange-500 flex-shrink-0" />, text: 'You ship via your courier and keep 100% of the margin.' },
+                  { icon: <PenLine className="w-4 h-4 text-pink-500 flex-shrink-0" />, text: 'Add details about your brand.' },
+                  { icon: <PhoneCall className="w-4 h-4 text-blue-500 flex-shrink-0" />, text: 'We Promote Your Products.' },
+                  { icon: <GiftIcon className="w-4 h-4 text-green-500 flex-shrink-0" />, text: 'Customers Discover & Claim Offers on your whatsapp.' },
+                  { icon: <Banknote className="w-4 h-4 text-orange-500 flex-shrink-0" />, text: 'Collect Payment Directly & Fulfill Orders.' },
                 ].map(({ icon, text }) => (
                   <li key={text} className="flex items-start gap-3 text-sm md:text-base text-slate-700 dark:text-slate-300">
                     {icon}
@@ -206,25 +215,25 @@ export default function SellerLandingPage() {
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-full bg-pink-200 dark:bg-pink-900/40 flex items-center justify-center text-lg">🌿</div>
                     <div>
-                      <p className="font-bold text-sm text-slate-800 dark:text-white leading-none">Mitti Botanics</p>
-                      <p className="text-xs text-slate-500 dark:text-slate-400">Verified Artisan · Jaipur</p>
+                      <p className="font-bold text-sm text-slate-800 dark:text-white leading-none">Your Brand</p>
+                      <p className="text-xs text-slate-500 dark:text-slate-400">Verified Brand · City</p>
                     </div>
                   </div>
-                  <span className="bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-400 text-xs font-bold px-3 py-1 rounded-full">Active Deal</span>
+                  <span className="bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-400 text-xs font-bold px-3 py-1 rounded-full">Active Products</span>
                 </div>
 
                 <div className="flex items-center gap-3 bg-pink-50 dark:bg-pink-900/20 border border-pink-200 dark:border-pink-800/40 rounded-xl px-4 py-3">
                   <Gift className="w-5 h-5 text-pink-500 flex-shrink-0" />
                   <div>
-                    <p className="text-xs font-bold text-slate-800 dark:text-white">₹10 Micro-Voucher → ₹120 Off Sampler Kit</p>
-                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Customer pays ₹10 token · Lands on your WhatsApp</p>
+                    <p className="text-xs font-bold text-slate-800 dark:text-white">Customers Discover & Claim Offers</p>
+                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Customer Comes to Your WhatsApp · Collect Payments</p>
                   </div>
                 </div>
 
                 <div className="bg-slate-50 dark:bg-slate-700/40 rounded-xl p-3 border border-slate-100 dark:border-white/10">
                   <p className="text-xs text-slate-500 dark:text-slate-400 mb-1 font-semibold uppercase tracking-wider">Pre-filled WhatsApp Message</p>
                   <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
-                    "Hi Mitti Botanics! I paid the ₹10 token for the ₹120 Off Sampler Kit (Code: <span className="text-pink-600 font-bold">INDIE-942</span>). Here's my delivery address in Pune!"
+                    "Hi [Brand Name]! 👋 I found your product on GrahakSetu and would like to place an order. (Code: <span className="text-pink-600 font-bold">INDIE-942</span>). Here's my delivery address!"
                   </p>
                 </div>
 
@@ -232,7 +241,7 @@ export default function SellerLandingPage() {
                   <div className="bg-pink-50 dark:bg-slate-700/40 rounded-xl p-3">
                     <p className="text-xs text-slate-500 dark:text-slate-400">Your Margin Kept</p>
                     <p className="text-xl font-black text-primary">100%</p>
-                    <p className="text-xs text-slate-400">Zero cut taken</p>
+                    <p className="text-xs text-slate-400">Repeated Customers</p>
                   </div>
                   <div className="bg-pink-50 dark:bg-slate-700/40 rounded-xl p-3">
                     <p className="text-xs text-slate-500 dark:text-slate-400">Avg. Intent Rate</p>
@@ -255,10 +264,10 @@ export default function SellerLandingPage() {
           <div className="text-center max-w-2xl mx-auto mb-12">
             <span className="text-xs font-bold uppercase tracking-widest text-primary">Simple 3-Step Process</span>
             <h2 className="text-2xl md:text-3xl font-bold text-slate-800 dark:text-white mt-2">
-              Built For Real Conversions, Not Vanity Clicks
+              Turn Your Brand Into a Customer-Magnet
             </h2>
             <p className="text-sm md:text-base text-slate-500 dark:text-slate-400 mt-2 leading-relaxed">
-              Marketplace ads bleed money before you make a single sale. We ensure every click has real buying intent.
+              We help you reach real customers through creators, referrals and exclusive offers—while you handle the sale directly.
             </p>
           </div>
 
@@ -269,18 +278,18 @@ export default function SellerLandingPage() {
                 bg: 'bg-pink-100 dark:bg-pink-900/30',
                 text: 'text-primary',
                 icon: <Gift className="w-5 h-5 text-primary" />,
-                title: 'Create a ₹10 Micro-Offer',
-                desc: 'Set up an irresistible offer — e.g., Pay ₹10, Get ₹100 Off + Free Sampler. The token fee instantly eliminates window-shoppers and fake leads.',
-                tag: '🎯 Filters out junk leads instantly',
+                title: 'Create Your Brand Offer',
+                desc: 'Add your products, set an attractive offer, and tell customers what makes your brand worth buying.',
+                tag: 'Create offers that attract genuine buyers',
               },
               {
                 num: '02',
                 bg: 'bg-blue-100 dark:bg-blue-900/30',
                 text: 'text-blue-600 dark:text-blue-400',
                 icon: <Users className="w-5 h-5 text-blue-500" />,
-                title: 'Creators Share With Their Audience',
+                title: 'Creators Promote Your Brand',
                 desc: 'Micro-creators on Instagram and WhatsApp distribute your branded voucher link to their followers in exchange for a barter gift from your brand.',
-                tag: '🤝 Zero upfront influencer cash',
+                tag: 'No upfront influencer cost',
               },
               {
                 num: '03',
@@ -289,7 +298,7 @@ export default function SellerLandingPage() {
                 icon: <MessageCircle className="w-5 h-5 text-green-500" />,
                 title: 'Customer Lands on Your WhatsApp',
                 desc: 'Buyers tap directly into your WhatsApp carrying their voucher code and delivery address. You collect full payment via UPI and ship yourself — no middleman.',
-                tag: '💰 100% lifetime customer ownership',
+                tag: '100% lifetime customer ownership',
               },
             ].map(({ num, bg, text, icon, title, desc, tag }) => (
               <div key={num} className="bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm border border-pink-100 dark:border-white/10 rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
@@ -326,10 +335,10 @@ export default function SellerLandingPage() {
           <div className="text-center max-w-2xl mx-auto mb-12">
             <span className="text-xs font-bold uppercase tracking-widest text-primary">Honest Comparison</span>
             <h2 className="text-2xl md:text-3xl font-bold text-slate-800 dark:text-white mt-2">
-              Old Marketplaces vs. GrahakSetu Direct
+              Traditional Marketplaces vs. GrahakSetu
             </h2>
             <p className="text-sm md:text-base text-slate-500 dark:text-slate-400 mt-2">
-              Stop giving away a third of your hard-earned revenue just to sell your own products.
+              Stop relying only on marketplaces. Build direct customer relationships and grow your brand with GrahakSetu.
             </p>
           </div>
 
@@ -340,7 +349,7 @@ export default function SellerLandingPage() {
                 <h3 className="font-bold text-base text-slate-800 dark:text-white">Traditional Marketplaces</h3>
                 <span className="bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400 text-xs font-bold px-2.5 py-1 rounded-full">Legacy Trap</span>
               </div>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mb-5">Amazon, Meesho, Nykaa & typical aggregators</p>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mb-5">Amazon, Flipkart, Meesho & other marketplaces</p>
               <ul className="space-y-4">
                 {[
                   { t: '25-35% commission on every order', d: 'Slices your entire craft manufacturing margin.' },
@@ -376,7 +385,7 @@ export default function SellerLandingPage() {
                 {[
                   { t: '₹0 commission — ever', d: 'Every rupee from the product price goes straight to your UPI.' },
                   { t: 'Instant payment before you ship', d: 'Customer pays via PhonePe / GPay / NetBanking before dispatch.' },
-                  { t: 'Commitment-backed orders only', d: 'The ₹10 token eliminates phantom orders and returns.' },
+                  { t: 'Build your own customer base', d: 'Create relationships that can lead to repeat purchases and long-term customers.' },
                   { t: 'Direct WhatsApp relationship', d: 'Build lifetime loyalty — cross-sells, reviews, repeat buyers.' },
                 ].map(({ t, d }) => (
                   <li key={t} className="flex items-start gap-3">
@@ -430,10 +439,10 @@ export default function SellerLandingPage() {
           <div className="text-center max-w-2xl mx-auto mb-10">
             <span className="text-xs font-bold uppercase tracking-widest text-primary">No Hidden Percentage Fees</span>
             <h2 className="text-2xl md:text-3xl font-bold text-slate-800 dark:text-white mt-2">
-              Transparent, Predictable Pricing
+              Choose Your Growth Plan
             </h2>
             <p className="text-sm md:text-base text-slate-500 dark:text-slate-400 mt-2">
-              Pick a flat monthly plan. Keep 100% of your product earnings — always.
+              Start small, get customers, and scale your brand with GrahakSetu.
             </p>
             {/* billing toggle */}
             <div className="mt-5 inline-flex items-center gap-1 p-1 bg-white/70 dark:bg-slate-800/70 border border-pink-100 dark:border-white/10 rounded-full shadow-sm">
@@ -446,7 +455,7 @@ export default function SellerLandingPage() {
                 className={`px-5 py-1.5 rounded-full text-sm font-semibold transition-all flex items-center gap-1.5 ${billing === 'annual' ? 'bg-primary text-white shadow' : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white'}`}
               >
                 Annual
-                <span className="bg-pink-100 text-pink-600 dark:bg-pink-900/40 dark:text-pink-400 text-xs font-bold px-2 py-0.5 rounded-full">2 Mos Free</span>
+                <span className="bg-pink-100 text-pink-600 dark:bg-pink-900/40 dark:text-pink-400 text-xs font-bold px-2 py-0.5 rounded-full">Save 45%</span>
               </button>
             </div>
           </div>
@@ -467,7 +476,7 @@ export default function SellerLandingPage() {
                 {billing === 'annual' && <p className="text-xs text-primary font-semibold mb-1">Billed annually</p>}
                 <p className="text-xs text-slate-500 dark:text-slate-400 mb-5">Perfect for new brands stepping out of exhibitions.</p>
                 <ul className="space-y-2.5 text-sm text-slate-700 dark:text-slate-300">
-                  {['0% Commission on all orders', 'Up to 10 products / month', 'Custom brand page & link', 'Direct WhatsApp order button', 'Brand dashboard access'].map(f => (
+                  {['50+ Customers on whatsapp','Brand profile on GrahakSetu', '5+ Product listing', 'Direct WhatsApp customer enquiries', 'Customer analytics Dashboard', 'Brand dashboard access'].map(f => (
                     <li key={f} className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-green-500 shrink-0" />{f}</li>
                   ))}
                 </ul>
@@ -495,7 +504,7 @@ export default function SellerLandingPage() {
                 {billing === 'annual' && <p className="text-xs text-primary font-semibold mb-1">Billed annually</p>}
                 <p className="text-xs text-slate-500 dark:text-slate-400 mb-5">For established brands ready to scale daily volume.</p>
                 <ul className="space-y-2.5 text-sm text-slate-700 dark:text-slate-300">
-                  {['0% Commission forever', 'Unlimited product catalog', 'Custom domain (yourbrand.com)', 'Advanced real-time analytics', 'Realtime customer lead access', 'Priority WhatsApp support'].map(f => (
+                  {['Everything in Starter', 'Unlimited product catalog', 'Custom domain (yourbrand.com)', 'Advanced real-time analytics', 'Realtime customer lead access', 'Priority WhatsApp support'].map(f => (
                     <li key={f} className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-green-500 shrink-0" />{f}</li>
                   ))}
                 </ul>
@@ -522,7 +531,7 @@ export default function SellerLandingPage() {
                 {billing === 'annual' && <p className="text-xs text-primary font-semibold mb-1">Billed annually</p>}
                 <p className="text-xs text-slate-500 dark:text-slate-400 mb-5">Multi-brand / agency accounts at scale.</p>
                 <ul className="space-y-2.5 text-sm text-slate-700 dark:text-slate-300">
-                  {['Everything in Growth Pro', 'Multiple brand pages', 'Dedicated account manager', 'Creator campaign matching', 'Bulk order management', 'API access & integrations'].map(f => (
+                  {['Everything in Growth Pro', 'UGC & content campaign opportunities', 'Dedicated account manager', 'Creator campaign matching', 'Bulk order management', 'API access & integrations'].map(f => (
                     <li key={f} className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-green-500 shrink-0" />{f}</li>
                   ))}
                 </ul>
@@ -544,31 +553,31 @@ export default function SellerLandingPage() {
       <section className="py-16 md:py-20 px-4 bg-transparent">
         <div className="container mx-auto max-w-6xl">
           <div className="text-center max-w-2xl mx-auto mb-12">
-            <span className="text-xs font-bold uppercase tracking-widest text-primary">Trusted Voices</span>
+            <span className="text-xs font-bold uppercase tracking-widest text-primary">TRUSTED BY BRANDS</span>
             <h2 className="text-2xl md:text-3xl font-bold text-slate-800 dark:text-white mt-2">
-              Loved By Modern Indian Makers
+              Brands Growing With GrahakSetu
             </h2>
             <p className="text-sm md:text-base text-slate-500 dark:text-slate-400 mt-2">
-              Real stories from brands who broke free from marketplace dominance.
+              Real experiences from brands using GrahakSetu to reach new customers, increase sales, and build direct customer relationships.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
               {
-                quote: '"We were paying almost 32% on marketplace portals. With GrahakSetu, customers arrive right in our WhatsApp after paying ₹10. Our repeat order rate skyrocketed because we actually talk with them."',
+                quote: '“GrahakSetu helped us reach customers beyond Instagram. Instead of spending money on ads, we started getting genuine enquiries directly on WhatsApp.”',
                 name: 'Pooja Sharma',
                 brand: 'Mitti Herbals · Jaipur',
                 emoji: '🌿',
               },
               {
-                quote: '"Micro-creators in college groups shared our silver jewellery voucher to get gift sets. We had 240 genuine purchases in our first 10 days without spending a single rupee on Instagram Ads!"',
+                quote: '“The creator campaigns gave our products exposure to completely new audiences. We were able to turn that reach into real customers and sales.”',
                 name: 'Harshvardhan Rao',
                 brand: 'Kaari Silver · Udaipur',
                 emoji: '💍',
               },
               {
-                quote: '"The ₹10 token commitment is brilliant psychology. Before, visitors would abandon carts. On GrahakSetu, every person pinging us on WhatsApp transfers UPI right away. Game changer."',
+                quote: '“What I like most is that the customer comes directly to us. We can talk to them, take payment, fulfil the order and build a relationship for future purchases.”',
                 name: 'Karthik Menon',
                 brand: 'BeanCraft Coffee · Chikmagalur',
                 emoji: '☕',
@@ -606,28 +615,56 @@ export default function SellerLandingPage() {
           </div>
           <div className="flex flex-col gap-3">
             <FaqItem
-              q="Do you take any percentage of my product sales?"
-              a="No! You keep 100% of your sales money. GrahakSetu charges zero commission on your orders. You only pay the flat monthly subscription fee. The ₹10 voucher commitment paid by the customer covers the platform's lead verification engine."
+              q="How does GrahakSetu help me get customers?"
+              a="We promote your brand through creators, referrals, offers and our growing customer network. Interested shoppers discover your products and are directed to your WhatsApp to place an order."
             />
             <FaqItem
-              q="How does the ₹10 voucher system work exactly?"
-              a="You create a micro-offer (e.g., Pay ₹10 and get ₹100 off your first order). A customer pays ₹10 to get a unique voucher code. They then message you on WhatsApp with the code and their delivery address. You collect full product payment via UPI and ship directly — no platform in between."
+              q="Do I need my own website to use GrahakSetu?"
+              a="No. You can create your brand page on GrahakSetu, showcase your products and receive customers directly on WhatsApp—without building or maintaining an e-commerce website."
             />
             <FaqItem
-              q="How do I handle shipping and delivery?"
-              a="You ship through your existing preferred couriers — Shiprocket, Delhivery, Porter, India Post — exactly like you do today. There are no forced warehouse hubs or mandatory logistics deductions from us."
+              q="Do you charge commission on my sales?"
+              a="No marketplace commission. You pay your selected subscription fee, while the customer pays you directly for their order."
             />
             <FaqItem
-              q="What if a creator doesn't deliver results?"
-              a="Our barter safety lock protects you. Barter gifts and hampers are only unlocked for a creator once their unique link generates verified voucher redemptions. You never send free products blindly without confirmed conversions first."
+              q="How do customers place an order?"
+              a="Customers discover your product, select your offer and click Order on WhatsApp. They receive a pre-filled message containing the product and offer details, making it easy for you to confirm the order."
             />
             <FaqItem
-              q="Can I cancel my subscription anytime?"
-              a="Yes, completely. There are zero long-term contracts or cancellation penalties. Cancel or pause anytime from your dashboard with a single tap."
+              q="Who collects the customer's payment?"
+              a="You do. Customers pay your brand directly through UPI or your preferred payment method. GrahakSetu does not hold your product payment."
             />
             <FaqItem
-              q="Do I need a GST number or company registration to sign up?"
-              a="No! You don't need GSTIN, company registration, or any complex paperwork to onboard. Just fill in your brand details and your page goes live in under 2 minutes."
+              q="Who handles shipping and delivery?"
+              a="Your brand handles fulfilment. You can use Shiprocket, Delhivery, India Post, your local courier, or any delivery partner you prefer."
+            />
+            <FaqItem
+              q="Do I have to send free products to every creator?"
+              a="No. You can decide your campaign rules, rewards and eligibility. You only provide a creator reward when the agreed campaign conditions are met."
+            />
+            <FaqItem
+              q="Can I create discounts and special offers?"
+              a="Yes. You can create product offers, referral discounts and promotional campaigns to attract customers and increase conversions."
+            />
+            <FaqItem
+              q="Can customers become repeat customers?"
+              a="Yes. Since customers connect with your brand directly through WhatsApp, you can build relationships and encourage repeat purchases."
+            />
+            <FaqItem
+              q="Can I cancel my subscription?"
+              a="Yes. You can cancel or change your plan according to the subscription terms. There is no need to remain dependent on a marketplace."
+            />
+            <FaqItem
+              q="Can small Instagram/WhatsApp brands join?"
+              a="Absolutely. GrahakSetu is designed especially for small and growing brands that want customers without investing heavily in building their own e-commerce infrastructure."
+            />
+            <FaqItem
+              q="Do I need GST registration to join?"
+              a="Requirements may depend on your business, products and applicable laws. GrahakSetu can provide the platform, but you remain responsible for meeting the legal and tax requirements applicable to your business."
+            />
+            <FaqItem
+              q="What happens after I receive a customer?"
+              a="You contact the customer on WhatsApp, confirm the product and payment, collect the payment directly, pack the order and ship it through your preferred delivery partner."
             />
           </div>
         </div>
