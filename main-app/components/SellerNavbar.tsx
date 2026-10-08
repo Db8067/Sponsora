@@ -14,8 +14,8 @@ export default function SellerNavbar() {
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Link href="/" className="flex items-center">
-            <img src="/images/logo-light.png" alt="GrahakSetu Logo" className="h-6 md:h-8 w-auto dark:hidden block" />
-            <img src="/images/logo-dark.png" alt="GrahakSetu Logo" className="h-6 md:h-8 w-auto hidden dark:block" />
+            <img src="/images/logo-light.png" alt="GrahakSetu Logo" className="h-12 sm:h-14 md:h-[4.5rem] w-auto dark:hidden block object-contain" />
+            <img src="/images/logo-dark.png" alt="GrahakSetu Logo" className="h-12 sm:h-14 md:h-[4.5rem] w-auto hidden dark:block object-contain" />
           </Link>
         </div>
         
@@ -81,8 +81,8 @@ export default function SellerNavbar() {
         <div className="flex flex-col h-full p-6">
           <div className="flex items-center justify-between mb-12">
             <Link href="/" className="flex items-center">
-              <img src="/images/logo-light.png" alt="GrahakSetu Logo" className="h-6 w-auto dark:hidden block" />
-              <img src="/images/logo-dark.png" alt="GrahakSetu Logo" className="h-6 w-auto hidden dark:block" />
+              <img src="/images/logo-light.png" alt="GrahakSetu Logo" className="h-12 sm:h-14 md:h-[4.5rem] w-auto dark:hidden block object-contain" />
+              <img src="/images/logo-dark.png" alt="GrahakSetu Logo" className="h-12 sm:h-14 md:h-[4.5rem] w-auto hidden dark:block object-contain" />
             </Link>
           </div>
           

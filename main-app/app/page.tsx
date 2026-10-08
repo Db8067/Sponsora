@@ -59,8 +59,9 @@ export default function SellerLandingPage() {
 
               <h1 className="text-4xl lg:text-5xl font-black text-slate-800 dark:text-white leading-tight mb-4">
                 Get Direct Customers For Your Brand.{' '}
-                <span className="text-primary">No 30% Marketplace Cuts.</span>{' '}
-                No Logistics Hassle.
+
+                <span className="text-primary">Repeat Customers</span>{' '}
+                Sell Products & Earn
               </h1>
 
               <p className="text-base text-slate-600 dark:text-slate-400 max-w-xl mb-6 leading-relaxed">
