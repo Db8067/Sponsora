@@ -6,7 +6,12 @@ import Link from 'next/link';
 import {
   LineChart, MessageCircle, ShieldCheck, Percent,
   Scissors, Phone, Banknote, Zap, CheckCircle2,
-  XCircle, ChevronDown, Star, ArrowRight, Users, Filter, Gift, Wallet
+  XCircle, ChevronDown, Star, ArrowRight, Users, Filter, Gift, Wallet,
+  BadgeCheckIcon,
+  PhoneForwarded,
+  PhoneIncomingIcon,
+  SquareArrowOutUpRight,
+  SquareArrowOutUpRightIcon
 } from 'lucide-react';
 
 /* ─── FAQ Accordion item ─── */
@@ -54,33 +59,33 @@ export default function SellerLandingPage() {
               {/* live badge */}
               <div className="inline-flex items-center gap-2 bg-pink-100 dark:bg-pink-900/30 text-pink-700 dark:text-pink-300 px-4 py-1.5 rounded-full text-xs font-bold mb-5">
                 <span className="w-2 h-2 rounded-full bg-pink-500 animate-pulse" />
-                Empowering 850+ Independent Indian Brands
+                More than 1200+ Customers can buy your products... 
               </div>
 
               <h1 className="text-4xl lg:text-5xl font-black text-slate-800 dark:text-white leading-tight mb-4">
-                Get Direct Customers For Your Brand.{' '}
+                Get Customers For Your Brand.{' '}
 
                 <span className="text-primary">Repeat Customers</span>{' '}
-                Sell Products & Earn
+                Sell Products and Earn...
               </h1>
 
               <p className="text-base text-slate-600 dark:text-slate-400 max-w-xl mb-6 leading-relaxed">
-                We connect your brand with real shoppers and local micro-creators using a ₹10 commitment voucher — so every customer who reaches you is genuinely interested in buying.
+              GrahakSetu helps brands get real customers through creators, referrals, and targeted promotions—without the hassle of building or managing an e-commerce store.
               </p>
 
               {/* 4 USP chips */}
               <ul className="grid grid-cols-2 gap-x-6 gap-y-3 mb-8">
                 <li className="flex items-center gap-2 text-slate-700 dark:text-slate-300 font-medium text-sm">
-                  <Scissors className="w-4 h-4 text-pink-500 flex-shrink-0" /> Zero marketplace cuts
+                  <BadgeCheckIcon className="w-4 h-4 text-pink-500 flex-shrink-0" /> Get Own E-commerce Website
                 </li>
                 <li className="flex items-center gap-2 text-slate-700 dark:text-slate-300 font-medium text-sm">
-                  <Phone className="w-4 h-4 text-green-500 flex-shrink-0" /> Direct WhatsApp orders
+                  <PhoneIncomingIcon className="w-4 h-4 text-green-500 flex-shrink-0" /> Direct WhatsApp orders
                 </li>
                 <li className="flex items-center gap-2 text-slate-700 dark:text-slate-300 font-medium text-sm">
                   <Banknote className="w-4 h-4 text-blue-500 flex-shrink-0" /> 100% money in your bank
                 </li>
                 <li className="flex items-center gap-2 text-slate-700 dark:text-slate-300 font-medium text-sm">
-                  <Zap className="w-4 h-4 text-orange-500 flex-shrink-0" /> Setup under 5 mins
+                  <SquareArrowOutUpRightIcon className="w-4 h-4 text-orange-500 flex-shrink-0" /> Setup under 5 mins
                 </li>
               </ul>
 
@@ -120,22 +125,23 @@ export default function SellerLandingPage() {
             <div className="w-full pt-4">
               <div className="inline-flex items-center gap-2 bg-pink-100 dark:bg-pink-900/30 text-pink-700 dark:text-pink-300 px-3 py-1 rounded-full text-xs font-bold mb-4">
                 <span className="w-2 h-2 rounded-full bg-pink-500 animate-pulse" />
-                850+ Independent Indian Brands
+                More than 1200+ Customers can buy your products... 
               </div>
               <h1 className="text-2xl sm:text-3xl font-black text-slate-800 dark:text-white leading-tight mb-3">
-                Get Direct Customers.{' '}
-                <span className="text-primary">No Marketplace Cuts.</span>
+                Get Customers for your brand.{' '}
+                <span className="text-primary">Sell Products and Earn</span>
               </h1>
               <p className="text-sm text-slate-600 dark:text-slate-400 mb-5 px-2 leading-relaxed">
-                We connect your brand with real buyers using a ₹10 commitment voucher. Every lead is genuinely interested.
+              GrahakSetu help brands get real customers through creators, referrals, and smart promotions.
+              You sell. We bring the customers.
               </p>
 
               <ul className="grid grid-cols-2 gap-x-4 gap-y-2.5 mb-5 text-left max-w-xs mx-auto">
                 {[
-                  { icon: <Scissors className="w-3.5 h-3.5 text-pink-500 flex-shrink-0" />, label: 'Zero marketplace cuts' },
-                  { icon: <Phone className="w-3.5 h-3.5 text-green-500 flex-shrink-0" />, label: 'Direct WhatsApp' },
+                  { icon: <BadgeCheckIcon className="w-3.5 h-3.5 text-pink-500 flex-shrink-0" />, label: 'Get Own Brand Page' },
+                  { icon: <PhoneIncomingIcon className="w-3.5 h-3.5 text-green-500 flex-shrink-0" />, label: 'Direct WhatsApp' },
                   { icon: <Banknote className="w-3.5 h-3.5 text-blue-500 flex-shrink-0" />, label: '100% your money' },
-                  { icon: <Zap className="w-3.5 h-3.5 text-orange-500 flex-shrink-0" />, label: 'Setup in 5 mins' },
+                  { icon: <SquareArrowOutUpRight className="w-3.5 h-3.5 text-orange-500 flex-shrink-0" />, label: 'Setup in 5 mins' },
                 ].map(({ icon, label }) => (
                   <li key={label} className="flex items-center gap-1.5 text-slate-700 dark:text-slate-300 text-xs font-medium">{icon}{label}</li>
                 ))}
