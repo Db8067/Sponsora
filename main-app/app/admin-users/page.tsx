@@ -9,7 +9,8 @@ export default async function AdminUsersPage() {
   }
 
   // Fetch users from Clerk
-  const usersResponse = await clerkClient().users.getUserList();
+  const client = await clerkClient();
+  const usersResponse = await client.users.getUserList();
   const users = usersResponse.data;
 
   return (
@@ -33,7 +34,7 @@ export default async function AdminUsersPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
-              {users.map(u => (
+              {users.map((u: any) => (
                 <tr key={u.id} className="hover:bg-slate-50">
                   <td className="p-3 flex items-center gap-3">
                     <img src={u.imageUrl} alt="avatar" className="w-8 h-8 rounded-full border" />
