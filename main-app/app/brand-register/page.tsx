@@ -39,8 +39,6 @@ export default function BrandRegisterPage() {
   const [brandWebsite, setBrandWebsite] = useState('');
   const [logoFile, setLogoFile] = useState<File | null>(null);
   const [logoPreview, setLogoPreview] = useState<string>('');
-  const [customCategory, setCustomCategory] = useState('');
-
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
 
@@ -77,7 +75,7 @@ export default function BrandRegisterPage() {
         throw new Error('Please upload a brand logo.');
       }
 
-      const categoryToSave = selectedCategory === 'Other' ? customCategory : selectedCategory;
+      
 
       const brandData = {
         founder_name: founderName.trim(),
@@ -85,7 +83,7 @@ export default function BrandRegisterPage() {
         work_email: email.trim().toLowerCase(),
         whatsapp_number: phone.trim(),
         gst_registered: gstStatus === 'yes',
-        brand_category: categoryToSave.trim() || 'D2C Brand',
+        brand_category: 'D2C Brand',
         instagram_handle: instagram.trim(),
         brand_website: brandWebsite.trim() || null,
         city: city.trim(),
@@ -308,33 +306,6 @@ export default function BrandRegisterPage() {
                   )}
                 </div>
 
-                {/* Brand Category */}
-                <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2.5 flex items-center justify-between">
-                    <span className="flex items-center gap-1.5"><Tag className="w-4 h-4 text-primary" />Brand Category</span>
-                    <span className="text-[11px] text-slate-500 dark:text-slate-400 normal-case tracking-normal font-normal">Select primary craft</span>
-                  </label>
-                  <div className="flex flex-wrap gap-2.5">
-                    {CATEGORIES.map(({ emoji, label }) => (
-                      <button
-                        key={label}
-                        type="button"
-                        onClick={() => setSelectedCategory(selectedCategory === label ? '' : label)}
-                        className={`px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-2 border transition-all ${
-                          selectedCategory === label
-                            ? 'bg-primary text-white border-primary shadow-sm shadow-primary/20'
-                            : 'bg-white/60 dark:bg-slate-900/40 text-slate-800 dark:text-slate-200 border-pink-100 dark:border-white/10 hover:bg-white dark:hover:bg-slate-800'
-                        }`}
-                      >
-                        <span>{emoji}</span>
-                        <span>{label}</span>
-                        {selectedCategory === label && <span className="w-1.5 h-1.5 rounded-full bg-white" />}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                
                 {/* Brand Logo Upload */}
                 <div>
                   <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5 flex items-center justify-between">
