@@ -11,6 +11,7 @@ import {
   User2Icon
 } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
+import { uploadImageToCloudinary } from '@/app/actions/upload';
 
 const CATEGORIES = [
   { emoji: '✨', label: 'Ayurvedic & Skincare' },
@@ -32,55 +33,76 @@ export default function BrandRegisterPage() {
   const [gstStatus, setGstStatus] = useState<'yes' | 'no'>('no');
   const [gstin, setGstin] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
-  const [storeLink, setStoreLink] = useState('');
+  
+  const [city, setCity] = useState('');
+  const [instagram, setInstagram] = useState('');
+  const [brandWebsite, setBrandWebsite] = useState('');
+  const [logoFile, setLogoFile] = useState<File | null>(null);
+  const [logoPreview, setLogoPreview] = useState<string>('');
+  const [customCategory, setCustomCategory] = useState('');
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
 
   // Helper function to set secure cookie
+  
+  const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      setLogoFile(file);
+      setLogoPreview(URL.createObjectURL(file));
+    }
+  };
+
   const setSecureCookie = (name: string, value: string, days: number = 7) => {
     const expires = new Date();
     expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000);
     document.cookie = `${name}=${encodeURIComponent(value)};expires=${expires.toUTCString()};path=/;SameSite=Lax;Secure`;
   };
 
+  
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     setIsSubmitting(true);
 
     try {
-      const { error: dbError } = await supabase.from('brand_registrations').insert({
+      let logoUrl = '';
+      if (logoFile) {
+        const formData = new FormData();
+        formData.append('file', logoFile);
+        const uploadRes = await uploadImageToCloudinary(formData);
+        logoUrl = uploadRes.secure_url;
+      } else {
+        throw new Error('Please upload a brand logo.');
+      }
+
+      const categoryToSave = selectedCategory === 'Other' ? customCategory : selectedCategory;
+
+      const brandData = {
         founder_name: founderName.trim(),
         brand_name: brandName.trim(),
-        email: email.trim().toLowerCase(),
+        work_email: email.trim().toLowerCase(),
         whatsapp_number: phone.trim(),
-        gst_status: gstStatus,
-        gstin: gstin.trim().toUpperCase() || null,
-        category: selectedCategory || null,
-        store_link: storeLink.trim() || null,
-      });
-
-      if (dbError) throw dbError;
-
-      // Store brand data in secure cookie instead of URL params
-      const brandData = {
-        brand: brandName.trim(),
-        founder: founderName.trim(),
-        category: selectedCategory || 'D2C Brand',
-        phone: phone.trim(),
-        email: email.trim(),
+        gst_registered: gstStatus === 'yes',
+        brand_category: categoryToSave.trim() || 'D2C Brand',
+        instagram_handle: instagram.trim(),
+        brand_website: brandWebsite.trim() || null,
+        city: city.trim(),
+        brand_logo_url: logoUrl,
         plan: 'Starter Maker',
         amount: '99',
       };
-      
-      // Set cookie with 7 day expiry
+
       setSecureCookie('brand_welcome_data', JSON.stringify(brandData), 7);
       
-      // Redirect to /brand-subscriptions without personal data in URL
-      router.push('/brand-subscriptions');
+      // Navigate to Clerk sign-up, after which they are redirected to /brand-subscriptions
+      router.push('/sign-up?redirect_url=' + encodeURIComponent('/brand-subscriptions'));
+
     } catch (err: any) {
-      console.error('Registration error:', err);
-      setError('Something went wrong. Please try again or contact support.');
+      console.error(err);
+      setError(err.message || 'An error occurred during registration. Please try again.');
+    } finally {
       setIsSubmitting(false);
     }
   };
@@ -188,7 +210,7 @@ export default function BrandRegisterPage() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5" htmlFor="email">
-                      Work Email
+                      Business Email
                     </label>
                     <div className="relative group">
                       <Mail className="absolute left-3.5 top-3.5 w-4 h-4 text-slate-400 group-focus-within:text-primary transition-colors" />
@@ -206,7 +228,7 @@ export default function BrandRegisterPage() {
                   <div>
                     <div className="flex items-center justify-between mb-1.5">
                       <label className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400" htmlFor="phone">
-                        WhatsApp Business No.
+                        WhatsApp Business Number
                       </label>
                       <span className="inline-flex items-center gap-1 text-[11px] text-emerald-700 dark:text-emerald-400 font-semibold bg-emerald-50 dark:bg-emerald-900/30 px-1.5 py-0.5 rounded">
                         <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
@@ -312,24 +334,90 @@ export default function BrandRegisterPage() {
                   </div>
                 </div>
 
-                {/* Store Link */}
+                
+                {/* Brand Logo Upload */}
                 <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5 flex items-center justify-between" htmlFor="storeLink">
-                    <span>Store Website or Instagram Handle</span>
-                    <span className="text-[11px] text-slate-500 dark:text-slate-400 font-normal lowercase tracking-normal">(optional)</span>
+                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5 flex items-center justify-between">
+                    <span>Brand Logo</span>
+                    <span className="text-[10px] text-primary lowercase font-medium normal-case tracking-normal">required</span>
+                  </label>
+                  <div className="relative group flex items-center gap-4">
+                    {logoPreview ? (
+                      <img src={logoPreview} alt="Logo preview" className="w-14 h-14 rounded-full object-cover border border-pink-200 shadow-sm" />
+                    ) : (
+                      <div className="w-14 h-14 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center border border-dashed border-slate-300 dark:border-slate-600">
+                        <User2Icon className="w-6 h-6 text-slate-400" />
+                      </div>
+                    )}
+                    <div className="flex-1">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        required
+                        onChange={handleLogoChange}
+                        className="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20 cursor-pointer"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* City */}
+                <div>
+                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5 flex items-center justify-between">
+                    <span>City</span>
+                    <span className="text-[10px] text-primary lowercase font-medium normal-case tracking-normal">required</span>
                   </label>
                   <div className="relative group">
-                    <LinkIcon className="absolute left-3.5 top-3.5 w-4 h-4 text-slate-400 group-focus-within:text-primary transition-colors" />
                     <input
-                      id="storeLink"
                       type="text"
-                      value={storeLink}
-                      onChange={e => setStoreLink(e.target.value)}
-                      placeholder="instagram.com/yourbrand or yourbrand.com"
-                      className="w-full pl-10 pr-3.5 py-3 rounded-xl border border-pink-100 dark:border-white/10 text-sm bg-white/60 dark:bg-slate-900/60 focus:bg-white dark:focus:bg-slate-900 text-slate-800 dark:text-white placeholder:text-slate-400 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
+                      required
+                      placeholder="e.g. Mumbai"
+                      value={city}
+                      onChange={e => setCity(e.target.value)}
+                      className="w-full h-11 pl-4 pr-4 rounded-xl border border-pink-100 dark:border-white/10 bg-white/60 dark:bg-slate-900/40 text-slate-800 dark:text-slate-200 text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary shadow-sm transition-all"
                     />
                   </div>
                 </div>
+
+                {/* Instagram & Website */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5 flex items-center justify-between" htmlFor="instagram">
+                      <span>Instagram Handle</span>
+                      <span className="text-[10px] text-primary lowercase font-medium normal-case tracking-normal">required</span>
+                    </label>
+                    <div className="relative group">
+                      <LinkIcon className="absolute left-3.5 top-3.5 w-4 h-4 text-slate-400 group-focus-within:text-primary transition-colors" />
+                      <input
+                        id="instagram"
+                        type="text"
+                        required
+                        placeholder="@yourbrand"
+                        value={instagram}
+                        onChange={e => setInstagram(e.target.value)}
+                        className="w-full h-11 pl-10 pr-4 rounded-xl border border-pink-100 dark:border-white/10 bg-white/60 dark:bg-slate-900/40 text-slate-800 dark:text-slate-200 text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary shadow-sm transition-all"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5 flex items-center justify-between" htmlFor="brandWebsite">
+                      <span>Brand Website</span>
+                      <span className="text-[10px] text-slate-500 lowercase font-medium normal-case tracking-normal">(optional)</span>
+                    </label>
+                    <div className="relative group">
+                      <LinkIcon className="absolute left-3.5 top-3.5 w-4 h-4 text-slate-400 group-focus-within:text-primary transition-colors" />
+                      <input
+                        id="brandWebsite"
+                        type="url"
+                        placeholder="https://yourbrand.com"
+                        value={brandWebsite}
+                        onChange={e => setBrandWebsite(e.target.value)}
+                        className="w-full h-11 pl-10 pr-4 rounded-xl border border-pink-100 dark:border-white/10 bg-white/60 dark:bg-slate-900/40 text-slate-800 dark:text-slate-200 text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary shadow-sm transition-all"
+                      />
+                    </div>
+                  </div>
+                </div>
+
 
                 {/* Error */}
                 {error && (
@@ -478,7 +566,7 @@ export default function BrandRegisterPage() {
                 <div className="bg-white dark:bg-slate-900 p-3.5 rounded-2xl rounded-tl-sm border border-green-200/70 dark:border-green-800/40 shadow-sm space-y-2 text-xs text-slate-800 dark:text-slate-200">
                   <div className="flex items-center justify-between border-b border-slate-100 dark:border-white/10 pb-1.5">
                     <div className="flex items-center gap-1.5">
-                      <div className="w-5 h-5 rounded-full bg-green-100 dark:bg-green-900/40 text-green-800 dark:text-green-300 font-bold text-[10px] flex items-center justify-center">A</div>
+                      {logoPreview ? <img src={logoPreview} alt="Logo" className="w-5 h-5 rounded-full object-cover" /> : <div className="w-5 h-5 rounded-full bg-green-100 dark:bg-green-900/40 text-green-800 dark:text-green-300 font-bold text-[10px] flex items-center justify-center">A</div>}
                       <span className="font-bold text-[11px]">Ananya Roy (Verified Shopper)</span>
                     </div>
                     <span className="text-[10px] text-slate-400">Just now</span>

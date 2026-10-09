@@ -1,13 +1,15 @@
-import { NextResponse } from 'next/server';
+import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 
-/**
- * Authentication and role-based access control have been removed,
- * and the admin/brand routes have been deleted. No middleware logic
- * is required anymore; all remaining pages are public.
- */
-export default function middleware() {
-  return NextResponse.next();
-}
+const isProtectedRoute = createRouteMatcher([
+  '/brand-subscriptions(.*)',
+  '/admin(.*)'
+]);
+
+export default clerkMiddleware((auth, req) => {
+  if (isProtectedRoute(req)) {
+    auth().protect();
+  }
+});
 
 export const config = {
   matcher: ['/((?!.*\\..*|_next).*)', '/', '/(api|trpc)(.*)'],

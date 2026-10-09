@@ -20,7 +20,10 @@ export default function SellerNavbar() {
         </div>
         
         <nav className="hidden lg:flex items-center gap-6 absolute left-1/2 -translate-x-1/2">
-          <Link href="/sell-online" className="text-sm font-medium text-slate-600 hover:text-primary dark:text-slate-300 transition-colors whitespace-nowrap">
+          <Link href="/brand-register" className="text-sm font-medium text-slate-600 hover:text-primary dark:text-slate-300 transition-colors whitespace-nowrap">
+              Brand Register
+            </Link>
+            <Link href="/sell-online" className="text-sm font-medium text-slate-600 hover:text-primary dark:text-slate-300 transition-colors whitespace-nowrap">
             Sell online
           </Link>
           
@@ -87,7 +90,11 @@ export default function SellerNavbar() {
           </div>
           
           <div className="flex flex-col items-center justify-center flex-1 gap-8">
-            <Link href="/sell-online" onClick={() => setIsMobileMenuOpen(false)} className="text-2xl font-bold text-slate-700 dark:text-slate-200 hover:text-primary transition-colors text-center">
+            <Link href="/brand-register" onClick={() => setIsMobileMenuOpen(false)} className="text-2xl font-bold text-slate-700 dark:text-slate-200 hover:text-primary transition-colors text-center">
+                Brand Register
+              </Link>
+              
+              <Link href="/sell-online" onClick={() => setIsMobileMenuOpen(false)} className="text-2xl font-bold text-slate-700 dark:text-slate-200 hover:text-primary transition-colors text-center">
               Sell online
             </Link>
             
