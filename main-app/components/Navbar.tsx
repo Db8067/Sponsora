@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { UserButton, useUser } from "@/lib/mock-auth";
+import { UserButton, useUser } from "@clerk/nextjs";
 import { Menu, X, Rocket, LayoutDashboard, Banknote } from "lucide-react";
 import { useState, useEffect } from "react";
 import { ThemeToggle } from "./ThemeToggle";
@@ -39,7 +39,7 @@ export default function Navbar() {
             {!isLoaded ? (
               <div className="w-8 h-8 rounded-full bg-white/5 animate-pulse" />
             ) : isSignedIn ? (
-              <UserButton userProfileMode="navigation" userProfileUrl="/profile" />
+              <UserButton />
             ) : (
               <Link href="/sign-in" className="text-sm font-medium text-foreground/60 hover:text-foreground transition-colors">
                 Sign In
@@ -73,7 +73,7 @@ export default function Navbar() {
           {!isLoaded ? (
             <div className="w-8 h-8 rounded-full bg-white/5 animate-pulse" />
           ) : isSignedIn ? (
-            <UserButton userProfileMode="navigation" userProfileUrl="/profile" />
+            <UserButton />
           ) : (
             <Link href="/sign-in" className="text-sm font-medium text-foreground/60 hover:text-foreground transition-colors">
               Sign In

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { UserButton } from "@/lib/mock-auth";
+import { UserButton } from "@clerk/nextjs";
 
 export default function UserProfile() {
   return (

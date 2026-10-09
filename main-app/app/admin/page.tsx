@@ -3,12 +3,17 @@ import AdminLayout from "@/components/AdminLayout";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
+const ADMIN_EMAIL = 'devanshb3456@gmail.com';
+function isAdminUser(user: any) {
+  return (user?.emailAddresses || []).some((e: any) => (e.emailAddress || '').toLowerCase() === ADMIN_EMAIL);
+}
+
 export default async function AdminPage() {
   const user = await currentUser();
   if (!user) {
     redirect('/sign-in');
   }
-  if (user.primaryEmailAddress?.emailAddress !== 'devanshb3456@gmail.com') {
+  if (!isAdminUser(user)) {
     return <div className="min-h-screen flex items-center justify-center bg-slate-50"><h1 className="text-2xl font-bold text-red-500">Access Denied. You are not an admin.</h1></div>;
   }
 

@@ -6,7 +6,7 @@ import Script from 'next/script';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { Check, Sparkles, Zap, ShieldCheck, HelpCircle, X, Loader2 } from 'lucide-react';
 import SellerNavbar from '@/components/SellerNavbar';
-import { useUser } from '@/lib/mock-auth';
+import { useUser } from "@clerk/nextjs";
 
 function PopupModal() {
   const searchParams = useSearchParams();
@@ -64,7 +64,7 @@ export default function SubscriptionsPage() {
 
   const handlePayment = async (amount: number, planName: string, planId: number) => {
     if (!isSignedIn) {
-      router.push('/sign-in?redirectUrl=/subscriptions');
+      router.push('/sign-in?redirect_url=%2Fsubscriptions');
       return;
     }
 

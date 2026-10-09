@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { Menu, X } from 'lucide-react';
 
-import { useUser, UserButton } from "@/lib/mock-auth";
+import { useUser, UserButton } from "@clerk/nextjs";
 
 export default function SellerNavbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);

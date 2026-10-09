@@ -4,24 +4,28 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import AdminLayout from "@/components/AdminLayout";
 
+const ADMIN_EMAIL = 'devanshb3456@gmail.com';
+function isAdminUser(user: any) {
+  return (user?.emailAddresses || []).some((e: any) => (e.emailAddress || '').toLowerCase() === ADMIN_EMAIL);
+}
+
 export default async function AdminBrandFormPage() {
   const user = await currentUser();
   if (!user) {
     redirect('/sign-in');
   }
-  if (user.primaryEmailAddress?.emailAddress !== 'devanshb3456@gmail.com') {
+  if (!isAdminUser(user)) {
     return <div className="p-10 text-red-500 font-bold">Access Denied</div>;
   }
-
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-  );
 
   let brands: any[] = [];
   let errorMsg = null;
 
   try {
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    if (!url || !key) throw new Error('Supabase environment variables are missing on the server.');
+    const supabase = createClient(url, key);
     const { data, error } = await supabase
       .from("brand_registrations")
       .select("*")
@@ -75,15 +79,15 @@ export default async function AdminBrandFormPage() {
                       </td>
                       <td className="p-3 text-sm text-slate-600">
                         <div className="font-medium text-slate-700">{brand.founder_name}</div>
-                        <div className="text-[11px] text-slate-500">{brand.work_email}</div>
+                        <div className="text-[11px] text-slate-500">{(brand.email || brand.work_email)}</div>
                         <div className="text-[11px] font-mono text-slate-400">{brand.whatsapp_number}</div>
                       </td>
                       <td className="p-3 text-sm text-slate-600 font-medium">
-                        {brand.brand_category}
-                        {brand.gst_registered && <span className="ml-2 bg-green-100 text-green-700 px-2 py-0.5 rounded-full text-[10px]">GST</span>}
+                        {(brand.category || brand.brand_category || '—')}
+                        {(brand.gst_status === 'yes' || brand.gst_registered) && <span className="ml-2 bg-green-100 text-green-700 px-2 py-0.5 rounded-full text-[10px]">GST</span>}
                       </td>
                       <td className="p-3 text-sm text-slate-600">
-                        <div><a href={`https://instagram.com/${(brand.instagram_handle || '').replace('@','')}`} target="_blank" rel="noopener noreferrer" className="text-pink-600 hover:underline">{brand.instagram_handle}</a></div>
+                        <div><a href={`https://instagram.com/${(brand.instagram_handle || '').replace('@','')}`} target="_blank" rel="noopener noreferrer" className="text-pink-600 hover:underline">{brand.instagram_handle || '—'}</a></div>
                         {brand.brand_website && <div><a href={brand.brand_website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline text-[11px]">{brand.brand_website}</a></div>}
                       </td>
                       <td className="p-3 text-sm text-slate-500">

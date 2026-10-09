@@ -23,13 +23,14 @@ export default function Snowfall() {
       {flakes.map((flake) => (
         <div
           key={flake.id}
-          className="absolute bg-white rounded-full animate-snow"
+          className="absolute rounded-full animate-snow"
           style={{
             left: flake.left,
             top: '-5%',
             width: flake.size + 'px',
             height: flake.size + 'px',
             opacity: flake.opacity,
+            backgroundColor: ['#f472b6', '#fbcfe8', '#bfdbfe'][flake.id % 3],
             animationDuration: flake.animationDuration,
             animationDelay: flake.animationDelay,
           }}

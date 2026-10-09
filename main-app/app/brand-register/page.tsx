@@ -77,24 +77,39 @@ export default function BrandRegisterPage() {
 
       
 
-      const brandData = {
+      const { error: dbError } = await supabase.from('brand_registrations').insert({
         founder_name: founderName.trim(),
         brand_name: brandName.trim(),
-        work_email: email.trim().toLowerCase(),
+        email: email.trim().toLowerCase(),
         whatsapp_number: phone.trim(),
-        gst_registered: gstStatus === 'yes',
-        brand_category: 'D2C Brand',
+        gst_status: gstStatus,
+        gstin: gstStatus === 'yes' ? (gstin.trim().toUpperCase() || null) : null,
+        category: null,
+        store_link: brandWebsite.trim() || null,
         instagram_handle: instagram.trim(),
         brand_website: brandWebsite.trim() || null,
         city: city.trim(),
         brand_logo_url: logoUrl,
+      });
+      if (dbError) throw new Error(dbError.message);
+
+      const brandData = {
+        brand: brandName.trim(),
+        founder: founderName.trim(),
+        category: 'D2C Brand',
+        phone: phone.trim(),
+        email: email.trim().toLowerCase(),
+        instagram: instagram.trim(),
+        website: brandWebsite.trim(),
+        city: city.trim(),
+        logo: logoUrl,
         plan: 'Starter Maker',
         amount: '99',
       };
 
       setSecureCookie('brand_welcome_data', JSON.stringify(brandData), 7);
-      
-      // Navigate to Clerk sign-up, after which they are redirected to /brand-subscriptions
+
+      // Signup/Login (Clerk) must happen before /brand-subscriptions
       router.push('/sign-up?redirect_url=' + encodeURIComponent('/brand-subscriptions'));
 
     } catch (err: any) {

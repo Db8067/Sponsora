@@ -4,17 +4,15 @@ import Link from 'next/link';
 
 export default function AdminLayout({ children, user }: { children: React.ReactNode, user: any }) {
   return (
-    <div className="bg-surface font-body-md text-body-md text-on-surface antialiased relative min-h-screen">
-      <div className="fixed inset-0 z-0 pointer-events-none">
-        <Snowfall />
-      </div>
+    <div className="antialiased relative min-h-screen">
+      <Snowfall />
       
       <div className="relative z-10">
         <aside className="fixed left-0 top-0 h-full w-72 bg-white/80 backdrop-blur-md shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-50 flex flex-col justify-between border-r border-pink-100">
           <div className="flex flex-col">
-            <div className="py-4 px-6 flex items-center gap-2 bg-white/50 border-b border-pink-50">
+            <Link href="/" className="py-4 px-6 flex items-center gap-2 bg-white/50 border-b border-pink-50" aria-label="Go to landing page">
               <img alt="GrahakSetu Logo" className="h-12 sm:h-14 md:h-[4.5rem] w-auto object-contain" src="/images/logo-light.png" />
-            </div>
+            </Link>
             <div className="px-4 pt-4">
               <span className="px-2 text-[10px] text-slate-400 font-bold uppercase tracking-wider block mb-2">Platform Ops</span>
               <nav className="flex flex-col gap-1">
