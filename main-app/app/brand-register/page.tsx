@@ -6,7 +6,9 @@ import { useRouter } from 'next/navigation';
 import SellerNavbar from '@/components/SellerNavbar';
 import {
   CheckCircle2, ArrowRight, Loader2, Rocket,
-  Store, User, Phone, Mail, Receipt, Tag, Link as LinkIcon
+  Store, User, Phone, Mail, Receipt, Tag, Link as LinkIcon,
+  StarsIcon,
+  User2Icon
 } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 
@@ -94,17 +96,17 @@ export default function BrandRegisterPage() {
           <div className="bg-gradient-to-r from-pink-100/60 via-pink-50/30 to-transparent border border-pink-200/50 dark:border-white/10 rounded-2xl p-4 sm:p-5 mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4 backdrop-blur-sm">
             <div className="flex items-center gap-3.5">
               <div className="w-10 h-10 rounded-xl bg-primary text-white flex items-center justify-center shrink-0 shadow-sm shadow-primary/30">
-                <Rocket className="w-5 h-5" />
+                <User2Icon className="w-5 h-5" />
               </div>
               <div>
                 <div className="flex items-center gap-2 flex-wrap">
                   <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-extrabold uppercase tracking-wider bg-primary text-white">
-                    Launchpad
+                    QUICK BRAND ONBOARDING
                   </span>
-                  <span className="text-xs font-bold text-primary">Founders Launchpad • 14-Day Zero-Fee Sandbox</span>
+                  <span className="text-xs font-bold text-primary">LAUNCH YOUR BRAND • START GROWING</span>
                 </div>
                 <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                  Turn social scrollers into direct WhatsApp orders with ₹10 intent tokens. Zero platform commission.
+                  Set up your brand on GrahakSetu and start reaching potential customers through creators, referrals, and promotional offers.
                 </p>
               </div>
             </div>
@@ -112,12 +114,12 @@ export default function BrandRegisterPage() {
             <div className="flex items-center gap-3 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm px-4 py-2 rounded-xl border border-pink-100 dark:border-white/10 shadow-sm self-start md:self-auto shrink-0">
               <div className="flex items-center gap-2">
                 <div className="w-6 h-6 rounded-full bg-primary text-white text-[11px] font-bold flex items-center justify-center ring-4 ring-primary/15">1</div>
-                <span className="text-xs font-bold text-slate-800 dark:text-white">Brand Intake</span>
+                <span className="text-xs font-bold text-slate-800 dark:text-white">Brand Details</span>
               </div>
               <div className="w-8 h-0.5 bg-slate-200 dark:bg-slate-700 rounded" />
               <div className="flex items-center gap-2 opacity-50">
                 <div className="w-6 h-6 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-500 text-[11px] font-bold flex items-center justify-center">2</div>
-                <span className="text-xs font-medium text-slate-500">₹10 Offer Setup</span>
+                <span className="text-xs font-medium text-slate-500">Preview & Publish</span>
               </div>
             </div>
           </div>
@@ -130,13 +132,13 @@ export default function BrandRegisterPage() {
               <div className="mb-7">
                 <div className="inline-flex items-center gap-1.5 text-xs font-bold text-primary mb-2 tracking-wide uppercase">
                   <CheckCircle2 className="w-4 h-4" />
-                  Quick Founder Onboarding
+                  QUICK BRAND ONBOARDING
                 </div>
                 <h1 className="text-2xl sm:text-3xl font-black text-slate-800 dark:text-white tracking-tight">
-                  Register Your Homegrown Brand
+                  Get Your Brand Discovered. Get More Customers.
                 </h1>
                 <p className="mt-2 text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
-                  Stop losing 30% to marketplaces. Get verified buyers directed straight to your WhatsApp with high-intent micro-vouchers.
+                  Create your brand profile, showcase your products, and connect with interested shoppers directly on WhatsApp.
                 </p>
               </div>
 
@@ -347,7 +349,7 @@ export default function BrandRegisterPage() {
                       <><Loader2 className="w-5 h-5 animate-spin" /> Launching Brand…</>
                     ) : (
                       <>
-                        <span>Launch Brand &amp; Create ₹10 Offer</span>
+                        <span>Launch Brand &amp; Continue</span>
                         <span className="text-lg">🚀</span>
                         <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                       </>
@@ -385,12 +387,12 @@ export default function BrandRegisterPage() {
                     <div>
                       <div className="flex items-center gap-1.5">
                         <h3 className="font-bold text-slate-800 dark:text-white text-base leading-tight">
-                          {brandName || 'Mitti Herbals'}
+                          {brandName || 'Brand Name'}
                         </h3>
                         <CheckCircle2 className="w-4 h-4 text-green-600" />
                       </div>
                       <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
-                        Founder: <span className="font-medium text-slate-800 dark:text-white">{founderName || 'Radhika Sharma'}</span>
+                        Founder: <span className="font-medium text-slate-800 dark:text-white">{founderName || 'Your Name'}</span>
                       </p>
                     </div>
                   </div>
@@ -402,7 +404,7 @@ export default function BrandRegisterPage() {
                 <div className="mt-4 p-4 rounded-2xl bg-white dark:bg-slate-900 border border-primary/20 shadow-sm relative">
                   <div className="flex items-center justify-between text-xs mb-2">
                     <span className="font-extrabold text-primary flex items-center gap-1">
-                      🎫 INDIE INTENT VOUCHER
+                      🎫 GRAHAK SETU VOUCHER
                     </span>
                     <span className="font-mono text-[11px] font-bold bg-pink-100 dark:bg-pink-900/30 text-primary px-2 py-0.5 rounded">
                       CODE: #{(brandName || 'BRAND').slice(0, 5).toUpperCase()}-8921
@@ -414,7 +416,7 @@ export default function BrandRegisterPage() {
                       <div className="text-[11px] text-slate-500 dark:text-slate-400">On first direct artisan order above ₹499</div>
                     </div>
                     <div className="text-xs font-bold text-green-700 dark:text-green-400 bg-green-50 dark:bg-green-900/30 px-2 py-1 rounded-md border border-green-100 dark:border-green-800/40">
-                      Buyer Locked with ₹10 UPI
+                      Repeat Customers & Buyer
                     </div>
                   </div>
                   <div className="my-3 border-t border-dashed border-pink-100 dark:border-white/10 relative">
@@ -422,8 +424,8 @@ export default function BrandRegisterPage() {
                     <div className="absolute -right-5 -top-2 w-3.5 h-3.5 bg-pink-50 dark:bg-slate-800 rounded-full" />
                   </div>
                   <div className="flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400">
-                    <span>Valid directly on <span className="font-semibold text-slate-800 dark:text-white">{brandName || 'Mitti Herbals'}</span></span>
-                    <span className="font-semibold text-green-700 dark:text-green-400">100% Direct Delivery</span>
+                    <span>Valid directly on <span className="font-semibold text-slate-800 dark:text-white">{brandName || 'Grahak Setu'}</span></span>
+                    <span className="font-semibold text-green-700 dark:text-green-400">Keep 100% Money</span>
                   </div>
                 </div>
               </div>
@@ -442,12 +444,12 @@ export default function BrandRegisterPage() {
                 <p className="text-xs text-slate-500 dark:text-slate-400 mb-3">Based on 100 orders/month · ₹1,500 avg order value:</p>
                 <div className="grid grid-cols-2 gap-3 text-center">
                   <div className="p-3 rounded-2xl bg-red-50/70 dark:bg-red-900/20 border border-red-100 dark:border-red-800/40">
-                    <span className="text-[10px] uppercase font-bold text-red-600 dark:text-red-400 tracking-wider">Aggregator Cut</span>
+                    <span className="text-[10px] uppercase font-bold text-red-600 dark:text-red-400 tracking-wider">Marketplace Cut</span>
                     <div className="text-lg font-extrabold text-red-700 dark:text-red-400 mt-0.5">-₹38,000</div>
                     <span className="text-[10px] text-red-500 dark:text-red-400">25-30% marketplace fees</span>
                   </div>
                   <div className="p-3 rounded-2xl bg-green-50/70 dark:bg-green-900/20 border border-green-100 dark:border-green-800/40">
-                    <span className="text-[10px] uppercase font-bold text-green-700 dark:text-green-400 tracking-wider">IndieLoop Retained</span>
+                    <span className="text-[10px] uppercase font-bold text-green-700 dark:text-green-400 tracking-wider">On GrahaK Setu</span>
                     <div className="text-lg font-extrabold text-green-800 dark:text-green-300 mt-0.5">+₹1,24,000</div>
                     <span className="text-[10px] font-semibold text-green-600 dark:text-green-400">100% Direct UPI</span>
                   </div>
@@ -482,13 +484,13 @@ export default function BrandRegisterPage() {
                     <span className="text-[10px] text-slate-400">Just now</span>
                   </div>
                   <p className="leading-relaxed">
-                    "Namaste <span className="font-bold text-primary">{brandName || 'Mitti Herbals'}</span>! 👋 I just unlocked the ₹10 token for your shop on IndieLoop."
+                    "Namaste <span className="font-bold text-primary">{brandName || 'Mitti Herbals'}</span>! 👋 I just unlocked the Discount for your shop on Grahak Setu."
                   </p>
                   <div className="bg-green-50 dark:bg-green-900/20 p-2 rounded-xl border border-green-100 dark:border-green-800/40 font-mono text-[11px] text-green-900 dark:text-green-300 flex items-center justify-between">
                     <span>Token: <strong>#{(brandName || 'BRAND').slice(0, 5).toUpperCase()}-8921</strong></span>
                     <span className="text-[10px] font-sans font-bold text-green-700 dark:text-green-400 bg-green-100 dark:bg-green-900/40 px-1.5 py-0.5 rounded">UPI Confirmed</span>
                   </div>
-                  <p>"Can I order the Kumkumadi Face Glow Oil to Bangalore?"</p>
+                  <p>"Can I order again from your brand?"</p>
                 </div>
                 <div className="mt-2.5 flex items-center justify-between text-[11px] text-green-900 dark:text-green-300 font-semibold px-1">
                   <span>🔒 Zero intermediary spam</span>
