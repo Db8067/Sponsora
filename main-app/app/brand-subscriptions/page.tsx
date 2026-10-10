@@ -127,7 +127,8 @@ function BrandPassport() {
     founderName: searchParams.get('founder') || '',
     category: searchParams.get('category') || '',
     phone: searchParams.get('phone') || '',
-    email: searchParams.get('email') || ''
+    email: searchParams.get('email') || '',
+    logo: searchParams.get('logo') || ''
   });
 
   useEffect(() => {
@@ -141,18 +142,18 @@ function BrandPassport() {
             founderName: cookieData.founder || 'Founder',
             category: cookieData.category || 'D2C Brand',
             phone: cookieData.phone || '',
-            email: cookieData.email || ''
+            email: cookieData.email || '', logo: cookieData.logo || ''
           });
         } else {
-          setBrandData({ brandName: 'Your Brand', founderName: 'Founder', category: 'D2C Brand', phone: '', email: '' });
+          setBrandData({ brandName: 'Your Brand', founderName: 'Founder', category: 'D2C Brand', phone: '', email: '', logo: '' });
         }
       } catch (e) {
-        setBrandData({ brandName: 'Your Brand', founderName: 'Founder', category: 'D2C Brand', phone: '', email: '' });
+        setBrandData({ brandName: 'Your Brand', founderName: 'Founder', category: 'D2C Brand', phone: '', email: '', logo: '' });
       }
     }
   }, []);
 
-  const { brandName, founderName, category, phone, email } = brandData;
+  const { brandName, founderName, category, phone, email, logo } = brandData;
   const initials = (brandName || 'YB').slice(0, 2).toUpperCase();  return (
     <section className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl border border-pink-100 dark:border-white/10 shadow-sm overflow-hidden">
       {/* colour bar */}
@@ -163,9 +164,16 @@ function BrandPassport() {
           {/* left — identity */}
           <div className="flex items-start sm:items-center gap-4">
             <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-pink-300 p-0.5 shadow-md shadow-primary/20 shrink-0">
-              <div className="w-full h-full bg-slate-900 rounded-[14px] flex flex-col items-center justify-center text-white">
-                <span className="text-sm font-mono font-bold tracking-widest text-pink-300">{initials}</span>
-                <span className="text-[9px] uppercase tracking-wider text-pink-200 font-semibold">BRAND</span>
+              <div className="w-full h-full bg-slate-900 rounded-[14px] overflow-hidden flex flex-col items-center justify-center text-white">
+                {logo ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={logo} alt={brandName} className="w-full h-full object-cover" />
+                ) : (
+                  <>
+                    <span className="text-sm font-mono font-bold tracking-widest text-pink-300">{initials}</span>
+                    <span className="text-[9px] uppercase tracking-wider text-pink-200 font-semibold">BRAND</span>
+                  </>
+                )}
               </div>
             </div>
             <div>

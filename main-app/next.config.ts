@@ -13,6 +13,12 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async rewrites() {
+    return [
+      // /admin-brandform-<brand-name>  ->  app/admin-brandform/[slug]
+      { source: '/admin-brandform-:slug', destination: '/admin-brandform/:slug' },
+    ];
+  },
   experimental: {
     optimizePackageImports: ['lucide-react'],
   },

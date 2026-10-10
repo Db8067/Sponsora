@@ -1,56 +1,100 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import SellerNavbar from '@/components/SellerNavbar';
 import {
   CheckCircle2, ArrowRight, Loader2, Rocket,
-  Store, User, Phone, Mail, Receipt, Tag, Link as LinkIcon,
-  StarsIcon,
-  User2Icon
+  Store, User, Phone, Mail, Receipt, Link as LinkIcon,
+  StarsIcon, User2Icon, AlertCircle, ShieldCheck, Globe, ImagePlus, MapPin, XCircle,
 } from 'lucide-react';
-import { supabase } from '@/lib/supabase';
-import { uploadImageToCloudinary } from '@/app/actions/upload';
+import LogoDropzone, { useLogoUpload } from '@/components/brand/LogoDropzone';
+import CityCombobox from '@/components/brand/CityCombobox';
+import { useVerify, type VState } from '@/components/brand/useVerify';
+import {
+  validateEmailSyntax, validatePhone, validateGstFormat, parseInstagram, validateWebsite,
+  type GstDetails, type InstagramInfo,
+} from '@/lib/validators';
 
-const CATEGORIES = [
-  { emoji: '✨', label: 'Ayurvedic & Skincare' },
-  { emoji: '💎', label: 'Handcrafted Jewelry' },
-  { emoji: '☕', label: 'Gourmet Food & Coffee' },
-  { emoji: '🌿', label: 'Handloom Apparel' },
-  { emoji: '🏺', label: 'Ceramic & Home Decor' },
-  { emoji: '🧁', label: 'Bakery & Sweets' },
-  { emoji: '🪴', label: 'Plants & Wellness' },
-  { emoji: '🎨', label: 'Art & Illustration' },
-];
+/* ── small UI helpers ── */
+const inputBase =
+  'w-full rounded-xl border text-sm bg-white/60 dark:bg-slate-900/60 focus:bg-white dark:focus:bg-slate-900 text-slate-800 dark:text-white placeholder:text-slate-400 outline-none transition-all focus:ring-2';
+const okRing = 'border-pink-100 dark:border-white/10 focus:border-primary focus:ring-primary/20';
+const errRing = 'border-red-300 focus:border-red-400 focus:ring-red-200';
+const goodRing = 'border-emerald-300 focus:border-emerald-400 focus:ring-emerald-200';
+
+function ringFor(s: VState['status']) {
+  return s === 'invalid' ? errRing : s === 'valid' ? goodRing : okRing;
+}
+
+function FieldMsg({ state }: { state: VState<any> }) {
+  if (state.status === 'idle' || (!state.message && state.status !== 'checking')) return null;
+  if (state.status === 'checking')
+    return <p className="mt-1.5 text-xs text-slate-500 flex items-center gap-1.5"><Loader2 className="w-3.5 h-3.5 animate-spin" />Verifying…</p>;
+  const cls = state.status === 'valid' ? 'text-emerald-600' : state.status === 'warn' ? 'text-amber-600' : 'text-red-600';
+  const Icon = state.status === 'valid' ? CheckCircle2 : state.status === 'warn' ? AlertCircle : XCircle;
+  return <p className={`mt-1.5 text-xs flex items-start gap-1.5 ${cls}`}><Icon className="w-3.5 h-3.5 mt-px shrink-0" /><span>{state.message}</span></p>;
+}
+
+function Label({ children, required, htmlFor, hint }: { children: React.ReactNode; required?: boolean; htmlFor?: string; hint?: string }) {
+  return (
+    <label htmlFor={htmlFor} className="mb-1.5 flex items-center justify-between text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+      <span>{children}</span>
+      {(required || hint) && (
+        <span className={`text-[10px] font-medium normal-case tracking-normal ${required ? 'text-primary' : 'text-slate-500'}`}>{hint || 'required'}</span>
+      )}
+    </label>
+  );
+}
+
+function Row({ k, v }: { k: string; v?: string | null }) {
+  if (!v) return null;
+  return (
+    <div className="flex justify-between gap-3 text-[11px] py-1 border-b border-pink-50 last:border-0">
+      <span className="text-slate-500 shrink-0">{k}</span>
+      <span className="font-semibold text-slate-800 dark:text-white text-right break-words min-w-0">{v}</span>
+    </div>
+  );
+}
 
 export default function BrandRegisterPage() {
   const router = useRouter();
+
   const [founderName, setFounderName] = useState('');
   const [brandName, setBrandName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [gstStatus, setGstStatus] = useState<'yes' | 'no'>('no');
   const [gstin, setGstin] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('');
-  
+  const [gstConfirmed, setGstConfirmed] = useState(false);
   const [city, setCity] = useState('');
   const [instagram, setInstagram] = useState('');
   const [brandWebsite, setBrandWebsite] = useState('');
-  const [logoFile, setLogoFile] = useState<File | null>(null);
-  const [logoPreview, setLogoPreview] = useState<string>('');
+  const [touched, setTouched] = useState<Record<string, boolean>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
 
-  // Helper function to set secure cookie
-  
-  const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      const file = e.target.files[0];
-      setLogoFile(file);
-      setLogoPreview(URL.createObjectURL(file));
-    }
-  };
+  const { logo, input: logoInput, openPicker, handleFile, reset: resetLogo } = useLogoUpload();
+  const logoPreview = logo.previewUrl;
+  const touch = (k: string) => setTouched((t) => ({ ...t, [k]: true }));
+
+  /* ── live validation ── */
+  const emailSyn = validateEmailSyntax(email);
+  const emailV = useVerify<unknown>('email', email, touched.email && !emailSyn.valid ? emailSyn.error! : null, emailSyn.valid);
+
+  const phoneV = validatePhone(phone);
+  const phoneShowErr = (touched.phone || phone.length >= 10) && phone.length > 0 && !phoneV.valid;
+
+  const gstFmt = validateGstFormat(gstin);
+  const gstLocalErr = gstin.length > 0 && !gstFmt.valid && (gstin.length >= 15 || touched.gstin) ? gstFmt.error! : null;
+  const gstV = useVerify<GstDetails>('gst', gstStatus === 'yes' ? gstin : '', gstLocalErr, gstFmt.valid);
+  useEffect(() => setGstConfirmed(false), [gstin]);
+
+  const igParse = parseInstagram(instagram);
+  const igV = useVerify<InstagramInfo>('instagram', instagram, touched.instagram && !igParse.valid ? (igParse as any).error : null, igParse.valid);
+
+  const webV = validateWebsite(brandWebsite);
 
   const setSecureCookie = (name: string, value: string, days: number = 7) => {
     const expires = new Date();
@@ -58,62 +102,66 @@ export default function BrandRegisterPage() {
     document.cookie = `${name}=${encodeURIComponent(value)};expires=${expires.toUTCString()};path=/;SameSite=Lax;Secure`;
   };
 
-  
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    setTouched({ email: true, phone: true, gstin: true, instagram: true, website: true, city: true });
+
+    const problems: string[] = [];
+    if (founderName.trim().length < 2) problems.push('Enter the founder name.');
+    if (brandName.trim().length < 2) problems.push('Enter your brand name.');
+    if (!emailSyn.valid) problems.push(emailSyn.error!);
+    else if (emailV.status === 'invalid') problems.push(emailV.message || 'Email is not valid.');
+    if (!phoneV.valid) problems.push(phoneV.error!);
+    if (gstStatus === 'yes') {
+      if (!gstFmt.valid) problems.push(gstFmt.error!);
+      else if (gstV.status === 'invalid') problems.push(gstV.message || 'GSTIN is not valid.');
+    }
+    if (logo.status === 'uploading') problems.push('Your logo is still uploading — one moment.');
+    else if (logo.status !== 'done' || !logo.uploadedUrl) problems.push('Please upload your brand logo.');
+    if (!city) problems.push('Select your city from the list.');
+    if (!igParse.valid) problems.push((igParse as any).error);
+    else if (igV.status === 'invalid') problems.push(igV.message || 'Instagram account is not valid.');
+    if (!webV.valid) problems.push(webV.error!);
+
+    if (problems.length) {
+      setError(problems[0]);
+      return;
+    }
+
     setIsSubmitting(true);
-
     try {
-      let logoUrl = '';
-      if (logoFile) {
-        const formData = new FormData();
-        formData.append('file', logoFile);
-        const uploadRes = await uploadImageToCloudinary(formData);
-        logoUrl = uploadRes.secure_url;
-      } else {
-        throw new Error('Please upload a brand logo.');
-      }
-
-      
-
-      const { error: dbError } = await supabase.from('brand_registrations').insert({
-        founder_name: founderName.trim(),
-        brand_name: brandName.trim(),
-        email: email.trim().toLowerCase(),
-        whatsapp_number: phone.trim(),
-        gst_status: gstStatus,
-        gstin: gstStatus === 'yes' ? (gstin.trim().toUpperCase() || null) : null,
-        category: null,
-        store_link: brandWebsite.trim() || null,
-        instagram_handle: instagram.trim(),
-        brand_website: brandWebsite.trim() || null,
-        city: city.trim(),
-        brand_logo_url: logoUrl,
+      const res = await fetch('/api/brand/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          founderName, brandName, email, phone, gstStatus, gstin, gstConfirmed,
+          city, instagram, website: brandWebsite, logoUrl: logo.uploadedUrl,
+        }),
       });
-      if (dbError) throw new Error(dbError.message);
+      let json: any = null;
+      try { json = await res.json(); } catch { /* non-JSON */ }
+      if (!res.ok || !json?.ok) throw new Error(json?.error || 'Something went wrong. Please try again.');
 
+      const ig = igParse.valid ? igParse.handle : instagram;
       const brandData = {
         brand: brandName.trim(),
         founder: founderName.trim(),
         category: 'D2C Brand',
-        phone: phone.trim(),
-        email: email.trim().toLowerCase(),
-        instagram: instagram.trim(),
-        website: brandWebsite.trim(),
-        city: city.trim(),
-        logo: logoUrl,
+        phone: phoneV.value,
+        email: emailSyn.value,
+        instagram: `@${ig}`,
+        website: webV.value,
+        city,
+        logo: logo.uploadedUrl,
         plan: 'Starter Maker',
         amount: '99',
       };
-
       setSecureCookie('brand_welcome_data', JSON.stringify(brandData), 7);
 
-      // Signup/Login (Clerk) must happen before /brand-subscriptions
+      // Sign-up / login (Clerk) must happen before /brand-subscriptions
       router.push('/sign-up?redirect_url=' + encodeURIComponent('/brand-subscriptions'));
-
     } catch (err: any) {
-      console.error(err);
       setError(err.message || 'An error occurred during registration. Please try again.');
     } finally {
       setIsSubmitting(false);
@@ -222,21 +270,23 @@ export default function BrandRegisterPage() {
                 {/* Email & WhatsApp */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5" htmlFor="email">
-                      Business Email
-                    </label>
+                    <Label htmlFor="email" required>Business Email</Label>
                     <div className="relative group">
                       <Mail className="absolute left-3.5 top-3.5 w-4 h-4 text-slate-400 group-focus-within:text-primary transition-colors" />
                       <input
                         id="email"
                         type="email"
+                        inputMode="email"
+                        autoComplete="email"
                         required
                         value={email}
                         onChange={e => setEmail(e.target.value)}
+                        onBlur={() => touch('email')}
                         placeholder="you@yourbrand.com"
-                        className="w-full pl-10 pr-3.5 py-3 rounded-xl border border-pink-100 dark:border-white/10 text-sm bg-white/60 dark:bg-slate-900/60 focus:bg-white dark:focus:bg-slate-900 text-slate-800 dark:text-white placeholder:text-slate-400 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
+                        className={`${inputBase} ${ringFor(emailV.status)} pl-10 pr-3.5 py-3`}
                       />
                     </div>
+                    <FieldMsg state={emailV} />
                   </div>
                   <div>
                     <div className="flex items-center justify-between mb-1.5">
@@ -248,25 +298,37 @@ export default function BrandRegisterPage() {
                         Live Orders
                       </span>
                     </div>
-                    <div className="flex rounded-xl border border-pink-100 dark:border-white/10 overflow-hidden focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20 bg-white/60 dark:bg-slate-900/60 focus-within:bg-white dark:focus-within:bg-slate-900 transition-all">
+                    <div className={`flex rounded-xl border overflow-hidden focus-within:ring-2 bg-white/60 dark:bg-slate-900/60 focus-within:bg-white dark:focus-within:bg-slate-900 transition-all ${phoneShowErr ? errRing : phoneV.valid ? goodRing : okRing}`}>
                       <span className="px-3.5 py-3 bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-200 font-bold text-sm border-r border-pink-100 dark:border-white/10 select-none flex items-center gap-1.5 shrink-0">
                         🇮🇳 +91
                       </span>
                       <input
                         id="phone"
                         type="tel"
+                        inputMode="numeric"
+                        autoComplete="tel-national"
                         required
-                        pattern="[0-9]{10}"
+                        maxLength={14}
                         value={phone}
-                        onChange={e => setPhone(e.target.value)}
+                        onChange={e => {
+                          const raw = e.target.value.replace(/[^\d+\s]/g, '');
+                          const n = raw.replace(/\D/g, '');
+                          setPhone(n.length > 10 ? validatePhone(raw).value.slice(0, 10) : n);
+                        }}
+                        onBlur={() => touch('phone')}
                         placeholder="98765 43210"
                         className="w-full px-3.5 py-3 text-sm font-semibold tracking-wide outline-none bg-transparent placeholder:text-slate-400 text-slate-800 dark:text-white"
                       />
+                      {phoneV.valid && <CheckCircle2 className="w-4 h-4 text-emerald-500 self-center mr-3 shrink-0" />}
                     </div>
-                    <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1.5 flex items-center gap-1">
-                      <Phone className="w-3 h-3 text-green-600" />
-                      Verified buyer codes land directly in this chat
-                    </p>
+                    {phoneShowErr ? (
+                      <p className="mt-1.5 text-xs text-red-600 flex items-start gap-1.5"><XCircle className="w-3.5 h-3.5 mt-px shrink-0" />{phoneV.error}</p>
+                    ) : (
+                      <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1.5 flex items-center gap-1">
+                        <Phone className="w-3 h-3 text-green-600" />
+                        Verified buyer codes land directly in this chat
+                      </p>
+                    )}
                   </div>
                 </div>
 
@@ -279,7 +341,7 @@ export default function BrandRegisterPage() {
                         GST Registration Status
                       </span>
                       <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
-                        Home bakers, artisans & hobby crafters don&apos;t need a GST number to sell!
+                        Home bakers, artisans &amp; hobby crafters don&apos;t need a GST number to sell!
                       </p>
                     </div>
                     <span className="text-[10px] font-bold text-primary bg-pink-100 dark:bg-pink-900/30 px-2 py-0.5 rounded-full shrink-0 self-start sm:self-auto">
@@ -287,6 +349,13 @@ export default function BrandRegisterPage() {
                     </span>
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <label className={`flex items-center gap-3 p-3.5 rounded-xl border-2 cursor-pointer transition-all ${gstStatus === 'no' ? 'border-primary bg-white dark:bg-slate-800' : 'border-pink-100 dark:border-white/10 bg-white/60 dark:bg-slate-900/40 hover:bg-white dark:hover:bg-slate-800/60'}`}>
+                      <input type="radio" name="gst" value="no" checked={gstStatus === 'no'} onChange={() => setGstStatus('no')} className="accent-primary h-4 w-4" />
+                      <div>
+                        <div className="text-xs font-bold text-slate-800 dark:text-white">No / Unregistered</div>
+                        <div className="text-[11px] text-slate-500 dark:text-slate-400">Artisan, home baker, or craft maker</div>
+                      </div>
+                    </label>
                     <label className={`flex items-center gap-3 p-3.5 rounded-xl border-2 cursor-pointer transition-all ${gstStatus === 'yes' ? 'border-primary bg-white dark:bg-slate-800' : 'border-pink-100 dark:border-white/10 bg-white/60 dark:bg-slate-900/40 hover:bg-white dark:hover:bg-slate-800/60'}`}>
                       <input type="radio" name="gst" value="yes" checked={gstStatus === 'yes'} onChange={() => setGstStatus('yes')} className="accent-primary h-4 w-4" />
                       <div>
@@ -297,110 +366,145 @@ export default function BrandRegisterPage() {
                         <div className="text-[11px] text-slate-500 dark:text-slate-400">Have active GSTIN for B2B invoices</div>
                       </div>
                     </label>
-                    <label className={`flex items-center gap-3 p-3.5 rounded-xl border-2 cursor-pointer transition-all ${gstStatus === 'no' ? 'border-primary bg-white dark:bg-slate-800' : 'border-pink-100 dark:border-white/10 bg-white/60 dark:bg-slate-900/40 hover:bg-white dark:hover:bg-slate-800/60'}`}>
-                      <input type="radio" name="gst" value="no" checked={gstStatus === 'no'} onChange={() => setGstStatus('no')} className="accent-primary h-4 w-4" />
-                      <div>
-                        <div className="text-xs font-bold text-slate-800 dark:text-white">No / Unregistered</div>
-                        <div className="text-[11px] text-slate-500 dark:text-slate-400">Artisan, home baker, or craft maker</div>
-                      </div>
-                    </label>
                   </div>
+
                   {gstStatus === 'yes' && (
                     <div className="mt-3.5 pt-3 border-t border-pink-100 dark:border-white/10">
                       <div className="relative">
-                        <Receipt className="absolute left-3 top-2.5 w-4 h-4 text-slate-400" />
+                        <Receipt className="absolute left-3 top-3 w-4 h-4 text-slate-400" />
                         <input
                           type="text"
+                          autoCapitalize="characters"
+                          autoComplete="off"
+                          spellCheck={false}
+                          maxLength={15}
                           value={gstin}
-                          onChange={e => setGstin(e.target.value)}
+                          onChange={e => setGstin(e.target.value.replace(/[^a-zA-Z0-9]/g, '').toUpperCase())}
+                          onBlur={() => touch('gstin')}
                           placeholder="GSTIN e.g. 08AAAAA0000A1Z5"
-                          className="w-full pl-9 pr-3.5 py-2 rounded-xl border border-pink-100 dark:border-white/10 text-xs uppercase tracking-wider bg-white dark:bg-slate-900 text-slate-800 dark:text-white placeholder:normal-case placeholder:tracking-normal placeholder:text-slate-400 focus:border-primary focus:ring-1 focus:ring-primary/20 outline-none transition-all"
+                          className={`${inputBase} ${ringFor(gstV.status)} pl-9 pr-3.5 py-2.5 uppercase tracking-wider placeholder:normal-case placeholder:tracking-normal`}
                         />
                       </div>
+                      <FieldMsg state={gstV} />
+
+                      {gstV.status !== 'invalid' && gstV.data && (
+                        <div className="mt-3 rounded-2xl border border-emerald-200 bg-white dark:bg-slate-900 p-3.5 shadow-sm">
+                          <div className="flex items-center justify-between gap-2 mb-1.5">
+                            <span className="text-[11px] font-extrabold uppercase tracking-wider text-emerald-700 flex items-center gap-1.5">
+                              <ShieldCheck className="w-4 h-4" />
+                              {gstV.data.source === 'govt-api' ? 'Details from GST portal' : 'Details found in your GSTIN'}
+                            </span>
+                            {gstV.data.status && (
+                              <span className="text-[10px] font-bold bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full">{gstV.data.status}</span>
+                            )}
+                          </div>
+                          <Row k="Legal name" v={gstV.data.legalName} />
+                          <Row k="Trade name" v={gstV.data.tradeName} />
+                          <Row k="GSTIN" v={gstV.data.gstin} />
+                          <Row k="PAN" v={gstV.data.pan} />
+                          <Row k="State" v={`${gstV.data.state} (${gstV.data.stateCode})`} />
+                          <Row k="Business type" v={gstV.data.constitution || gstV.data.entityType} />
+                          <Row k="Taxpayer type" v={gstV.data.taxpayerType} />
+                          <Row k="Registered on" v={gstV.data.registrationDate} />
+                          <Row k="Address" v={gstV.data.address} />
+                          <Row k="Nature of business" v={gstV.data.businessNature?.join(', ')} />
+                          <button
+                            type="button"
+                            onClick={() => setGstConfirmed(c => !c)}
+                            className={`mt-3 w-full py-2.5 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${gstConfirmed ? 'bg-emerald-500 text-white shadow-md shadow-emerald-500/20' : 'bg-pink-100 text-primary hover:bg-pink-200'}`}
+                          >
+                            <CheckCircle2 className="w-4 h-4" />
+                            {gstConfirmed ? 'These details will be shown on your brand profile' : 'Use these details for my brand'}
+                          </button>
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>
 
                 {/* Brand Logo Upload */}
                 <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5 flex items-center justify-between">
-                    <span>Brand Logo</span>
-                    <span className="text-[10px] text-primary lowercase font-medium normal-case tracking-normal">required</span>
-                  </label>
-                  <div className="relative group flex items-center gap-4">
-                    {logoPreview ? (
-                      <img src={logoPreview} alt="Logo preview" className="w-14 h-14 rounded-full object-cover border border-pink-200 shadow-sm" />
-                    ) : (
-                      <div className="w-14 h-14 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center border border-dashed border-slate-300 dark:border-slate-600">
-                        <User2Icon className="w-6 h-6 text-slate-400" />
-                      </div>
-                    )}
-                    <div className="flex-1">
-                      <input
-                        type="file"
-                        accept="image/*"
-                        required
-                        onChange={handleLogoChange}
-                        className="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20 cursor-pointer"
-                      />
-                    </div>
-                  </div>
+                  <Label required>Brand Logo</Label>
+                  {logoInput}
+                  <LogoDropzone logo={logo} openPicker={openPicker} onFile={handleFile} onRemove={resetLogo} />
                 </div>
 
                 {/* City */}
                 <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5 flex items-center justify-between">
-                    <span>City</span>
-                    <span className="text-[10px] text-primary lowercase font-medium normal-case tracking-normal">required</span>
-                  </label>
-                  <div className="relative group">
-                    <input
-                      type="text"
-                      required
-                      placeholder="e.g. Mumbai"
-                      value={city}
-                      onChange={e => setCity(e.target.value)}
-                      className="w-full h-11 pl-4 pr-4 rounded-xl border border-pink-100 dark:border-white/10 bg-white/60 dark:bg-slate-900/40 text-slate-800 dark:text-slate-200 text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary shadow-sm transition-all"
-                    />
-                  </div>
+                  <Label htmlFor="city" required>City</Label>
+                  <CityCombobox value={city} onChange={setCity} />
                 </div>
 
                 {/* Instagram & Website */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 gap-4">
                   <div>
-                    <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5 flex items-center justify-between" htmlFor="instagram">
-                      <span>Instagram Handle</span>
-                      <span className="text-[10px] text-primary lowercase font-medium normal-case tracking-normal">required</span>
-                    </label>
+                    <Label htmlFor="instagram" required>Instagram Profile</Label>
                     <div className="relative group">
                       <LinkIcon className="absolute left-3.5 top-3.5 w-4 h-4 text-slate-400 group-focus-within:text-primary transition-colors" />
                       <input
                         id="instagram"
                         type="text"
+                        inputMode="url"
+                        autoCapitalize="none"
+                        autoCorrect="off"
+                        spellCheck={false}
                         required
-                        placeholder="@yourbrand"
+                        placeholder="instagram.com/yourbrand  or  @yourbrand"
                         value={instagram}
                         onChange={e => setInstagram(e.target.value)}
-                        className="w-full h-11 pl-10 pr-4 rounded-xl border border-pink-100 dark:border-white/10 bg-white/60 dark:bg-slate-900/40 text-slate-800 dark:text-slate-200 text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary shadow-sm transition-all"
+                        onBlur={() => touch('instagram')}
+                        className={`${inputBase} ${ringFor(igV.status)} pl-10 pr-4 py-3`}
                       />
                     </div>
+                    <FieldMsg state={igV} />
+
+                    {igV.data && igV.status !== 'invalid' && (
+                      <div className="mt-3 rounded-2xl border border-pink-100 bg-white dark:bg-slate-900 p-3.5 shadow-sm flex gap-3 items-center">
+                        <div className="w-14 h-14 rounded-full p-[2px] bg-gradient-to-tr from-amber-400 via-pink-500 to-purple-600 shrink-0">
+                          <div className="w-full h-full rounded-full bg-white overflow-hidden flex items-center justify-center">
+                            {igV.data.avatar ? (
+                              // eslint-disable-next-line @next/next/no-img-element
+                              <img src={igV.data.avatar} alt="" referrerPolicy="no-referrer" className="w-full h-full object-cover"
+                                onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }} />
+                            ) : (
+                              <LinkIcon className="w-6 h-6 text-pink-500" />
+                            )}
+                          </div>
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <p className="text-sm font-bold text-slate-800 dark:text-white truncate">{igV.data.fullName || `@${igV.data.handle}`}</p>
+                          <p className="text-[11px] text-pink-600 font-semibold truncate">
+                            <a href={igV.data.url} target="_blank" rel="noopener noreferrer">@{igV.data.handle}</a>
+                          </p>
+                          {igV.data.followers ? (
+                            <p className="text-[11px] text-slate-500 mt-0.5">
+                              <b className="text-slate-800 dark:text-white">{igV.data.posts}</b> posts · <b className="text-slate-800 dark:text-white">{igV.data.followers}</b> followers · <b className="text-slate-800 dark:text-white">{igV.data.following}</b> following
+                            </p>
+                          ) : (
+                            <p className="text-[11px] text-slate-500 mt-0.5">{igV.data.note || 'Profile found'}</p>
+                          )}
+                        </div>
+                      </div>
+                    )}
                   </div>
                   <div>
-                    <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5 flex items-center justify-between" htmlFor="brandWebsite">
-                      <span>Brand Website</span>
-                      <span className="text-[10px] text-slate-500 lowercase font-medium normal-case tracking-normal">(optional)</span>
-                    </label>
+                    <Label htmlFor="brandWebsite" hint="(optional)">Brand Website</Label>
                     <div className="relative group">
-                      <LinkIcon className="absolute left-3.5 top-3.5 w-4 h-4 text-slate-400 group-focus-within:text-primary transition-colors" />
+                      <Globe className="absolute left-3.5 top-3.5 w-4 h-4 text-slate-400 group-focus-within:text-primary transition-colors" />
                       <input
                         id="brandWebsite"
-                        type="url"
+                        type="text"
+                        inputMode="url"
+                        autoCapitalize="none"
+                        spellCheck={false}
                         placeholder="https://yourbrand.com"
                         value={brandWebsite}
                         onChange={e => setBrandWebsite(e.target.value)}
-                        className="w-full h-11 pl-10 pr-4 rounded-xl border border-pink-100 dark:border-white/10 bg-white/60 dark:bg-slate-900/40 text-slate-800 dark:text-slate-200 text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary shadow-sm transition-all"
+                        onBlur={() => touch('website')}
+                        className={`${inputBase} ${touched.website && !webV.valid ? errRing : okRing} pl-10 pr-4 py-3`}
                       />
                     </div>
+                    {touched.website && !webV.valid && <p className="mt-1.5 text-xs text-red-600">{webV.error}</p>}
                   </div>
                 </div>
 
@@ -431,7 +535,6 @@ export default function BrandRegisterPage() {
                   </button>
                   <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 mt-3.5 text-xs font-medium text-slate-500 dark:text-slate-400">
                     <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-green-600" />No setup fee</span>
-                    <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-green-600" />No credit card required</span>
                     <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-green-600" />0% commissions</span>
                   </div>
                 </div>
@@ -455,9 +558,17 @@ export default function BrandRegisterPage() {
                 <div className="absolute -right-8 -top-8 w-32 h-32 bg-primary/10 rounded-full blur-2xl pointer-events-none" />
                 <div className="flex items-start justify-between pb-4 border-b border-pink-100 dark:border-white/10">
                   <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-primary to-pink-300 text-white flex items-center justify-center font-bold text-lg shadow-sm">
-                      {brandName ? brandName.slice(0, 2).toUpperCase() : 'MB'}
-                    </div>
+                    <button type="button" onClick={openPicker} aria-label="Upload brand logo" title="Click to upload your logo" className="group relative w-12 h-12 shrink-0 rounded-2xl overflow-hidden bg-gradient-to-tr from-primary to-pink-300 text-white flex items-center justify-center font-bold text-lg shadow-sm ring-2 ring-transparent hover:ring-primary/40 transition-all">
+                      {logoPreview ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={logoPreview} alt={brandName || 'Brand logo'} className="w-full h-full object-cover" />
+                      ) : (
+                        brandName ? brandName.slice(0, 2).toUpperCase() : 'MB'
+                      )}
+                      <span className="absolute inset-0 bg-black/45 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <ImagePlus className="w-5 h-5 text-white" />
+                      </span>
+                    </button>
                     <div>
                       <div className="flex items-center gap-1.5">
                         <h3 className="font-bold text-slate-800 dark:text-white text-base leading-tight">

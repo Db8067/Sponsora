@@ -484,7 +484,7 @@ export default function SellerLandingPage() {
                 </ul>
               </div>
               <Link href="/subscriptions" className="block mt-6">
-                <button className="w-full py-3 rounded-xl bg-slate-100 dark:bg-slate-700 hover:bg-primary hover:text-white text-slate-800 dark:text-white font-bold text-sm transition-all">
+                <button className={`w-full py-3 rounded-xl font-bold text-sm transition-all duration-300 ${hoveredPlan === 1 ? 'bg-primary text-white shadow-lg shadow-primary/25 scale-[1.02]' : 'bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-white hover:bg-primary hover:text-white'}`}>
                   Get Started — ₹{billing === 'monthly' ? '99' : '79'}/mo
                 </button>
               </Link>
@@ -513,7 +513,7 @@ export default function SellerLandingPage() {
                 </ul>
               </div>
               <Link href="/subscriptions" className="block mt-6">
-                <button className="w-full py-3 rounded-xl bg-primary hover:bg-primary-dark text-white font-bold text-sm shadow-lg shadow-primary/20 transition-all hover:scale-[1.02]">
+                <button className={`w-full py-3 rounded-xl font-bold text-sm transition-all duration-300 ${hoveredPlan === 2 ? 'bg-primary text-white shadow-lg shadow-primary/25 scale-[1.02]' : 'bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-white hover:bg-primary hover:text-white'}`}>
                   Get Growth Pro — ₹{billing === 'monthly' ? '499' : '399'}/mo
                 </button>
               </Link>
@@ -541,7 +541,7 @@ export default function SellerLandingPage() {
                 </ul>
               </div>
               <Link href="/subscriptions" className="block mt-6">
-                <button className="w-full py-3 rounded-xl bg-slate-100 dark:bg-slate-700 hover:bg-primary hover:text-white text-slate-800 dark:text-white font-bold text-sm transition-all">
+                <button className={`w-full py-3 rounded-xl font-bold text-sm transition-all duration-300 ${hoveredPlan === 3 ? 'bg-primary text-white shadow-lg shadow-primary/25 scale-[1.02]' : 'bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-white hover:bg-primary hover:text-white'}`}>
                   Get Scale — ₹{billing === 'monthly' ? '1,499' : '1,199'}/mo
                 </button>
               </Link>

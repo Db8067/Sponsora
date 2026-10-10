@@ -389,3 +389,17 @@ h3 { font-size: clamp(1.25rem, 3vw + 0.25rem, 1.75rem); }
   height: 27px;
   fill: #fff;
 }
+
+
+/* NO-ZOOM-ON-FOCUS
+   iOS Safari / mobile browsers zoom the page when a focused field has a font-size under 16px.
+   Forcing 16px on touch devices stops that on every current and future page. */
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+@media (hover: none) and (pointer: coarse), (max-width: 1023px) {
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]),
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+}
+input, select, textarea, button, a { touch-action: manipulation; }

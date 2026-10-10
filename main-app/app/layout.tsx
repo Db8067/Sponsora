@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Plus_Jakarta_Sans, Inter } from "next/font/google";
 import Footer from "@/components/Footer";
 import BackToTop from "@/components/BackToTop";
@@ -16,6 +16,13 @@ const inter = Inter({
   subsets: ["latin"],
 });
 
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1, // stops mobile browsers from zooming the page when an input is focused
+  viewportFit: "cover",
+};
 
 export const metadata: Metadata = {
   title: "GrahakSetu | Get Real Customers For Your Brand Directly on WhatsApp",
