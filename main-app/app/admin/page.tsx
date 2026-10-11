@@ -3,15 +3,17 @@ import { clerkClient } from '@clerk/nextjs/server';
 import AdminLayout from '@/components/AdminLayout';
 import AutoRefresh from '@/components/admin/AutoRefresh';
 import { BrandLogo, STATUS_STYLES } from '@/components/admin/shared';
-import { requireAdmin, fetchBrands } from '@/lib/admin-data';
+import AdminAccessDenied from '@/components/admin/AdminAccessDenied';
+import { getAdminAuth, fetchBrands } from '@/lib/admin-data';
 
 export const dynamic = 'force-dynamic';
 
 export default async function AdminPage() {
-  const admin = await requireAdmin();
-  if (!admin) {
-    return <div className="min-h-screen flex items-center justify-center px-4"><h1 className="text-xl sm:text-2xl font-bold text-red-500 text-center">Access Denied. You are not an admin.</h1></div>;
+  const auth = await getAdminAuth();
+  if (!auth.authorized) {
+    return <AdminAccessDenied userEmail={auth.userEmail} />;
   }
+  const admin = auth.identity;
 
   const { rows: brands, error } = await fetchBrands();
   let userCount: number | null = null;

@@ -8,6 +8,7 @@ import Snowfall from '@/components/Snowfall';
 const NAV = [
   { href: '/admin', label: 'Overview & Metrics', icon: 'grid_view', match: (p: string) => p === '/admin' },
   { href: '/admin-brandform', label: 'Brand Approvals (Realtime)', icon: 'verified', badge: 'New', match: (p: string) => p.startsWith('/admin-brandform') },
+  { href: '/admin-brand-delete', label: 'Deleted Brand', icon: 'delete', match: (p: string) => p.startsWith('/admin-brand-delete') },
   { href: '/admin-users', label: 'Users & Activity', icon: 'group', match: (p: string) => p.startsWith('/admin-users') },
 ];
 

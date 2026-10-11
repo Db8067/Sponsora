@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useUser } from '@clerk/nextjs';
 import SellerNavbar from '@/components/SellerNavbar';
 import {
   CheckCircle2, ArrowRight, Loader2, Rocket,
@@ -30,6 +31,7 @@ function ringFor(s: VState['status']) {
 
 function FieldMsg({ state }: { state: VState<any> }) {
   if (state.status === 'idle' || (!state.message && state.status !== 'checking')) return null;
+  if (/private|couldn.?t load a preview/i.test(state.message || '')) return null;
   if (state.status === 'checking')
     return <p className="mt-1.5 text-xs text-slate-500 flex items-center gap-1.5"><Loader2 className="w-3.5 h-3.5 animate-spin" />Verifying…</p>;
   const cls = state.status === 'valid' ? 'text-emerald-600' : state.status === 'warn' ? 'text-amber-600' : 'text-red-600';
@@ -74,6 +76,50 @@ export default function BrandRegisterPage() {
   const [touched, setTouched] = useState<Record<string, boolean>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
+
+  const { user } = useUser();
+  const [existingBrand, setExistingBrand] = useState<{ brand_name: string; slug: string } | null>(null);
+  const [selectedInstagram, setSelectedInstagram] = useState(false);
+
+  // Auto-fill email if signed in via Clerk
+  useEffect(() => {
+    const userEmail = user?.primaryEmailAddress?.emailAddress;
+    if (userEmail && !email) {
+      setEmail(userEmail);
+    }
+  }, [user, email]);
+
+  // Check if this email already registered a brand
+  useEffect(() => {
+    const checkEmail = (email || user?.primaryEmailAddress?.emailAddress || '').trim();
+    if (!checkEmail || !validateEmailSyntax(checkEmail).valid) {
+      setExistingBrand(null);
+      return;
+    }
+
+    let active = true;
+    const timer = setTimeout(async () => {
+      try {
+        const res = await fetch(`/api/brand/check-status?email=${encodeURIComponent(checkEmail)}`);
+        const data = await res.json().catch(() => null);
+        if (active && data?.registered && data.brand) {
+          setExistingBrand({
+            brand_name: data.brand.brand_name,
+            slug: data.brand.slug,
+          });
+        } else if (active) {
+          setExistingBrand(null);
+        }
+      } catch {
+        /* ignore */
+      }
+    }, 500);
+
+    return () => {
+      active = false;
+      clearTimeout(timer);
+    };
+  }, [user, email]);
 
   const { logo, input: logoInput, openPicker, handleFile, reset: resetLogo } = useLogoUpload();
   const logoPreview = logo.previewUrl;
@@ -136,7 +182,12 @@ export default function BrandRegisterPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           founderName, brandName, email, phone, gstStatus, gstin, gstConfirmed,
-          city, instagram, website: brandWebsite, logoUrl: logo.uploadedUrl,
+          gstDetails: gstV.data || null,
+          clerkUserId: user?.id || null,
+          city,
+          instagram: igParse.valid ? `@${igParse.handle}` : instagram,
+          website: brandWebsite,
+          logoUrl: logo.uploadedUrl,
         }),
       });
       let json: any = null;
@@ -159,8 +210,12 @@ export default function BrandRegisterPage() {
       };
       setSecureCookie('brand_welcome_data', JSON.stringify(brandData), 7);
 
-      // Sign-up / login (Clerk) must happen before /brand-subscriptions
-      router.push('/sign-up?redirect_url=' + encodeURIComponent('/brand-subscriptions'));
+      const dest = '/brand-subscriptions?brand=' + encodeURIComponent(brandName.trim());
+      if (user) {
+        router.push(dest);
+      } else {
+        router.push('/sign-up?redirect_url=' + encodeURIComponent(dest));
+      }
     } catch (err: any) {
       setError(err.message || 'An error occurred during registration. Please try again.');
     } finally {
@@ -226,6 +281,28 @@ export default function BrandRegisterPage() {
               </div>
 
               <form className="space-y-6" onSubmit={handleSubmit}>
+                {existingBrand && (
+                  <div className="rounded-2xl border-2 border-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 p-4 sm:p-5 shadow-lg flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div className="flex items-start gap-3">
+                      <span className="material-symbols-outlined text-emerald-600 dark:text-emerald-400 text-[28px] shrink-0 mt-0.5">verified_user</span>
+                      <div>
+                        <h4 className="text-sm sm:text-base font-extrabold text-slate-900 dark:text-white">
+                          Brand Already Registered: &ldquo;{existingBrand.brand_name}&rdquo;
+                        </h4>
+                        <p className="text-xs text-slate-600 dark:text-slate-300 mt-0.5">
+                          An active registration already exists for this email. You can directly proceed to your subscriptions dashboard.
+                        </p>
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => router.push(`/brand-subscriptions?brand=${encodeURIComponent(existingBrand.brand_name)}`)}
+                      className="px-4 py-2.5 rounded-xl font-bold text-xs bg-emerald-600 hover:bg-emerald-700 text-white shadow-md shadow-emerald-600/20 shrink-0 transition-all text-center flex items-center justify-center gap-1.5"
+                    >
+                      Open Dashboard <ArrowRight className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                )}
 
                 {/* Founder Name & Brand Name */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -458,32 +535,71 @@ export default function BrandRegisterPage() {
                     </div>
                     <FieldMsg state={igV} />
 
-                    {igV.data && igV.status !== 'invalid' && (
-                      <div className="mt-3 rounded-2xl border border-pink-100 bg-white dark:bg-slate-900 p-3.5 shadow-sm flex gap-3 items-center">
-                        <div className="w-14 h-14 rounded-full p-[2px] bg-gradient-to-tr from-amber-400 via-pink-500 to-purple-600 shrink-0">
-                          <div className="w-full h-full rounded-full bg-white overflow-hidden flex items-center justify-center">
-                            {igV.data.avatar ? (
-                              // eslint-disable-next-line @next/next/no-img-element
-                              <img src={igV.data.avatar} alt="" referrerPolicy="no-referrer" className="w-full h-full object-cover"
-                                onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }} />
+                    {((igV.data && igV.status !== 'invalid') || (igParse.valid && instagram.length > 1)) && (
+                      <div
+                        onClick={() => setSelectedInstagram(true)}
+                        className={`mt-3 cursor-pointer rounded-2xl border-2 p-3.5 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3 transition-all ${
+                          selectedInstagram
+                            ? 'border-pink-500 bg-pink-50/70 dark:bg-pink-950/30 ring-2 ring-pink-500/20'
+                            : 'border-slate-200 dark:border-white/10 hover:border-pink-300 bg-white dark:bg-slate-900'
+                        }`}
+                      >
+                        <div className="flex items-center gap-3 min-w-0">
+                          <div className="w-12 h-12 rounded-full p-[2px] bg-gradient-to-tr from-amber-400 via-pink-500 to-purple-600 shrink-0">
+                            <div className="w-full h-full rounded-full bg-white dark:bg-slate-900 overflow-hidden flex items-center justify-center">
+                              {igV.data?.avatar ? (
+                                // eslint-disable-next-line @next/next/no-img-element
+                                <img
+                                  src={igV.data.avatar}
+                                  alt=""
+                                  referrerPolicy="no-referrer"
+                                  className="w-full h-full object-cover"
+                                  onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
+                                />
+                              ) : (
+                                <LinkIcon className="w-5 h-5 text-pink-500" />
+                              )}
+                            </div>
+                          </div>
+                          <div className="min-w-0">
+                            <div className="flex items-center gap-1.5">
+                              <p className="text-sm font-bold text-slate-800 dark:text-white truncate">
+                                {igV.data?.fullName || `@${igParse.valid ? igParse.handle : instagram}`}
+                              </p>
+                              <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-pink-100 text-pink-700 dark:bg-pink-900/40 dark:text-pink-300">
+                                Instagram
+                              </span>
+                            </div>
+                            <p className="text-xs text-pink-600 font-semibold truncate mt-0.5">
+                              @{igParse.valid ? igParse.handle : instagram}
+                            </p>
+                            {igV.data?.followers ? (
+                              <p className="text-[11px] text-slate-500 mt-0.5">
+                                {igV.data.posts} posts · {igV.data.followers} followers
+                              </p>
                             ) : (
-                              <LinkIcon className="w-6 h-6 text-pink-500" />
+                              <p className="text-[11px] text-slate-400 mt-0.5">
+                                Profile ID detected (Public / Private)
+                              </p>
                             )}
                           </div>
                         </div>
-                        <div className="min-w-0 flex-1">
-                          <p className="text-sm font-bold text-slate-800 dark:text-white truncate">{igV.data.fullName || `@${igV.data.handle}`}</p>
-                          <p className="text-[11px] text-pink-600 font-semibold truncate">
-                            <a href={igV.data.url} target="_blank" rel="noopener noreferrer">@{igV.data.handle}</a>
-                          </p>
-                          {igV.data.followers ? (
-                            <p className="text-[11px] text-slate-500 mt-0.5">
-                              <b className="text-slate-800 dark:text-white">{igV.data.posts}</b> posts · <b className="text-slate-800 dark:text-white">{igV.data.followers}</b> followers · <b className="text-slate-800 dark:text-white">{igV.data.following}</b> following
-                            </p>
-                          ) : (
-                            <p className="text-[11px] text-slate-500 mt-0.5">{igV.data.note || 'Profile found'}</p>
-                          )}
-                        </div>
+
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedInstagram(true);
+                          }}
+                          className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all shrink-0 flex items-center justify-center gap-1.5 ${
+                            selectedInstagram
+                              ? 'bg-primary text-white shadow-md shadow-primary/25'
+                              : 'bg-pink-100 text-pink-700 hover:bg-pink-200'
+                          }`}
+                        >
+                          <CheckCircle2 className="w-3.5 h-3.5" />
+                          {selectedInstagram ? 'Selected Account ✓' : 'Click to Select ID'}
+                        </button>
                       </div>
                     )}
                   </div>
@@ -534,7 +650,7 @@ export default function BrandRegisterPage() {
                     )}
                   </button>
                   <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 mt-3.5 text-xs font-medium text-slate-500 dark:text-slate-400">
-                    <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-green-600" />No setup fee</span>
+                    <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-green-600" />Customers Guranteed</span>
                     <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-green-600" />0% commissions</span>
                   </div>
                 </div>

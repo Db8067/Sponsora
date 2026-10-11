@@ -69,7 +69,7 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider signInUrl="/sign-in" signUpUrl="/sign-up">
-    <html lang="en" className={`${jakarta.variable} ${inter.variable} antialiased`} suppressHydrationWarning>
+    <html lang="en" className={`${jakarta.variable} ${inter.variable} antialiased`} data-scroll-behavior="smooth" suppressHydrationWarning>
       <head>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(
 {

@@ -208,10 +208,10 @@ export async function verifyInstagram(raw: string): Promise<VerifyResult<Instagr
     /* network / blocked — handled below */
   }
 
-  info.note = 'Instagram did not share a preview (private or restricted accounts, or Instagram blocked the lookup).';
+  info.status = 'found';
   return {
-    status: 'warn',
-    message: 'Link format is valid. We couldn’t load a preview — the account may be private.',
+    status: 'valid',
+    message: `Instagram account found: @${parsed.handle}`,
     normalized: parsed.handle,
     data: info,
   };

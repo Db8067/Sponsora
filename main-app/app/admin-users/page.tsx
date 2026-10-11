@@ -2,15 +2,17 @@ import Link from 'next/link';
 import { clerkClient } from '@clerk/nextjs/server';
 import AdminLayout from '@/components/AdminLayout';
 import AutoRefresh from '@/components/admin/AutoRefresh';
-import { requireAdmin } from '@/lib/admin-data';
+import AdminAccessDenied from '@/components/admin/AdminAccessDenied';
+import { getAdminAuth } from '@/lib/admin-data';
 
 export const dynamic = 'force-dynamic';
 
 export default async function AdminUsersPage() {
-  const admin = await requireAdmin();
-  if (!admin) {
-    return <div className="min-h-screen flex items-center justify-center px-4 text-red-500 font-bold text-center">Access Denied</div>;
+  const auth = await getAdminAuth();
+  if (!auth.authorized) {
+    return <AdminAccessDenied userEmail={auth.userEmail} />;
   }
+  const admin = auth.identity;
 
   let users: any[] = [];
   let errorMsg: string | null = null;

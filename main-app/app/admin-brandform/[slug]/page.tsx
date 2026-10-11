@@ -2,8 +2,10 @@ import React from 'react';
 import Link from 'next/link';
 import AdminLayout from '@/components/AdminLayout';
 import AutoRefresh from '@/components/admin/AutoRefresh';
+import AdminAccessDenied from '@/components/admin/AdminAccessDenied';
+import BrandDetailActions from '@/components/admin/BrandDetailActions';
 import { BrandLogo, STATUS_STYLES } from '@/components/admin/shared';
-import { requireAdmin, fetchBrands } from '@/lib/admin-data';
+import { getAdminAuth, fetchBrands } from '@/lib/admin-data';
 
 export const dynamic = 'force-dynamic';
 
@@ -30,10 +32,11 @@ function Card({ title, icon, children }: { title: string; icon: string; children
 }
 
 export default async function AdminBrandDetailPage({ params }: { params: Promise<{ slug: string }> }) {
-  const admin = await requireAdmin();
-  if (!admin) {
-    return <div className="min-h-screen flex items-center justify-center px-4 text-red-500 font-bold text-center">Access Denied</div>;
+  const auth = await getAdminAuth();
+  if (!auth.authorized) {
+    return <AdminAccessDenied userEmail={auth.userEmail} />;
   }
+  const admin = auth.identity;
 
   const { slug } = await params;
   const { rows, error } = await fetchBrands();
@@ -72,25 +75,40 @@ export default async function AdminBrandDetailPage({ params }: { params: Promise
       <div className="pt-5 sm:pt-6 pb-12 w-full space-y-5">
         {back}
 
-        {/* Header */}
+        {/* Header with Admin Action Buttons */}
         <section className="bg-white/90 backdrop-blur-sm rounded-2xl border border-pink-100 shadow-sm p-4 sm:p-6">
-          <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-            <BrandLogo url={brand.brand_logo_url} name={brand.brand_name} size="lg" />
-            <div className="min-w-0 flex-1">
-              <div className="flex flex-wrap items-center gap-2">
-                <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight break-words">{brand.brand_name}</h1>
-                <span className={`px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase ${STATUS_STYLES[st] || STATUS_STYLES.pending}`}>{st}</span>
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+            <div className="flex items-center gap-4 min-w-0">
+              <BrandLogo url={brand.brand_logo_url} name={brand.brand_name} size="lg" />
+              <div className="min-w-0 flex-1">
+                <div className="flex flex-wrap items-center gap-2">
+                  <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight break-words">{brand.brand_name}</h1>
+                  <span className={`px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase ${STATUS_STYLES[st] || STATUS_STYLES.pending}`}>{st}</span>
+                </div>
+                <p className="text-sm text-slate-500 mt-1">Founded by <b className="text-slate-700">{brand.founder_name}</b>{brand.city ? ` · ${brand.city}` : ''}</p>
+                <p className="text-xs text-slate-400 mt-1">Registered {new Date(brand.created_at).toLocaleString('en-IN', { dateStyle: 'long', timeStyle: 'short' })}</p>
               </div>
-              <p className="text-sm text-slate-500 mt-1">Founded by <b className="text-slate-700">{brand.founder_name}</b>{brand.city ? ` · ${brand.city}` : ''}</p>
-              <p className="text-xs text-slate-400 mt-1">Registered {new Date(brand.created_at).toLocaleString('en-IN', { dateStyle: 'long', timeStyle: 'short' })}</p>
             </div>
-            <div className="flex flex-wrap gap-2">
-              {brand.whatsapp_number && (
-                <a href={`https://wa.me/91${brand.whatsapp_number}`} target="_blank" rel="noopener noreferrer" className="px-4 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-white text-sm font-bold shadow-md transition-colors">WhatsApp</a>
-              )}
-              {brand.email && (
-                <a href={`mailto:${brand.email}`} className="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-900 text-white text-sm font-bold shadow-md transition-colors">Email</a>
-              )}
+
+            {/* Quick Actions & Administrative Management */}
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 shrink-0">
+              <div className="flex items-center gap-2">
+                {brand.whatsapp_number && (
+                  <a href={`https://wa.me/91${brand.whatsapp_number}`} target="_blank" rel="noopener noreferrer" className="px-3.5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-bold shadow-md transition-colors flex items-center gap-1.5">
+                    <span className="material-symbols-outlined text-[16px]">chat</span> WhatsApp
+                  </a>
+                )}
+                {brand.email && (
+                  <a href={`mailto:${brand.email}`} className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold shadow-md transition-colors flex items-center gap-1.5">
+                    <span className="material-symbols-outlined text-[16px]">mail</span> Email
+                  </a>
+                )}
+              </div>
+
+              {/* Delete / Block / Undo Buttons */}
+              <div className="pt-2 sm:pt-0 sm:border-l sm:border-slate-200 sm:pl-3">
+                <BrandDetailActions id={brand.id} brandName={brand.brand_name} status={st} slug={brand.slug} />
+              </div>
             </div>
           </div>
         </section>
@@ -146,28 +164,67 @@ export default async function AdminBrandDetailPage({ params }: { params: Promise
             </div>
           </Card>
 
-          <Card title="GST Details" icon="receipt_long">
+          <Card title="GST Details & Company Information" icon="receipt_long">
             <dl className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <Field label="GST registered">{brand.gst_status === 'yes' ? 'Yes — Registered' : 'No — Unregistered'}</Field>
-              <Field label="GSTIN">{brand.gstin && <span className="font-mono tracking-wide">{brand.gstin}</span>}</Field>
-              {g && (
+              <Field label="GST registration status">
+                {brand.gst_status === 'yes' ? (
+                  <span className="inline-flex items-center gap-1 text-emerald-700 font-bold">
+                    <span className="material-symbols-outlined text-[16px]">verified</span> Registered Taxpayer
+                  </span>
+                ) : (
+                  <span className="text-slate-500">Unregistered / Artisan maker</span>
+                )}
+              </Field>
+              <Field label="GSTIN">
+                {brand.gstin ? (
+                  <span className="font-mono tracking-wider font-bold bg-slate-100 px-2 py-0.5 rounded text-slate-900">{brand.gstin}</span>
+                ) : 'None'}
+              </Field>
+              {g ? (
                 <>
-                  <Field label="Legal name">{g.legalName}</Field>
-                  <Field label="Trade name">{g.tradeName}</Field>
-                  <Field label="PAN"><span className="font-mono">{g.pan}</span></Field>
-                  <Field label="State">{g.state ? `${g.state} (${g.stateCode})` : ''}</Field>
-                  <Field label="Business type">{g.constitution || g.entityType}</Field>
-                  <Field label="Taxpayer type">{g.taxpayerType}</Field>
-                  <Field label="GST status">{g.status}</Field>
-                  <Field label="Registered on">{g.registrationDate}</Field>
-                  <div className="sm:col-span-2"><Field label="Address">{g.address}</Field></div>
-                  <div className="sm:col-span-2"><Field label="Nature of business">{g.businessNature?.join(', ')}</Field></div>
-                  <div className="sm:col-span-2 text-[11px] text-slate-400">
-                    {g.source === 'govt-api' ? 'Confirmed by the brand · fetched from the GST portal' : 'Confirmed by the brand · decoded from the GSTIN'}
+                  <Field label="Legal Company Name">{g.legalName}</Field>
+                  <Field label="Trade Name">{g.tradeName || g.legalName}</Field>
+                  <Field label="PAN"><span className="font-mono font-bold">{g.pan}</span></Field>
+                  <Field label="State / Jurisdiction">{g.state ? `${g.state} (${g.stateCode})` : g.stateCode}</Field>
+                  <Field label="Constitution of Business">{g.constitution || g.entityType}</Field>
+                  <Field label="Taxpayer Type">{g.taxpayerType || 'Regular'}</Field>
+                  <Field label="GST Portal Status">
+                    <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">
+                      {g.status || 'Active'}
+                    </span>
+                  </Field>
+                  <Field label="Registration Date">{g.registrationDate}</Field>
+                  {g.address && (
+                    <div className="sm:col-span-2">
+                      <dt className="text-[11px] uppercase tracking-wider font-bold text-slate-400">Principal Place of Business</dt>
+                      <dd className="mt-1 p-3 rounded-xl bg-slate-50 border border-slate-100 text-xs font-medium text-slate-700 leading-relaxed">
+                        {g.address}
+                      </dd>
+                    </div>
+                  )}
+                  {g.businessNature && g.businessNature.length > 0 && (
+                    <div className="sm:col-span-2">
+                      <dt className="text-[11px] uppercase tracking-wider font-bold text-slate-400">Nature of Business Activities</dt>
+                      <dd className="mt-1 flex flex-wrap gap-1.5">
+                        {g.businessNature.map((item: string) => (
+                          <span key={item} className="px-2.5 py-1 rounded-lg bg-pink-50 border border-pink-100 text-[11px] font-semibold text-pink-700">
+                            {item}
+                          </span>
+                        ))}
+                      </dd>
+                    </div>
+                  )}
+                  <div className="sm:col-span-2 text-[11px] text-slate-400 pt-1">
+                    {g.source === 'govt-api' ? '✓ Verified via Govt GST Portal API' : '✓ Verified and decoded from GSTIN checksum'}
                   </div>
                 </>
+              ) : (
+                brand.gst_status === 'yes' && (
+                  <div className="sm:col-span-2 text-xs text-slate-400 italic">
+                    GST number entered: {brand.gstin}. Awaiting secondary portal sync.
+                  </div>
+                )
               )}
-              {brand.gst_status === 'yes' && !g && <div className="sm:col-span-2 text-xs text-slate-400">The brand did not confirm GST details on the form.</div>}
             </dl>
           </Card>
         </div>

@@ -22,6 +22,7 @@ export async function POST(req: Request) {
   const gstStatus = body.gstStatus === 'yes' ? 'yes' : 'no';
   const city = String(body.city || '');
   const logoUrl = String(body.logoUrl || '');
+  const clerkUserId = body.clerkUserId ? String(body.clerkUserId) : null;
 
   if (founderName.length < 2 || founderName.length > 80) return bad('Please enter a valid founder name.');
   if (brandName.length < 2 || brandName.length > 80) return bad('Please enter a valid brand name.');
@@ -48,13 +49,15 @@ export async function POST(req: Request) {
     const gst = await verifyGst(String(body.gstin || ''));
     if (gst.status === 'invalid') return bad(gst.message);
     gstin = gst.normalized || null;
-    if (body.gstConfirmed) gstDetails = gst.data || null;
+    gstDetails = body.gstDetails || gst.data || null;
   }
+
+  const normalizedEmail = email.normalized || String(body.email).trim().toLowerCase();
 
   const row = {
     founder_name: founderName,
     brand_name: brandName,
-    email: email.normalized || String(body.email).trim().toLowerCase(),
+    email: normalizedEmail,
     whatsapp_number: phone.value,
     gst_status: gstStatus,
     gstin,
@@ -66,6 +69,7 @@ export async function POST(req: Request) {
     instagram_info: ig.data || null,
     city,
     brand_logo_url: logoUrl,
+    clerk_user_id: clerkUserId,
   };
 
   // Prefer the service-role client; if its key is bad, fall back to the anon client (insert-only RLS policy).
@@ -74,6 +78,28 @@ export async function POST(req: Request) {
 
   let lastError = '';
   for (const client of candidates) {
+    // Check if brand with this email already exists — update instead of inserting duplicate
+    try {
+      const { data: existing } = await client
+        .from('brand_registrations')
+        .select('id')
+        .ilike('email', normalizedEmail)
+        .limit(1);
+
+      if (existing && existing.length > 0) {
+        const { error: updErr } = await client
+          .from('brand_registrations')
+          .update(row)
+          .eq('id', existing[0].id);
+
+        if (!updErr) {
+          return NextResponse.json({ ok: true, slug: slugify(brandName), updated: true });
+        }
+      }
+    } catch {
+      /* fallback to insert */
+    }
+
     const { error } = await client.from('brand_registrations').insert(row);
     if (!error) {
       return NextResponse.json({ ok: true, slug: slugify(brandName) });

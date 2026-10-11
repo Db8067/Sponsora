@@ -8,16 +8,31 @@ export const ADMIN_EMAIL = 'devanshb3456@gmail.com';
 
 export type AdminIdentity = { name: string; imageUrl: string };
 
-/** Redirects to sign-in when logged out; returns null when logged in as a non-admin. */
-export async function requireAdmin(): Promise<AdminIdentity | null> {
+export type AdminAuthResult =
+  | { authorized: true; identity: AdminIdentity }
+  | { authorized: false; userEmail?: string };
+
+export async function getAdminAuth(): Promise<AdminAuthResult> {
   const user = await currentUser();
   if (!user) redirect('/sign-in?redirect_url=%2Fadmin');
+  const userEmail = (user.emailAddresses?.[0]?.emailAddress || '').toLowerCase();
   const isAdmin = (user.emailAddresses || []).some((e) => (e.emailAddress || '').toLowerCase() === ADMIN_EMAIL);
-  if (!isAdmin) return null;
+  if (!isAdmin) {
+    return { authorized: false, userEmail };
+  }
   return {
-    name: [user.firstName, user.lastName].filter(Boolean).join(' ') || 'Admin',
-    imageUrl: user.imageUrl || '',
+    authorized: true,
+    identity: {
+      name: [user.firstName, user.lastName].filter(Boolean).join(' ') || 'Admin',
+      imageUrl: user.imageUrl || '',
+    },
   };
+}
+
+/** Redirects to sign-in when logged out; returns null when logged in as a non-admin. */
+export async function requireAdmin(): Promise<AdminIdentity | null> {
+  const auth = await getAdminAuth();
+  return auth.authorized ? auth.identity : null;
 }
 
 export type BrandRow = {
@@ -40,6 +55,9 @@ export type BrandRow = {
   brand_logo_url: string | null;
   status: string | null;
   notes: string | null;
+  deleted_at?: string | null;
+  blocked_at?: string | null;
+  cloudinary_public_id?: string | null;
 };
 
 export async function fetchBrands(): Promise<{ rows: BrandRow[]; error: string | null }> {

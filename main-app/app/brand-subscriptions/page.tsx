@@ -288,21 +288,7 @@ export default function BrandSubscriptionsPage() {
     <div className="flex flex-col min-h-screen">
       <SellerNavbar />
 
-      {/* reassurance bar */}
-      <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 text-white py-2 px-4 text-xs font-medium">
-        <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
-          <div className="flex items-center gap-2">
-            <span className="px-2 py-0.5 rounded bg-primary/30 text-pink-300 text-[10px] font-bold uppercase tracking-wider">Zero Risk</span>
-            <span className="text-slate-300">Bank-grade 256-bit security &bull; Direct UPI to your QR &bull; Cancel anytime</span>
-          </div>
-          <div className="flex items-center gap-4 text-slate-400 text-[11px]">
-            <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" /> Instant Webhook Sync</span>
-            <span className="hidden sm:inline">24/7 Founder Concierge</span>
-          </div>
-        </div>
-      </div>
-
-      <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 space-y-10">
+      <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 pt-6 pb-12 sm:pt-8 sm:pb-16 space-y-10">
 
         {/* ── 1. Brand Passport ── */}
         <Suspense fallback={
@@ -349,7 +335,7 @@ export default function BrandSubscriptionsPage() {
                 <div
                   key={plan.id}
                   onClick={() => setSelectedPlan(plan.id)} onMouseEnter={() => setSelectedPlan(plan.id)} onTouchStart={() => setSelectedPlan(plan.id)}
-                  className={`relative cursor-pointer flex flex-col justify-between p-6 rounded-3xl backdrop-blur-sm transition-all duration-200
+                  className={`group relative cursor-pointer flex flex-col justify-between p-6 rounded-3xl backdrop-blur-sm transition-all duration-200
                     ${plan.highlight ? 'md:-translate-y-2' : ''}
                     ${active
                       ? 'bg-white/90 dark:bg-slate-800/90 border-2 border-primary shadow-2xl shadow-primary/10 scale-[1.02]'
@@ -398,10 +384,7 @@ export default function BrandSubscriptionsPage() {
                       onClick={e => { e.stopPropagation(); handlePayment(plan.id, plan.tier, plan.price); }}
                       disabled={isProcessing === plan.id}
                       className={`w-full flex items-center justify-center gap-2 py-3.5 rounded-xl font-bold text-sm transition-all hover:scale-[1.02] disabled:opacity-70 disabled:hover:scale-100
-                        ${plan.highlight
-                          ? 'bg-primary hover:bg-primary-dark text-white shadow-lg shadow-primary/25'
-                          : 'border-2 border-slate-800 dark:border-white text-slate-800 dark:text-white hover:bg-slate-800 dark:hover:bg-white hover:text-white dark:hover:text-slate-900'
-                        }`}
+                        ${active ? 'bg-primary hover:bg-primary-dark text-white border-2 border-primary shadow-lg shadow-primary/25' : 'bg-white dark:bg-slate-800 border-2 border-pink-200 dark:border-white/20 text-slate-800 dark:text-white hover:bg-primary hover:border-primary hover:text-white group-hover:bg-primary group-hover:border-primary group-hover:text-white shadow-sm'}`}
                     >
                       {isProcessing === plan.id
                         ? <Loader2 className="w-5 h-5 animate-spin" />
