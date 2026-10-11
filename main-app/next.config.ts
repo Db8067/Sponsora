@@ -17,6 +17,14 @@ const nextConfig: NextConfig = {
     return [
       // /admin-brandform-<brand-name>  ->  app/admin-brandform/[slug]
       { source: '/admin-brandform-:slug', destination: '/admin-brandform/:slug' },
+      // /brand-subscriptions-<brand-name> -> app/brand-subscriptions?brand=<brand-name>
+      { source: '/brand-subscriptions-:slug', destination: '/brand-subscriptions?brand=:slug' },
+      // Handle typo in prompt /brand-subscriptiom-[slug]
+      { source: '/brand-subscriptiom-:slug', destination: '/brand-subscriptions?brand=:slug' },
+      // Admin Settings & Connectivity aliases
+      { source: '/admin/setting', destination: '/setting' },
+      { source: '/admin-setting', destination: '/setting' },
+      { source: '/admin/connectivity-check', destination: '/connectivity-check' },
     ];
   },
   experimental: {

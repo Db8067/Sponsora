@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { useRouter } from 'next/navigation';
 import { Loader2, Trash2, Ban, CheckCircle, AlertTriangle } from 'lucide-react';
 
@@ -13,9 +14,14 @@ type Props = {
 
 export default function BrandDetailActions({ id, brandName, status }: Props) {
   const router = useRouter();
+  const [mounted, setMounted] = useState(false);
   const [loading, setLoading] = useState<string | null>(null);
   const [showPermanentModal, setShowPermanentModal] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const isBlocked = status === 'blocked';
   const isDeleted = status === 'deleted';
@@ -113,9 +119,9 @@ export default function BrandDetailActions({ id, brandName, status }: Props) {
         </button>
       </div>
 
-      {/* Confirmation Modal for Permanent Delete */}
-      {showPermanentModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm animate-in fade-in duration-200">
+      {/* Confirmation Modal for Permanent Delete — Mounted to document.body via portal */}
+      {mounted && showPermanentModal && typeof document !== 'undefined' && createPortal(
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-200">
           <div className="max-w-md w-full bg-white dark:bg-slate-800 rounded-3xl p-6 shadow-2xl border border-rose-100 dark:border-rose-900/30 text-left">
             <div className="w-12 h-12 rounded-2xl bg-rose-100 dark:bg-rose-900/40 text-rose-600 flex items-center justify-center mb-4">
               <AlertTriangle className="w-6 h-6" />
@@ -149,7 +155,8 @@ export default function BrandDetailActions({ id, brandName, status }: Props) {
               </button>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </>
   );

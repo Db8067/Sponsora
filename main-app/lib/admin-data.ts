@@ -10,15 +10,22 @@ export type AdminIdentity = { name: string; imageUrl: string };
 
 export type AdminAuthResult =
   | { authorized: true; identity: AdminIdentity }
-  | { authorized: false; userEmail?: string };
+  | { authorized: false; status: 'logged_out' | 'unauthorized'; userEmail?: string };
 
 export async function getAdminAuth(): Promise<AdminAuthResult> {
-  const user = await currentUser();
-  if (!user) redirect('/sign-in?redirect_url=%2Fadmin');
+  let user = null;
+  try {
+    user = await currentUser();
+  } catch {
+    /* Clerk session check */
+  }
+  if (!user) {
+    return { authorized: false, status: 'logged_out' };
+  }
   const userEmail = (user.emailAddresses?.[0]?.emailAddress || '').toLowerCase();
   const isAdmin = (user.emailAddresses || []).some((e) => (e.emailAddress || '').toLowerCase() === ADMIN_EMAIL);
   if (!isAdmin) {
-    return { authorized: false, userEmail };
+    return { authorized: false, status: 'unauthorized', userEmail };
   }
   return {
     authorized: true,

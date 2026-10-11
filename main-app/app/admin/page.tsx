@@ -4,6 +4,7 @@ import AdminLayout from '@/components/AdminLayout';
 import AutoRefresh from '@/components/admin/AutoRefresh';
 import { BrandLogo, STATUS_STYLES } from '@/components/admin/shared';
 import AdminAccessDenied from '@/components/admin/AdminAccessDenied';
+import AdminLoggedOutScreen from '@/components/admin/AdminLoggedOutScreen';
 import { getAdminAuth, fetchBrands } from '@/lib/admin-data';
 
 export const dynamic = 'force-dynamic';
@@ -11,6 +12,9 @@ export const dynamic = 'force-dynamic';
 export default async function AdminPage() {
   const auth = await getAdminAuth();
   if (!auth.authorized) {
+    if (auth.status === 'logged_out') {
+      return <AdminLoggedOutScreen />;
+    }
     return <AdminAccessDenied userEmail={auth.userEmail} />;
   }
   const admin = auth.identity;

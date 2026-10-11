@@ -3,6 +3,7 @@ import Link from 'next/link';
 import AdminLayout from '@/components/AdminLayout';
 import AutoRefresh from '@/components/admin/AutoRefresh';
 import AdminAccessDenied from '@/components/admin/AdminAccessDenied';
+import AdminLoggedOutScreen from '@/components/admin/AdminLoggedOutScreen';
 import DeletedBrandItem from '@/components/admin/DeletedBrandItem';
 import { getAdminAuth, fetchBrands } from '@/lib/admin-data';
 
@@ -11,6 +12,9 @@ export const dynamic = 'force-dynamic';
 export default async function AdminBrandDeletePage() {
   const auth = await getAdminAuth();
   if (!auth.authorized) {
+    if (auth.status === 'logged_out') {
+      return <AdminLoggedOutScreen />;
+    }
     return <AdminAccessDenied userEmail={auth.userEmail} />;
   }
   const admin = auth.identity;

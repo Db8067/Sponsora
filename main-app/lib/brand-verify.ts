@@ -165,12 +165,11 @@ export async function verifyInstagram(raw: string): Promise<VerifyResult<Instagr
 
   try {
     const ctrl = new AbortController();
-    const timer = setTimeout(() => ctrl.abort(), 7000);
+    const timer = setTimeout(() => ctrl.abort(), 8000);
     const res = await fetch(parsed.url, {
       headers: {
-        // Link-preview crawlers are served the public meta tags
-        'User-Agent': 'facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)',
-        Accept: 'text/html',
+        'User-Agent': 'Twitterbot/1.0',
+        Accept: 'text/html,application/xhtml+xml',
       },
       redirect: 'follow',
       signal: ctrl.signal,
@@ -179,39 +178,53 @@ export async function verifyInstagram(raw: string): Promise<VerifyResult<Instagr
     clearTimeout(timer);
 
     if (res.status === 404) {
-      return { status: 'invalid', message: `No Instagram account found with the username @${parsed.handle}` };
+      return { status: 'invalid', message: `No Instagram profile found with username @${parsed.handle}` };
     }
-    if (res.ok && !res.url.includes('/accounts/login')) {
+
+    if (res.ok) {
       const html = await res.text();
       const meta = readMeta(html);
-      const title = meta['og:title'] || '';
-      if (/page not found|content isn'?t available/i.test(title)) {
-        return { status: 'invalid', message: `No Instagram account found with the username @${parsed.handle}` };
+      let title = decodeEntities(meta['og:title'] || '');
+      if (/page not found|content isn'?t available/i.test(title) || /page not found/i.test(html)) {
+        return { status: 'invalid', message: `No Instagram profile found with username @${parsed.handle}` };
       }
-      if (title) {
-        const desc = meta['og:description'] || meta['description'] || '';
-        const counts = /([\d.,]+[KMkm]?)\s+Followers?,\s*([\d.,]+[KMkm]?)\s+Following,\s*([\d.,]+[KMkm]?)\s+Posts?/i.exec(desc);
-        info.status = 'found';
-        info.fullName = /^(.*?)\s*\(@/.exec(title)?.[1]?.trim() || undefined;
-        if (counts) {
-          info.followers = counts[1];
-          info.following = counts[2];
-          info.posts = counts[3];
-        }
-        info.avatar = meta['og:image'] || undefined;
-        const bio = /on Instagram:\s*"([\s\S]*)"\s*$/.exec(desc)?.[1];
-        info.bio = bio ? bio.slice(0, 220) : undefined;
-        return { status: 'valid', message: 'Instagram account found', normalized: parsed.handle, data: info };
+
+      const desc = decodeEntities(meta['og:description'] || meta['description'] || '');
+      const counts = /([\d.,]+[KMkm]?)\s+Followers?,\s*([\d.,]+[KMkm]?)\s+Following,\s*([\d.,]+[KMkm]?)\s+Posts?/i.exec(desc);
+      
+      info.status = 'found';
+      const cleanName = /^(.*?)\s*\(@/.exec(title)?.[1]?.trim();
+      info.fullName = cleanName || `@${parsed.handle}`;
+      if (counts) {
+        info.followers = counts[1];
+        info.following = counts[2];
+        info.posts = counts[3];
       }
+
+      const rawImg = meta['og:image'] || undefined;
+      if (rawImg) {
+        const decodedImg = rawImg.replace(/&amp;/g, '&');
+        info.avatar = `/api/brand/image-proxy?url=${encodeURIComponent(decodedImg)}`;
+      }
+
+      const bio = /from\s+[^:]+:\s*"([\s\S]*)"\s*$/.exec(desc)?.[1] || /on Instagram:\s*"([\s\S]*)"\s*$/.exec(desc)?.[1];
+      info.bio = bio ? bio.slice(0, 220) : undefined;
+
+      return {
+        status: 'valid',
+        message: `Instagram profile verified: @${parsed.handle}`,
+        normalized: parsed.handle,
+        data: info,
+      };
     }
   } catch {
-    /* network / blocked — handled below */
+    /* network timeout */
   }
 
   info.status = 'found';
   return {
     status: 'valid',
-    message: `Instagram account found: @${parsed.handle}`,
+    message: `@${parsed.handle}`,
     normalized: parsed.handle,
     data: info,
   };

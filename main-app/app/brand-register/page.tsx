@@ -12,6 +12,8 @@ import {
 } from 'lucide-react';
 import LogoDropzone, { useLogoUpload } from '@/components/brand/LogoDropzone';
 import CityCombobox from '@/components/brand/CityCombobox';
+import WebsitePreview from '@/components/brand/WebsitePreview';
+import BrandDisabledScreen from '@/components/brand/BrandDisabledScreen';
 import { useVerify, type VState } from '@/components/brand/useVerify';
 import {
   validateEmailSyntax, validatePhone, validateGstFormat, parseInstagram, validateWebsite,
@@ -80,6 +82,12 @@ export default function BrandRegisterPage() {
   const { user } = useUser();
   const [existingBrand, setExistingBrand] = useState<{ brand_name: string; slug: string } | null>(null);
   const [selectedInstagram, setSelectedInstagram] = useState(false);
+  const [isDisabledBrand, setIsDisabledBrand] = useState(false);
+  const [disabledBrandName, setDisabledBrandName] = useState('');
+
+  const [phoneConflict, setPhoneConflict] = useState<string | null>(null);
+  const [gstConflict, setGstConflict] = useState<string | null>(null);
+  const [igConflict, setIgConflict] = useState<string | null>(null);
 
   // Auto-fill email if signed in via Clerk
   useEffect(() => {
@@ -89,7 +97,7 @@ export default function BrandRegisterPage() {
     }
   }, [user, email]);
 
-  // Check if this email already registered a brand
+  // Check if this email already registered a brand or is disabled
   useEffect(() => {
     const checkEmail = (email || user?.primaryEmailAddress?.emailAddress || '').trim();
     if (!checkEmail || !validateEmailSyntax(checkEmail).valid) {
@@ -102,24 +110,101 @@ export default function BrandRegisterPage() {
       try {
         const res = await fetch(`/api/brand/check-status?email=${encodeURIComponent(checkEmail)}`);
         const data = await res.json().catch(() => null);
-        if (active && data?.registered && data.brand) {
-          setExistingBrand({
-            brand_name: data.brand.brand_name,
-            slug: data.brand.slug,
-          });
-        } else if (active) {
-          setExistingBrand(null);
+        if (!active) return;
+
+        if (data?.disabled) {
+          setIsDisabledBrand(true);
+          setDisabledBrandName(data.brandName || 'Your Brand');
+          return;
         }
+
+        if (data?.registered && data.brand) {
+          // Instantly redirect returning brand to subscriptions without rendering the form
+          const brandSlug = data.brand.slug || encodeURIComponent(data.brand.brand_name);
+          router.replace(`/brand-subscriptions-${brandSlug}`);
+          return;
+        }
+
+        setExistingBrand(null);
       } catch {
         /* ignore */
       }
-    }, 500);
+    }, 400);
 
     return () => {
       active = false;
       clearTimeout(timer);
     };
-  }, [user, email]);
+  }, [user, email, router]);
+
+  // Conflict checks: Phone
+  useEffect(() => {
+    const p = phone.trim();
+    if (p.length < 10) {
+      setPhoneConflict(null);
+      return;
+    }
+    const timer = setTimeout(async () => {
+      try {
+        const res = await fetch(`/api/brand/check-status?phone=${encodeURIComponent(p)}&email=${encodeURIComponent(email)}`);
+        const data = await res.json().catch(() => null);
+        if (data?.conflict && data.field === 'phone') {
+          setPhoneConflict(data.message);
+        } else {
+          setPhoneConflict(null);
+        }
+      } catch {
+        setPhoneConflict(null);
+      }
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [phone, email]);
+
+  // Conflict checks: GSTIN
+  useEffect(() => {
+    const g = gstin.trim();
+    if (g.length !== 15 || gstStatus !== 'yes') {
+      setGstConflict(null);
+      return;
+    }
+    const timer = setTimeout(async () => {
+      try {
+        const res = await fetch(`/api/brand/check-status?gstin=${encodeURIComponent(g)}&email=${encodeURIComponent(email)}`);
+        const data = await res.json().catch(() => null);
+        if (data?.conflict && data.field === 'gstin') {
+          setGstConflict(data.message);
+        } else {
+          setGstConflict(null);
+        }
+      } catch {
+        setGstConflict(null);
+      }
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [gstin, gstStatus, email]);
+
+  // Conflict checks: Instagram
+  useEffect(() => {
+    const parsed = parseInstagram(instagram);
+    if (!parsed.valid) {
+      setIgConflict(null);
+      return;
+    }
+    const timer = setTimeout(async () => {
+      try {
+        const res = await fetch(`/api/brand/check-status?instagram=${encodeURIComponent(parsed.handle)}&email=${encodeURIComponent(email)}`);
+        const data = await res.json().catch(() => null);
+        if (data?.conflict && data.field === 'instagram') {
+          setIgConflict(data.message);
+        } else {
+          setIgConflict(null);
+        }
+      } catch {
+        setIgConflict(null);
+      }
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [instagram, email]);
 
   const { logo, input: logoInput, openPicker, handleFile, reset: resetLogo } = useLogoUpload();
   const logoPreview = logo.previewUrl;
@@ -169,6 +254,9 @@ export default function BrandRegisterPage() {
     if (!igParse.valid) problems.push((igParse as any).error);
     else if (igV.status === 'invalid') problems.push(igV.message || 'Instagram account is not valid.');
     if (!webV.valid) problems.push(webV.error!);
+    if (phoneConflict) problems.push(phoneConflict);
+    if (gstConflict) problems.push(gstConflict);
+    if (igConflict) problems.push(igConflict);
 
     if (problems.length) {
       setError(problems[0]);
@@ -222,6 +310,10 @@ export default function BrandRegisterPage() {
       setIsSubmitting(false);
     }
   };
+
+  if (isDisabledBrand) {
+    return <BrandDisabledScreen brandName={disabledBrandName} />;
+  }
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -406,6 +498,12 @@ export default function BrandRegisterPage() {
                         Verified buyer codes land directly in this chat
                       </p>
                     )}
+                    {phoneConflict && (
+                      <div className="mt-2 p-2.5 rounded-xl border border-pink-200 bg-pink-50 text-pink-700 text-xs font-medium leading-relaxed flex items-start gap-2 animate-in fade-in">
+                        <span className="text-sm">🌸</span>
+                        <span>{phoneConflict}</span>
+                      </div>
+                    )}
                   </div>
                 </div>
 
@@ -463,6 +561,12 @@ export default function BrandRegisterPage() {
                         />
                       </div>
                       <FieldMsg state={gstV} />
+                      {gstConflict && (
+                        <div className="mt-2 p-2.5 rounded-xl border border-pink-200 bg-pink-50 text-pink-700 text-xs font-medium leading-relaxed flex items-start gap-2 animate-in fade-in">
+                          <span className="text-sm">🌸</span>
+                          <span>{gstConflict}</span>
+                        </div>
+                      )}
 
                       {gstV.status !== 'invalid' && gstV.data && (
                         <div className="mt-3 rounded-2xl border border-emerald-200 bg-white dark:bg-slate-900 p-3.5 shadow-sm">
@@ -602,6 +706,13 @@ export default function BrandRegisterPage() {
                         </button>
                       </div>
                     )}
+
+                    {igConflict && (
+                      <div className="mt-2 p-2.5 rounded-xl border border-pink-200 bg-pink-50 text-pink-700 text-xs font-medium leading-relaxed flex items-start gap-2 animate-in fade-in">
+                        <span className="text-sm">🌸</span>
+                        <span>{igConflict}</span>
+                      </div>
+                    )}
                   </div>
                   <div>
                     <Label htmlFor="brandWebsite" hint="(optional)">Brand Website</Label>
@@ -621,6 +732,7 @@ export default function BrandRegisterPage() {
                       />
                     </div>
                     {touched.website && !webV.valid && <p className="mt-1.5 text-xs text-red-600">{webV.error}</p>}
+                    {brandWebsite.trim().length > 3 && <WebsitePreview url={brandWebsite} />}
                   </div>
                 </div>
 

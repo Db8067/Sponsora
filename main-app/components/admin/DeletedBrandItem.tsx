@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { useRouter } from 'next/navigation';
 import { Loader2, RotateCcw, Trash2, AlertTriangle, ShieldCheck, MapPin, Phone, Mail } from 'lucide-react';
 import type { BrandRow } from '@/lib/admin-data';
@@ -8,9 +9,14 @@ import { BrandLogo } from '@/components/admin/shared';
 
 export default function DeletedBrandItem({ brand }: { brand: BrandRow }) {
   const router = useRouter();
+  const [mounted, setMounted] = useState(false);
   const [loading, setLoading] = useState<string | null>(null);
   const [showConfirm, setShowConfirm] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   async function handleAction(action: 'undo' | 'permanent-delete') {
     setError(null);
@@ -109,9 +115,9 @@ export default function DeletedBrandItem({ brand }: { brand: BrandRow }) {
         </div>
       </div>
 
-      {/* Confirmation Modal */}
-      {showConfirm && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-200">
+      {/* Confirmation Modal — Mounted to document.body via portal to prevent backdrop clipping */}
+      {mounted && showConfirm && typeof document !== 'undefined' && createPortal(
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-200">
           <div className="max-w-md w-full bg-white dark:bg-slate-800 rounded-3xl p-6 shadow-2xl border border-rose-100 dark:border-rose-900/30 text-left">
             <div className="w-12 h-12 rounded-2xl bg-rose-100 dark:bg-rose-900/40 text-rose-600 flex items-center justify-center mb-4">
               <AlertTriangle className="w-6 h-6" />
@@ -145,7 +151,8 @@ export default function DeletedBrandItem({ brand }: { brand: BrandRow }) {
               </button>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );

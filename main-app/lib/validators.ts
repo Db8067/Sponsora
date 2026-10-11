@@ -140,6 +140,16 @@ export function parseInstagram(raw: string): InstagramParse {
   const v = raw.trim();
   if (!v) return { valid: false, error: 'Enter your Instagram profile link or @handle' };
 
+  // Explicitly reject GST numbers entered into Instagram field
+  if (GST_REGEX.test(v.toUpperCase())) {
+    return { valid: false, error: 'This is a GST number, not an Instagram profile link or handle!' };
+  }
+
+  // Reject Indian/international phone numbers
+  if (/^\+?\d{10,13}$/.test(v.replace(/\s+/g, ''))) {
+    return { valid: false, error: 'This is a phone number, not an Instagram handle!' };
+  }
+
   let handle = '';
   const looksLikeBareHandle = /^@?[A-Za-z0-9._]+$/.test(v);
   const lastLabel = v.includes('.') ? v.split('.').pop()!.toLowerCase() : '';
@@ -167,9 +177,19 @@ export function parseInstagram(raw: string): InstagramParse {
     }
   }
 
-  if (!/^[A-Za-z0-9._]{1,30}$/.test(handle) || handle.endsWith('.') || handle.includes('..')) {
-    return { valid: false, error: 'Instagram usernames can only contain letters, numbers, dots and underscores (max 30)' };
+  // Strictly reject numbers only (phone/random digits)
+  if (/^\d+$/.test(handle)) {
+    return { valid: false, error: 'Instagram usernames cannot be numbers only' };
   }
+
+  if (handle.length < 2 || handle.length > 30) {
+    return { valid: false, error: 'Instagram usernames must be between 2 and 30 characters' };
+  }
+
+  if (!/^[A-Za-z0-9._]+$/.test(handle) || handle.startsWith('.') || handle.endsWith('.') || handle.includes('..')) {
+    return { valid: false, error: 'Instagram usernames can only contain letters, numbers, dots and underscores' };
+  }
+
   return { valid: true, handle, url: `https://www.instagram.com/${handle}/` };
 }
 

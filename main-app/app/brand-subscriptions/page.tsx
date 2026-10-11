@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import SellerNavbar from '@/components/SellerNavbar';
 import Script from 'next/script';
+import BrandDisabledScreen from '@/components/brand/BrandDisabledScreen';
 
 /* ─── plan data (same as subscriptions page) ─── */
 const PLANS = [
@@ -119,42 +120,112 @@ const STORIES = [
   },
 ];
 
-/* ─── Brand Passport pulled from URL params ─── */
+/* ─── Brand Passport pulled from URL params or Database ─── */
 function BrandPassport() {
   const searchParams = useSearchParams();
+  const [disabled, setDisabled] = useState(false);
+  const [disabledBrandName, setDisabledBrandName] = useState('');
   const [brandData, setBrandData] = useState({
     brandName: searchParams.get('brand') || '',
     founderName: searchParams.get('founder') || '',
     category: searchParams.get('category') || '',
     phone: searchParams.get('phone') || '',
     email: searchParams.get('email') || '',
-    logo: searchParams.get('logo') || ''
+    logo: searchParams.get('logo') || '',
   });
 
   useEffect(() => {
-    if (!brandData.brandName) {
-      try {
-        const match = document.cookie.match(/brand_welcome_data=([^;]+)/);
-        if (match) {
-          const cookieData = JSON.parse(decodeURIComponent(match[1]));
-          setBrandData({
-            brandName: cookieData.brand || 'Your Brand',
-            founderName: cookieData.founder || 'Founder',
-            category: cookieData.category || 'D2C Brand',
-            phone: cookieData.phone || '',
-            email: cookieData.email || '', logo: cookieData.logo || ''
-          });
-        } else {
-          setBrandData({ brandName: 'Your Brand', founderName: 'Founder', category: 'D2C Brand', phone: '', email: '', logo: '' });
-        }
-      } catch (e) {
-        setBrandData({ brandName: 'Your Brand', founderName: 'Founder', category: 'D2C Brand', phone: '', email: '', logo: '' });
+    const brandParam = searchParams.get('brand')?.trim();
+    const slugParam = searchParams.get('slug')?.trim();
+    const emailParam = searchParams.get('email')?.trim();
+
+    let cookieBrand = '';
+    let cookieFounder = '';
+    let cookieLogo = '';
+    let cookieCategory = '';
+    let cookiePhone = '';
+    let cookieEmail = '';
+
+    try {
+      const match = document.cookie.match(/brand_welcome_data=([^;]+)/);
+      if (match) {
+        const cookieData = JSON.parse(decodeURIComponent(match[1]));
+        cookieBrand = cookieData.brand || '';
+        cookieFounder = cookieData.founder || '';
+        cookieLogo = cookieData.logo || '';
+        cookieCategory = cookieData.category || '';
+        cookiePhone = cookieData.phone || '';
+        cookieEmail = cookieData.email || '';
       }
+    } catch {
+      /* ignore */
     }
-  }, []);
+
+    const target = brandParam || slugParam || emailParam || cookieBrand || cookieEmail;
+    if (target) {
+      const q = new URLSearchParams();
+      if (brandParam) q.set('brand', brandParam);
+      else if (slugParam) q.set('slug', slugParam);
+      else if (emailParam) q.set('email', emailParam);
+      else if (cookieBrand) q.set('brand', cookieBrand);
+      else if (cookieEmail) q.set('email', cookieEmail);
+
+      fetch(`/api/brand/get-details?${q.toString()}`)
+        .then((res) => res.json())
+        .then((data) => {
+          if (data?.disabled) {
+            setDisabled(true);
+            setDisabledBrandName(data.brandName || 'Your Brand');
+          } else if (data?.ok && data.brand) {
+            setBrandData({
+              brandName: data.brand.brand_name || cookieBrand || 'Your Brand',
+              founderName: data.brand.founder_name || cookieFounder || 'Founder',
+              category: data.brand.category || cookieCategory || 'D2C Brand',
+              phone: data.brand.phone || cookiePhone || '',
+              email: data.brand.email || cookieEmail || '',
+              logo: data.brand.logo || cookieLogo || '',
+            });
+          } else {
+            setBrandData({
+              brandName: cookieBrand || brandParam || 'Your Brand',
+              founderName: cookieFounder || 'Founder',
+              category: cookieCategory || 'D2C Brand',
+              phone: cookiePhone || '',
+              email: cookieEmail || '',
+              logo: cookieLogo || '',
+            });
+          }
+        })
+        .catch(() => {
+          setBrandData({
+            brandName: cookieBrand || brandParam || 'Your Brand',
+            founderName: cookieFounder || 'Founder',
+            category: cookieCategory || 'D2C Brand',
+            phone: cookiePhone || '',
+            email: cookieEmail || '',
+            logo: cookieLogo || '',
+          });
+        });
+    } else {
+      setBrandData({
+        brandName: cookieBrand || 'Your Brand',
+        founderName: cookieFounder || 'Founder',
+        category: cookieCategory || 'D2C Brand',
+        phone: cookiePhone || '',
+        email: cookieEmail || '',
+        logo: cookieLogo || '',
+      });
+    }
+  }, [searchParams]);
+
+  if (disabled) {
+    return <BrandDisabledScreen brandName={disabledBrandName} />;
+  }
 
   const { brandName, founderName, category, phone, email, logo } = brandData;
-  const initials = (brandName || 'YB').slice(0, 2).toUpperCase();  return (
+  const initials = (brandName || 'YB').slice(0, 2).toUpperCase();
+
+  return (
     <section className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl border border-pink-100 dark:border-white/10 shadow-sm overflow-hidden">
       {/* colour bar */}
       <div className="h-1.5 bg-gradient-to-r from-primary via-pink-400 to-pink-300" />
@@ -499,27 +570,6 @@ export default function BrandSubscriptionsPage() {
                 </div>
               </div>
             ))}
-          </div>
-
-          {/* ── Video / Case Study Banner ── */}
-          <div className="rounded-2xl bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 text-white p-6 sm:p-7 flex flex-col md:flex-row items-center justify-between gap-6 shadow-md">
-            <div className="flex items-center gap-4">
-              <div className="relative w-16 h-16 rounded-2xl bg-primary/20 border border-primary/40 flex items-center justify-center shrink-0 cursor-pointer">
-                <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white shadow-lg shadow-primary/40">
-                  ▶
-                </div>
-              </div>
-              <div>
-                <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-white/10 text-pink-300 text-[10px] font-bold uppercase tracking-wider mb-1">
-                  Watch 2-Min Founder Story
-                </div>
-                <h4 className="text-base font-bold text-white">How 12 Handcrafted D2C Brands Built 10,000+ Direct Buyer Queues</h4>
-                <p className="text-xs text-slate-400 mt-0.5">Featuring live WhatsApp conversions and payout statements.</p>
-              </div>
-            </div>
-            <button className="px-5 py-2.5 rounded-xl bg-white text-slate-900 hover:bg-slate-100 font-bold text-xs uppercase tracking-wider shrink-0 transition-all flex items-center gap-1.5 shadow-sm">
-              Watch Case Study <ArrowRight className="w-4 h-4" />
-            </button>
           </div>
         </section>
 

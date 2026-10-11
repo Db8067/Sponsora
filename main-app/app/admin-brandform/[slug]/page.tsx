@@ -3,6 +3,7 @@ import Link from 'next/link';
 import AdminLayout from '@/components/AdminLayout';
 import AutoRefresh from '@/components/admin/AutoRefresh';
 import AdminAccessDenied from '@/components/admin/AdminAccessDenied';
+import AdminLoggedOutScreen from '@/components/admin/AdminLoggedOutScreen';
 import BrandDetailActions from '@/components/admin/BrandDetailActions';
 import { BrandLogo, STATUS_STYLES } from '@/components/admin/shared';
 import { getAdminAuth, fetchBrands } from '@/lib/admin-data';
@@ -34,6 +35,9 @@ function Card({ title, icon, children }: { title: string; icon: string; children
 export default async function AdminBrandDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const auth = await getAdminAuth();
   if (!auth.authorized) {
+    if (auth.status === 'logged_out') {
+      return <AdminLoggedOutScreen />;
+    }
     return <AdminAccessDenied userEmail={auth.userEmail} />;
   }
   const admin = auth.identity;

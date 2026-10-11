@@ -10,6 +10,8 @@ const NAV = [
   { href: '/admin-brandform', label: 'Brand Approvals (Realtime)', icon: 'verified', badge: 'New', match: (p: string) => p.startsWith('/admin-brandform') },
   { href: '/admin-brand-delete', label: 'Deleted Brand', icon: 'delete', match: (p: string) => p.startsWith('/admin-brand-delete') },
   { href: '/admin-users', label: 'Users & Activity', icon: 'group', match: (p: string) => p.startsWith('/admin-users') },
+  { href: '/setting', label: 'Settings', icon: 'settings', match: (p: string) => p === '/setting' || p.startsWith('/setting') },
+  { href: '/connectivity-check', label: 'Connectivity Check', icon: 'wifi_tethering', badge: 'Live', match: (p: string) => p.startsWith('/connectivity-check') },
 ];
 
 type Props = { name?: string; imageUrl?: string; children: React.ReactNode };

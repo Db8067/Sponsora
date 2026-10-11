@@ -68,10 +68,10 @@ export async function POST(req: Request) {
     }
 
     if (action === 'permanent-delete') {
-      // 1. Fetch brand row first to retrieve logo image URL
+      // 1. Fetch brand row first to retrieve logo image URL and email
       const { data: brand, error: fetchErr } = await client
         .from('brand_registrations')
-        .select('id, brand_name, brand_logo_url')
+        .select('id, brand_name, brand_logo_url, email')
         .eq('id', id)
         .single();
 
@@ -79,7 +79,20 @@ export async function POST(req: Request) {
         return NextResponse.json({ ok: false, error: fetchErr?.message || 'Brand not found.' }, { status: 404 });
       }
 
-      // 2. Permanently delete image from Cloudinary if logo URL is present
+      // 2. Insert into deleted_brand_logs to decommission brand email
+      if (brand?.email) {
+        try {
+          await client.from('deleted_brand_logs').insert({
+            email: brand.email.toLowerCase().trim(),
+            brand_name: brand.brand_name,
+            deleted_at: new Date().toISOString(),
+          });
+        } catch (logErr) {
+          console.error('[deleted_brand_logs insert error]:', logErr);
+        }
+      }
+
+      // 3. Permanently delete image from Cloudinary if logo URL is present
       const logoUrl = brand?.brand_logo_url;
       if (logoUrl) {
         const publicId = extractCloudinaryPublicId(logoUrl);
@@ -99,7 +112,7 @@ export async function POST(req: Request) {
         }
       }
 
-      // 3. Permanently delete text record from Supabase
+      // 4. Permanently delete text record from Supabase
       const { error: deleteErr } = await client
         .from('brand_registrations')
         .delete()
