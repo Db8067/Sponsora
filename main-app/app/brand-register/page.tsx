@@ -99,9 +99,25 @@ export default function BrandRegisterPage() {
 
   // Check if this email already registered a brand or is disabled
   useEffect(() => {
+    // If URL has reapply=true, clear any old log immediately and allow registration
+    const isReapply = typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('reapply') === 'true';
+    if (isReapply) {
+      setIsDisabledBrand(false);
+      const targetEmail = (email || user?.primaryEmailAddress?.emailAddress || '').trim();
+      if (targetEmail) {
+        fetch('/api/brand/check-status', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: targetEmail }),
+        }).catch(() => null);
+      }
+      return;
+    }
+
     const checkEmail = (email || user?.primaryEmailAddress?.emailAddress || '').trim();
     if (!checkEmail || !validateEmailSyntax(checkEmail).valid) {
       setExistingBrand(null);
+      setIsDisabledBrand(false);
       return;
     }
 
@@ -116,6 +132,8 @@ export default function BrandRegisterPage() {
           setIsDisabledBrand(true);
           setDisabledBrandName(data.brandName || 'Your Brand');
           return;
+        } else {
+          setIsDisabledBrand(false);
         }
 
         if (data?.registered && data.brand) {
@@ -312,7 +330,13 @@ export default function BrandRegisterPage() {
   };
 
   if (isDisabledBrand) {
-    return <BrandDisabledScreen brandName={disabledBrandName} />;
+    return (
+      <BrandDisabledScreen
+        brandName={disabledBrandName}
+        email={email || user?.primaryEmailAddress?.emailAddress || ''}
+        onReset={() => setIsDisabledBrand(false)}
+      />
+    );
   }
 
   return (

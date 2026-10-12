@@ -9,7 +9,7 @@ export const dynamic = 'force-dynamic';
 
 type CheckResult = {
   name: string;
-  category: 'database' | 'auth' | 'storage' | 'hosting' | 'git' | 'external';
+  category: 'database' | 'auth' | 'storage' | 'hosting' | 'git' | 'external' | 'payment';
   status: 'operational' | 'degraded' | 'error';
   latencyMs: number;
   details: string;
@@ -204,6 +204,46 @@ export async function GET() {
         status: 'degraded',
         latencyMs: Math.round(performance.now() - igStart),
         details: 'Gateway fallback mode enabled for metadata resolution.',
+      });
+    }
+
+    // 7. Razorpay Payment Gateway Realtime Health Check
+    const rzpStart = performance.now();
+    try {
+      const key_id = process.env.RAZORPAY_KEY_ID;
+      const rzpRes = await fetch('https://api.razorpay.com', {
+        headers: { 'User-Agent': 'GrahakSetu-Health-Monitor' },
+        next: { revalidate: 0 },
+      });
+      const rzpLatency = Math.round(performance.now() - rzpStart);
+
+      if (rzpRes.ok) {
+        checks.push({
+          name: 'Razorpay Payment Gateway API',
+          category: 'payment',
+          status: rzpLatency < 1500 ? 'operational' : 'degraded',
+          latencyMs: rzpLatency,
+          details: `Razorpay API cluster live (HTTP ${rzpRes.status}). ${
+            key_id ? `Merchant Key "${key_id.slice(0, 8)}..." configured.` : 'Ready for payment intent processing.'
+          }`,
+          meta: { configured: Boolean(key_id), keyIdPrefix: key_id ? key_id.slice(0, 8) : null },
+        });
+      } else {
+        checks.push({
+          name: 'Razorpay Payment Gateway API',
+          category: 'payment',
+          status: 'degraded',
+          latencyMs: rzpLatency,
+          details: `Razorpay response HTTP ${rzpRes.status} (${rzpRes.statusText})`,
+        });
+      }
+    } catch (err: any) {
+      checks.push({
+        name: 'Razorpay Payment Gateway API',
+        category: 'payment',
+        status: 'error',
+        latencyMs: Math.round(performance.now() - rzpStart),
+        details: err?.message || 'Razorpay cluster ping failed.',
       });
     }
 

@@ -89,6 +89,7 @@ const STORIES = [
     headline: 'From Amazon Aggregator Trap to ₹3.8L Direct Monthly Sales',
     quote: '"We used to pay ₹92,000 every single month in marketplace fees. Switching to Grahak Setu gave us direct WhatsApp customer connections with a 68% repeat purchase rate."',
     initials: 'RS',
+    image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=160&h=160&fit=crop&crop=faces&q=80',
     avatarBg: 'bg-pink-100 dark:bg-pink-900/30 text-primary',
     name: 'Radhika Sharma',
     brand: 'Mitti Herbals · Jaipur',
@@ -99,6 +100,7 @@ const STORIES = [
     headline: 'Scaling Without Paid Ads: 40 Micro-Creators Drove 450+ Sales',
     quote: '"Meta ads were costing us ₹600 per acquisition. The creator gifting engine let us send samples to 40 micro-influencers. The return was 14x with zero ad spend."',
     initials: 'HR',
+    image: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=160&h=160&fit=crop&crop=faces&q=80',
     avatarBg: 'bg-purple-100 dark:bg-purple-900/30 text-purple-700',
     name: 'Harshvardhan Rao',
     brand: 'Kaari Silver · Udaipur',
@@ -109,6 +111,7 @@ const STORIES = [
     headline: 'Specialty Coffee Direct to Kitchens with 0% Commission',
     quote: '"Before, visitors would abandon carts. On GrahakSetu, every person pinging us transfers UPI right away."',
     initials: 'KM',
+    image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=160&h=160&fit=crop&crop=faces&q=80',
     avatarBg: 'bg-amber-100 dark:bg-amber-900/30 text-amber-800',
     name: 'Karthik Menon',
     brand: 'BeanCraft Coffee · Chikmagalur',
@@ -219,7 +222,13 @@ function BrandPassport() {
   }, [searchParams]);
 
   if (disabled) {
-    return <BrandDisabledScreen brandName={disabledBrandName} />;
+    return (
+      <BrandDisabledScreen
+        brandName={disabledBrandName}
+        email={brandData.email}
+        onReset={() => setDisabled(false)}
+      />
+    );
   }
 
   const { brandName, founderName, category, phone, email, logo } = brandData;
@@ -327,9 +336,12 @@ export default function BrandSubscriptionsPage() {
     return match ? JSON.parse(decodeURIComponent(match[1])) : null;
   };
 
-  // Reset isProcessing when returning to this page
+  // Reset isProcessing and check URL billing param when mounting
   useEffect(() => {
     setIsProcessing(null);
+    if (typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('billing') === 'annual') {
+      setBilling('annual');
+    }
   }, []);
 
   const handlePayment = (planId: number, planName: string, amount: number) => {
@@ -383,10 +395,12 @@ export default function BrandSubscriptionsPage() {
             {/* billing toggle */}
             <div className="inline-flex items-center p-1.5 rounded-2xl bg-white/70 dark:bg-slate-800/70 border border-pink-100 dark:border-white/10 mt-2 shadow-sm">
               <button
+                type="button"
                 onClick={() => setBilling('monthly')}
                 className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all ${billing === 'monthly' ? 'bg-primary text-white shadow' : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white'}`}
               >Monthly</button>
               <button
+                type="button"
                 onClick={() => setBilling('annual')}
                 className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold flex items-center gap-1.5 transition-all ${billing === 'annual' ? 'bg-primary text-white shadow' : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white'}`}
               >
@@ -452,14 +466,18 @@ export default function BrandSubscriptionsPage() {
                   </div>
                   <div className="mt-8 space-y-2">
                     <button
-                      onClick={e => { e.stopPropagation(); handlePayment(plan.id, plan.tier, plan.price); }}
+                      onClick={e => {
+                        e.stopPropagation();
+                        const finalAmount = billing === 'annual' ? discountedPrice(plan.price) : plan.price;
+                        handlePayment(plan.id, plan.tier, finalAmount);
+                      }}
                       disabled={isProcessing === plan.id}
                       className={`w-full flex items-center justify-center gap-2 py-3.5 rounded-xl font-bold text-sm transition-all hover:scale-[1.02] disabled:opacity-70 disabled:hover:scale-100
                         ${active ? 'bg-primary hover:bg-primary-dark text-white border-2 border-primary shadow-lg shadow-primary/25' : 'bg-white dark:bg-slate-800 border-2 border-pink-200 dark:border-white/20 text-slate-800 dark:text-white hover:bg-primary hover:border-primary hover:text-white group-hover:bg-primary group-hover:border-primary group-hover:text-white shadow-sm'}`}
                     >
                       {isProcessing === plan.id
                         ? <Loader2 className="w-5 h-5 animate-spin" />
-                        : <>Start 14-Day Free Trial <ArrowRight className="w-4 h-4" /></>
+                        : <>Pay ₹{billing === 'annual' ? discountedPrice(plan.price) : plan.price} <ArrowRight className="w-4 h-4" /></>
                       }
                     </button>
                     <p className="text-[11px] text-center text-slate-500 dark:text-slate-400">Pay Securly by Razorpay</p>
@@ -560,8 +578,15 @@ export default function BrandSubscriptionsPage() {
                   )}
                 </div>
                 <div className="mt-4 pt-3 border-t border-pink-100 dark:border-white/10 flex items-center gap-3">
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 font-bold text-sm ring-2 ${s.avatarBg} ring-pink-200 dark:ring-pink-800/40`}>
-                    {s.initials}
+                  <div className="w-11 h-11 rounded-full overflow-hidden shrink-0 ring-2 ring-pink-200 dark:ring-pink-800/40 relative">
+                    {s.image ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={s.image} alt={s.name} className="w-full h-full object-cover" />
+                    ) : (
+                      <div className={`w-full h-full flex items-center justify-center shrink-0 font-bold text-sm ${s.avatarBg}`}>
+                        {s.initials}
+                      </div>
+                    )}
                   </div>
                   <div>
                     <div className="text-xs font-bold text-slate-800 dark:text-white">{s.name}</div>

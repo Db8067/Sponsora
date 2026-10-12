@@ -483,15 +483,15 @@ export default function SellerLandingPage() {
                   ))}
                 </ul>
               </div>
-              <Link href="/subscriptions" className="block mt-6">
-                <button className={`w-full py-3 rounded-xl font-bold text-sm transition-all duration-300 ${hoveredPlan === 1 ? 'bg-primary text-white shadow-lg shadow-primary/25 scale-[1.02]' : 'bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-white hover:bg-primary hover:text-white'}`}>
+              <Link href={billing === 'annual' ? '/subscriptions?billing=annual' : '/subscriptions'} className="block mt-6">
+                <button type="button" className={`w-full py-3 rounded-xl font-bold text-sm transition-all duration-200 ${hoveredPlan === 1 ? 'bg-primary text-white shadow-lg shadow-primary/25 scale-[1.02]' : 'bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-white hover:bg-primary hover:text-white'}`}>
                   Get Started — ₹{billing === 'monthly' ? '99' : '82'}/mo
                 </button>
               </Link>
             </div>
 
             {/* Growth Pro — highlighted */}
-            <div onMouseEnter={() => setHoveredPlan(2)} onTouchStart={() => setHoveredPlan(2)} className={`relative cursor-pointer flex flex-col justify-between p-6 rounded-2xl backdrop-blur-sm transition-all duration-300 ${hoveredPlan === 2 ? 'bg-white/90 dark:bg-slate-800/90 border-2 border-primary/50 shadow-xl scale-[1.02] z-10' : 'bg-white/70 dark:bg-slate-800/70 border border-pink-100 dark:border-white/10 shadow-sm scale-100 opacity-90'}`}>
+            <div onMouseEnter={() => setHoveredPlan(2)} onTouchStart={() => setHoveredPlan(2)} className={`relative cursor-pointer flex flex-col justify-between p-6 rounded-2xl backdrop-blur-sm transition-all duration-200 ${hoveredPlan === 2 ? 'bg-white/90 dark:bg-slate-800/90 border-2 border-primary/50 shadow-xl scale-[1.02] z-10' : 'bg-white/70 dark:bg-slate-800/70 border border-pink-100 dark:border-white/10 shadow-sm scale-100 opacity-90'}`}>
 
               <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-primary text-white text-xs font-bold px-4 py-1 rounded-full shadow-md">Most Popular</div>
               <div>
@@ -512,15 +512,15 @@ export default function SellerLandingPage() {
                   ))}
                 </ul>
               </div>
-              <Link href="/subscriptions" className="block mt-6">
-                <button className={`w-full py-3 rounded-xl font-bold text-sm transition-all duration-300 ${hoveredPlan === 2 ? 'bg-primary text-white shadow-lg shadow-primary/25 scale-[1.02]' : 'bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-white hover:bg-primary hover:text-white'}`}>
+              <Link href={billing === 'annual' ? '/subscriptions?billing=annual' : '/subscriptions'} className="block mt-6">
+                <button type="button" className={`w-full py-3 rounded-xl font-bold text-sm transition-all duration-200 ${hoveredPlan === 2 ? 'bg-primary text-white shadow-lg shadow-primary/25 scale-[1.02]' : 'bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-white hover:bg-primary hover:text-white'}`}>
                   Get Growth Pro — ₹{billing === 'monthly' ? '499' : '414'}/mo
                 </button>
               </Link>
             </div>
 
             {/* Business Scale */}
-            <div onMouseEnter={() => setHoveredPlan(3)} onTouchStart={() => setHoveredPlan(3)} className={`relative cursor-pointer flex flex-col justify-between p-6 rounded-2xl backdrop-blur-sm transition-all duration-300 ${hoveredPlan === 3 ? 'bg-white/90 dark:bg-slate-800/90 border-2 border-primary/50 shadow-xl scale-[1.02] z-10' : 'bg-white/70 dark:bg-slate-800/70 border border-pink-100 dark:border-white/10 shadow-sm scale-100 opacity-90'}`}>
+            <div onMouseEnter={() => setHoveredPlan(3)} onTouchStart={() => setHoveredPlan(3)} className={`relative cursor-pointer flex flex-col justify-between p-6 rounded-2xl backdrop-blur-sm transition-all duration-200 ${hoveredPlan === 3 ? 'bg-white/90 dark:bg-slate-800/90 border-2 border-primary/50 shadow-xl scale-[1.02] z-10' : 'bg-white/70 dark:bg-slate-800/70 border border-pink-100 dark:border-white/10 shadow-sm scale-100 opacity-90'}`}>
 
               <div>
                 <div className="flex items-center justify-between mb-2">
@@ -540,8 +540,8 @@ export default function SellerLandingPage() {
                   ))}
                 </ul>
               </div>
-              <Link href="/subscriptions" className="block mt-6">
-                <button className={`w-full py-3 rounded-xl font-bold text-sm transition-all duration-300 ${hoveredPlan === 3 ? 'bg-primary text-white shadow-lg shadow-primary/25 scale-[1.02]' : 'bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-white hover:bg-primary hover:text-white'}`}>
+              <Link href={billing === 'annual' ? '/subscriptions?billing=annual' : '/subscriptions'} className="block mt-6">
+                <button type="button" className={`w-full py-3 rounded-xl font-bold text-sm transition-all duration-200 ${hoveredPlan === 3 ? 'bg-primary text-white shadow-lg shadow-primary/25 scale-[1.02]' : 'bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-white hover:bg-primary hover:text-white'}`}>
                   Get Scale — ₹{billing === 'monthly' ? '1,499' : '1,244'}/mo
                 </button>
               </Link>

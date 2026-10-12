@@ -16,11 +16,12 @@ import {
   Globe2,
   Clock,
   Cpu,
+  CreditCard,
 } from 'lucide-react';
 
 type CheckItem = {
   name: string;
-  category: 'database' | 'auth' | 'storage' | 'hosting' | 'git' | 'external';
+  category: 'database' | 'auth' | 'storage' | 'hosting' | 'git' | 'external' | 'payment';
   status: 'operational' | 'degraded' | 'error';
   latencyMs: number;
   details: string;
@@ -80,6 +81,8 @@ export default function ConnectivityDashboard() {
         return <GitBranch className="w-5 h-5 text-purple-500" />;
       case 'hosting':
         return <Server className="w-5 h-5 text-sky-500" />;
+      case 'payment':
+        return <CreditCard className="w-5 h-5 text-rose-500" />;
       default:
         return <Globe2 className="w-5 h-5 text-amber-500" />;
     }

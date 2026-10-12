@@ -5,7 +5,36 @@ import Image from 'next/image';
 import Snowfall from '@/components/Snowfall';
 import { Mail, RefreshCw } from 'lucide-react';
 
-export default function BrandDisabledScreen({ brandName }: { brandName?: string }) {
+export default function BrandDisabledScreen({
+  brandName,
+  email,
+  onReset,
+}: {
+  brandName?: string;
+  email?: string;
+  onReset?: () => void;
+}) {
+  const [clearing, setClearing] = React.useState(false);
+
+  const handleRegisterAgain = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    setClearing(true);
+    try {
+      // Proactively clear log for this email so they can re-register cleanly
+      await fetch('/api/brand/check-status', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+      // Clear legacy cookies
+      document.cookie = 'brand_welcome_data=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+    } catch {
+      /* ignore */
+    }
+    onReset?.();
+    window.location.href = '/brand-register?reapply=true';
+  };
+
   return (
     <div className="min-h-screen relative overflow-hidden bg-pink-50/40 dark:bg-slate-950 flex items-center justify-center p-4 sm:p-6">
       <Snowfall />
@@ -44,12 +73,15 @@ export default function BrandDisabledScreen({ brandName }: { brandName?: string 
           >
             <Mail className="w-4 h-4" /> Contact Admin
           </a>
-          <a
-            href="/brand-register?reapply=true"
-            className="w-full sm:flex-1 py-3 px-4 rounded-xl font-bold text-xs sm:text-sm bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-white transition-all text-center border border-slate-200 dark:border-white/10 flex items-center justify-center gap-1.5"
+          <button
+            type="button"
+            onClick={handleRegisterAgain}
+            disabled={clearing}
+            className="w-full sm:flex-1 py-3 px-4 rounded-xl font-bold text-xs sm:text-sm bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-white transition-all text-center border border-slate-200 dark:border-white/10 flex items-center justify-center gap-1.5 disabled:opacity-50"
           >
-            <RefreshCw className="w-4 h-4" /> Register Again
-          </a>
+            <RefreshCw className={`w-4 h-4 ${clearing ? 'animate-spin' : ''}`} />
+            {clearing ? 'Unlocking...' : 'Register Again'}
+          </button>
         </div>
       </div>
     </div>

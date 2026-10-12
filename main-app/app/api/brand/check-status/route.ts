@@ -37,24 +37,27 @@ export async function GET(req: Request) {
     const reapply = searchParams.get('reapply') === 'true';
 
     // 1. Check if email was disabled / permanently deleted
-    if (email) {
-      if (reapply) {
+    if (reapply) {
+      if (email) {
         // Clear decommission log so the brand can fill registration form again
         await db.from('deleted_brand_logs').delete().ilike('email', email);
-      } else {
-        const { data: disabledLog } = await db
-          .from('deleted_brand_logs')
-          .select('*')
-          .ilike('email', email)
-          .limit(1);
+      }
+      return NextResponse.json({ registered: false, reapplySuccess: true });
+    }
 
-        if (disabledLog && disabledLog.length > 0) {
-          return NextResponse.json({
-            disabled: true,
-            brandName: disabledLog[0].brand_name || 'Your Brand',
-            deletedAt: disabledLog[0].deleted_at,
-          });
-        }
+    if (email) {
+      const { data: disabledLog } = await db
+        .from('deleted_brand_logs')
+        .select('*')
+        .ilike('email', email)
+        .limit(1);
+
+      if (disabledLog && disabledLog.length > 0) {
+        return NextResponse.json({
+          disabled: true,
+          brandName: disabledLog[0].brand_name || 'Your Brand',
+          deletedAt: disabledLog[0].deleted_at,
+        });
       }
     }
 
@@ -150,5 +153,24 @@ export async function GET(req: Request) {
   } catch (err) {
     console.error('[check-status error]:', err);
     return NextResponse.json({ registered: false });
+  }
+}
+
+export async function POST(req: Request) {
+  try {
+    const body = (await req.json().catch(() => ({}))) as { email?: string };
+    let email = body.email?.trim().toLowerCase();
+    if (!email) {
+      const user = await currentUser().catch(() => null);
+      if (user) email = user.emailAddresses?.[0]?.emailAddress?.toLowerCase();
+    }
+    const { client } = getAdminClient();
+    const db = client || getAnonClient();
+    if (db && email) {
+      await db.from('deleted_brand_logs').delete().ilike('email', email);
+    }
+    return NextResponse.json({ ok: true, cleared: true });
+  } catch (err: any) {
+    return NextResponse.json({ ok: false, error: err.message }, { status: 500 });
   }
 }

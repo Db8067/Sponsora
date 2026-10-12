@@ -12,13 +12,19 @@ export async function GET(req: Request) {
     const decodedUrl = decodeURIComponent(rawUrl).replace(/&amp;/g, '&');
     
     // Only allow proxying Instagram CDN images
-    if (!decodedUrl.includes('cdninstagram.com') && !decodedUrl.includes('fbcdn.net')) {
+    if (
+      !decodedUrl.includes('cdninstagram.com') &&
+      !decodedUrl.includes('fbcdn.net') &&
+      !decodedUrl.includes('instagram.com') &&
+      !decodedUrl.includes('akamaihd.net')
+    ) {
       return new Response('Invalid host', { status: 403 });
     }
 
     const res = await fetch(decodedUrl, {
       headers: {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+        Referer: 'https://www.instagram.com/',
         Accept: 'image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8',
       },
     });

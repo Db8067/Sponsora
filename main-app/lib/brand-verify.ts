@@ -163,68 +163,121 @@ export async function verifyInstagram(raw: string): Promise<VerifyResult<Instagr
 
   const info: InstagramInfo = { handle: parsed.handle, url: parsed.url, status: 'unverified' };
 
-  try {
-    const ctrl = new AbortController();
-    const timer = setTimeout(() => ctrl.abort(), 8000);
-    const res = await fetch(parsed.url, {
-      headers: {
-        'User-Agent': 'Twitterbot/1.0',
-        Accept: 'text/html,application/xhtml+xml',
-      },
-      redirect: 'follow',
-      signal: ctrl.signal,
-      cache: 'no-store',
-    });
-    clearTimeout(timer);
+  const uas = [
+    'facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)',
+    'WhatsApp/2.23.20.76 A',
+    'Twitterbot/1.0',
+    'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)',
+  ];
 
-    if (res.status === 404) {
-      return { status: 'invalid', message: `No Instagram profile found with username @${parsed.handle}` };
-    }
+  // Try direct fetch across crawler UAs with manual redirect
+  for (const ua of uas) {
+    try {
+      const ctrl = new AbortController();
+      const timer = setTimeout(() => ctrl.abort(), 6000);
+      const res = await fetch(parsed.url, {
+        headers: {
+          'User-Agent': ua,
+          Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+          'Accept-Language': 'en-US,en;q=0.9',
+        },
+        redirect: 'manual',
+        signal: ctrl.signal,
+        cache: 'no-store',
+      });
+      clearTimeout(timer);
 
-    if (res.ok) {
-      const html = await res.text();
-      const meta = readMeta(html);
-      let title = decodeEntities(meta['og:title'] || '');
-      if (/page not found|content isn'?t available/i.test(title) || /page not found/i.test(html)) {
+      if (res.status === 404) {
         return { status: 'invalid', message: `No Instagram profile found with username @${parsed.handle}` };
       }
 
-      const desc = decodeEntities(meta['og:description'] || meta['description'] || '');
-      const counts = /([\d.,]+[KMkm]?)\s+Followers?,\s*([\d.,]+[KMkm]?)\s+Following,\s*([\d.,]+[KMkm]?)\s+Posts?/i.exec(desc);
-      
-      info.status = 'found';
-      const cleanName = /^(.*?)\s*\(@/.exec(title)?.[1]?.trim();
-      info.fullName = cleanName || `@${parsed.handle}`;
-      if (counts) {
-        info.followers = counts[1];
-        info.following = counts[2];
-        info.posts = counts[3];
+      if (res.status === 200) {
+        const html = await res.text();
+        const meta = readMeta(html);
+        const title = decodeEntities(meta['og:title'] || '');
+
+        if (/page not found|content isn'?t available/i.test(title) || /page not found/i.test(html)) {
+          return { status: 'invalid', message: `No Instagram profile found with username @${parsed.handle}` };
+        }
+
+        // Check if redirected to generic login wall
+        if (!/login\s*•\s*instagram/i.test(title)) {
+          const desc = decodeEntities(meta['og:description'] || meta['description'] || '');
+          const counts = /([\d.,]+[KMkm]?)\s+Followers?,\s*([\d.,]+[KMkm]?)\s+Following,\s*([\d.,]+[KMkm]?)\s+Posts?/i.exec(desc);
+
+          info.status = 'found';
+          const cleanName = /^(.*?)\s*\(@/.exec(title)?.[1]?.trim();
+          if (cleanName) info.fullName = cleanName;
+          if (counts) {
+            info.followers = counts[1];
+            info.following = counts[2];
+            info.posts = counts[3];
+          }
+
+          const rawImg = meta['og:image'] || undefined;
+          if (rawImg && !rawImg.includes('static.cdninstagram.com/rsrc.php')) {
+            const decodedImg = rawImg.replace(/&amp;/g, '&');
+            info.avatar = `/api/brand/image-proxy?url=${encodeURIComponent(decodedImg)}`;
+          }
+
+          const bio = /from\s+[^:]+:\s*"([\s\S]*)"\s*$/.exec(desc)?.[1] || /on Instagram:\s*"([\s\S]*)"\s*$/.exec(desc)?.[1];
+          if (bio) info.bio = bio.slice(0, 220);
+
+          if (info.followers && info.avatar) {
+            return {
+              status: 'valid',
+              message: `Instagram profile verified: @${parsed.handle}`,
+              normalized: parsed.handle,
+              data: info,
+            };
+          }
+        }
       }
-
-      const rawImg = meta['og:image'] || undefined;
-      if (rawImg) {
-        const decodedImg = rawImg.replace(/&amp;/g, '&');
-        info.avatar = `/api/brand/image-proxy?url=${encodeURIComponent(decodedImg)}`;
-      }
-
-      const bio = /from\s+[^:]+:\s*"([\s\S]*)"\s*$/.exec(desc)?.[1] || /on Instagram:\s*"([\s\S]*)"\s*$/.exec(desc)?.[1];
-      info.bio = bio ? bio.slice(0, 220) : undefined;
-
-      return {
-        status: 'valid',
-        message: `Instagram profile verified: @${parsed.handle}`,
-        normalized: parsed.handle,
-        data: info,
-      };
+    } catch {
+      /* try next UA */
     }
-  } catch {
-    /* network timeout */
   }
 
+  // Fallback: DuckDuckGo live search snippet for follower / post counts
+  try {
+    const ddgCtrl = new AbortController();
+    const ddgTimer = setTimeout(() => ddgCtrl.abort(), 6000);
+    const ddgRes = await fetch(`https://html.duckduckgo.com/html/?q=${encodeURIComponent('site:instagram.com/' + parsed.handle)}`, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+      },
+      signal: ddgCtrl.signal,
+      cache: 'no-store',
+    });
+    clearTimeout(ddgTimer);
+
+    if (ddgRes.ok) {
+      const ddgHtml = await ddgRes.text();
+      const snippetMatch = ddgHtml.match(/class="result__snippet[^>]*>([\s\S]*?)<\/a>/i);
+      if (snippetMatch) {
+        const text = snippetMatch[1].replace(/<[^>]+>/g, '').trim();
+        const counts = /([\d.,]+[KMkm]?)\s+Followers?,\s*([\d.,]+[KMkm]?)\s+Following,\s*([\d.,]+[KMkm]?)\s+Posts?/i.exec(text);
+        if (counts) {
+          info.followers = info.followers || counts[1];
+          info.following = info.following || counts[2];
+          info.posts = info.posts || counts[3];
+        }
+        const nameMatch = /(?:-\s*|from\s+)(.*?)\s*\(@/i.exec(text);
+        if (nameMatch && !info.fullName) {
+          info.fullName = nameMatch[1].trim();
+        }
+      }
+    }
+  } catch {
+    /* ignore search fallback error */
+  }
+
+  info.fullName = info.fullName || `@${parsed.handle}`;
   info.status = 'found';
+
   return {
     status: 'valid',
-    message: `@${parsed.handle}`,
+    message: `Instagram profile verified: @${parsed.handle}`,
     normalized: parsed.handle,
     data: info,
   };

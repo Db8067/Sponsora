@@ -25,6 +25,9 @@ const nextConfig: NextConfig = {
       { source: '/admin/setting', destination: '/setting' },
       { source: '/admin-setting', destination: '/setting' },
       { source: '/admin/connectivity-check', destination: '/connectivity-check' },
+      // Mentorship route aliases
+      { source: '/online-mentorship', destination: '/Online-Mentorship' },
+      { source: '/Online-mentorship', destination: '/Online-Mentorship' },
     ];
   },
   experimental: {
