@@ -472,7 +472,7 @@ export default function SellerLandingPage() {
                 </div>
                 <div className="text-sm text-slate-400 line-through mb-0.5">₹599</div>
                 <div className="flex items-baseline gap-1 mb-1">
-                  <span className="text-3xl font-black text-slate-900 dark:text-white">{billing === 'monthly' ? '₹99' : '₹79'}</span>
+                  <span className="text-3xl font-black text-slate-900 dark:text-white">{billing === 'monthly' ? '₹99' : '₹82'}</span>
                   <span className="text-sm text-slate-500">/ month</span>
                 </div>
                 {billing === 'annual' && <p className="text-xs text-primary font-semibold mb-1">Billed annually</p>}
@@ -485,7 +485,7 @@ export default function SellerLandingPage() {
               </div>
               <Link href="/subscriptions" className="block mt-6">
                 <button className={`w-full py-3 rounded-xl font-bold text-sm transition-all duration-300 ${hoveredPlan === 1 ? 'bg-primary text-white shadow-lg shadow-primary/25 scale-[1.02]' : 'bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-white hover:bg-primary hover:text-white'}`}>
-                  Get Started — ₹{billing === 'monthly' ? '99' : '79'}/mo
+                  Get Started — ₹{billing === 'monthly' ? '99' : '82'}/mo
                 </button>
               </Link>
             </div>
@@ -501,7 +501,7 @@ export default function SellerLandingPage() {
                 </div>
                 <div className="text-sm text-slate-400 line-through mb-0.5">₹2,099</div>
                 <div className="flex items-baseline gap-1 mb-1">
-                  <span className="text-3xl font-black text-primary">{billing === 'monthly' ? '₹499' : '₹399'}</span>
+                  <span className="text-3xl font-black text-primary">{billing === 'monthly' ? '₹499' : '₹414'}</span>
                   <span className="text-sm text-slate-500">/ month</span>
                 </div>
                 {billing === 'annual' && <p className="text-xs text-primary font-semibold mb-1">Billed annually</p>}
@@ -514,7 +514,7 @@ export default function SellerLandingPage() {
               </div>
               <Link href="/subscriptions" className="block mt-6">
                 <button className={`w-full py-3 rounded-xl font-bold text-sm transition-all duration-300 ${hoveredPlan === 2 ? 'bg-primary text-white shadow-lg shadow-primary/25 scale-[1.02]' : 'bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-white hover:bg-primary hover:text-white'}`}>
-                  Get Growth Pro — ₹{billing === 'monthly' ? '499' : '399'}/mo
+                  Get Growth Pro — ₹{billing === 'monthly' ? '499' : '414'}/mo
                 </button>
               </Link>
             </div>
@@ -529,7 +529,7 @@ export default function SellerLandingPage() {
                 </div>
                 <div className="text-sm text-slate-400 line-through mb-0.5">₹4,299</div>
                 <div className="flex items-baseline gap-1 mb-1">
-                  <span className="text-3xl font-black text-slate-900 dark:text-white">{billing === 'monthly' ? '₹1,499' : '₹1,199'}</span>
+                  <span className="text-3xl font-black text-slate-900 dark:text-white">{billing === 'monthly' ? '₹1,499' : '₹1,244'}</span>
                   <span className="text-sm text-slate-500">/ month</span>
                 </div>
                 {billing === 'annual' && <p className="text-xs text-primary font-semibold mb-1">Billed annually</p>}
@@ -542,7 +542,7 @@ export default function SellerLandingPage() {
               </div>
               <Link href="/subscriptions" className="block mt-6">
                 <button className={`w-full py-3 rounded-xl font-bold text-sm transition-all duration-300 ${hoveredPlan === 3 ? 'bg-primary text-white shadow-lg shadow-primary/25 scale-[1.02]' : 'bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-white hover:bg-primary hover:text-white'}`}>
-                  Get Scale — ₹{billing === 'monthly' ? '1,499' : '1,199'}/mo
+                  Get Scale — ₹{billing === 'monthly' ? '1,499' : '1,244'}/mo
                 </button>
               </Link>
             </div>

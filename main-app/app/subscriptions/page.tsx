@@ -4,7 +4,7 @@ import React, { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
 import Script from 'next/script';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { Check, Sparkles, Zap, ShieldCheck, HelpCircle, X, Loader2 } from 'lucide-react';
+import { Check, Sparkles, Zap, ShieldCheck, HelpCircle, X, Loader2, MonitorCloudIcon, CirclePoundSterling, User } from 'lucide-react';
 import SellerNavbar from '@/components/SellerNavbar';
 import { useUser } from "@clerk/nextjs";
 
@@ -180,7 +180,7 @@ export default function SubscriptionsPage() {
       {/* Hero Header */}
       <section className="pt-10 pb-8 px-4 md:px-12 text-center max-w-4xl mx-auto">
         <div className="inline-flex items-center gap-2 bg-pink-100 dark:bg-pink-900/30 text-pink-700 dark:text-pink-300 px-4 py-1.5 rounded-full font-bold text-xs md:text-sm mb-4">
-          <Zap className="w-4 h-4 fill-pink-500" />
+          <User className="w-4 h-4 fill-pink-500" />
           A platfrom where you get Customers for your brand
         </div>
         <h1 className="text-2xl md:text-4xl font-bold text-slate-800 dark:text-white mb-4">
@@ -225,19 +225,19 @@ export default function SubscriptionsPage() {
               <ul className="space-y-3.5 text-xs md:text-sm text-slate-700 dark:text-slate-300">
                 <li className="flex items-center gap-3">
                   <Check className="w-4 h-4 text-green-500 shrink-0" />
-                  <span><strong>0% Commission</strong> on all orders</span>
+                  <span>50+ Customers on whatsapp</span>
                 </li>
                 <li className="flex items-center gap-3">
                   <Check className="w-4 h-4 text-green-500 shrink-0" />
-                  <span>Up to <strong>10 product uploading for 1 month</strong></span>
+                  <span>Brand profile on GrahakSetu</span>
                 </li>
                 <li className="flex items-center gap-3">
                   <Check className="w-4 h-4 text-green-500 shrink-0" />
-                  <span>Customized brand page and link</span>
+                  <span>5+ Product listing</span>
                 </li>
                 <li className="flex items-center gap-3">
                   <Check className="w-4 h-4 text-green-500 shrink-0" />
-                  <span>Direct WhatsApp order button</span>
+                  <span>Direct WhatsApp customer enquiries</span>
                 </li>
                 <li className="flex items-center gap-3">
                   <Check className="w-4 h-4 text-green-500 shrink-0" />
@@ -349,7 +349,7 @@ export default function SubscriptionsPage() {
                 <span className="text-sm text-slate-500 font-medium">/month</span>
               </div>
               <p className="text-xs md:text-sm text-slate-600 dark:text-slate-300 mb-6">
-                For high-volume merchants needing dedicated assistance and multi-staff accounts.
+                For high-volume merchants needing dedicated assistance.
               </p>
 
               <div className="h-px bg-slate-200 dark:bg-slate-700 mb-6"></div>
@@ -365,15 +365,15 @@ export default function SubscriptionsPage() {
                 </li>
                 <li className="flex items-center gap-3">
                   <Check className="w-4 h-4 text-green-500 shrink-0" />
-                  <span>Bulk catalog import assistance</span>
+                  <span>Creator campaign matching</span>
                 </li>
                 <li className="flex items-center gap-3">
                   <Check className="w-4 h-4 text-green-500 shrink-0" />
-                  <span>Multi-staff dashboard logins</span>
+                  <span>Bulk order management</span>
                 </li>
                 <li className="flex items-center gap-3">
                   <Check className="w-4 h-4 text-green-500 shrink-0" />
-                  <span>Custom marketing promotional banners</span>
+                  <span>API access & integrations</span>
                 </li>
               </ul>
             </div>
@@ -429,7 +429,7 @@ export default function SubscriptionsPage() {
                 Can I cancel or change plans anytime?
               </h3>
               <p className="text-xs md:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
-                Absolutely. You can upgrade, downgrade, or cancel your subscription at any time straight from your merchant dashboard.
+                Absolutely. You can upgrade, downgrade, or cancel your subscription at any time straight from your merchant dashboard. Term & conditions apply.
               </p>
             </div>
 

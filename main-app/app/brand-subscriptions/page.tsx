@@ -15,8 +15,8 @@ import BrandDisabledScreen from '@/components/brand/BrandDisabledScreen';
 const PLANS = [
   {
     id: 1,
-    tier: 'Startup Package',
-    tagline: 'For emerging makers',
+    tier: 'Startup',
+    tagline: 'Perfect for new brands stepping out of exhibitions.',
     badge: '83% off',
     strikethrough: '₹599',
     price: 99,
@@ -24,18 +24,18 @@ const PLANS = [
     description: 'Perfect for new sellers getting their brand online.',
     highlight: false,
     features: [
-      { text: '0% Commission on all orders', included: true },
-      { text: 'Up to 10 products / month', included: true },
-      { text: 'Customized brand page & link', included: true },
-      { text: 'Direct WhatsApp order button', included: true },
-      { text: 'Brand Dashboard Access', included: true },
-      { text: 'Creator Gifting Engine', included: false },
+      { text: '50+ Customers on whatsapp', included: true },
+      { text: 'Brand profile on GrahakSetu', included: true },
+      { text: '5+ Product listing', included: true },
+      { text: 'Direct WhatsApp customer enquiries', included: true },
+      { text: 'Customer analytics Dashboard', included: true },
+      { text: 'Brand dashboard access', included: false },
     ],
   },
   {
     id: 2,
     tier: 'Growth Pro',
-    tagline: 'For accelerating D2C',
+    tagline: 'For established brands ready to scale daily volume.',
     badge: '76% off',
     strikethrough: '₹2,099',
     price: 499,
@@ -43,7 +43,7 @@ const PLANS = [
     description: 'For established small businesses ready to grow traffic and sales rapidly.',
     highlight: true,
     features: [
-      { text: '0% Commission forever', included: true },
+      { text: 'Everything in Startup Pacakage', included: true },
       { text: 'Unlimited product catalog', included: true },
       { text: 'Custom domain (yourbrand.com)', included: true },
       { text: 'Advanced real-time analytics', included: true },
@@ -54,7 +54,7 @@ const PLANS = [
   {
     id: 3,
     tier: 'Business Scale',
-    tagline: 'For high-volume brands',
+    tagline: 'Multi-brand / agency accounts at scale.',
     badge: '65% off',
     strikethrough: '₹4,299',
     price: 1499,
@@ -63,19 +63,19 @@ const PLANS = [
     highlight: false,
     features: [
       { text: 'Everything in Growth Pro', included: true },
-      { text: 'Dedicated Account Manager', included: true },
-      { text: 'Bulk catalog import assistance', included: true },
-      { text: 'Multi-staff dashboard logins', included: true },
-      { text: 'Custom marketing banners', included: true },
-      { text: 'Unlimited barter creator matching', included: true },
+      { text: 'UGC & content campaign opportunities', included: true },
+      { text: 'Dedicated account manager', included: true },
+      { text: 'Creator campaign matching', included: true },
+      { text: 'Bulk order management', included: true },
+      { text: 'API access & integrations', included: true },
     ],
   },
 ];
 
 const MATRIX_ROWS = [
-  { label: 'Monthly Verified Leads', starter: '150 Shoppers', growth: '600 Shoppers', enterprise: 'Unlimited' },
+  { label: 'Monthly Verified Leads', starter: '50+ Shoppers', growth: 'Unlimited', enterprise: 'Unlimited' },
   { label: 'WhatsApp Direct Handoff', starter: true, growth: true, enterprise: true },
-  { label: 'Creator Gifting & Barter Engine', starter: false, growth: 'Auto 5 Collabs/mo', enterprise: 'Unlimited Barter' },
+  { label: 'Creator Gifting & Barter Engine', starter: false, growth: 'Unlimited', enterprise: 'Unlimited Barter' },
   { label: 'Marketplace Fee Cut', starter: '0%', growth: '0%', enterprise: '0%' },
   { label: 'Explore Storefront Placement', starter: 'Standard', growth: 'Featured Badge', enterprise: 'Category Hero Spotlight' },
   { label: 'Customer CRM & Broadcast', starter: 'Basic Contacts', growth: 'Advanced Tagging', enterprise: 'Automated Drip' },
@@ -87,7 +87,7 @@ const STORIES = [
     gmv: '₹3.8L Direct GMV',
     gmvColor: 'text-primary bg-pink-50 dark:bg-pink-900/20',
     headline: 'From Amazon Aggregator Trap to ₹3.8L Direct Monthly Sales',
-    quote: '"We used to pay ₹92,000 every single month in marketplace fees. Switching to ₹10 verified vouchers gave us direct WhatsApp customer connections with a 68% repeat purchase rate."',
+    quote: '"We used to pay ₹92,000 every single month in marketplace fees. Switching to Grahak Setu gave us direct WhatsApp customer connections with a 68% repeat purchase rate."',
     initials: 'RS',
     avatarBg: 'bg-pink-100 dark:bg-pink-900/30 text-primary',
     name: 'Radhika Sharma',
@@ -107,7 +107,7 @@ const STORIES = [
     gmv: '0% Fee Savings',
     gmvColor: 'text-green-700 bg-green-50 dark:bg-green-900/20',
     headline: 'Specialty Coffee Direct to Kitchens with 0% Commission',
-    quote: '"The ₹10 token commitment is brilliant psychology. Before, visitors would abandon carts. On GrahakSetu, every person pinging us transfers UPI right away."',
+    quote: '"Before, visitors would abandon carts. On GrahakSetu, every person pinging us transfers UPI right away."',
     initials: 'KM',
     avatarBg: 'bg-amber-100 dark:bg-amber-900/30 text-amber-800',
     name: 'Karthik Menon',
@@ -251,7 +251,7 @@ function BrandPassport() {
               <div className="flex flex-wrap items-center gap-2 mb-1">
                 <h2 className="text-xl sm:text-2xl font-black text-slate-800 dark:text-white tracking-tight">{brandName}</h2>
                 <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-pink-50 dark:bg-pink-900/30 text-primary text-xs font-semibold border border-pink-200 dark:border-pink-800/40">
-                  ✨ Active Founder Sandbox
+                  ✨ Brand Passport
                 </span>
                 <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-[11px] font-bold">
                   ✓ Verified D2C
@@ -285,7 +285,7 @@ function BrandPassport() {
             <div className="bg-slate-50 dark:bg-slate-900/60 rounded-xl p-3 border border-pink-100 dark:border-white/10">
               <div className="text-[11px] text-slate-500 dark:text-slate-400 font-semibold uppercase tracking-wider">Category Tag</div>
               <div className="text-xs font-bold text-slate-800 dark:text-white mt-0.5">{category}</div>
-              <div className="text-[11px] text-green-700 dark:text-green-400 font-medium">Ready for ₹10 Tokens</div>
+              <div className="text-[11px] text-green-700 dark:text-green-400 font-medium">Ready To Get Customer?</div>
             </div>
           </div>
         </div>
@@ -298,7 +298,7 @@ function BrandPassport() {
               <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500" />
             </span>
             <span className="text-xs sm:text-sm font-semibold text-slate-800 dark:text-white">
-              Ready to receive buyer tokens — select a plan below to publish offers and open your WhatsApp queue.
+              Ready to receive buyer tokens — select a plan below to start getting Customers for your Brand.
             </span>
           </div>
           <div className="text-xs text-slate-500 dark:text-slate-400 shrink-0 flex items-center gap-1">
@@ -375,10 +375,10 @@ export default function BrandSubscriptionsPage() {
               Transparent Tiering
             </span>
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-slate-800 dark:text-white tracking-tight">
-              Select Your Growth Engine
+              Select Your Subscription Plan
             </h2>
             <p className="text-sm sm:text-base text-slate-500 dark:text-slate-400">
-              No commissions on sales. No buyer leakage. Test risk-free with a full 14-day free trial.
+              No commissions on sales. Get Customers. No middlemen. No hidden fees. Just a simple Service subscription to get Customers.
             </p>
             {/* billing toggle */}
             <div className="inline-flex items-center p-1.5 rounded-2xl bg-white/70 dark:bg-slate-800/70 border border-pink-100 dark:border-white/10 mt-2 shadow-sm">
@@ -392,7 +392,7 @@ export default function BrandSubscriptionsPage() {
               >
                 Annual
                 <span className="bg-pink-100 dark:bg-pink-900/40 text-primary dark:text-pink-300 text-[10px] font-bold px-2 py-0.5 rounded-full">
-                  Save ₹4,990/yr + 2 Mo Free
+                  Save 45%
                 </span>
               </button>
             </div>
@@ -415,7 +415,7 @@ export default function BrandSubscriptionsPage() {
                 >
                   {plan.highlight && (
                     <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-primary text-white text-[11px] font-extrabold uppercase tracking-widest px-3.5 py-1 rounded-full shadow-sm flex items-center gap-1">
-                      <Star className="w-3 h-3 fill-white" /> Founder Favorite
+                      <Star className="w-3 h-3 fill-white" /> Brand Favorite
                     </div>
                   )}
                   <div>
@@ -462,7 +462,7 @@ export default function BrandSubscriptionsPage() {
                         : <>Start 14-Day Free Trial <ArrowRight className="w-4 h-4" /></>
                       }
                     </button>
-                    <p className="text-[11px] text-center text-slate-500 dark:text-slate-400">No credit card needed to activate</p>
+                    <p className="text-[11px] text-center text-slate-500 dark:text-slate-400">Pay Securly by Razorpay</p>
                   </div>
                 </div>
               );
