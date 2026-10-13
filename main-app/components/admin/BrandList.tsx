@@ -5,6 +5,8 @@ import Link from 'next/link';
 import type { BrandRow } from '@/lib/admin-data';
 import { BrandLogo, STATUS_STYLES } from '@/components/admin/shared';
 
+import Image from 'next/image';
+
 export default function BrandList({ brands }: { brands: BrandRow[] }) {
   const [q, setQ] = useState('');
   const [status, setStatus] = useState('all');
@@ -44,9 +46,54 @@ export default function BrandList({ brands }: { brands: BrandRow[] }) {
       </div>
 
       {filtered.length === 0 ? (
-        <div className="text-center py-14 text-slate-400">
-          <span className="material-symbols-outlined text-[44px] mb-2 opacity-50">inbox</span>
-          <p>{brands.length === 0 ? 'No brand registrations yet.' : 'No brands match your search.'}</p>
+        <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-3xl border border-pink-100 dark:border-white/10 p-8 sm:p-12 text-center shadow-sm flex flex-col items-center justify-center my-4">
+          {brands.length === 0 ? (
+            <>
+              <div className="w-full max-w-sm sm:max-w-md mx-auto aspect-[4/3] relative rounded-2xl overflow-hidden mb-6 drop-shadow-md">
+                <Image
+                  src="/admin-no-brands.png"
+                  alt="No brand registrations yet"
+                  fill
+                  sizes="(max-width: 640px) 320px, 420px"
+                  className="object-contain"
+                  priority
+                />
+              </div>
+              <h3 className="text-lg sm:text-xl font-black text-slate-800 dark:text-white">
+                No Brand Registrations Yet
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1.5 max-w-sm mx-auto leading-relaxed">
+                When sellers submit their brand application on the portal, their details and verification status will appear here.
+              </p>
+            </>
+          ) : (
+            <>
+              <div className="w-full max-w-sm sm:max-w-md mx-auto aspect-[4/3] relative rounded-2xl overflow-hidden mb-6 drop-shadow-md">
+                <Image
+                  src="/admin-brand-not-found.png"
+                  alt="No brands match your search"
+                  fill
+                  sizes="(max-width: 640px) 320px, 420px"
+                  className="object-contain"
+                  priority
+                />
+              </div>
+              <h3 className="text-lg sm:text-xl font-black text-slate-800 dark:text-white">
+                No Brands Match Your Search
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1.5 max-w-sm mx-auto leading-relaxed">
+                We couldn&apos;t find any brands matching &ldquo;{q}&rdquo;. Try checking for spelling errors or clearing filters.
+              </p>
+              <button
+                type="button"
+                onClick={() => { setQ(''); setStatus('all'); }}
+                className="mt-5 px-4 py-2 rounded-xl text-xs font-bold bg-pink-100 text-pink-700 hover:bg-pink-200 transition-colors inline-flex items-center gap-1.5 shadow-sm"
+              >
+                <span className="material-symbols-outlined text-[16px]">close</span>
+                Clear Search &amp; Filters
+              </button>
+            </>
+          )}
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-4">

@@ -131,54 +131,42 @@ function SubscriptionsContent() {
   }, [searchParams]);
 
   const handlePayment = async (amount: number, planName: string, planId: number) => {
-    if (!isSignedIn) {
-      router.push(`/sign-in?redirect_url=${encodeURIComponent('/subscriptions?billing=' + billing)}`);
+    setIsProcessing(planId);
+
+    // Get email from signed in user or cookie
+    let userEmail = user?.primaryEmailAddress?.emailAddress?.trim().toLowerCase();
+    if (!userEmail) {
+      try {
+        const match = document.cookie.match(/brand_welcome_data=([^;]+)/);
+        if (match) {
+          const cookieData = JSON.parse(decodeURIComponent(match[1]));
+          userEmail = cookieData.email?.trim().toLowerCase();
+        }
+      } catch {
+        /* ignore */
+      }
+    }
+
+    if (!userEmail) {
+      // User not signed in and has no cookie brand profile -> redirect to brand-register
+      router.push(`/brand-register?plan=${planId}&billing=${billing}`);
       return;
     }
 
     try {
-      setIsProcessing(planId);
-      const res = await fetch('/api/create-razorpay-order', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ amount, planId: `${planName} (${billing})` }),
-      });
+      const res = await fetch(`/api/brand/check-status?email=${encodeURIComponent(userEmail)}`);
+      const data = await res.json().catch(() => null);
 
-      const orderData = await res.json();
-      
-      if (!res.ok) {
-        alert('Failed to initialize payment: ' + (orderData.error || 'Unknown error'));
-        return;
+      if (data?.registered && data.brand && !data.disabled && data.brand.status !== 'deleted') {
+        // User created the profile from same email id -> redirect to /brand-subscriptions-[slug]
+        const slug = data.brand.slug || encodeURIComponent(data.brand.brand_name);
+        router.push(`/brand-subscriptions-${slug}?plan=${planId}&billing=${billing}`);
+      } else {
+        // Not created or deleted -> redirect to /brand-register
+        router.push(`/brand-register?plan=${planId}&billing=${billing}`);
       }
-
-      const options = {
-        key: orderData.key_id,
-        amount: orderData.amount,
-        currency: orderData.currency,
-        name: 'GrahakSetu',
-        description: `Subscription for ${planName} (${billing})`,
-        order_id: orderData.id,
-        handler: function (response: any) {
-          alert('Payment successful! Payment ID: ' + response.razorpay_payment_id);
-          router.push('/seller-onboard?payment=success');
-        },
-        prefill: {
-          name: user?.fullName || 'GrahakSetu Seller',
-          email: user?.primaryEmailAddress?.emailAddress || 'seller@example.com',
-        },
-        theme: {
-          color: '#e11d48',
-        },
-      };
-
-      const rzp = new (window as any).Razorpay(options);
-      rzp.on('payment.failed', function (response: any) {
-        alert('Payment Failed: ' + response.error.description);
-      });
-      rzp.open();
-    } catch (error) {
-      console.error(error);
-      alert('Network error while processing payment.');
+    } catch {
+      router.push(`/brand-register?plan=${planId}&billing=${billing}`);
     } finally {
       setIsProcessing(null);
     }

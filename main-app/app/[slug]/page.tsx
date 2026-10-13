@@ -3,6 +3,7 @@ import { supabaseServer } from '@/lib/supabase-server';
 import { Welcome99Client } from './WelcomeClient';
 import { Welcome499Client } from './Welcome499Client';
 import { Welcome1499Client } from './Welcome1499Client';
+import BrandDisabledScreen from '@/components/brand/BrandDisabledScreen';
 
 export async function generateStaticParams() {
   const { data: brands } = await supabaseServer
@@ -45,6 +46,27 @@ export default async function WelcomePage({ params }: { params: Promise<{ slug: 
        const bSlug = (b.brand_name || '').toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
        return bSlug === brandSlug;
     });
+  }
+
+  // Check deleted_brand_logs as well
+  const { data: deletedLogs } = await supabaseServer
+    .from('deleted_brand_logs')
+    .select('*')
+    .limit(200);
+
+  const matchedDeletedLog = (deletedLogs || []).find((d: any) => {
+    if (!d.brand_name && !d.email) return false;
+    const s = (d.brand_name || '').toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+    return s === brandSlug || (matchedBrand && d.email?.toLowerCase() === matchedBrand.email?.toLowerCase());
+  });
+
+  if (matchedDeletedLog || !matchedBrand || matchedBrand.status === 'deleted' || matchedBrand.status === 'blocked') {
+    return (
+      <BrandDisabledScreen
+        brandName={matchedDeletedLog?.brand_name || matchedBrand?.brand_name || brandSlug.replace(/-/g, ' ')}
+        email={matchedDeletedLog?.email || matchedBrand?.email}
+      />
+    );
   }
 
   const props = {

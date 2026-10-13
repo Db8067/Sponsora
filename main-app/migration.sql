@@ -59,8 +59,10 @@ CREATE INDEX IF NOT EXISTS idx_brand_registrations_email      ON public.brand_re
 CREATE INDEX IF NOT EXISTS idx_brand_registrations_phone      ON public.brand_registrations USING btree (whatsapp_number);
 CREATE INDEX IF NOT EXISTS idx_brand_registrations_clerk_user ON public.brand_registrations USING btree (clerk_user_id);
 CREATE INDEX IF NOT EXISTS idx_brand_registrations_city       ON public.brand_registrations USING btree (city);
+CREATE INDEX IF NOT EXISTS idx_brand_registrations_brand_name ON public.brand_registrations USING btree (brand_name);
 CREATE INDEX IF NOT EXISTS idx_brand_registrations_created_at ON public.brand_registrations USING btree (created_at desc);
 CREATE INDEX IF NOT EXISTS idx_deleted_brand_logs_email       ON public.deleted_brand_logs USING btree (email);
+CREATE INDEX IF NOT EXISTS idx_deleted_brand_logs_brand_name  ON public.deleted_brand_logs USING btree (brand_name);
 
 -- 6) Row Level Security (RLS) Configuration
 ALTER TABLE public.brand_registrations ENABLE ROW LEVEL SECURITY;

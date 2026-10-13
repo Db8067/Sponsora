@@ -31,12 +31,31 @@ export async function POST(req: Request) {
       return NextResponse.json({ ok: false, error: clientErr || 'Database client unavailable.' }, { status: 500 });
     }
 
+    // Fetch brand details for logging
+    const { data: brand } = await client
+      .from('brand_registrations')
+      .select('id, brand_name, email')
+      .eq('id', id)
+      .single();
+
     if (action === 'block') {
       const { error } = await client
         .from('brand_registrations')
         .update({ status: 'blocked', blocked_at: new Date().toISOString() })
         .eq('id', id);
       if (error) return NextResponse.json({ ok: false, error: error.message }, { status: 500 });
+
+      if (brand?.email) {
+        try {
+          await client.from('deleted_brand_logs').insert({
+            email: brand.email.toLowerCase().trim(),
+            brand_name: brand.brand_name,
+            deleted_at: new Date().toISOString(),
+          });
+        } catch (logErr) {
+          console.error('[deleted_brand_logs block insert error]:', logErr);
+        }
+      }
       return NextResponse.json({ ok: true, message: 'Brand successfully blocked.' });
     }
 
@@ -46,6 +65,14 @@ export async function POST(req: Request) {
         .update({ status: 'approved', blocked_at: null })
         .eq('id', id);
       if (error) return NextResponse.json({ ok: false, error: error.message }, { status: 500 });
+
+      if (brand?.email) {
+        try {
+          await client.from('deleted_brand_logs').delete().ilike('email', brand.email.trim());
+        } catch (logErr) {
+          console.error('[deleted_brand_logs unblock delete error]:', logErr);
+        }
+      }
       return NextResponse.json({ ok: true, message: 'Brand unblocked.' });
     }
 
@@ -55,6 +82,18 @@ export async function POST(req: Request) {
         .update({ status: 'deleted', deleted_at: new Date().toISOString() })
         .eq('id', id);
       if (error) return NextResponse.json({ ok: false, error: error.message }, { status: 500 });
+
+      if (brand?.email) {
+        try {
+          await client.from('deleted_brand_logs').insert({
+            email: brand.email.toLowerCase().trim(),
+            brand_name: brand.brand_name,
+            deleted_at: new Date().toISOString(),
+          });
+        } catch (logErr) {
+          console.error('[deleted_brand_logs soft-delete insert error]:', logErr);
+        }
+      }
       return NextResponse.json({ ok: true, message: 'Brand moved to Deleted Brands.' });
     }
 
@@ -64,6 +103,14 @@ export async function POST(req: Request) {
         .update({ status: 'pending', deleted_at: null })
         .eq('id', id);
       if (error) return NextResponse.json({ ok: false, error: error.message }, { status: 500 });
+
+      if (brand?.email) {
+        try {
+          await client.from('deleted_brand_logs').delete().ilike('email', brand.email.trim());
+        } catch (logErr) {
+          console.error('[deleted_brand_logs undo delete error]:', logErr);
+        }
+      }
       return NextResponse.json({ ok: true, message: 'Brand restored successfully.' });
     }
 

@@ -13,7 +13,6 @@ import {
 import LogoDropzone, { useLogoUpload } from '@/components/brand/LogoDropzone';
 import CityCombobox from '@/components/brand/CityCombobox';
 import WebsitePreview from '@/components/brand/WebsitePreview';
-import BrandDisabledScreen from '@/components/brand/BrandDisabledScreen';
 import { useVerify, type VState } from '@/components/brand/useVerify';
 import {
   validateEmailSyntax, validatePhone, validateGstFormat, parseInstagram, validateWebsite,
@@ -81,9 +80,6 @@ export default function BrandRegisterPage() {
 
   const { user } = useUser();
   const [existingBrand, setExistingBrand] = useState<{ brand_name: string; slug: string } | null>(null);
-  const [selectedInstagram, setSelectedInstagram] = useState(false);
-  const [isDisabledBrand, setIsDisabledBrand] = useState(false);
-  const [disabledBrandName, setDisabledBrandName] = useState('');
 
   const [phoneConflict, setPhoneConflict] = useState<string | null>(null);
   const [gstConflict, setGstConflict] = useState<string | null>(null);
@@ -97,27 +93,23 @@ export default function BrandRegisterPage() {
     }
   }, [user, email]);
 
-  // Check if this email already registered a brand or is disabled
+  // Proactively clear any decommission logs for this user so they can register freely
   useEffect(() => {
-    // If URL has reapply=true, clear any old log immediately and allow registration
-    const isReapply = typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('reapply') === 'true';
-    if (isReapply) {
-      setIsDisabledBrand(false);
-      const targetEmail = (email || user?.primaryEmailAddress?.emailAddress || '').trim();
-      if (targetEmail) {
-        fetch('/api/brand/check-status', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email: targetEmail }),
-        }).catch(() => null);
-      }
-      return;
+    const targetEmail = (email || user?.primaryEmailAddress?.emailAddress || '').trim();
+    if (targetEmail && validateEmailSyntax(targetEmail).valid) {
+      fetch('/api/brand/check-status', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: targetEmail }),
+      }).catch(() => null);
     }
+  }, [user, email]);
 
+  // Check if an existing active brand registration exists (to optionally inform the user)
+  useEffect(() => {
     const checkEmail = (email || user?.primaryEmailAddress?.emailAddress || '').trim();
     if (!checkEmail || !validateEmailSyntax(checkEmail).valid) {
       setExistingBrand(null);
-      setIsDisabledBrand(false);
       return;
     }
 
@@ -128,32 +120,24 @@ export default function BrandRegisterPage() {
         const data = await res.json().catch(() => null);
         if (!active) return;
 
-        if (data?.disabled) {
-          setIsDisabledBrand(true);
-          setDisabledBrandName(data.brandName || 'Your Brand');
-          return;
+        if (data?.registered && data.brand && data.brand.status !== 'deleted') {
+          setExistingBrand({
+            brand_name: data.brand.brand_name,
+            slug: data.brand.slug || encodeURIComponent(data.brand.brand_name),
+          });
         } else {
-          setIsDisabledBrand(false);
+          setExistingBrand(null);
         }
-
-        if (data?.registered && data.brand) {
-          // Instantly redirect returning brand to subscriptions without rendering the form
-          const brandSlug = data.brand.slug || encodeURIComponent(data.brand.brand_name);
-          router.replace(`/brand-subscriptions-${brandSlug}`);
-          return;
-        }
-
-        setExistingBrand(null);
       } catch {
         /* ignore */
       }
-    }, 400);
+    }, 600);
 
     return () => {
       active = false;
       clearTimeout(timer);
     };
-  }, [user, email, router]);
+  }, [user, email]);
 
   // Conflict checks: Phone
   useEffect(() => {
@@ -328,16 +312,6 @@ export default function BrandRegisterPage() {
       setIsSubmitting(false);
     }
   };
-
-  if (isDisabledBrand) {
-    return (
-      <BrandDisabledScreen
-        brandName={disabledBrandName}
-        email={email || user?.primaryEmailAddress?.emailAddress || ''}
-        onReset={() => setIsDisabledBrand(false)}
-      />
-    );
-  }
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -662,74 +636,6 @@ export default function BrandRegisterPage() {
                       />
                     </div>
                     <FieldMsg state={igV} />
-
-                    {((igV.data && igV.status !== 'invalid') || (igParse.valid && instagram.length > 1)) && (
-                      <div
-                        onClick={() => setSelectedInstagram(true)}
-                        className={`mt-3 cursor-pointer rounded-2xl border-2 p-3.5 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3 transition-all ${
-                          selectedInstagram
-                            ? 'border-pink-500 bg-pink-50/70 dark:bg-pink-950/30 ring-2 ring-pink-500/20'
-                            : 'border-slate-200 dark:border-white/10 hover:border-pink-300 bg-white dark:bg-slate-900'
-                        }`}
-                      >
-                        <div className="flex items-center gap-3 min-w-0">
-                          <div className="w-12 h-12 rounded-full p-[2px] bg-gradient-to-tr from-amber-400 via-pink-500 to-purple-600 shrink-0">
-                            <div className="w-full h-full rounded-full bg-white dark:bg-slate-900 overflow-hidden flex items-center justify-center">
-                              {igV.data?.avatar ? (
-                                // eslint-disable-next-line @next/next/no-img-element
-                                <img
-                                  src={igV.data.avatar}
-                                  alt=""
-                                  referrerPolicy="no-referrer"
-                                  className="w-full h-full object-cover"
-                                  onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
-                                />
-                              ) : (
-                                <LinkIcon className="w-5 h-5 text-pink-500" />
-                              )}
-                            </div>
-                          </div>
-                          <div className="min-w-0">
-                            <div className="flex items-center gap-1.5">
-                              <p className="text-sm font-bold text-slate-800 dark:text-white truncate">
-                                {igV.data?.fullName || `@${igParse.valid ? igParse.handle : instagram}`}
-                              </p>
-                              <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-pink-100 text-pink-700 dark:bg-pink-900/40 dark:text-pink-300">
-                                Instagram
-                              </span>
-                            </div>
-                            <p className="text-xs text-pink-600 font-semibold truncate mt-0.5">
-                              @{igParse.valid ? igParse.handle : instagram}
-                            </p>
-                            {igV.data?.followers ? (
-                              <p className="text-[11px] text-slate-500 mt-0.5">
-                                {igV.data.posts} posts · {igV.data.followers} followers
-                              </p>
-                            ) : (
-                              <p className="text-[11px] text-slate-400 mt-0.5">
-                                Profile ID detected (Public / Private)
-                              </p>
-                            )}
-                          </div>
-                        </div>
-
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setSelectedInstagram(true);
-                          }}
-                          className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all shrink-0 flex items-center justify-center gap-1.5 ${
-                            selectedInstagram
-                              ? 'bg-primary text-white shadow-md shadow-primary/25'
-                              : 'bg-pink-100 text-pink-700 hover:bg-pink-200'
-                          }`}
-                        >
-                          <CheckCircle2 className="w-3.5 h-3.5" />
-                          {selectedInstagram ? 'Selected Account ✓' : 'Click to Select ID'}
-                        </button>
-                      </div>
-                    )}
 
                     {igConflict && (
                       <div className="mt-2 p-2.5 rounded-xl border border-pink-200 bg-pink-50 text-pink-700 text-xs font-medium leading-relaxed flex items-start gap-2 animate-in fade-in">

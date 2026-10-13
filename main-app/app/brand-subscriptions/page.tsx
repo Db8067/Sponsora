@@ -124,7 +124,11 @@ const STORIES = [
 ];
 
 /* ─── Brand Passport pulled from URL params or Database ─── */
-function BrandPassport() {
+function BrandPassport({
+  onDisabled,
+}: {
+  onDisabled?: (brandName: string, email: string) => void;
+}) {
   const searchParams = useSearchParams();
   const [disabled, setDisabled] = useState(false);
   const [disabledBrandName, setDisabledBrandName] = useState('');
@@ -179,6 +183,8 @@ function BrandPassport() {
           if (data?.disabled) {
             setDisabled(true);
             setDisabledBrandName(data.brandName || 'Your Brand');
+            document.cookie = 'brand_welcome_data=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+            onDisabled?.(data.brandName || 'Your Brand', data.email || cookieEmail);
           } else if (data?.ok && data.brand) {
             setBrandData({
               brandName: data.brand.brand_name || cookieBrand || 'Your Brand',
@@ -188,9 +194,16 @@ function BrandPassport() {
               email: data.brand.email || cookieEmail || '',
               logo: data.brand.logo || cookieLogo || '',
             });
+          } else if (brandParam || slugParam) {
+            // Brand was explicitly queried in URL but does not exist in DB (deleted)
+            setDisabled(true);
+            const targetName = (brandParam || slugParam || 'Your Brand').replace(/[-_]/g, ' ');
+            setDisabledBrandName(targetName);
+            document.cookie = 'brand_welcome_data=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+            onDisabled?.(targetName, cookieEmail);
           } else {
             setBrandData({
-              brandName: cookieBrand || brandParam || 'Your Brand',
+              brandName: cookieBrand || 'Your Brand',
               founderName: cookieFounder || 'Founder',
               category: cookieCategory || 'D2C Brand',
               phone: cookiePhone || '',
@@ -200,26 +213,15 @@ function BrandPassport() {
           }
         })
         .catch(() => {
-          setBrandData({
-            brandName: cookieBrand || brandParam || 'Your Brand',
-            founderName: cookieFounder || 'Founder',
-            category: cookieCategory || 'D2C Brand',
-            phone: cookiePhone || '',
-            email: cookieEmail || '',
-            logo: cookieLogo || '',
-          });
+          if (brandParam || slugParam) {
+            setDisabled(true);
+            const targetName = (brandParam || slugParam || 'Your Brand').replace(/[-_]/g, ' ');
+            setDisabledBrandName(targetName);
+            onDisabled?.(targetName, cookieEmail);
+          }
         });
-    } else {
-      setBrandData({
-        brandName: cookieBrand || 'Your Brand',
-        founderName: cookieFounder || 'Founder',
-        category: cookieCategory || 'D2C Brand',
-        phone: cookiePhone || '',
-        email: cookieEmail || '',
-        logo: cookieLogo || '',
-      });
     }
-  }, [searchParams]);
+  }, [searchParams, onDisabled]);
 
   if (disabled) {
     return (
@@ -326,6 +328,9 @@ export default function BrandSubscriptionsPage() {
   const [selectedPlan, setSelectedPlan] = useState<number>(2);
   const [billing, setBilling] = useState<'monthly' | 'annual'>('monthly');
   const [isProcessing, setIsProcessing] = useState<number | null>(null);
+  const [isPageDisabled, setIsPageDisabled] = useState(false);
+  const [disabledBrandName, setDisabledBrandName] = useState('');
+  const [disabledBrandEmail, setDisabledBrandEmail] = useState('');
 
   const discountedPrice = (price: number) =>
     billing === 'annual' ? Math.round(price * 0.83) : price;
@@ -367,6 +372,22 @@ export default function BrandSubscriptionsPage() {
     }
   };
 
+  if (isPageDisabled) {
+    return (
+      <div className="flex flex-col min-h-screen">
+        <SellerNavbar />
+        <BrandDisabledScreen
+          brandName={disabledBrandName}
+          email={disabledBrandEmail}
+          onReset={() => {
+            setIsPageDisabled(false);
+            document.cookie = 'brand_welcome_data=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+          }}
+        />
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col min-h-screen">
       <SellerNavbar />
@@ -377,7 +398,13 @@ export default function BrandSubscriptionsPage() {
         <Suspense fallback={
           <div className="h-36 rounded-2xl bg-white/60 dark:bg-slate-800/60 animate-pulse border border-pink-100 dark:border-white/10" />
         }>
-          <BrandPassport />
+          <BrandPassport
+            onDisabled={(name, email) => {
+              setIsPageDisabled(true);
+              setDisabledBrandName(name);
+              setDisabledBrandEmail(email);
+            }}
+          />
         </Suspense>
 
         {/* ── 2. Subscription Plans ── */}

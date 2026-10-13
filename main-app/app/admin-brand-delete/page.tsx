@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import AdminLayout from '@/components/AdminLayout';
 import AutoRefresh from '@/components/admin/AutoRefresh';
 import AdminAccessDenied from '@/components/admin/AdminAccessDenied';
@@ -69,14 +70,21 @@ export default async function AdminBrandDeletePage() {
             ))}
           </div>
         ) : (
-          <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-3xl border border-pink-100 dark:border-white/10 p-12 text-center shadow-sm">
-            <div className="w-16 h-16 rounded-2xl bg-slate-100 dark:bg-slate-700/60 text-slate-400 mx-auto flex items-center justify-center mb-4">
-              <span className="material-symbols-outlined text-[32px]">delete_outline</span>
+          <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-3xl border border-pink-100 dark:border-white/10 p-8 sm:p-12 text-center shadow-sm flex flex-col items-center justify-center">
+            <div className="w-full max-w-sm sm:max-w-md mx-auto aspect-[4/3] relative rounded-2xl overflow-hidden mb-6 drop-shadow-md">
+              <Image
+                src="/admin-no-deleted-brands.png"
+                alt="No deleted brands"
+                fill
+                sizes="(max-width: 640px) 320px, 420px"
+                className="object-contain"
+                priority
+              />
             </div>
-            <h3 className="text-base font-extrabold text-slate-800 dark:text-white">
+            <h3 className="text-lg sm:text-xl font-black text-slate-800 dark:text-white">
               No Deleted Brands
             </h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-sm mx-auto">
+            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1.5 max-w-sm mx-auto leading-relaxed">
               Your trash is empty. When brands are deleted from the approval panel, they appear here with options to undo or permanently delete.
             </p>
             <div className="mt-5">

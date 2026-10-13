@@ -135,34 +135,8 @@ export default function SettingClient({
           </div>
         </div>
 
-        {/* Right Column: Platform Services & Connectivity Navigation */}
+        {/* Right Column: Platform Services & Configuration */}
         <div className="lg:col-span-2 space-y-6">
-          {/* Highlight Card: Connectivity Check */}
-          <div className="bg-gradient-to-r from-pink-500 via-primary to-purple-600 rounded-3xl p-6 sm:p-7 text-white shadow-xl shadow-primary/20 relative overflow-hidden">
-            <div className="relative z-10">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-white text-xs font-extrabold uppercase tracking-wider mb-3">
-                <Activity className="w-3.5 h-3.5" /> Realtime Diagnostics
-              </div>
-
-              <h2 className="text-xl sm:text-2xl font-black tracking-tight text-white">
-                Live Connectivity &amp; Health Checks
-              </h2>
-
-              <p className="text-xs sm:text-sm text-pink-100 mt-2 max-w-lg leading-relaxed">
-                Inspect live roundtrip pings for Supabase Database, Clerk Authentication, Cloudinary Assets, Vercel Serverless Hosting, and GitHub Repository synchronization.
-              </p>
-
-              <div className="mt-6 flex flex-wrap items-center gap-3">
-                <Link
-                  href="/connectivity-check"
-                  className="px-5 py-3 rounded-xl bg-white text-slate-900 hover:bg-pink-50 font-bold text-xs uppercase tracking-wider transition-all shadow-md flex items-center gap-2 group"
-                >
-                  Open Connectivity Check
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </Link>
-              </div>
-            </div>
-          </div>
 
           {/* Platform Configuration Card */}
           <div className="bg-white/90 backdrop-blur-md rounded-3xl border border-pink-100 p-6 shadow-sm space-y-4">

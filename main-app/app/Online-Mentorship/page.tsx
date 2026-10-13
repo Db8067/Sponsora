@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import Snowfall from '@/components/Snowfall';
 import SellerNavbar from '@/components/SellerNavbar';
+import { MENTORSHIP_SERVICES } from '@/lib/mentorship-data';
 import {
   Clock,
   ShieldCheck,
@@ -175,61 +176,80 @@ export default function OnlineMentorshipPage() {
               </div>
             </div>
 
-            {/* Right Column: Visual Showcase & Pricing Card */}
+            {/* Right Column: Visual Showcase & Dual Retainer Card */}
             <div className="lg:col-span-5 relative space-y-4">
-              <div className="relative rounded-3xl overflow-hidden shadow-2xl bg-slate-900 border border-pink-200/50 dark:border-white/10 group">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  alt="High-end 1-on-1 mentorship session in a modern studio with ultra-wide monitor showing code architecture"
-                  className="w-full h-[320px] sm:h-[360px] object-cover group-hover:scale-105 transition-transform duration-700 opacity-90"
-                  src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1200&h=800&fit=crop&q=80"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent flex items-end p-6">
-                  <div className="text-white space-y-1">
-                    <span className="inline-block px-2.5 py-0.5 rounded-full bg-emerald-500 text-white font-extrabold text-[10px] uppercase tracking-wider mb-1">
-                      LIVE HUD IN ACTION
-                    </span>
-                    <p className="text-base sm:text-lg font-bold">Unrushed Screen-Share Debugging</p>
-                    <p className="text-xs text-slate-300">
-                      Every line of code explained until you run it independently.
-                    </p>
-                  </div>
+              <div className="relative rounded-3xl overflow-hidden shadow-2xl bg-pink-50/60 dark:bg-slate-900 border-2 border-pink-200/70 dark:border-white/10 group p-4 sm:p-6 flex items-center justify-center">
+                <div className="w-full aspect-[4/3] relative rounded-2xl overflow-hidden">
+                  <Image
+                    src="/hero-art.png"
+                    alt="NextHour & Grahak Setu 1:1 Mentorship Doodle"
+                    fill
+                    sizes="(max-width: 640px) 340px, 460px"
+                    className="object-contain group-hover:scale-105 transition-transform duration-500"
+                    priority
+                  />
                 </div>
               </div>
 
               {/* Transparent Highlight Retainer Card */}
-              <div className="bg-white/95 dark:bg-slate-850/95 backdrop-blur-md p-6 rounded-3xl shadow-xl border-2 border-primary/40 space-y-3 relative -mt-10 mx-2 sm:mx-4 z-20">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-extrabold uppercase tracking-wider text-primary">
-                    All-Inclusive Retainer
+              <div className="bg-white/95 dark:bg-slate-850/95 backdrop-blur-md p-6 rounded-3xl shadow-xl border-2 border-primary/40 space-y-4 relative -mt-8 mx-2 sm:mx-4 z-20">
+                <div className="flex items-center justify-between pb-2 border-b border-pink-100 dark:border-white/10">
+                  <span className="text-xs font-black uppercase tracking-wider text-primary">
+                    Transparent Monthly Retainers
                   </span>
                   <span className="px-2.5 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 text-[11px] font-bold">
                     Zero Hidden Fees
                   </span>
                 </div>
-                <div className="flex items-baseline gap-1.5">
-                  <span className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white">
-                    ₹15,000
-                  </span>
-                  <span className="text-sm font-medium text-slate-500 dark:text-slate-400">/ month</span>
-                </div>
-                <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-                  Flat monthly investment. Cancel anytime. Full 7-day money-back satisfaction commitment.
-                </p>
-                <div className="grid grid-cols-2 gap-2 pt-2 text-xs font-semibold text-slate-800 dark:text-slate-200">
-                  <div className="flex items-center gap-1.5">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" /> Unlimited Doubt Sprints
+
+                {/* Tier 1: 1:1 Mentorship */}
+                <div className="p-3.5 rounded-2xl bg-pink-50/60 dark:bg-slate-800/80 border border-pink-100 dark:border-white/10 flex items-center justify-between">
+                  <div>
+                    <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded bg-pink-200 text-pink-800">1:1 Deep Sprints</span>
+                    <h4 className="font-extrabold text-sm text-slate-900 dark:text-white mt-1">1:1 Live Mentorship</h4>
+                    <p className="text-[11px] text-slate-500">1-2 hour sessions until doubt clear</p>
                   </div>
-                  <div className="flex items-center gap-1.5">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" /> 1-2 Hr Live Sessions
-                  </div>
-                  <div className="flex items-center gap-1.5">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" /> Direct Mentor WhatsApp
-                  </div>
-                  <div className="flex items-center gap-1.5">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" /> Grahak Setu Brand Deals
+                  <div className="text-right">
+                    <span className="text-xl font-black text-primary">₹15,000</span>
+                    <span className="text-[11px] text-slate-500 block">/ month</span>
                   </div>
                 </div>
+
+                {/* Tier 2: DFY Engine */}
+                <div className="p-3.5 rounded-2xl bg-emerald-50/60 dark:bg-slate-800/80 border border-emerald-100 dark:border-white/10 flex items-center justify-between">
+                  <div>
+                    <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded bg-emerald-200 text-emerald-800">Done-For-You</span>
+                    <h4 className="font-extrabold text-sm text-slate-900 dark:text-white mt-1">DFY Website + Clients</h4>
+                    <p className="text-[11px] text-slate-500">We build site &amp; deliver clients</p>
+                  </div>
+                  <div className="text-right">
+                    <span className="text-xl font-black text-emerald-600 dark:text-emerald-400">₹10,000</span>
+                    <span className="text-[11px] text-slate-500 block">/ month</span>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-2 pt-1 text-xs font-semibold text-slate-800 dark:text-slate-200">
+                  <div className="flex items-center gap-1.5">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" /> 1-2 Hr Sprints
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" /> Doubt Clear Guarantee
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" /> Direct Mentor WhatsApp
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" /> Pitch to 50+ Brands
+                  </div>
+                </div>
+
+                <Link
+                  href="/mentorship-subscription"
+                  className="w-full py-3 rounded-xl bg-gradient-to-r from-primary to-pink-500 hover:from-primary-dark hover:to-pink-600 text-white font-bold text-xs shadow-md transition-all flex items-center justify-center gap-1.5"
+                >
+                  <span>View All Plans &amp; Enroll</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
               </div>
             </div>
           </div>
@@ -417,165 +437,90 @@ export default function OnlineMentorshipPage() {
           </div>
         </section>
 
-        {/* Comprehensive Skill Curriculum Section */}
+        {/* Comprehensive Skill Curriculum Section (All 17 Tracks) */}
         <section id="curriculum" className="w-full py-16 px-4 sm:px-6 lg:px-8">
           <div className="max-w-7xl mx-auto space-y-12">
-            <div className="max-w-3xl space-y-3">
-              <span className="text-xs font-extrabold uppercase tracking-widest text-primary">
-                Hands-On Mastery Tracks
-              </span>
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
-                Everything We Build With You 1-on-1
-              </h2>
-              <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300">
-                No generic slideshows or pre-recorded fluff. You pick the track or combine them based on what your clients and market need today.
-              </p>
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+              <div className="max-w-3xl space-y-3">
+                <span className="text-xs font-extrabold uppercase tracking-widest text-primary">
+                  17 Hands-On Mastery Tracks
+                </span>
+                <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
+                  Everything We Build With You 1-on-1
+                </h2>
+                <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300">
+                  No generic slideshows or pre-recorded fluff. You pick any skill or combine them. Click any track to see the full deep-dive syllabus.
+                </p>
+              </div>
+              <Link
+                href="/mentorship-subscription"
+                className="px-6 py-3 rounded-xl bg-gradient-to-r from-primary to-pink-500 hover:from-primary-dark hover:to-pink-600 text-white font-bold text-xs sm:text-sm shadow-md transition-all shrink-0 flex items-center gap-1.5 self-start md:self-auto"
+              >
+                <span>View Retainer Plans</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
             </div>
 
-            {/* Curriculum Bento Grid */}
+            {/* Curriculum Grid (17 Tracks) */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {/* Track 1 */}
-              <div className="p-6 bg-white/80 dark:bg-slate-850/80 rounded-3xl border-t-4 border-primary shadow-sm hover:shadow-md transition-shadow space-y-4 backdrop-blur-sm">
-                <div className="w-12 h-12 rounded-2xl bg-pink-100 dark:bg-pink-900/40 text-primary flex items-center justify-center">
-                  <Bot className="w-6 h-6" />
-                </div>
-                <div className="space-y-1">
-                  <span className="text-xs font-bold text-primary uppercase tracking-wider">Track 01</span>
-                  <h3 className="font-bold text-base text-slate-900 dark:text-white">Custom AI Agents & RAG Systems</h3>
-                </div>
-                <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-                  Build production multi-agent workflows using LangChain, LlamaIndex, and OpenAI Assistants. Vector databases (Pinecone, Supabase pgvector), token optimization, and guardrails.
-                </p>
-                <div className="pt-2 flex flex-wrap gap-1.5 text-[11px] font-semibold text-slate-700 dark:text-slate-300">
-                  <span className="px-2.5 py-1 rounded-lg bg-pink-50 dark:bg-slate-800 border border-pink-100 dark:border-white/10">LangChain</span>
-                  <span className="px-2.5 py-1 rounded-lg bg-pink-50 dark:bg-slate-800 border border-pink-100 dark:border-white/10">LlamaIndex</span>
-                  <span className="px-2.5 py-1 rounded-lg bg-pink-50 dark:bg-slate-800 border border-pink-100 dark:border-white/10">Supabase</span>
-                </div>
-              </div>
-
-              {/* Track 2 */}
-              <div className="p-6 bg-white/80 dark:bg-slate-850/80 rounded-3xl border-t-4 border-emerald-500 shadow-sm hover:shadow-md transition-shadow space-y-4 backdrop-blur-sm">
-                <div className="w-12 h-12 rounded-2xl bg-emerald-100 dark:bg-emerald-950/60 text-emerald-600 flex items-center justify-center">
-                  <MessageSquare className="w-6 h-6" />
-                </div>
-                <div className="space-y-1">
-                  <span className="text-xs font-bold text-emerald-600 uppercase tracking-wider">Track 02</span>
-                  <h3 className="font-bold text-base text-slate-900 dark:text-white">WhatsApp Business API & Inbound Bots</h3>
-                </div>
-                <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-                  Official Cloud API integration, Meta webhook configurations, interactive catalogs, 24/7 autonomous support bots, and CRM auto-logging into HubSpot & Google Sheets.
-                </p>
-                <div className="pt-2 flex flex-wrap gap-1.5 text-[11px] font-semibold text-slate-700 dark:text-slate-300">
-                  <span className="px-2.5 py-1 rounded-lg bg-emerald-50 dark:bg-slate-800 border border-emerald-100 dark:border-white/10">Meta Cloud API</span>
-                  <span className="px-2.5 py-1 rounded-lg bg-emerald-50 dark:bg-slate-800 border border-emerald-100 dark:border-white/10">Webhooks</span>
-                  <span className="px-2.5 py-1 rounded-lg bg-emerald-50 dark:bg-slate-800 border border-emerald-100 dark:border-white/10">CRM Sync</span>
-                </div>
-              </div>
-
-              {/* Track 3 */}
-              <div className="p-6 bg-white/80 dark:bg-slate-850/80 rounded-3xl border-t-4 border-indigo-500 shadow-sm hover:shadow-md transition-shadow space-y-4 backdrop-blur-sm">
-                <div className="w-12 h-12 rounded-2xl bg-indigo-100 dark:bg-indigo-950/60 text-indigo-600 flex items-center justify-center">
-                  <Mic className="w-6 h-6" />
-                </div>
-                <div className="space-y-1">
-                  <span className="text-xs font-bold text-indigo-600 uppercase tracking-wider">Track 03</span>
-                  <h3 className="font-bold text-base text-slate-900 dark:text-white">Voice AI Agents & Telephony</h3>
-                </div>
-                <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-                  Real-time low-latency phone callers using ElevenLabs, Twilio, and Deepgram. Inbound qualification and outbound calendar booking systems that sound indistinguishable from humans.
-                </p>
-                <div className="pt-2 flex flex-wrap gap-1.5 text-[11px] font-semibold text-slate-700 dark:text-slate-300">
-                  <span className="px-2.5 py-1 rounded-lg bg-indigo-50 dark:bg-slate-800 border border-indigo-100 dark:border-white/10">ElevenLabs</span>
-                  <span className="px-2.5 py-1 rounded-lg bg-indigo-50 dark:bg-slate-800 border border-indigo-100 dark:border-white/10">Twilio Telephony</span>
-                  <span className="px-2.5 py-1 rounded-lg bg-indigo-50 dark:bg-slate-800 border border-indigo-100 dark:border-white/10">WebRTC</span>
-                </div>
-              </div>
-
-              {/* Track 4 */}
-              <div className="p-6 bg-white/80 dark:bg-slate-850/80 rounded-3xl border-t-4 border-sky-500 shadow-sm hover:shadow-md transition-shadow space-y-4 backdrop-blur-sm">
-                <div className="w-12 h-12 rounded-2xl bg-sky-100 dark:bg-sky-950/60 text-sky-600 flex items-center justify-center">
-                  <Laptop className="w-6 h-6" />
-                </div>
-                <div className="space-y-1">
-                  <span className="text-xs font-bold text-sky-600 uppercase tracking-wider">Track 04</span>
-                  <h3 className="font-bold text-base text-slate-900 dark:text-white">Production Web & Mobile Fullstack</h3>
-                </div>
-                <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-                  Next.js App Router, React Native/Flutter, PostgreSQL schemas, Stripe/Razorpay checkouts, and deployment to high-availability Vercel and AWS environments.
-                </p>
-                <div className="pt-2 flex flex-wrap gap-1.5 text-[11px] font-semibold text-slate-700 dark:text-slate-300">
-                  <span className="px-2.5 py-1 rounded-lg bg-sky-50 dark:bg-slate-800 border border-sky-100 dark:border-white/10">Next.js 15</span>
-                  <span className="px-2.5 py-1 rounded-lg bg-sky-50 dark:bg-slate-800 border border-sky-100 dark:border-white/10">Postgres</span>
-                  <span className="px-2.5 py-1 rounded-lg bg-sky-50 dark:bg-slate-800 border border-sky-100 dark:border-white/10">Razorpay</span>
-                </div>
-              </div>
-
-              {/* Track 5 */}
-              <div className="p-6 bg-white/80 dark:bg-slate-850/80 rounded-3xl border-t-4 border-amber-500 shadow-sm hover:shadow-md transition-shadow space-y-4 backdrop-blur-sm">
-                <div className="w-12 h-12 rounded-2xl bg-amber-100 dark:bg-amber-950/60 text-amber-600 flex items-center justify-center">
-                  <Search className="w-6 h-6" />
-                </div>
-                <div className="space-y-1">
-                  <span className="text-xs font-bold text-amber-600 uppercase tracking-wider">Track 05</span>
-                  <h3 className="font-bold text-base text-slate-900 dark:text-white">Advanced SEO & Generative Engine Optimization</h3>
-                </div>
-                <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-                  Rank directly inside ChatGPT, Perplexity, and Google Search Generative Experience (SGE). Entity authority schemas, knowledge graphs, and programmatic search setups.
-                </p>
-                <div className="pt-2 flex flex-wrap gap-1.5 text-[11px] font-semibold text-slate-700 dark:text-slate-300">
-                  <span className="px-2.5 py-1 rounded-lg bg-amber-50 dark:bg-slate-800 border border-amber-100 dark:border-white/10">GEO Strategy</span>
-                  <span className="px-2.5 py-1 rounded-lg bg-amber-50 dark:bg-slate-800 border border-amber-100 dark:border-white/10">Perplexity Index</span>
-                  <span className="px-2.5 py-1 rounded-lg bg-amber-50 dark:bg-slate-800 border border-amber-100 dark:border-white/10">Schema JSON-LD</span>
-                </div>
-              </div>
-
-              {/* Track 6 */}
-              <div className="p-6 bg-white/80 dark:bg-slate-850/80 rounded-3xl border-t-4 border-purple-500 shadow-sm hover:shadow-md transition-shadow space-y-4 backdrop-blur-sm">
-                <div className="w-12 h-12 rounded-2xl bg-purple-100 dark:bg-purple-950/60 text-purple-600 flex items-center justify-center">
-                  <Globe className="w-6 h-6" />
-                </div>
-                <div className="space-y-1">
-                  <span className="text-xs font-bold text-purple-600 uppercase tracking-wider">Track 06</span>
-                  <h3 className="font-bold text-base text-slate-900 dark:text-white">Closing International High-Ticket Clients</h3>
-                </div>
-                <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
-                  Finding US, UK, and EU agency retainers ($2k-$5k/mo). Cold email infrastructure, personalized Loom outreach teardowns, and closing contracts on live video calls.
-                </p>
-                <div className="pt-2 flex flex-wrap gap-1.5 text-[11px] font-semibold text-slate-700 dark:text-slate-300">
-                  <span className="px-2.5 py-1 rounded-lg bg-purple-50 dark:bg-slate-800 border border-purple-100 dark:border-white/10">Foreign Retainers</span>
-                  <span className="px-2.5 py-1 rounded-lg bg-purple-50 dark:bg-slate-800 border border-purple-100 dark:border-white/10">Cold Outbound</span>
-                  <span className="px-2.5 py-1 rounded-lg bg-purple-50 dark:bg-slate-800 border border-purple-100 dark:border-white/10">Closing Scripts</span>
-                </div>
-              </div>
-
-              {/* Track 7: Spans Full Width on Large */}
-              <div className="md:col-span-2 lg:col-span-3 p-6 sm:p-8 bg-gradient-to-r from-pink-50 via-white to-pink-50 dark:from-slate-850 dark:via-slate-800 dark:to-slate-850 rounded-3xl border border-pink-200 dark:border-white/10 shadow-sm flex flex-col md:flex-row items-center justify-between gap-6">
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-2xl bg-primary text-white flex items-center justify-center shrink-0 shadow-md shadow-primary/20">
-                    <Video className="w-6 h-6" />
-                  </div>
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs font-bold text-primary uppercase tracking-wider">Track 07</span>
-                      <span className="px-2.5 py-0.5 rounded-full bg-pink-100 dark:bg-pink-900/40 text-primary dark:text-pink-300 text-[11px] font-extrabold uppercase">
-                        Viral Distribution
-                      </span>
-                    </div>
-                    <h3 className="font-bold text-base sm:text-lg text-slate-900 dark:text-white">
-                      AI Video Generation, Reels & Audience Growth
-                    </h3>
-                    <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 max-w-2xl leading-relaxed">
-                      Master Midjourney v6, Runway Gen-3, CapCut automation templates, and automated captioning engines to generate 100k+ organic views for your personal brand or client campaigns.
-                    </p>
-                  </div>
-                </div>
-                <a
-                  href="#apply"
-                  className="shrink-0 px-6 py-3 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 hover:bg-primary dark:hover:bg-primary hover:text-white dark:hover:text-white font-bold text-xs sm:text-sm transition-all shadow-md"
+              {MENTORSHIP_SERVICES.map((s, idx) => (
+                <Link
+                  key={s.slug}
+                  href={`/online-mentorship/${s.slug}`}
+                  className="group p-6 bg-white/85 dark:bg-slate-850/85 rounded-3xl border border-pink-100 dark:border-white/10 hover:border-pink-300 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all flex flex-col justify-between space-y-5 backdrop-blur-sm"
                 >
-                  Include in My Retainer
-                </a>
-              </div>
+                  <div className="space-y-4">
+                    {/* Cute Doodle Header */}
+                    <div className="w-full aspect-[16/10] relative rounded-2xl overflow-hidden bg-pink-50/50 dark:bg-slate-900 border border-pink-100 dark:border-white/10 shadow-inner flex items-center justify-center">
+                      <Image
+                        src={s.doodle}
+                        alt={s.title}
+                        fill
+                        sizes="(max-width: 640px) 300px, 360px"
+                        className="object-contain p-2 group-hover:scale-105 transition-transform duration-500"
+                      />
+                    </div>
+
+                    <div className="space-y-1">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[10px] font-extrabold text-primary uppercase tracking-wider px-2 py-0.5 rounded bg-pink-100 dark:bg-pink-900/40">
+                          Track {String(idx + 1).padStart(2, '0')} · {s.badge}
+                        </span>
+                        <span className="material-symbols-outlined text-slate-300 group-hover:text-pink-500 text-[18px] transition-colors">
+                          arrow_forward
+                        </span>
+                      </div>
+                      <h3 className="font-extrabold text-base text-slate-900 dark:text-white group-hover:text-primary transition-colors">
+                        {s.title}
+                      </h3>
+                    </div>
+
+                    <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed line-clamp-3">
+                      {s.description}
+                    </p>
+
+                    <div className="flex flex-wrap gap-1.5 pt-1">
+                      {s.tools.slice(0, 3).map((tool, i) => (
+                        <span
+                          key={i}
+                          className="px-2 py-0.5 rounded-md text-[10px] font-semibold bg-pink-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-pink-100 dark:border-white/10"
+                        >
+                          {tool}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="pt-3 border-t border-pink-100 dark:border-white/10 flex items-center justify-between text-xs font-bold">
+                    <span className="text-slate-500 dark:text-slate-400 text-[11px] flex items-center gap-1">
+                      <Clock className="w-3.5 h-3.5 text-emerald-500" /> 1-2 Hr Live Sprints
+                    </span>
+                    <span className="text-primary group-hover:underline flex items-center gap-0.5">
+                      Explore Track →
+                    </span>
+                  </div>
+                </Link>
+              ))}
             </div>
           </div>
         </section>
@@ -701,21 +646,24 @@ export default function OnlineMentorshipPage() {
         <section className="w-full py-16 px-4 sm:px-6 lg:px-8">
           <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
             {/* Visual presentation */}
-            <div className="lg:col-span-7 relative rounded-3xl overflow-hidden shadow-2xl group border border-pink-200 dark:border-white/10">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                alt="Live team presentation showcasing AI-Driven WhatsApp Automation system architecture in executive boardroom"
-                className="w-full h-[360px] sm:h-[400px] object-cover group-hover:scale-105 transition-transform duration-700"
-                src="https://images.unsplash.com/photo-1531482615713-2afd69097998?w=1200&h=800&fit=crop&q=80"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent flex flex-col justify-end p-6 sm:p-8">
-                <span className="inline-block px-3 py-1 rounded-full bg-primary text-white text-[11px] font-bold w-fit mb-2">
+            <div className="lg:col-span-7 relative rounded-3xl overflow-hidden shadow-2xl group border border-pink-200 dark:border-white/10 bg-white/90 dark:bg-slate-900 p-6 flex flex-col items-center justify-center">
+              <div className="w-full aspect-[16/10] relative rounded-2xl overflow-hidden">
+                <Image
+                  src="/workshops_doodle.png"
+                  alt="Live 1:1 Architecture & Production Sprints"
+                  fill
+                  sizes="(max-width: 640px) 340px, 500px"
+                  className="object-contain group-hover:scale-105 transition-transform duration-700"
+                />
+              </div>
+              <div className="w-full pt-4 text-center sm:text-left">
+                <span className="inline-block px-3 py-1 rounded-full bg-primary text-white text-[11px] font-bold mb-2">
                   PRODUCTION GRADE ARCHITECTURE
                 </span>
-                <h3 className="text-xl sm:text-2xl font-bold text-white">
+                <h3 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">
                   From Blank Screen to Boardroom Demos
                 </h3>
-                <p className="text-xs sm:text-sm text-slate-200 max-w-xl">
+                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 max-w-xl mt-1">
                   Every workflow is designed so you can present it confidently to founders, CTOs, and non-technical stakeholders alike.
                 </p>
               </div>

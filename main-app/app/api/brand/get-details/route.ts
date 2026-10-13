@@ -22,7 +22,7 @@ export async function GET(req: Request) {
       return NextResponse.json({ ok: false, error: 'Database unavailable' }, { status: 500 });
     }
 
-    // Check if brand was decommissioned
+    // 1. Check if brand was decommissioned in deleted_brand_logs
     if (emailParam) {
       const { data: disabledLog } = await db
         .from('deleted_brand_logs')
@@ -39,6 +39,28 @@ export async function GET(req: Request) {
       }
     }
 
+    if (brandParam || slugParam) {
+      const targetSlug = slugify(slugParam || brandParam || '');
+      const rawTarget = (brandParam || slugParam || '').replace(/[-_]/g, ' ').toLowerCase().trim();
+      const { data: allDeletedLogs } = await db.from('deleted_brand_logs').select('*').limit(200);
+      if (allDeletedLogs && allDeletedLogs.length > 0) {
+        const matchedDeleted = allDeletedLogs.find((d: any) => {
+          if (!d.brand_name) return false;
+          const s = slugify(d.brand_name);
+          const n = d.brand_name.toLowerCase().trim();
+          return s === targetSlug || n === rawTarget;
+        });
+        if (matchedDeleted) {
+          return NextResponse.json({
+            ok: false,
+            disabled: true,
+            brandName: matchedDeleted.brand_name || 'Your Brand',
+          });
+        }
+      }
+    }
+
+    // 2. Query brand_registrations (active brands first)
     let query = db.from('brand_registrations').select('*').neq('status', 'deleted');
 
     if (emailParam) {
@@ -59,7 +81,31 @@ export async function GET(req: Request) {
       }
     }
 
-    if (error || !data || data.length === 0) {
+    // 3. If still not found, check if it was marked status = 'deleted' or 'blocked' in brand_registrations
+    if (!data || data.length === 0) {
+      let anyQuery = db.from('brand_registrations').select('*');
+      if (emailParam) {
+        anyQuery = anyQuery.ilike('email', emailParam);
+      } else if (brandParam) {
+        anyQuery = anyQuery.ilike('brand_name', brandParam);
+      }
+      const { data: anyBrands } = await anyQuery.order('created_at', { ascending: false }).limit(1);
+      let deletedRow = (anyBrands && anyBrands.length > 0) ? anyBrands[0] : null;
+
+      if (!deletedRow && (brandParam || slugParam)) {
+        const targetSlug = slugify(slugParam || brandParam || '');
+        const { data: allAny } = await db.from('brand_registrations').select('*');
+        deletedRow = (allAny || []).find((b: any) => slugify(b.brand_name || '') === targetSlug) || null;
+      }
+
+      if (deletedRow && (deletedRow.status === 'deleted' || deletedRow.status === 'blocked')) {
+        return NextResponse.json({
+          ok: false,
+          disabled: true,
+          brandName: deletedRow.brand_name || 'Your Brand',
+        });
+      }
+
       return NextResponse.json({ ok: false, error: 'Brand not found' }, { status: 404 });
     }
 
