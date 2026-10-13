@@ -206,7 +206,19 @@ export type InstagramInfo = {
   note?: string;
 };
 
-/* ───────────────────────────── Website ───────────────────────────── */
+export function normalizeWebsite(raw: string): string {
+  const v = raw.trim().toLowerCase();
+  if (!v) return '';
+  const urlStr = /^https?:\/\//i.test(v) ? v : `https://${v}`;
+  try {
+    const u = new URL(urlStr);
+    const host = u.hostname.replace(/^www\./, '');
+    const path = u.pathname.replace(/\/+$/, '');
+    return `${host}${path}`;
+  } catch {
+    return v.replace(/^https?:\/\//, '').replace(/^www\./, '').replace(/\/+$/, '');
+  }
+}
 
 export function validateWebsite(raw: string): { valid: boolean; value: string; error?: string } {
   const v = raw.trim();
@@ -220,3 +232,5 @@ export function validateWebsite(raw: string): { valid: boolean; value: string; e
     return { valid: false, value: v, error: 'Enter a valid website (e.g. https://yourbrand.com)' };
   }
 }
+
+

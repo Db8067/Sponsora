@@ -60,6 +60,9 @@ CREATE INDEX IF NOT EXISTS idx_brand_registrations_phone      ON public.brand_re
 CREATE INDEX IF NOT EXISTS idx_brand_registrations_clerk_user ON public.brand_registrations USING btree (clerk_user_id);
 CREATE INDEX IF NOT EXISTS idx_brand_registrations_city       ON public.brand_registrations USING btree (city);
 CREATE INDEX IF NOT EXISTS idx_brand_registrations_brand_name ON public.brand_registrations USING btree (brand_name);
+CREATE INDEX IF NOT EXISTS idx_brand_registrations_website    ON public.brand_registrations USING btree (brand_website);
+CREATE INDEX IF NOT EXISTS idx_brand_registrations_instagram  ON public.brand_registrations USING btree (instagram_handle);
+CREATE INDEX IF NOT EXISTS idx_brand_registrations_gstin      ON public.brand_registrations USING btree (gstin);
 CREATE INDEX IF NOT EXISTS idx_brand_registrations_created_at ON public.brand_registrations USING btree (created_at desc);
 CREATE INDEX IF NOT EXISTS idx_deleted_brand_logs_email       ON public.deleted_brand_logs USING btree (email);
 CREATE INDEX IF NOT EXISTS idx_deleted_brand_logs_brand_name  ON public.deleted_brand_logs USING btree (brand_name);

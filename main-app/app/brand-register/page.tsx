@@ -13,6 +13,7 @@ import {
 import LogoDropzone, { useLogoUpload } from '@/components/brand/LogoDropzone';
 import CityCombobox from '@/components/brand/CityCombobox';
 import WebsitePreview from '@/components/brand/WebsitePreview';
+import BrandAlreadyCreatedScreen, { ActiveBrandInfo } from '@/components/brand/BrandAlreadyCreatedScreen';
 import { useVerify, type VState } from '@/components/brand/useVerify';
 import {
   validateEmailSyntax, validatePhone, validateGstFormat, parseInstagram, validateWebsite,
@@ -79,11 +80,13 @@ export default function BrandRegisterPage() {
   const [error, setError] = useState('');
 
   const { user } = useUser();
-  const [existingBrand, setExistingBrand] = useState<{ brand_name: string; slug: string } | null>(null);
+  const [activeBrandProfile, setActiveBrandProfile] = useState<ActiveBrandInfo | null>(null);
+  const [forceShowForm, setForceShowForm] = useState(false);
 
   const [phoneConflict, setPhoneConflict] = useState<string | null>(null);
   const [gstConflict, setGstConflict] = useState<string | null>(null);
   const [igConflict, setIgConflict] = useState<string | null>(null);
+  const [websiteConflict, setWebsiteConflict] = useState<string | null>(null);
 
   // Auto-fill email if signed in via Clerk
   useEffect(() => {
@@ -105,11 +108,11 @@ export default function BrandRegisterPage() {
     }
   }, [user, email]);
 
-  // Check if an existing active brand registration exists (to optionally inform the user)
+  // Check if an existing active brand registration exists (to optionally inform the user or show BrandAlreadyCreatedScreen)
   useEffect(() => {
     const checkEmail = (email || user?.primaryEmailAddress?.emailAddress || '').trim();
     if (!checkEmail || !validateEmailSyntax(checkEmail).valid) {
-      setExistingBrand(null);
+      setActiveBrandProfile(null);
       return;
     }
 
@@ -120,18 +123,15 @@ export default function BrandRegisterPage() {
         const data = await res.json().catch(() => null);
         if (!active) return;
 
-        if (data?.registered && data.brand && data.brand.status !== 'deleted') {
-          setExistingBrand({
-            brand_name: data.brand.brand_name,
-            slug: data.brand.slug || encodeURIComponent(data.brand.brand_name),
-          });
+        if (data?.registered && data.brand && data.brand.status !== 'deleted' && data.brand.status !== 'blocked') {
+          setActiveBrandProfile(data.brand);
         } else {
-          setExistingBrand(null);
+          setActiveBrandProfile(null);
         }
       } catch {
         /* ignore */
       }
-    }, 600);
+    }, 400);
 
     return () => {
       active = false;
@@ -208,6 +208,29 @@ export default function BrandRegisterPage() {
     return () => clearTimeout(timer);
   }, [instagram, email]);
 
+  // Conflict checks: Website
+  useEffect(() => {
+    const w = brandWebsite.trim();
+    if (w.length < 4) {
+      setWebsiteConflict(null);
+      return;
+    }
+    const timer = setTimeout(async () => {
+      try {
+        const res = await fetch(`/api/brand/check-status?website=${encodeURIComponent(w)}&email=${encodeURIComponent(email)}`);
+        const data = await res.json().catch(() => null);
+        if (data?.conflict && data.field === 'website') {
+          setWebsiteConflict(data.message);
+        } else {
+          setWebsiteConflict(null);
+        }
+      } catch {
+        setWebsiteConflict(null);
+      }
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [brandWebsite, email]);
+
   const { logo, input: logoInput, openPicker, handleFile, reset: resetLogo } = useLogoUpload();
   const logoPreview = logo.previewUrl;
   const touch = (k: string) => setTouched((t) => ({ ...t, [k]: true }));
@@ -259,6 +282,7 @@ export default function BrandRegisterPage() {
     if (phoneConflict) problems.push(phoneConflict);
     if (gstConflict) problems.push(gstConflict);
     if (igConflict) problems.push(igConflict);
+    if (websiteConflict) problems.push(websiteConflict);
 
     if (problems.length) {
       setError(problems[0]);
@@ -312,6 +336,15 @@ export default function BrandRegisterPage() {
       setIsSubmitting(false);
     }
   };
+
+  if (activeBrandProfile && !forceShowForm) {
+    return (
+      <BrandAlreadyCreatedScreen
+        brand={activeBrandProfile}
+        onRegisterAnother={() => setForceShowForm(true)}
+      />
+    );
+  }
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -371,13 +404,13 @@ export default function BrandRegisterPage() {
               </div>
 
               <form className="space-y-6" onSubmit={handleSubmit}>
-                {existingBrand && (
+                {activeBrandProfile && (
                   <div className="rounded-2xl border-2 border-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 p-4 sm:p-5 shadow-lg flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div className="flex items-start gap-3">
                       <span className="material-symbols-outlined text-emerald-600 dark:text-emerald-400 text-[28px] shrink-0 mt-0.5">verified_user</span>
                       <div>
                         <h4 className="text-sm sm:text-base font-extrabold text-slate-900 dark:text-white">
-                          Brand Already Registered: &ldquo;{existingBrand.brand_name}&rdquo;
+                          Brand Already Registered: &ldquo;{activeBrandProfile.brand_name}&rdquo;
                         </h4>
                         <p className="text-xs text-slate-600 dark:text-slate-300 mt-0.5">
                           An active registration already exists for this email. You can directly proceed to your subscriptions dashboard.
@@ -386,7 +419,7 @@ export default function BrandRegisterPage() {
                     </div>
                     <button
                       type="button"
-                      onClick={() => router.push(`/brand-subscriptions?brand=${encodeURIComponent(existingBrand.brand_name)}`)}
+                      onClick={() => router.push(`/brand-subscriptions?brand=${encodeURIComponent(activeBrandProfile.brand_name)}`)}
                       className="px-4 py-2.5 rounded-xl font-bold text-xs bg-emerald-600 hover:bg-emerald-700 text-white shadow-md shadow-emerald-600/20 shrink-0 transition-all text-center flex items-center justify-center gap-1.5"
                     >
                       Open Dashboard <ArrowRight className="w-3.5 h-3.5" />
@@ -662,7 +695,13 @@ export default function BrandRegisterPage() {
                       />
                     </div>
                     {touched.website && !webV.valid && <p className="mt-1.5 text-xs text-red-600">{webV.error}</p>}
-                    {brandWebsite.trim().length > 3 && <WebsitePreview url={brandWebsite} />}
+                    {websiteConflict && (
+                      <div className="mt-2 p-2.5 rounded-xl border border-pink-200 bg-pink-50 text-pink-700 text-xs font-medium leading-relaxed flex items-start gap-2 animate-in fade-in">
+                        <span className="text-sm">🌸</span>
+                        <span>{websiteConflict}</span>
+                      </div>
+                    )}
+                    {brandWebsite.trim().length > 3 && !websiteConflict && <WebsitePreview url={brandWebsite} />}
                   </div>
                 </div>
 

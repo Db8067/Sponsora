@@ -43,24 +43,33 @@ export default async function WelcomePage({ params }: { params: Promise<{ slug: 
   let matchedBrand = null;
   if (!error && brands && brands.length > 0) {
     matchedBrand = brands.find(b => {
-       const bSlug = (b.brand_name || '').toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
-       return bSlug === brandSlug;
+      const bSlug = (b.brand_name || '').toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+      return bSlug === brandSlug;
     });
   }
 
-  // Check deleted_brand_logs as well
-  const { data: deletedLogs } = await supabaseServer
-    .from('deleted_brand_logs')
-    .select('*')
-    .limit(200);
+  const isGenericRoute = brandSlug === 'brand' || brandSlug === '';
 
-  const matchedDeletedLog = (deletedLogs || []).find((d: any) => {
-    if (!d.brand_name && !d.email) return false;
-    const s = (d.brand_name || '').toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
-    return s === brandSlug || (matchedBrand && d.email?.toLowerCase() === matchedBrand.email?.toLowerCase());
-  });
+  // 1. If active brand found with status != 'deleted' and != 'blocked', brand is active!
+  const isBrandActive = matchedBrand && matchedBrand.status !== 'deleted' && matchedBrand.status !== 'blocked';
 
-  if (matchedDeletedLog || !matchedBrand || matchedBrand.status === 'deleted' || matchedBrand.status === 'blocked') {
+  // 2. Check deleted_brand_logs only if brand is NOT active
+  let matchedDeletedLog = null;
+  if (!isBrandActive && !isGenericRoute) {
+    const { data: deletedLogs } = await supabaseServer
+      .from('deleted_brand_logs')
+      .select('*')
+      .limit(200);
+
+    matchedDeletedLog = (deletedLogs || []).find((d: any) => {
+      if (!d.brand_name && !d.email) return false;
+      const s = (d.brand_name || '').toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+      return s === brandSlug || (matchedBrand && d.email?.toLowerCase() === matchedBrand.email?.toLowerCase());
+    });
+  }
+
+  // 3. Only show disabled screen if brand is specifically confirmed deleted/blocked
+  if (!isGenericRoute && (matchedBrand?.status === 'deleted' || matchedBrand?.status === 'blocked' || (matchedDeletedLog && !matchedBrand))) {
     return (
       <BrandDisabledScreen
         brandName={matchedDeletedLog?.brand_name || matchedBrand?.brand_name || brandSlug.replace(/-/g, ' ')}
@@ -71,8 +80,8 @@ export default async function WelcomePage({ params }: { params: Promise<{ slug: 
 
   const props = {
     slug: brandSlug,
-    brand: matchedBrand?.brand_name,
-    founder: matchedBrand?.founder_name,
+    brand: matchedBrand?.brand_name || 'Your Brand',
+    founder: matchedBrand?.founder_name || 'Founder',
     email: matchedBrand?.email,
     phone: matchedBrand?.whatsapp_number,
     plan: amount === '1499' ? 'Business Scale' : amount === '499' ? 'Growth Pro' : 'Starter Maker',

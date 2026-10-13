@@ -41,19 +41,7 @@ export default async function MentorshipServicePage({
       <Snowfall />
       <SellerNavbar />
 
-      {/* Top Banner */}
-      <div className="bg-gradient-to-r from-pink-500/10 via-primary/15 to-pink-500/10 border-b border-pink-200/50 dark:border-white/10 py-2.5 px-4 text-center backdrop-blur-sm relative z-20">
-        <div className="max-w-7xl mx-auto flex items-center justify-center gap-2 text-xs sm:text-sm font-semibold text-slate-800 dark:text-pink-100">
-          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full bg-primary text-white text-[11px] font-extrabold uppercase tracking-wider">
-            1:1 Live Unrushed Sprint
-          </span>
-          <span className="truncate">
-            ⚡ 1-2 Hour Sprints Until Doubts Are 100% Cleared • Flat ₹15,000/mo • Grahak Setu 50+ Brand Pitching
-          </span>
-        </div>
-      </div>
-
-      <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 space-y-12 relative z-10">
+      <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-10 relative z-10">
         {/* Navigation Breadcrumb */}
         <div className="flex items-center gap-2 text-xs font-semibold text-slate-500 dark:text-slate-400">
           <Link href="/Online-Mentorship" className="hover:text-primary transition-colors flex items-center gap-1">
@@ -75,7 +63,7 @@ export default async function MentorshipServicePage({
 
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tight leading-tight">
               Master {service.title} in{' '}
-              <span className="text-primary underline decoration-primary/30 decoration-wavy decoration-2">
+              <span className="text-primary font-black">
                 1-2 Hour Live Sprints
               </span>
             </h1>

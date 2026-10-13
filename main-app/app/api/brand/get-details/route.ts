@@ -22,7 +22,57 @@ export async function GET(req: Request) {
       return NextResponse.json({ ok: false, error: 'Database unavailable' }, { status: 500 });
     }
 
-    // 1. Check if brand was decommissioned in deleted_brand_logs
+    // 1. Check active brand_registrations FIRST (active brands should NEVER be blocked by stale deleted logs)
+    let query = db.from('brand_registrations').select('*').neq('status', 'deleted').neq('status', 'blocked');
+
+    if (emailParam) {
+      query = query.ilike('email', emailParam);
+    } else if (brandParam) {
+      query = query.ilike('brand_name', brandParam);
+    }
+
+    let { data, error } = await query.order('created_at', { ascending: false }).limit(1);
+
+    // If no match by exact brand name, try searching all brands and matching by slug
+    if ((!data || data.length === 0) && (brandParam || slugParam)) {
+      const targetSlug = slugify(slugParam || brandParam || '');
+      const { data: allBrands } = await db.from('brand_registrations').select('*').neq('status', 'deleted').neq('status', 'blocked');
+      const matched = (allBrands || []).find((b: any) => slugify(b.brand_name || '') === targetSlug);
+      if (matched) {
+        data = [matched];
+      }
+    }
+
+    // 2. If an active brand is found, clear any stale decommission logs and return active brand
+    if (data && data.length > 0) {
+      const b = data[0];
+      if (b.email) {
+        try {
+          await db.from('deleted_brand_logs').delete().ilike('email', b.email);
+        } catch {
+          /* ignore */
+        }
+      }
+      return NextResponse.json({
+        ok: true,
+        brand: {
+          id: b.id,
+          brand_name: b.brand_name,
+          founder_name: b.founder_name,
+          slug: slugify(b.brand_name || 'brand'),
+          logo: b.brand_logo_url,
+          category: b.category || 'D2C Brand',
+          city: b.city,
+          phone: b.whatsapp_number,
+          email: b.email,
+          status: b.status,
+          website: b.brand_website || b.store_link,
+          instagram: b.instagram_handle,
+        },
+      });
+    }
+
+    // 3. No active brand found — now check if the brand was actually decommissioned in deleted_brand_logs
     if (emailParam) {
       const { data: disabledLog } = await db
         .from('deleted_brand_logs')
@@ -60,71 +110,31 @@ export async function GET(req: Request) {
       }
     }
 
-    // 2. Query brand_registrations (active brands first)
-    let query = db.from('brand_registrations').select('*').neq('status', 'deleted');
-
+    // 4. Check if it was marked status = 'deleted' or 'blocked' in brand_registrations
+    let anyQuery = db.from('brand_registrations').select('*');
     if (emailParam) {
-      query = query.ilike('email', emailParam);
+      anyQuery = anyQuery.ilike('email', emailParam);
     } else if (brandParam) {
-      query = query.ilike('brand_name', brandParam);
+      anyQuery = anyQuery.ilike('brand_name', brandParam);
     }
+    const { data: anyBrands } = await anyQuery.order('created_at', { ascending: false }).limit(1);
+    let deletedRow = (anyBrands && anyBrands.length > 0) ? anyBrands[0] : null;
 
-    let { data, error } = await query.order('created_at', { ascending: false }).limit(1);
-
-    // If no match by exact brand name, try searching all brands and matching by slug
-    if ((!data || data.length === 0) && (brandParam || slugParam)) {
+    if (!deletedRow && (brandParam || slugParam)) {
       const targetSlug = slugify(slugParam || brandParam || '');
-      const { data: allBrands } = await db.from('brand_registrations').select('*').neq('status', 'deleted');
-      const matched = (allBrands || []).find((b: any) => slugify(b.brand_name || '') === targetSlug);
-      if (matched) {
-        data = [matched];
-      }
+      const { data: allAny } = await db.from('brand_registrations').select('*');
+      deletedRow = (allAny || []).find((b: any) => slugify(b.brand_name || '') === targetSlug) || null;
     }
 
-    // 3. If still not found, check if it was marked status = 'deleted' or 'blocked' in brand_registrations
-    if (!data || data.length === 0) {
-      let anyQuery = db.from('brand_registrations').select('*');
-      if (emailParam) {
-        anyQuery = anyQuery.ilike('email', emailParam);
-      } else if (brandParam) {
-        anyQuery = anyQuery.ilike('brand_name', brandParam);
-      }
-      const { data: anyBrands } = await anyQuery.order('created_at', { ascending: false }).limit(1);
-      let deletedRow = (anyBrands && anyBrands.length > 0) ? anyBrands[0] : null;
-
-      if (!deletedRow && (brandParam || slugParam)) {
-        const targetSlug = slugify(slugParam || brandParam || '');
-        const { data: allAny } = await db.from('brand_registrations').select('*');
-        deletedRow = (allAny || []).find((b: any) => slugify(b.brand_name || '') === targetSlug) || null;
-      }
-
-      if (deletedRow && (deletedRow.status === 'deleted' || deletedRow.status === 'blocked')) {
-        return NextResponse.json({
-          ok: false,
-          disabled: true,
-          brandName: deletedRow.brand_name || 'Your Brand',
-        });
-      }
-
-      return NextResponse.json({ ok: false, error: 'Brand not found' }, { status: 404 });
+    if (deletedRow && (deletedRow.status === 'deleted' || deletedRow.status === 'blocked')) {
+      return NextResponse.json({
+        ok: false,
+        disabled: true,
+        brandName: deletedRow.brand_name || 'Your Brand',
+      });
     }
 
-    const b = data[0];
-    return NextResponse.json({
-      ok: true,
-      brand: {
-        id: b.id,
-        brand_name: b.brand_name,
-        founder_name: b.founder_name,
-        slug: slugify(b.brand_name || 'brand'),
-        logo: b.brand_logo_url,
-        category: b.category || 'D2C Brand',
-        city: b.city,
-        phone: b.whatsapp_number,
-        email: b.email,
-        status: b.status,
-      },
-    });
+    return NextResponse.json({ ok: false, error: 'Brand not found' }, { status: 404 });
   } catch (err: any) {
     console.error('[get-details error]:', err);
     return NextResponse.json({ ok: false, error: err.message }, { status: 500 });

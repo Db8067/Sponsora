@@ -34,18 +34,59 @@ export async function GET(req: Request) {
       return NextResponse.json({ registered: false });
     }
 
+    const website = searchParams.get('website')?.trim();
     const reapply = searchParams.get('reapply') === 'true';
 
-    // 1. Check if email was disabled / permanently deleted
-    if (reapply) {
-      if (email) {
-        // Clear decommission log so the brand can fill registration form again
-        await db.from('deleted_brand_logs').delete().ilike('email', email);
-      }
-      return NextResponse.json({ registered: false, reapplySuccess: true });
+    // 1. If reapply requested, clear decommission logs immediately
+    if (reapply && email) {
+      await db.from('deleted_brand_logs').delete().ilike('email', email);
     }
 
-    if (email) {
+    // 2. Prioritize ACTIVE brand registrations: If the user/email is registered and active,
+    // they are definitely NOT disabled! Clean any stale deleted_brand_logs and return brand info.
+    if (email || clerkUserId) {
+      let query = db.from('brand_registrations').select('*').neq('status', 'deleted').neq('status', 'blocked');
+      if (email && clerkUserId) {
+        query = query.or(`email.ilike.${email},clerk_user_id.eq.${clerkUserId}`);
+      } else if (email) {
+        query = query.ilike('email', email);
+      } else if (clerkUserId) {
+        query = query.eq('clerk_user_id', clerkUserId);
+      }
+
+      const { data, error } = await query.order('created_at', { ascending: false }).limit(1);
+
+      if (!error && data && data.length > 0) {
+        const brand = data[0];
+        // Clean up any stale decommission logs for this active brand
+        if (email) {
+          try {
+            await db.from('deleted_brand_logs').delete().ilike('email', email);
+          } catch {
+            /* ignore */
+          }
+        }
+        return NextResponse.json({
+          registered: true,
+          brand: {
+            id: brand.id,
+            brand_name: brand.brand_name,
+            founder_name: brand.founder_name,
+            slug: slugify(brand.brand_name || 'brand'),
+            email: brand.email,
+            phone: brand.whatsapp_number,
+            logo: brand.brand_logo_url,
+            city: brand.city,
+            status: brand.status,
+            website: brand.brand_website || brand.store_link,
+            instagram: brand.instagram_handle,
+          },
+        });
+      }
+    }
+
+    // 3. Only if no active registration exists, check if email was decommissioned/deleted
+    if (!reapply && email) {
       const { data: disabledLog } = await db
         .from('deleted_brand_logs')
         .select('*')
@@ -61,45 +102,14 @@ export async function GET(req: Request) {
       }
     }
 
-    // 2. Check if this email / user is already registered
-    if (email || clerkUserId) {
-      let query = db.from('brand_registrations').select('*').neq('status', 'deleted');
-      if (email && clerkUserId) {
-        query = query.or(`email.ilike.${email},clerk_user_id.eq.${clerkUserId}`);
-      } else if (email) {
-        query = query.ilike('email', email);
-      } else if (clerkUserId) {
-        query = query.eq('clerk_user_id', clerkUserId);
-      }
-
-      const { data, error } = await query.order('created_at', { ascending: false }).limit(1);
-
-      if (!error && data && data.length > 0) {
-        const brand = data[0];
-        return NextResponse.json({
-          registered: true,
-          brand: {
-            id: brand.id,
-            brand_name: brand.brand_name,
-            founder_name: brand.founder_name,
-            slug: slugify(brand.brand_name || 'brand'),
-            email: brand.email,
-            phone: brand.whatsapp_number,
-            logo: brand.brand_logo_url,
-            city: brand.city,
-            status: brand.status,
-          },
-        });
-      }
-    }
-
-    // 3. Check for conflicting fields (Phone, GSTIN, Instagram) against other brands
+    // 4. Check for conflicting fields (Phone, Email, GSTIN, Instagram, Website) against other active brands
     if (phone && phone.length >= 10) {
       const norm = normalizePhone(phone);
       const { data: phoneConflict } = await db
         .from('brand_registrations')
         .select('brand_name, email')
         .neq('status', 'deleted')
+        .neq('status', 'blocked')
         .eq('whatsapp_number', norm)
         .limit(1);
 
@@ -108,7 +118,7 @@ export async function GET(req: Request) {
           conflict: true,
           field: 'phone',
           brandName: phoneConflict[0].brand_name,
-          message: `🌸 Oops! This WhatsApp number is already linked to "${phoneConflict[0].brand_name}". Please use your brand's unique phone number!`,
+          message: `🌸 Oops! WhatsApp number ${norm} is already linked to "${phoneConflict[0].brand_name}". Please use your brand's unique phone number!`,
         });
       }
     }
@@ -118,6 +128,7 @@ export async function GET(req: Request) {
         .from('brand_registrations')
         .select('brand_name, email')
         .neq('status', 'deleted')
+        .neq('status', 'blocked')
         .eq('gstin', gstin)
         .limit(1);
 
@@ -126,7 +137,7 @@ export async function GET(req: Request) {
           conflict: true,
           field: 'gstin',
           brandName: gstConflict[0].brand_name,
-          message: `🌸 Oops! This GST number is already linked to "${gstConflict[0].brand_name}". Please verify your GSTIN or log in to manage that brand!`,
+          message: `🌸 Oops! GST number ${gstin} is already linked to "${gstConflict[0].brand_name}". Please verify your GSTIN or use your unique brand details!`,
         });
       }
     }
@@ -136,6 +147,7 @@ export async function GET(req: Request) {
         .from('brand_registrations')
         .select('brand_name, email')
         .neq('status', 'deleted')
+        .neq('status', 'blocked')
         .ilike('instagram_handle', `@${instagram}`)
         .limit(1);
 
@@ -144,7 +156,32 @@ export async function GET(req: Request) {
           conflict: true,
           field: 'instagram',
           brandName: igConflict[0].brand_name,
-          message: `🌸 Oops! The Instagram ID @${instagram} is already registered by "${igConflict[0].brand_name}". Please connect your own brand profile!`,
+          message: `🌸 Oops! Instagram handle @${instagram} is already registered by "${igConflict[0].brand_name}". Please connect your own brand profile!`,
+        });
+      }
+    }
+
+    if (website && website.length > 3) {
+      const cleanWeb = website.toLowerCase().replace(/^https?:\/\//, '').replace(/^www\./, '').replace(/\/+$/, '');
+      const { data: allActive } = await db
+        .from('brand_registrations')
+        .select('brand_name, email, brand_website, store_link')
+        .neq('status', 'deleted')
+        .neq('status', 'blocked')
+        .limit(200);
+
+      const webConflict = (allActive || []).find((b: any) => {
+        if (email && b.email?.toLowerCase() === email) return false;
+        const targetW = (b.brand_website || b.store_link || '').toLowerCase().replace(/^https?:\/\//, '').replace(/^www\./, '').replace(/\/+$/, '');
+        return targetW && targetW === cleanWeb;
+      });
+
+      if (webConflict) {
+        return NextResponse.json({
+          conflict: true,
+          field: 'website',
+          brandName: webConflict.brand_name,
+          message: `🌸 Oops! The website URL "${website}" is already registered by "${webConflict.brand_name}". Please provide your brand's unique store link!`,
         });
       }
     }

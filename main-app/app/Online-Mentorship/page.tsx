@@ -51,6 +51,22 @@ export default function OnlineMentorshipPage() {
   // FAQ Accordion open index
   const [openFaq, setOpenFaq] = useState<number | null>(0);
 
+  // Animated sliding headline state
+  const SLIDE_HEADLINES = [
+    '1-2 Hour Live Sprints Until Every Doubt Is Crystal Clear.',
+    'Build Real Production Systems With Your Mentor Live.',
+    'Direct Pitch Access to 50+ Verified Grahak Setu Brands.',
+    'Close $2k–$5k/mo Foreign Client Retainers With Confidence.',
+  ];
+  const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
+
+  React.useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlideIndex((prev) => (prev + 1) % SLIDE_HEADLINES.length);
+    }, 3500);
+    return () => clearInterval(timer);
+  }, [SLIDE_HEADLINES.length]);
+
   const toggleFaq = (index: number) => {
     setOpenFaq(openFaq === index ? null : index);
   };
@@ -71,19 +87,7 @@ export default function OnlineMentorshipPage() {
       {/* Global Navbar */}
       <SellerNavbar />
 
-      {/* Top Protocol Announcement Bar */}
-      <div className="bg-gradient-to-r from-pink-500/10 via-primary/15 to-pink-500/10 border-b border-pink-200/50 dark:border-white/10 py-2 px-4 text-center backdrop-blur-sm relative z-20">
-        <div className="max-w-7xl mx-auto flex items-center justify-center gap-2 text-xs sm:text-sm font-semibold text-slate-800 dark:text-pink-100">
-          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full bg-primary text-white text-[11px] font-extrabold uppercase tracking-wider">
-            Unrushed Format
-          </span>
-          <span className="truncate">
-            ⚡ 1-2 Hour Live 1:1 Sessions Until Every Doubt is Resolved • Zero 30-Min Rush • Direct Brand Access
-          </span>
-        </div>
-      </div>
-
-      <main className="flex-1 w-full relative z-10">
+      <main className="flex-1 w-full relative z-10 pt-4 sm:pt-6">
         {/* Cohort Trust Bar */}
         <section className="w-full bg-white/70 dark:bg-slate-900/70 border-b border-pink-100 dark:border-white/10 py-2.5 px-4 sm:px-8 backdrop-blur-md">
           <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3 text-xs">
@@ -107,7 +111,7 @@ export default function OnlineMentorshipPage() {
         </section>
 
         {/* Hero Section */}
-        <section className="w-full py-12 md:py-20 px-4 sm:px-6 lg:px-8">
+        <section className="w-full py-10 md:py-16 px-4 sm:px-6 lg:px-8">
           <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
             {/* Left Column: Copy */}
             <div className="lg:col-span-7 space-y-6">
@@ -117,11 +121,29 @@ export default function OnlineMentorshipPage() {
               </div>
 
               <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tight leading-tight">
-                1:1 Personalized Mentorship:{' '}
-                <span className="text-primary underline decoration-primary/30 decoration-wavy decoration-2">
-                  1-2 Hour Live Sprints
-                </span>{' '}
-                Until Every Doubt Is Crystal Clear.
+                <span className="block text-slate-900 dark:text-white mb-2 sm:mb-3">
+                  1:1 Personalized Mentorship:
+                </span>
+                <span className="relative block h-[1.3em] overflow-hidden">
+                  {SLIDE_HEADLINES.map((line, idx) => {
+                    const isCurrent = idx === currentSlideIndex;
+                    const isPrev = idx === (currentSlideIndex - 1 + SLIDE_HEADLINES.length) % SLIDE_HEADLINES.length;
+                    return (
+                      <span
+                        key={line}
+                        className={`absolute inset-x-0 top-0 text-primary transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+                          isCurrent
+                            ? 'translate-y-0 opacity-100 pointer-events-auto'
+                            : isPrev
+                            ? '-translate-y-full opacity-0 pointer-events-none'
+                            : 'translate-y-full opacity-0 pointer-events-none'
+                        }`}
+                      >
+                        {line}
+                      </span>
+                    );
+                  })}
+                </span>
               </h1>
 
               <p className="text-base sm:text-lg text-slate-600 dark:text-slate-300 leading-relaxed max-w-2xl">

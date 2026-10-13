@@ -16,7 +16,7 @@ export const MENTORSHIP_SERVICES: MentorshipService[] = [
     slug: 'ai-agents',
     title: 'Custom AI Agents & Multi-Agent RAG',
     badge: 'High Demand',
-    doodle: '/tech_events_doodle.png',
+    doodle: '/images/tech_events_doodle.png',
     tagline: 'Build autonomous agents that execute multi-step business logic.',
     description: 'Master LangChain, LlamaIndex, OpenAI Assistants, and Supabase pgvector. Build multi-agent swarms that research, calculate, call APIs, and execute decisions autonomously.',
     outcomes: [
@@ -37,7 +37,7 @@ export const MENTORSHIP_SERVICES: MentorshipService[] = [
     slug: 'whatsapp-automation',
     title: 'WhatsApp Business API & Autonomous Bots',
     badge: 'Enterprise Standard',
-    doodle: '/sell_online_1.png',
+    doodle: '/images/sell_online_1.png',
     tagline: 'Convert chat conversations into instant revenue and CRM updates.',
     description: 'Learn the official Meta Cloud API from scratch. Configure webhooks, create interactive catalog buttons, build 24/7 customer support bots, and auto-sync contacts with Google Sheets & CRMs.',
     outcomes: [
@@ -58,7 +58,7 @@ export const MENTORSHIP_SERVICES: MentorshipService[] = [
     slug: 'voice-ai-agents',
     title: 'Voice AI Agents & Real-Time Telephony',
     badge: 'Cutting Edge',
-    doodle: '/workshops_doodle.png',
+    doodle: '/images/workshops_doodle.png',
     tagline: 'Phone callers that sound natural, qualify leads, and book calendars.',
     description: 'Harness ElevenLabs, Twilio, and Deepgram to create voice callers that sound indistinguishable from humans with sub-500ms latency. Handle inbound support and outbound sales seamlessly.',
     outcomes: [
@@ -79,7 +79,7 @@ export const MENTORSHIP_SERVICES: MentorshipService[] = [
     slug: 'website-building',
     title: 'High-Converting Website Building',
     badge: 'DFY Included',
-    doodle: '/hero-art.png',
+    doodle: '/images/hero-art.png',
     tagline: 'Modern, blazing-fast web applications designed to convert visitors.',
     description: 'We build websites that look stunning, load in 0.8 seconds, and guide visitors straight to buy buttons. Master Next.js 15, Tailwind CSS, high-converting copy layouts, and seamless payment gateway setups.',
     outcomes: [
@@ -100,7 +100,7 @@ export const MENTORSHIP_SERVICES: MentorshipService[] = [
     slug: 'app-building',
     title: 'Production Mobile App Building',
     badge: 'Cross-Platform',
-    doodle: '/seller_banner_doodle.png',
+    doodle: '/images/seller_banner_doodle.png',
     tagline: 'iOS and Android applications shipped directly to app stores.',
     description: 'Build native-feeling iOS and Android applications using React Native or Flutter. Implement offline-first storage, real-time push notifications, and frictionless user onboarding.',
     outcomes: [
@@ -121,7 +121,7 @@ export const MENTORSHIP_SERVICES: MentorshipService[] = [
     slug: 'seo',
     title: 'Technical & Programmatic SEO',
     badge: 'Compounding Traffic',
-    doodle: '/seminars_doodle.png',
+    doodle: '/images/seminars_doodle.png',
     tagline: 'Rank #1 on Google without wasting months on manual blog posts.',
     description: 'Master programmatic SEO pipelines that generate hundreds of high-intent search landing pages automatically. Master technical site audits, JSON-LD schema graphs, and internal linking engines.',
     outcomes: [
@@ -142,7 +142,7 @@ export const MENTORSHIP_SERVICES: MentorshipService[] = [
     slug: 'geo',
     title: 'GEO (Generative Engine Optimization)',
     badge: 'Next-Gen Search',
-    doodle: '/tech_events_doodle.png',
+    doodle: '/images/tech_events_doodle.png',
     tagline: 'Get recommended directly inside ChatGPT, Perplexity, and Claude.',
     description: 'Traditional SEO is evolving. When buyers ask ChatGPT or Perplexity for brand recommendations, ensure your product is cited first. Master entity authority, citation graphs, and AI knowledge extraction.',
     outcomes: [
@@ -163,7 +163,7 @@ export const MENTORSHIP_SERVICES: MentorshipService[] = [
     slug: 'marketing',
     title: 'Performance Marketing & Funnel Architecture',
     badge: 'Growth Engine',
-    doodle: '/cultural_events_doodle.png',
+    doodle: '/images/cultural_events_doodle.png',
     tagline: 'Profitable ad campaigns and high-converting acquisition funnels.',
     description: 'Learn how to run Meta, Google, and influencer campaigns with positive return on ad spend (ROAS). Design multi-step funnels, write persuasive direct-response copy, and master retention loops.',
     outcomes: [
@@ -184,7 +184,7 @@ export const MENTORSHIP_SERVICES: MentorshipService[] = [
     slug: 'finding-leads',
     title: 'B2B Lead Generation & Scraping Pipelines',
     badge: 'Automated Pipeline',
-    doodle: '/doodle_ask_sponsorship.png',
+    doodle: '/images/doodle_ask_sponsorship.png',
     tagline: 'Fill your pipeline with verified founder and decision-maker contacts.',
     description: 'Build automated B2B scraping pipelines using Apollo, Sales Navigator, and Google Maps scrapers. Clean, verify, and enrich prospect emails and phone numbers with 98%+ deliverability.',
     outcomes: [
@@ -268,7 +268,7 @@ export const MENTORSHIP_SERVICES: MentorshipService[] = [
     slug: 'reel-making',
     title: 'Viral Reel & Short-Form Video Production',
     badge: 'Audience Growth',
-    doodle: '/doodle_become_sponsor.png',
+    doodle: '/images/doodle_become_sponsor.png',
     tagline: 'Fast-paced, high-retention short videos built for millions of views.',
     description: 'Understand the algorithmic mechanics of Instagram Reels and YouTube Shorts. Learn viral retention curves, sound selection, visual pattern interrupts, and automated captioning.',
     outcomes: [
@@ -289,7 +289,7 @@ export const MENTORSHIP_SERVICES: MentorshipService[] = [
     slug: 'gaining-followers',
     title: 'Organic Social Growth & Follower Engines',
     badge: 'Brand Authority',
-    doodle: '/doodle_organize.png',
+    doodle: '/images/doodle_organize.png',
     tagline: 'Scale personal and brand profiles to 50,000+ targeted followers.',
     description: 'Turn your profile into an inbound lead magnet. Learn how to write high-converting bios, design carousel slides that get thousands of saves, and orchestrate algorithmic engagement loops.',
     outcomes: [
@@ -310,7 +310,7 @@ export const MENTORSHIP_SERVICES: MentorshipService[] = [
     slug: 'foreign-clients',
     title: 'Getting Foreign Clients ($2k - $5k/mo Retainers)',
     badge: 'High Ticket',
-    doodle: '/sell_online_2.png',
+    doodle: '/images/sell_online_2.png',
     tagline: 'Close US, UK, and European business owners on high-ticket retainers.',
     description: 'Stop competing for low-paying domestic gigs. Learn how to reach out to founders in the US, UK, Canada, and Europe who happily pay $2,000 to $5,000 every single month for AI automations and modern web development.',
     outcomes: [
@@ -331,7 +331,7 @@ export const MENTORSHIP_SERVICES: MentorshipService[] = [
     slug: 'ai-workflows',
     title: 'Enterprise AI Workflows & Automation (n8n & Make)',
     badge: 'Full Automation',
-    doodle: '/workshops_doodle.png',
+    doodle: '/images/workshops_doodle.png',
     tagline: 'Automate complex manual operations with visual AI pipelines.',
     description: 'Connect hundreds of SaaS tools together using n8n and Make. Build complex conditional logic, auto-generate PDF invoices, summarize inbound emails, and trigger webhook chains with zero human effort.',
     outcomes: [
@@ -352,7 +352,7 @@ export const MENTORSHIP_SERVICES: MentorshipService[] = [
     slug: 'brand-interaction',
     title: 'Direct Brand Interaction & Grahak Setu 50+ Network',
     badge: 'Unfair Advantage',
-    doodle: '/hero-art.png',
+    doodle: '/images/hero-art.png',
     tagline: 'Directly pitch your solutions to 50+ verified live partner brands.',
     description: 'You do not just learn skills—you gain direct boardroom access. Through the Grahak Setu brand network, present your AI agents, WhatsApp bots, and websites directly to founders looking for solutions today.',
     outcomes: [

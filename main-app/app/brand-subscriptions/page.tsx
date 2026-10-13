@@ -194,31 +194,26 @@ function BrandPassport({
               email: data.brand.email || cookieEmail || '',
               logo: data.brand.logo || cookieLogo || '',
             });
-          } else if (brandParam || slugParam) {
-            // Brand was explicitly queried in URL but does not exist in DB (deleted)
-            setDisabled(true);
-            const targetName = (brandParam || slugParam || 'Your Brand').replace(/[-_]/g, ' ');
-            setDisabledBrandName(targetName);
-            document.cookie = 'brand_welcome_data=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
-            onDisabled?.(targetName, cookieEmail);
           } else {
             setBrandData({
-              brandName: cookieBrand || 'Your Brand',
-              founderName: cookieFounder || 'Founder',
-              category: cookieCategory || 'D2C Brand',
-              phone: cookiePhone || '',
-              email: cookieEmail || '',
-              logo: cookieLogo || '',
+              brandName: brandParam || slugParam || cookieBrand || 'Your Brand',
+              founderName: searchParams.get('founder') || cookieFounder || 'Founder',
+              category: searchParams.get('category') || cookieCategory || 'D2C Brand',
+              phone: searchParams.get('phone') || cookiePhone || '',
+              email: searchParams.get('email') || cookieEmail || '',
+              logo: searchParams.get('logo') || cookieLogo || '',
             });
           }
         })
         .catch(() => {
-          if (brandParam || slugParam) {
-            setDisabled(true);
-            const targetName = (brandParam || slugParam || 'Your Brand').replace(/[-_]/g, ' ');
-            setDisabledBrandName(targetName);
-            onDisabled?.(targetName, cookieEmail);
-          }
+          setBrandData({
+            brandName: brandParam || slugParam || cookieBrand || 'Your Brand',
+            founderName: searchParams.get('founder') || cookieFounder || 'Founder',
+            category: searchParams.get('category') || cookieCategory || 'D2C Brand',
+            phone: searchParams.get('phone') || cookiePhone || '',
+            email: searchParams.get('email') || cookieEmail || '',
+            logo: searchParams.get('logo') || cookieLogo || '',
+          });
         });
     }
   }, [searchParams, onDisabled]);
@@ -351,25 +346,11 @@ export default function BrandSubscriptionsPage() {
 
   const handlePayment = (planId: number, planName: string, amount: number) => {
     setIsProcessing(planId);
-    
-    // Read brand data from secure cookie
     const cookieData = getSecureCookie('brand_welcome_data');
-    if (!cookieData) {
-      // Fallback or redirect if no cookie data
-      router.push('/');
-      return;
-    }
+    const urlBrand = typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('brand') || '' : '';
+    const brand = cookieData?.brand || urlBrand || '';
 
-    // Redirect to /[slug]-welcome-[amount] with the brand slug from cookie data
-    const slug = cookieData.brand.toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '') || 'mitti-herbals';
-    
-    if (amount === 499) {
-      window.location.href = `/${slug}-welcome-499`;
-    } else if (amount === 1499) {
-      window.location.href = `/${slug}-welcome-1499`;
-    } else {
-      window.location.href = `/${slug}-welcome-99`;
-    }
+    router.push(`/brand-checkout?plan=${planId}&billing=${billing}&brand=${encodeURIComponent(brand)}`);
   };
 
   if (isPageDisabled) {

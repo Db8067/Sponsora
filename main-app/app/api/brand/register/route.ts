@@ -76,6 +76,45 @@ export async function POST(req: Request) {
   const candidates = [getAdminClient().client, getAnonClient()].filter(Boolean) as NonNullable<ReturnType<typeof getAnonClient>>[];
   if (!candidates.length) return bad('Registration service is not configured. Please contact support.', 500);
 
+  const primaryClient = candidates[0];
+
+  // 1. Strict Conflict Checks: Prevent registration if Phone, Instagram, or Website belongs to another active brand
+  try {
+    const { data: conflicts } = await primaryClient
+      .from('brand_registrations')
+      .select('id, brand_name, email, whatsapp_number, instagram_handle, brand_website, store_link')
+      .neq('status', 'deleted')
+      .neq('status', 'blocked')
+      .limit(300);
+
+    if (conflicts && conflicts.length > 0) {
+      for (const b of conflicts) {
+        if (b.email?.toLowerCase() === normalizedEmail) continue; // Same user updating their profile is permitted
+
+        if (b.whatsapp_number && b.whatsapp_number === phone.value) {
+          return bad(`🌸 Oops! WhatsApp number ${phone.value} is already linked to "${b.brand_name}". Please use your brand's unique contact number!`, 409);
+        }
+
+        if (ig.normalized && b.instagram_handle) {
+          const bHandle = b.instagram_handle.replace(/^@/, '').toLowerCase();
+          if (bHandle === ig.normalized.toLowerCase()) {
+            return bad(`🌸 Oops! Instagram handle @${ig.normalized} is already linked to "${b.brand_name}". Please connect your own brand profile!`, 409);
+          }
+        }
+
+        if (website.value) {
+          const cleanInputWeb = website.value.toLowerCase().replace(/^https?:\/\//, '').replace(/^www\./, '').replace(/\/+$/, '');
+          const existingWeb = (b.brand_website || b.store_link || '').toLowerCase().replace(/^https?:\/\//, '').replace(/^www\./, '').replace(/\/+$/, '');
+          if (cleanInputWeb && existingWeb && cleanInputWeb === existingWeb) {
+            return bad(`🌸 Oops! The website URL "${website.value}" is already registered by "${b.brand_name}". Please provide your brand's unique website!`, 409);
+          }
+        }
+      }
+    }
+  } catch (conflictErr) {
+    console.error('[brand/register] conflict check warning:', conflictErr);
+  }
+
   let lastError = '';
   for (const client of candidates) {
     // Check if brand with this email already exists — update instead of inserting duplicate
@@ -89,10 +128,14 @@ export async function POST(req: Request) {
       if (existing && existing.length > 0) {
         const { error: updErr } = await client
           .from('brand_registrations')
-          .update(row)
+          .update({ ...row, status: 'pending' })
           .eq('id', existing[0].id);
 
         if (!updErr) {
+          // Immediately purge any deleted logs so user is fully unblocked
+          try {
+            await client.from('deleted_brand_logs').delete().ilike('email', normalizedEmail);
+          } catch {}
           return NextResponse.json({ ok: true, slug: slugify(brandName), updated: true });
         }
       }
@@ -102,6 +145,10 @@ export async function POST(req: Request) {
 
     const { error } = await client.from('brand_registrations').insert(row);
     if (!error) {
+      // Immediately purge any deleted logs so user is fully unblocked
+      try {
+        await client.from('deleted_brand_logs').delete().ilike('email', normalizedEmail);
+      } catch {}
       return NextResponse.json({ ok: true, slug: slugify(brandName) });
     }
     lastError = error.message;
