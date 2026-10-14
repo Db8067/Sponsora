@@ -1,6 +1,7 @@
 'use client';
 
 import SellerNavbar from '@/components/SellerNavbar';
+import BrandDashboardPopup from '@/components/brand/BrandDashboardPopup';
 import React, { useState } from 'react';
 import Link from 'next/link';
 import {
@@ -54,6 +55,7 @@ export default function SellerLandingPage() {
   return (
     <div className="flex flex-col min-h-screen">
       <SellerNavbar />
+      <BrandDashboardPopup />
 
       {/* ══════════════════════════════════════════
           1. HERO SECTION

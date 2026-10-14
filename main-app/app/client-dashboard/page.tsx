@@ -49,6 +49,8 @@ interface MentorshipSchedule {
   session_date: string;
   session_day: string;
   time_slot: string;
+  exact_time?: string;
+  duration?: string;
   topic: string;
   description?: string;
   meeting_link?: string;
@@ -70,16 +72,20 @@ export default function ClientDashboardPage() {
   const [schedules, setSchedules] = useState<MentorshipSchedule[]>([]);
   const [dataLoading, setDataLoading] = useState(false);
 
-  // Check existing session
+  // Check existing session (cookie or localStorage)
   useEffect(() => {
     try {
+      let session = null;
       const match = document.cookie.match(/client_session=([^;]+)/);
       if (match) {
-        const decoded = JSON.parse(decodeURIComponent(match[1]));
-        if (decoded?.username) {
-          setClient(decoded);
-          fetchDashboardData(decoded.username);
-        }
+        session = JSON.parse(decodeURIComponent(match[1]));
+      } else {
+        const stored = localStorage.getItem('client_session');
+        if (stored) session = JSON.parse(stored);
+      }
+      if (session?.username) {
+        setClient(session);
+        fetchDashboardData(session.username);
       }
     } catch {
       /* ignore */
@@ -130,6 +136,11 @@ export default function ClientDashboardPage() {
       }
 
       setClient(data.client);
+      try {
+        localStorage.setItem('client_session', JSON.stringify(data.client));
+      } catch {
+        /* ignore */
+      }
       fetchDashboardData(data.client.username);
     } catch (err: any) {
       setAuthError(err.message || 'Login failed. Please try again.');
@@ -141,6 +152,11 @@ export default function ClientDashboardPage() {
   const handleLogout = async () => {
     try {
       await fetch('/api/client/auth', { method: 'DELETE' });
+    } catch {
+      /* ignore */
+    }
+    try {
+      localStorage.removeItem('client_session');
     } catch {
       /* ignore */
     }
@@ -260,6 +276,8 @@ export default function ClientDashboardPage() {
   const totalFees = courses.reduce((acc, c) => acc + (Number(c.total_fees) || 0), 0);
   const totalPaid = courses.reduce((acc, c) => acc + (Number(c.fees_paid) || 0), 0);
   const remainingDue = courses.reduce((acc, c) => acc + (Number(c.fees_due) || 0), 0);
+  const upcomingSchedules = schedules.filter((s) => s.status !== 'completed');
+  const completedSchedules = schedules.filter((s) => s.status === 'completed');
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-50/50 dark:bg-slate-950 relative selection:bg-pink-100 selection:text-primary">
@@ -394,15 +412,20 @@ export default function ClientDashboardPage() {
           </div>
         </div>
 
-        {/* Booked Mentorship Calls Section */}
-        <div className="bg-white/90 dark:bg-slate-900/90 rounded-3xl p-6 sm:p-8 border border-pink-200 dark:border-white/10 shadow-sm backdrop-blur-md">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 mb-6 border-b border-slate-100 dark:border-white/10">
+        {/* 1. Booked & Upcoming Mentorship Sessions */}
+        <div className="bg-white/90 dark:bg-slate-900/90 rounded-3xl p-6 sm:p-8 border border-pink-200 dark:border-white/10 shadow-sm backdrop-blur-md space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-100 dark:border-white/10">
             <div>
-              <h2 className="text-lg font-black text-slate-900 dark:text-white">
-                Your Booked Mentorship Sessions
-              </h2>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
-                Upcoming and completed 1:1 mentorship calls with meeting links.
+              <div className="flex items-center gap-2">
+                <h2 className="text-lg font-black text-slate-900 dark:text-white">
+                  Your Booked Mentorship Sessions
+                </h2>
+                <span className="px-2.5 py-0.5 rounded-full bg-pink-100 dark:bg-pink-900/40 text-primary dark:text-pink-300 text-xs font-bold">
+                  {upcomingSchedules.length} Active
+                </span>
+              </div>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                Upcoming 1:1 sessions, live status approvals, and Google Meet details.
               </p>
             </div>
 
@@ -415,18 +438,18 @@ export default function ClientDashboardPage() {
             </Link>
           </div>
 
-          {schedules.length === 0 ? (
+          {upcomingSchedules.length === 0 ? (
             <div className="text-center py-10 px-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-dashed border-slate-200 dark:border-white/10">
               <Calendar className="w-10 h-10 text-slate-300 dark:text-slate-600 mx-auto mb-2" />
-              <h3 className="text-sm font-bold text-slate-700 dark:text-slate-300">No mentorship sessions scheduled yet</h3>
+              <h3 className="text-sm font-bold text-slate-700 dark:text-slate-300">No active mentorship sessions scheduled</h3>
               <p className="text-xs text-slate-500 mt-1 max-w-sm mx-auto">
-                Click the button above to pick a date and time slot that fits your schedule.
+                Click the button above to pick a date, 2-hour window, and exact start time that fits your schedule.
               </p>
               <Link
                 href="/client-schedule-mentorship"
                 className="mt-4 inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-primary text-white font-bold text-xs"
               >
-                Schedule First Session
+                Schedule Session Slot
               </Link>
             </div>
           ) : (
@@ -435,65 +458,195 @@ export default function ClientDashboardPage() {
                 <thead>
                   <tr className="border-b border-slate-100 dark:border-white/10 text-slate-400 text-[11px] uppercase tracking-wider">
                     <th className="py-3 px-4">Date &amp; Day</th>
-                    <th className="py-3 px-4">Time Slot</th>
+                    <th className="py-3 px-4">Time &amp; Exact Slot</th>
                     <th className="py-3 px-4">Session Topic</th>
                     <th className="py-3 px-4">Status</th>
-                    <th className="py-3 px-4 text-right">Meeting Link</th>
+                    <th className="py-3 px-4">Platform &amp; Duration</th>
+                    <th className="py-3 px-4 text-right">Action</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100 dark:divide-white/5">
-                  {schedules.map((s) => (
+                  {upcomingSchedules.map((s) => {
+                    const isPending = s.status === 'pending_approval' || s.status === 'scheduled';
+                    const isApproved = s.status === 'approved';
+                    const isCancelled = s.status === 'cancelled_by_admin' || s.status === 'cancelled';
+
+                    return (
+                      <tr key={s.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/50">
+                        <td className="py-3.5 px-4 font-bold text-slate-900 dark:text-white whitespace-nowrap">
+                          {s.session_date}
+                          <span className="text-xs text-slate-500 font-normal block">{s.session_day}</span>
+                        </td>
+
+                        <td className="py-3.5 px-4 whitespace-nowrap">
+                          {s.exact_time ? (
+                            <div>
+                              <span className="font-bold text-indigo-600 dark:text-indigo-400 block">
+                                {s.exact_time}
+                              </span>
+                              <span className="text-[10px] text-slate-400">Window: {s.time_slot}</span>
+                            </div>
+                          ) : (
+                            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-pink-50 dark:bg-pink-900/30 text-primary dark:text-pink-300 font-bold text-xs">
+                              <Clock className="w-3 h-3" />
+                              {s.time_slot}
+                            </span>
+                          )}
+                        </td>
+
+                        <td className="py-3.5 px-4 max-w-xs font-semibold text-slate-800 dark:text-slate-200">
+                          {s.topic}
+                          {s.description && (
+                            <span className="text-xs text-slate-400 font-normal block truncate mt-0.5">
+                              {s.description}
+                            </span>
+                          )}
+                        </td>
+
+                        {/* Status requirement:
+                            - If not approved yet -> "Approval Pending"
+                            - If approved -> "Approved"
+                            - If cancelled -> "Meeting Cancelled by Admin"
+                        */}
+                        <td className="py-3.5 px-4 whitespace-nowrap">
+                          <span
+                            className={`px-3 py-1 rounded-full text-[11px] font-black uppercase tracking-wider ${
+                              isApproved
+                                ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300'
+                                : isCancelled
+                                ? 'bg-red-100 text-red-800 dark:bg-red-950 dark:text-red-300'
+                                : 'bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300'
+                            }`}
+                          >
+                            {isApproved
+                              ? 'Approved'
+                              : isCancelled
+                              ? 'Meeting Cancelled by Admin'
+                              : 'Approval Pending'}
+                          </span>
+                        </td>
+
+                        {/* Platform & Duration requirement:
+                            - If approved -> show duration and text "Platform: Google Meet"
+                        */}
+                        <td className="py-3.5 px-4 whitespace-nowrap">
+                          <div className="space-y-0.5">
+                            <span className="font-medium text-slate-700 dark:text-slate-300 text-xs flex items-center gap-1">
+                              <Video className="w-3.5 h-3.5 text-emerald-600" />
+                              Platform: Google Meet
+                            </span>
+                            {isApproved && (
+                              <span className="text-[11px] font-bold text-indigo-600 dark:text-indigo-400 block">
+                                Duration: {s.duration || '1 hour'}
+                              </span>
+                            )}
+                          </div>
+                        </td>
+
+                        <td className="py-3.5 px-4 text-right whitespace-nowrap">
+                          {isApproved ? (
+                            <a
+                              href={s.meeting_link || 'https://meet.google.com/new'}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-100 font-bold text-xs transition-colors"
+                            >
+                              <Video className="w-3.5 h-3.5" />
+                              <span>Join Meet</span>
+                              <ExternalLink className="w-3 h-3" />
+                            </a>
+                          ) : isCancelled ? (
+                            <Link
+                              href="/client-schedule-mentorship"
+                              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-primary/10 text-primary hover:bg-primary hover:text-white font-bold text-xs transition-colors"
+                            >
+                              <span>Reschedule</span>
+                            </Link>
+                          ) : (
+                            <span className="text-[11px] text-amber-600 font-medium italic">
+                              Pending Review
+                            </span>
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+
+        {/* 2. Dedicated Section: Completed Mentorship Sessions */}
+        {completedSchedules.length > 0 && (
+          <div className="bg-white/90 dark:bg-slate-900/90 rounded-3xl p-6 sm:p-8 border border-emerald-200/80 dark:border-emerald-800/30 shadow-sm backdrop-blur-md space-y-4">
+            <div className="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-white/10">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-xl bg-emerald-100 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-bold">
+                  <CheckCircle2 className="w-5 h-5" />
+                </div>
+                <div>
+                  <h2 className="text-lg font-black text-slate-900 dark:text-white">
+                    Completed Mentorship Sessions ({completedSchedules.length})
+                  </h2>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">
+                    Finished 1:1 sprints successfully held with your mentor.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-xs sm:text-sm">
+                <thead>
+                  <tr className="border-b border-slate-100 dark:border-white/10 text-slate-400 text-[11px] uppercase tracking-wider">
+                    <th className="py-3 px-4">Date &amp; Day</th>
+                    <th className="py-3 px-4">Time &amp; Duration</th>
+                    <th className="py-3 px-4">Topic Covered</th>
+                    <th className="py-3 px-4">Platform</th>
+                    <th className="py-3 px-4 text-right">Status</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100 dark:divide-white/5">
+                  {completedSchedules.map((s) => (
                     <tr key={s.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-800/50">
-                      <td className="py-3.5 px-4 font-bold text-slate-900 dark:text-white">
+                      <td className="py-3.5 px-4 font-bold text-slate-900 dark:text-white whitespace-nowrap">
                         {s.session_date}
                         <span className="text-xs text-slate-500 font-normal block">{s.session_day}</span>
                       </td>
-                      <td className="py-3.5 px-4">
-                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-pink-50 dark:bg-pink-900/30 text-primary dark:text-pink-300 font-bold text-xs">
-                          <Clock className="w-3 h-3" />
-                          {s.time_slot}
+
+                      <td className="py-3.5 px-4 whitespace-nowrap">
+                        <span className="font-bold text-slate-800 dark:text-slate-200 block">
+                          {s.exact_time || s.time_slot}
+                        </span>
+                        <span className="text-[11px] text-slate-400 font-semibold">
+                          Duration: {s.duration || '1 hour'}
                         </span>
                       </td>
+
                       <td className="py-3.5 px-4 max-w-xs font-semibold text-slate-800 dark:text-slate-200">
                         {s.topic}
-                        {s.description && (
-                          <span className="text-xs text-slate-400 font-normal block truncate mt-0.5">
-                            {s.description}
-                          </span>
-                        )}
                       </td>
-                      <td className="py-3.5 px-4">
-                        <span className={`px-2.5 py-1 rounded-full text-[11px] font-bold ${
-                          s.status === 'completed'
-                            ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300'
-                            : s.status === 'rescheduled'
-                            ? 'bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300'
-                            : s.status === 'cancelled'
-                            ? 'bg-red-100 text-red-800 dark:bg-red-950 dark:text-red-300'
-                            : 'bg-blue-100 text-blue-800 dark:bg-blue-950 dark:text-blue-300'
-                        }`}>
-                          {s.status.toUpperCase()}
+
+                      <td className="py-3.5 px-4 text-slate-600 dark:text-slate-400 whitespace-nowrap">
+                        <span className="inline-flex items-center gap-1 font-medium text-xs">
+                          <Video className="w-3.5 h-3.5 text-emerald-600" />
+                          Platform: Google Meet
                         </span>
                       </td>
-                      <td className="py-3.5 px-4 text-right">
-                        <a
-                          href={s.meeting_link || 'https://meet.google.com/new'}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-100 font-bold text-xs transition-colors"
-                        >
-                          <Video className="w-3.5 h-3.5" />
-                          <span>Join Call</span>
-                          <ExternalLink className="w-3 h-3" />
-                        </a>
+
+                      <td className="py-3.5 px-4 text-right whitespace-nowrap">
+                        <span className="px-3 py-1 rounded-full text-[11px] font-black uppercase tracking-wider bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">
+                          Completed
+                        </span>
                       </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
-          )}
-        </div>
+          </div>
+        )}
 
       </main>
     </div>

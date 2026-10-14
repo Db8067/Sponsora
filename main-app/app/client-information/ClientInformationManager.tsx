@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 import {
   School,
   DollarSign,
@@ -12,7 +13,11 @@ import {
   Search,
   User,
   Calendar,
+  Layers,
+  Sparkles,
+  ExternalLink,
 } from 'lucide-react';
+import { slugify } from '@/lib/validators';
 
 interface CourseRecord {
   id: string;
@@ -117,7 +122,7 @@ export default function ClientInformationManager() {
         throw new Error(data.error || 'Failed to assign course details.');
       }
 
-      setFormMsg({ type: 'success', text: `Course information assigned for "${username}".` });
+      setFormMsg({ type: 'success', text: `Course enrollment assigned for "${username}".` });
       fetchData();
     } catch (err: any) {
       setFormMsg({ type: 'error', text: err.message || 'Creation failed.' });
@@ -150,14 +155,19 @@ export default function ClientInformationManager() {
 
   return (
     <div className="py-6 space-y-6">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      {/* Top Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-pink-100">
         <div>
-          <h1 className="text-2xl font-black text-slate-900 tracking-tight">
-            Client Courses, Fees &amp; Retainer Tracking
-          </h1>
+          <div className="flex items-center gap-2">
+            <h1 className="text-2xl font-black text-slate-900 tracking-tight">
+              Client Courses, Fees &amp; Retainer Tracking
+            </h1>
+            <span className="px-2.5 py-0.5 rounded-full bg-pink-100 text-pink-700 text-[10px] font-black uppercase tracking-wider">
+              {courses.length} Enrolled
+            </span>
+          </div>
           <p className="text-xs text-slate-500 mt-1">
-            Assign enrolled courses, track total fees, recorded payments, and remaining balances displayed on /client-dashboard.
+            Assign enrolled courses, track total fees, recorded payments, and remaining balances displayed on client dashboards.
           </p>
         </div>
 
@@ -167,27 +177,27 @@ export default function ClientInformationManager() {
           className="self-start sm:self-auto px-4 py-2 rounded-xl bg-white border border-pink-200 text-slate-700 hover:text-primary text-xs font-bold shadow-sm transition-all flex items-center gap-2 hover:bg-pink-50"
         >
           <RefreshCw className="w-3.5 h-3.5" />
-          <span>Refresh</span>
+          <span>Refresh Records</span>
         </button>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         
-        {/* Form: Assign Course / Fee (5 cols) */}
-        <div className="lg:col-span-5 bg-white rounded-2xl p-6 border border-pink-100 shadow-sm space-y-4">
-          <div className="flex items-center gap-2.5 pb-3 border-b border-pink-50">
-            <div className="w-8 h-8 rounded-xl bg-pink-100 text-primary flex items-center justify-center font-bold">
-              <School className="w-4 h-4" />
+        {/* Form: Assign Course / Fee (5 cols on lg, spacious and clean) */}
+        <div className="lg:col-span-5 bg-white rounded-3xl p-6 sm:p-7 border border-pink-100 shadow-sm space-y-6">
+          <div className="flex items-center gap-3 pb-4 border-b border-pink-50">
+            <div className="w-10 h-10 rounded-2xl bg-pink-100 text-primary flex items-center justify-center font-bold shadow-sm">
+              <School className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-sm font-black text-slate-900">Assign Course &amp; Fee Details</h2>
-              <p className="text-[11px] text-slate-400">Map client to course enrollment and fee structure</p>
+              <h2 className="text-base font-black text-slate-900">Assign Course &amp; Fee Details</h2>
+              <p className="text-xs text-slate-400">Map client to course enrollment and fee structure</p>
             </div>
           </div>
 
           {formMsg && (
             <div
-              className={`p-3 rounded-xl text-xs flex items-center gap-2 ${
+              className={`p-3.5 rounded-2xl text-xs flex items-center gap-2.5 ${
                 formMsg.type === 'success'
                   ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
                   : 'bg-red-50 text-red-800 border border-red-200'
@@ -198,25 +208,34 @@ export default function ClientInformationManager() {
               ) : (
                 <AlertCircle className="w-4 h-4 text-red-600 shrink-0" />
               )}
-              <span>{formMsg.text}</span>
+              <span className="font-medium">{formMsg.text}</span>
             </div>
           )}
 
-          <form onSubmit={handleCreate} className="space-y-3.5 text-xs">
+          <form onSubmit={handleCreate} className="space-y-4">
+            
+            {/* 1. Client Select */}
             <div>
-              <label className="block font-bold text-slate-700 mb-1">Select Client Username *</label>
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">
+                Client Account *
+              </label>
               {clients.length > 0 ? (
-                <select
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-slate-900 outline-none focus:border-primary font-semibold bg-white"
-                >
-                  {clients.map((cl) => (
-                    <option key={cl.username} value={cl.username}>
-                      {cl.client_name} (@{cl.username})
-                    </option>
-                  ))}
-                </select>
+                <div className="relative">
+                  <select
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    className="w-full px-4 py-3 rounded-xl border border-slate-200 text-slate-900 text-xs font-semibold bg-white outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all appearance-none cursor-pointer"
+                  >
+                    {clients.map((cl) => (
+                      <option key={cl.username} value={cl.username}>
+                        {cl.client_name} (@{cl.username})
+                      </option>
+                    ))}
+                  </select>
+                  <div className="absolute right-3.5 top-3.5 pointer-events-none text-slate-400 text-xs">
+                    ▼
+                  </div>
+                </div>
               ) : (
                 <input
                   type="text"
@@ -224,188 +243,225 @@ export default function ClientInformationManager() {
                   placeholder="e.g. client_rahul"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-slate-900 outline-none focus:border-primary"
+                  className="w-full px-4 py-3 rounded-xl border border-slate-200 text-slate-900 text-xs outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary font-medium"
                 />
               )}
             </div>
 
+            {/* 2. Course Name */}
             <div>
-              <label className="block font-bold text-slate-700 mb-1">Course Name *</label>
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">
+                Course / Program Name *
+              </label>
               <input
                 type="text"
                 required
                 value={courseName}
                 onChange={(e) => setCourseName(e.target.value)}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-slate-900 outline-none focus:border-primary font-semibold"
+                className="w-full px-4 py-3 rounded-xl border border-slate-200 text-slate-900 text-xs font-semibold outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
+            {/* 3. Mentor & Batch Date */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block font-bold text-slate-700 mb-1">Mentor Name</label>
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">
+                  Mentor Name
+                </label>
                 <input
                   type="text"
                   value={mentorName}
                   onChange={(e) => setMentorName(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-slate-900 outline-none focus:border-primary"
+                  className="w-full px-4 py-3 rounded-xl border border-slate-200 text-slate-900 text-xs outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-medium"
                 />
               </div>
 
               <div>
-                <label className="block font-bold text-slate-700 mb-1">Batch Start Date</label>
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">
+                  Batch Start Date
+                </label>
                 <input
                   type="date"
                   value={batchStartDate}
                   onChange={(e) => setBatchStartDate(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-slate-900 outline-none focus:border-primary"
+                  className="w-full px-4 py-3 rounded-xl border border-slate-200 text-slate-900 text-xs outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-medium"
                 />
               </div>
             </div>
 
-            {/* Fee Calculations */}
-            <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
-              <div className="grid grid-cols-2 gap-3">
+            {/* 4. Financials Calculation Box */}
+            <div className="p-4 rounded-2xl bg-pink-50/40 border border-pink-100 space-y-3">
+              <span className="text-[11px] font-extrabold uppercase tracking-wider text-slate-500 block">
+                Fee Breakdown &amp; Status
+              </span>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="block font-bold text-slate-700 mb-1">Total Fees (₹)</label>
+                  <label className="block text-[11px] font-bold text-slate-600 mb-1">
+                    Total Fees (₹)
+                  </label>
                   <input
                     type="number"
                     min={0}
                     value={totalFees}
                     onChange={(e) => setTotalFees(Number(e.target.value))}
-                    className="w-full px-3 py-2 rounded-lg border border-slate-200 text-slate-900 font-bold outline-none"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-slate-900 text-xs font-bold bg-white outline-none focus:border-primary"
                   />
                 </div>
 
                 <div>
-                  <label className="block font-bold text-slate-700 mb-1">Fees Paid (₹)</label>
+                  <label className="block text-[11px] font-bold text-slate-600 mb-1">
+                    Fees Paid (₹)
+                  </label>
                   <input
                     type="number"
                     min={0}
                     value={feesPaid}
                     onChange={(e) => setFeesPaid(Number(e.target.value))}
-                    className="w-full px-3 py-2 rounded-lg border border-slate-200 text-slate-900 font-bold outline-none"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-slate-900 text-xs font-bold bg-white outline-none focus:border-primary"
                   />
                 </div>
               </div>
 
-              <div className="flex items-center justify-between text-xs pt-1 border-t border-slate-200">
-                <span className="text-slate-500 font-bold">Remaining Balance Due:</span>
-                <span className={`font-black text-sm ${feesDue > 0 ? 'text-amber-600' : 'text-emerald-600'}`}>
+              <div className="flex items-center justify-between text-xs pt-2 border-t border-pink-100">
+                <span className="text-slate-600 font-bold">Remaining Balance Due:</span>
+                <span className={`font-black text-sm px-2.5 py-0.5 rounded-full ${feesDue > 0 ? 'bg-amber-100 text-amber-800' : 'bg-emerald-100 text-emerald-800'}`}>
                   ₹{feesDue.toLocaleString('en-IN')}
                 </span>
               </div>
             </div>
 
+            {/* 5. Course Description */}
             <div>
-              <label className="block font-bold text-slate-700 mb-1">Course Description &amp; Scope</label>
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">
+                Course Description &amp; Scope
+              </label>
               <textarea
                 rows={3}
                 value={courseDescription}
                 onChange={(e) => setCourseDescription(e.target.value)}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-slate-900 outline-none focus:border-primary resize-none"
+                className="w-full px-4 py-3 rounded-xl border border-slate-200 text-slate-900 text-xs outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all resize-none font-normal"
               />
             </div>
 
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full py-3 px-4 rounded-xl font-bold bg-primary hover:bg-primary-dark text-white shadow-md shadow-primary/20 transition-all flex items-center justify-center gap-1.5 disabled:opacity-50 mt-2"
+              className="w-full py-3.5 px-4 rounded-xl font-black text-xs bg-primary hover:bg-primary-dark text-white shadow-md shadow-primary/25 transition-all flex items-center justify-center gap-2 disabled:opacity-50 mt-2"
             >
               <PlusCircle className="w-4 h-4" />
-              <span>Save Course Enrollment</span>
+              <span>{isSubmitting ? 'Saving Enrollment...' : 'Save Course Enrollment'}</span>
             </button>
           </form>
         </div>
 
-        {/* Existing Courses Table (7 cols) */}
+        {/* Existing Courses Table (7 cols on lg) */}
         <div className="lg:col-span-7 space-y-4">
           <div className="bg-white rounded-2xl p-4 border border-pink-100 shadow-sm flex items-center justify-between gap-3">
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-2.5 w-4 h-4 text-slate-400" />
+              <Search className="absolute left-3.5 top-3 w-4 h-4 text-slate-400" />
               <input
                 type="text"
                 placeholder="Search courses by username, course name, or mentor..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full pl-9 pr-4 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs focus:outline-none focus:ring-1 focus:ring-primary"
+                className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs focus:outline-none focus:ring-2 focus:ring-primary/20 font-medium"
               />
             </div>
-            <span className="text-xs text-slate-400 shrink-0 font-semibold">
+            <span className="text-xs text-slate-400 shrink-0 font-semibold px-2">
               Total: {courses.length}
             </span>
           </div>
 
-          <div className="bg-white rounded-2xl border border-pink-100 shadow-sm overflow-hidden">
+          <div className="bg-white rounded-3xl border border-pink-100 shadow-sm overflow-hidden">
             {loading ? (
-              <div className="p-10 text-center text-xs text-slate-400">Loading course records...</div>
+              <div className="p-12 text-center text-xs text-slate-400">Loading course records...</div>
             ) : filtered.length === 0 ? (
-              <div className="p-10 text-center text-xs text-slate-400">No course records found.</div>
+              <div className="p-12 text-center text-xs text-slate-400">No course records found.</div>
             ) : (
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs">
-                  <thead className="bg-slate-50 border-b border-pink-50 text-[11px] font-bold uppercase tracking-wider text-slate-500">
+                  <thead className="bg-slate-50/70 border-b border-pink-50 text-[11px] font-bold uppercase tracking-wider text-slate-500">
                     <tr>
-                      <th className="py-3 px-4">Client</th>
-                      <th className="py-3 px-4">Course</th>
-                      <th className="py-3 px-4">Financials</th>
-                      <th className="py-3 px-4">Status</th>
-                      <th className="py-3 px-4 text-right">Actions</th>
+                      <th className="py-3.5 px-4">Client</th>
+                      <th className="py-3.5 px-4">Course Details</th>
+                      <th className="py-3.5 px-4">Financials</th>
+                      <th className="py-3.5 px-4">Status</th>
+                      <th className="py-3.5 px-4 text-right">Action</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-pink-50">
-                    {filtered.map((c) => (
-                      <tr key={c.id} className="hover:bg-pink-50/20">
-                        <td className="py-3 px-4 font-bold text-slate-900">
-                          @{c.username}
-                          <span className="text-[11px] text-slate-400 font-normal block">
-                            Mentor: {c.mentor_name || 'Lead'}
-                          </span>
-                        </td>
+                    {filtered.map((c) => {
+                      const matchedClient = clients.find((cl) => cl.username === c.username);
+                      const displayName = matchedClient?.client_name || c.username;
+                      const clientSlug = slugify(displayName);
 
-                        <td className="py-3 px-4 max-w-[180px]">
-                          <div className="font-semibold text-slate-800 truncate">{c.course_name}</div>
-                          {c.batch_start_date && (
-                            <span className="text-[10px] text-slate-400 block">
-                              Batch: {c.batch_start_date}
+                      return (
+                        <tr key={c.id} className="hover:bg-pink-50/20 transition-colors">
+                          <td className="py-3.5 px-4">
+                            <Link
+                              href={`/client-credentail-${clientSlug}`}
+                              className="font-bold text-slate-900 hover:text-primary transition-colors flex items-center gap-1 group"
+                              title="View full client details"
+                            >
+                              <span>{displayName}</span>
+                              <ExternalLink className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity text-primary" />
+                            </Link>
+                            <div className="text-[11px] text-slate-400 font-mono">@{c.username}</div>
+                          </td>
+
+                          <td className="py-3.5 px-4 max-w-xs">
+                            <div className="font-bold text-slate-800 line-clamp-1">{c.course_name}</div>
+                            <div className="text-[11px] text-slate-500 flex items-center gap-2 mt-0.5">
+                              {c.mentor_name && <span>Mentor: {c.mentor_name}</span>}
+                              {c.batch_start_date && (
+                                <span className="text-[10px] text-slate-400">
+                                  • Starts {c.batch_start_date}
+                                </span>
+                              )}
+                            </div>
+                          </td>
+
+                          <td className="py-3.5 px-4">
+                            <div className="font-bold text-slate-900">
+                              ₹{Number(c.total_fees || 0).toLocaleString('en-IN')}
+                            </div>
+                            <div className="text-[11px] text-emerald-600 font-medium">
+                              Paid: ₹{Number(c.fees_paid || 0).toLocaleString('en-IN')}
+                            </div>
+                            {Number(c.fees_due || 0) > 0 && (
+                              <div className="text-[11px] text-amber-600 font-bold">
+                                Due: ₹{Number(c.fees_due || 0).toLocaleString('en-IN')}
+                              </div>
+                            )}
+                          </td>
+
+                          <td className="py-3.5 px-4">
+                            <span
+                              className={`px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider ${
+                                c.payment_status === 'paid'
+                                  ? 'bg-emerald-100 text-emerald-800'
+                                  : c.payment_status === 'partial'
+                                  ? 'bg-amber-100 text-amber-800'
+                                  : 'bg-red-100 text-red-800'
+                              }`}
+                            >
+                              {c.payment_status}
                             </span>
-                          )}
-                        </td>
+                          </td>
 
-                        <td className="py-3 px-4">
-                          <div className="text-emerald-600 font-bold">
-                            Paid: ₹{Number(c.fees_paid || 0).toLocaleString('en-IN')}
-                          </div>
-                          <div className="text-slate-400 text-[11px]">
-                            Due: ₹{Number(c.fees_due || 0).toLocaleString('en-IN')}
-                          </div>
-                        </td>
-
-                        <td className="py-3 px-4">
-                          <span
-                            className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase ${
-                              c.payment_status === 'paid'
-                                ? 'bg-emerald-100 text-emerald-800'
-                                : c.payment_status === 'partial'
-                                ? 'bg-amber-100 text-amber-800'
-                                : 'bg-red-100 text-red-800'
-                            }`}
-                          >
-                            {c.payment_status}
-                          </span>
-                        </td>
-
-                        <td className="py-3 px-4 text-right">
-                          <button
-                            type="button"
-                            onClick={() => handleDelete(c.id, c.username)}
-                            className="p-1.5 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 transition-colors"
-                            title="Delete entry"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
+                          <td className="py-3.5 px-4 text-right">
+                            <button
+                              type="button"
+                              onClick={() => handleDelete(c.id, c.username)}
+                              className="p-1.5 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 transition-colors"
+                              title="Delete record"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          </td>
+                        </tr>
+                      );
+                    })}
                   </tbody>
                 </table>
               </div>

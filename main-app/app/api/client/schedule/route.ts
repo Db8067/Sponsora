@@ -12,6 +12,8 @@ export async function POST(req: Request) {
       session_date,
       session_day,
       time_slot,
+      exact_time,
+      duration = '1 hour',
       topic,
       description,
       meeting_link = 'https://meet.google.com/new',
@@ -39,10 +41,12 @@ export async function POST(req: Request) {
         session_date: String(session_date).trim(),
         session_day: String(session_day).trim(),
         time_slot: String(time_slot).trim(),
+        exact_time: exact_time ? String(exact_time).trim() : null,
+        duration: String(duration).trim(),
         topic: String(topic).trim(),
         description: (description || '').trim(),
         meeting_link,
-        status: 'scheduled',
+        status: 'pending_approval',
       })
       .select()
       .single();
@@ -92,7 +96,7 @@ export async function GET(req: Request) {
 export async function PATCH(req: Request) {
   try {
     const body = await req.json();
-    const { id, status, meeting_link } = body;
+    const { id, status, meeting_link, duration } = body;
 
     if (!id) {
       return NextResponse.json({ error: 'Schedule ID is required' }, { status: 400 });
@@ -108,6 +112,7 @@ export async function PATCH(req: Request) {
     };
     if (status) updatePayload.status = status;
     if (meeting_link) updatePayload.meeting_link = meeting_link;
+    if (duration) updatePayload.duration = duration;
 
     const { data, error } = await client
       .from('mentorship_schedules')

@@ -1,13 +1,36 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, LayoutDashboard } from 'lucide-react';
 
 import { useUser, UserButton } from "@clerk/nextjs";
 
 export default function SellerNavbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const { isLoaded, isSignedIn } = useUser();
+  const { isLoaded, isSignedIn, user } = useUser();
+  const [brandInfo, setBrandInfo] = useState<{ brand_name: string; slug: string; dashboard_url?: string } | null>(null);
+
+  useEffect(() => {
+    if (!isSignedIn || !user) {
+      setBrandInfo(null);
+      return;
+    }
+    const email = user.primaryEmailAddress?.emailAddress || user.emailAddresses?.[0]?.emailAddress;
+    if (!email) return;
+
+    fetch(`/api/brand/check-status?email=${encodeURIComponent(email)}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data?.registered && data?.brand?.brand_name) {
+          setBrandInfo({
+            brand_name: data.brand.brand_name,
+            slug: data.brand.slug || '',
+            dashboard_url: data.dashboard_url || `/brand-subscriptions?brand=${data.brand.slug}`,
+          });
+        }
+      })
+      .catch(() => {});
+  }, [isSignedIn, user]);
 
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-white dark:bg-slate-900 shadow-sm">
@@ -46,6 +69,16 @@ export default function SellerNavbar() {
         </nav>
 
         <div className="hidden lg:flex items-center gap-4">
+          {brandInfo && (
+            <Link
+              href={brandInfo.dashboard_url || `/brand-subscriptions?brand=${brandInfo.slug}`}
+              className="text-xs font-black text-primary bg-primary/10 hover:bg-primary hover:text-white px-3 py-1.5 rounded-full border border-primary/20 transition-all flex items-center gap-1.5 shadow-sm"
+            >
+              <LayoutDashboard className="w-3.5 h-3.5" />
+              <span>{brandInfo.brand_name} Dashboard</span>
+            </Link>
+          )}
+
           {!isLoaded ? (
             <div className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 animate-pulse" />
           ) : isSignedIn ? (
@@ -94,6 +127,17 @@ export default function SellerNavbar() {
           </div>
           
           <div className="flex flex-col items-center justify-center flex-1 gap-8">
+            {brandInfo && (
+              <Link
+                href={brandInfo.dashboard_url || `/brand-subscriptions?brand=${brandInfo.slug}`}
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="text-lg font-black text-primary bg-primary/10 border border-primary/20 px-5 py-3 rounded-2xl flex items-center justify-center gap-2 w-full max-w-xs shadow-sm"
+              >
+                <LayoutDashboard className="w-5 h-5" />
+                <span>{brandInfo.brand_name} Dashboard</span>
+              </Link>
+            )}
+
             <Link href="/brand-register" onClick={() => setIsMobileMenuOpen(false)} className="text-2xl font-bold text-slate-700 dark:text-slate-200 hover:text-primary transition-colors text-center">
               Brand Register
             </Link>

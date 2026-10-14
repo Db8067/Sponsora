@@ -66,13 +66,41 @@ export async function GET(req: Request) {
             /* ignore */
           }
         }
+
+        // Check if this brand/email has paid for a growth subscription
+        let hasPaid = false;
+        let paidPayment: any = null;
+        try {
+          const { data: pRows } = await db
+            .from('brand_payments')
+            .select('*')
+            .eq('payment_status', 'paid')
+            .or(`email.ilike.${email || 'none'},brand_name.ilike.${brand.brand_name || 'none'}`)
+            .order('created_at', { ascending: false })
+            .limit(1);
+
+          if (pRows && pRows.length > 0) {
+            hasPaid = true;
+            paidPayment = pRows[0];
+          }
+        } catch {
+          /* ignore */
+        }
+
+        const bSlug = slugify(brand.brand_name || 'brand');
+        const pAmt = paidPayment?.amount ? String(paidPayment.amount) : '499';
+        const welAmt = pAmt === '99' ? '99' : pAmt === '1499' ? '1499' : '499';
+        const dashboardUrl = `/${bSlug}-welcome-${welAmt}`;
+
         return NextResponse.json({
           registered: true,
+          has_paid: hasPaid,
+          dashboard_url: dashboardUrl,
           brand: {
             id: brand.id,
             brand_name: brand.brand_name,
             founder_name: brand.founder_name,
-            slug: slugify(brand.brand_name || 'brand'),
+            slug: bSlug,
             email: brand.email,
             phone: brand.whatsapp_number,
             logo: brand.brand_logo_url,
@@ -81,7 +109,43 @@ export async function GET(req: Request) {
             website: brand.brand_website || brand.store_link,
             instagram: brand.instagram_handle,
           },
+          payment: paidPayment,
         });
+      }
+
+      // Check if user has paid a subscription even without prior registration
+      if (email) {
+        try {
+          const { data: pOnly } = await db
+            .from('brand_payments')
+            .select('*')
+            .eq('payment_status', 'paid')
+            .ilike('email', email)
+            .order('created_at', { ascending: false })
+            .limit(1);
+
+          if (pOnly && pOnly.length > 0) {
+            const p = pOnly[0];
+            const bSlug = slugify(p.brand_name || 'brand');
+            const pAmt = p.amount ? String(p.amount) : '499';
+            const welAmt = pAmt === '99' ? '99' : pAmt === '1499' ? '1499' : '499';
+            return NextResponse.json({
+              registered: true,
+              has_paid: true,
+              dashboard_url: `/${bSlug}-welcome-${welAmt}`,
+              brand: {
+                brand_name: p.brand_name,
+                founder_name: p.founder_name,
+                slug: bSlug,
+                email: p.email,
+                phone: p.phone,
+              },
+              payment: p,
+            });
+          }
+        } catch {
+          /* ignore */
+        }
       }
     }
 

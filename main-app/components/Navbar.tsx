@@ -14,12 +14,35 @@ export default function Navbar() {
   
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [brandInfo, setBrandInfo] = useState<{ brand_name: string; slug: string; dashboard_url?: string } | null>(null);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  useEffect(() => {
+    if (!isSignedIn || !user) {
+      setBrandInfo(null);
+      return;
+    }
+    const email = user.primaryEmailAddress?.emailAddress || user.emailAddresses?.[0]?.emailAddress;
+    if (!email) return;
+
+    fetch(`/api/brand/check-status?email=${encodeURIComponent(email)}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data?.registered && data?.brand?.brand_name) {
+          setBrandInfo({
+            brand_name: data.brand.brand_name,
+            slug: data.brand.slug || '',
+            dashboard_url: data.dashboard_url || `/brand-subscriptions?brand=${data.brand.slug}`,
+          });
+        }
+      })
+      .catch(() => {});
+  }, [isSignedIn, user]);
 
   const navLinks = [
     { name: "Mentorship", href: "/Online-Mentorship", icon: GraduationCap },
@@ -60,6 +83,16 @@ export default function Navbar() {
                 {link.name}
               </Link>
             ))}
+
+            {brandInfo && (
+              <Link
+                href={brandInfo.dashboard_url || `/brand-subscriptions?brand=${brandInfo.slug}`}
+                className="text-xs sm:text-sm font-black text-primary bg-primary/10 hover:bg-primary hover:text-white px-3.5 py-1.5 rounded-full border border-primary/20 transition-all flex items-center gap-1.5 shadow-sm"
+              >
+                <LayoutDashboard className="w-3.5 h-3.5" />
+                <span>{brandInfo.brand_name} Dashboard</span>
+              </Link>
+            )}
           </div>
 
           <div className="h-4 w-px bg-foreground/10" />
@@ -121,6 +154,17 @@ export default function Navbar() {
               </div>
 
               <div className="flex flex-col gap-6 mb-8">
+                {brandInfo && (
+                  <Link
+                    href={brandInfo.dashboard_url || `/brand-subscriptions?brand=${brandInfo.slug}`}
+                    onClick={() => setIsOpen(false)}
+                    className="text-lg font-black text-primary bg-primary/10 border border-primary/20 p-3.5 rounded-2xl flex items-center justify-center gap-2"
+                  >
+                    <LayoutDashboard className="w-5 h-5" />
+                    <span>{brandInfo.brand_name} Dashboard</span>
+                  </Link>
+                )}
+
                 {navLinks.map((link) => (
                   <Link 
                     key={link.name} 

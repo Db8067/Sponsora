@@ -1,6 +1,8 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
+import { slugify } from '@/lib/validators';
 import {
   UserPlus,
   Key,
@@ -314,7 +316,14 @@ export default function ClientCredentialManager() {
                       return (
                         <tr key={c.id} className="hover:bg-pink-50/20">
                           <td className="py-3 px-4">
-                            <div className="font-bold text-slate-900">{c.client_name}</div>
+                            <Link
+                              href={`/client-credentail-${slugify(c.client_name)}`}
+                              className="font-bold text-slate-900 hover:text-primary transition-colors flex items-center gap-1 group"
+                              title="View full client details"
+                            >
+                              <span>{c.client_name}</span>
+                              <ExternalLink className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity text-primary" />
+                            </Link>
                             <div className="text-[11px] text-slate-400">{c.email || c.phone || 'No contact'}</div>
                           </td>
 

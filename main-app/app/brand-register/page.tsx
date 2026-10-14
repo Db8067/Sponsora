@@ -14,6 +14,7 @@ import LogoDropzone, { useLogoUpload } from '@/components/brand/LogoDropzone';
 import CityCombobox from '@/components/brand/CityCombobox';
 import WebsitePreview from '@/components/brand/WebsitePreview';
 import BrandAlreadyCreatedScreen, { ActiveBrandInfo } from '@/components/brand/BrandAlreadyCreatedScreen';
+import PaidBrandDashboardScreen, { PaidBrandInfo } from '@/components/brand/PaidBrandDashboardScreen';
 import { useVerify, type VState } from '@/components/brand/useVerify';
 import {
   validateEmailSyntax, validatePhone, validateGstFormat, parseInstagram, validateWebsite,
@@ -81,6 +82,7 @@ export default function BrandRegisterPage() {
 
   const { user } = useUser();
   const [activeBrandProfile, setActiveBrandProfile] = useState<ActiveBrandInfo | null>(null);
+  const [paidBrandInfo, setPaidBrandInfo] = useState<PaidBrandInfo | null>(null);
   const [forceShowForm, setForceShowForm] = useState(false);
 
   const [phoneConflict, setPhoneConflict] = useState<string | null>(null);
@@ -125,8 +127,23 @@ export default function BrandRegisterPage() {
 
         if (data?.registered && data.brand && data.brand.status !== 'deleted' && data.brand.status !== 'blocked') {
           setActiveBrandProfile(data.brand);
+          if (data.has_paid) {
+            setPaidBrandInfo({
+              brand_name: data.brand.brand_name,
+              founder_name: data.brand.founder_name,
+              slug: data.brand.slug,
+              logo: data.brand.logo,
+              email: data.brand.email,
+              dashboard_url: data.dashboard_url,
+              plan_tier: data.payment?.plan_tier,
+              amount: data.payment?.amount,
+            });
+          } else {
+            setPaidBrandInfo(null);
+          }
         } else {
           setActiveBrandProfile(null);
+          setPaidBrandInfo(null);
         }
       } catch {
         /* ignore */
@@ -337,6 +354,12 @@ export default function BrandRegisterPage() {
     }
   };
 
+  // If paid subscription exists, show the "Go to your Brand Dashboard" screen with panda artwork
+  if (paidBrandInfo) {
+    return <PaidBrandDashboardScreen brand={paidBrandInfo} />;
+  }
+
+  // If brand is registered but not paid, show the "Your brand is already live" message
   if (activeBrandProfile && !forceShowForm) {
     return (
       <BrandAlreadyCreatedScreen

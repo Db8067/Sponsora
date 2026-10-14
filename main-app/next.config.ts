@@ -48,10 +48,18 @@ const nextConfig: NextConfig = {
       { source: '/Online-mentorship', destination: '/Online-Mentorship' },
       { source: '/Online-Mentorship/:service', destination: '/online-mentorship/:service' },
       { source: '/Online-mentorship/:service', destination: '/online-mentorship/:service' },
-      // Brand Welcome rewrite aliases
+      // /brand-register-<brand-name> -> app/brand-register?brand=<brand-name>
+      { source: '/brand-register-:slug', destination: '/brand-register?brand=:slug' },
+      // /brand-welcome rewrite aliases
       { source: '/brand-welcom-99', destination: '/brand-welcome-99' },
       { source: '/brand-welcom-499', destination: '/brand-welcome-499' },
       { source: '/brand-welcom-1499', destination: '/brand-welcome-1499' },
+      // Client Detail aliases
+      { source: '/client-credentail-:slug', destination: '/client-credentail/:slug' },
+      { source: '/client-credential-:slug', destination: '/client-credentail/:slug' },
+      { source: '/admin/client-credentail-:slug', destination: '/client-credentail/:slug' },
+      { source: '/all-clients', destination: '/all-client' },
+      { source: '/admin/all-client', destination: '/all-client' },
     ];
   },
   experimental: {

@@ -210,13 +210,19 @@ CREATE TABLE IF NOT EXISTS public.mentorship_schedules (
   session_date text NOT NULL,
   session_day  text NOT NULL,
   time_slot    text NOT NULL,
+  exact_time   text,
+  duration     text DEFAULT '1 hour',
   topic        text NOT NULL,
   description  text,
   meeting_link text DEFAULT 'https://meet.google.com/new',
-  status       text NOT NULL DEFAULT 'scheduled',
+  status       text NOT NULL DEFAULT 'pending_approval',
   created_at   timestamp with time zone NOT NULL DEFAULT timezone('utc'::text, now()),
   updated_at   timestamp with time zone NOT NULL DEFAULT timezone('utc'::text, now())
 );
+
+ALTER TABLE public.mentorship_schedules
+  ADD COLUMN IF NOT EXISTS exact_time text,
+  ADD COLUMN IF NOT EXISTS duration   text DEFAULT '1 hour';
 
 CREATE INDEX IF NOT EXISTS idx_mentorship_schedules_username ON public.mentorship_schedules USING btree (username);
 CREATE INDEX IF NOT EXISTS idx_mentorship_schedules_date     ON public.mentorship_schedules USING btree (session_date);
@@ -229,4 +235,5 @@ CREATE POLICY "Allow all for mentorship_schedules"
   ON public.mentorship_schedules FOR ALL TO anon, authenticated USING (true) WITH CHECK (true);
 
 NOTIFY pgrst, 'reload schema';
+
 

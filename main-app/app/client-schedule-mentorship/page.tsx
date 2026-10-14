@@ -30,6 +30,15 @@ const TIME_SLOTS = [
   '8pm–10pm',
 ];
 
+const SLOT_TIMES: Record<string, string[]> = {
+  '10am–12pm': ['10:00 AM', '10:30 AM', '11:00 AM', '11:30 AM'],
+  '12pm–2pm': ['12:00 PM', '12:30 PM', '1:00 PM', '1:30 PM'],
+  '2pm–4pm': ['2:00 PM', '2:30 PM', '3:00 PM', '3:30 PM'],
+  '4pm–6pm': ['4:00 PM', '4:30 PM', '5:00 PM', '5:30 PM'],
+  '6pm–8pm': ['6:00 PM', '6:30 PM', '7:00 PM', '7:30 PM'],
+  '8pm–10pm': ['8:00 PM', '8:30 PM', '9:00 PM', '9:30 PM'],
+};
+
 const DAYS_OF_WEEK = [
   'Sunday',
   'Monday',
@@ -53,6 +62,7 @@ export default function ClientScheduleMentorshipPage() {
   const [sessionDate, setSessionDate] = useState('');
   const [sessionDay, setSessionDay] = useState('');
   const [timeSlot, setTimeSlot] = useState(TIME_SLOTS[0]);
+  const [exactTime, setExactTime] = useState(SLOT_TIMES[TIME_SLOTS[0]][0]);
   const [topic, setTopic] = useState('');
   const [description, setDescription] = useState('');
 
@@ -61,17 +71,23 @@ export default function ClientScheduleMentorshipPage() {
   const [errorMsg, setErrorMsg] = useState('');
   const [successData, setSuccessData] = useState<any | null>(null);
 
-  // Auto-fill from cookie session if present
+  const todayStr = new Date().toISOString().split('T')[0];
+
+  // Auto-fill from cookie / localStorage session if present
   useEffect(() => {
     try {
+      let session = null;
       const match = document.cookie.match(/client_session=([^;]+)/);
       if (match) {
-        const decoded = JSON.parse(decodeURIComponent(match[1]));
-        if (decoded?.username) setUsername(decoded.username);
-        if (decoded?.client_name) setClientName(decoded.client_name);
-        if (decoded?.email) setClientEmail(decoded.email);
-        if (decoded?.phone) setClientPhone(decoded.phone);
+        session = JSON.parse(decodeURIComponent(match[1]));
+      } else {
+        const stored = localStorage.getItem('client_session');
+        if (stored) session = JSON.parse(stored);
       }
+      if (session?.username) setUsername(session.username);
+      if (session?.client_name) setClientName(session.client_name);
+      if (session?.email) setClientEmail(session.email);
+      if (session?.phone) setClientPhone(session.phone);
     } catch {
       /* ignore */
     }
@@ -82,6 +98,8 @@ export default function ClientScheduleMentorshipPage() {
     const dateStr = tomorrow.toISOString().split('T')[0];
     setSessionDate(dateStr);
     setSessionDay(DAYS_OF_WEEK[tomorrow.getDay()]);
+    setTimeSlot(TIME_SLOTS[0]);
+    setExactTime(SLOT_TIMES[TIME_SLOTS[0]][0]);
   }, []);
 
   // Auto compute day when date changes
@@ -91,11 +109,24 @@ export default function ClientScheduleMentorshipPage() {
       setSessionDay('');
       return;
     }
-    // Parse date parts to prevent timezone offsets
     const [year, month, day] = dateVal.split('-').map(Number);
     const d = new Date(year, month - 1, day);
     const dayName = DAYS_OF_WEEK[d.getDay()];
     setSessionDay(dayName || '');
+  };
+
+  const resetForm = () => {
+    setSuccessData(null);
+    setTopic('');
+    setDescription('');
+    setErrorMsg('');
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const dateStr = tomorrow.toISOString().split('T')[0];
+    setSessionDate(dateStr);
+    setSessionDay(DAYS_OF_WEEK[tomorrow.getDay()]);
+    setTimeSlot(TIME_SLOTS[0]);
+    setExactTime(SLOT_TIMES[TIME_SLOTS[0]][0]);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -108,6 +139,10 @@ export default function ClientScheduleMentorshipPage() {
     }
     if (!sessionDate) {
       setErrorMsg('Please select a session date.');
+      return;
+    }
+    if (sessionDate < todayStr) {
+      setErrorMsg('Past dates are not allowed. Please choose today or a future date.');
       return;
     }
     if (!timeSlot) {
@@ -132,6 +167,8 @@ export default function ClientScheduleMentorshipPage() {
           session_date: sessionDate,
           session_day: sessionDay,
           time_slot: timeSlot,
+          exact_time: exactTime,
+          duration: '1 hour',
           topic: topic.trim(),
           description: description.trim(),
           meeting_link: 'https://meet.google.com/new',
@@ -192,30 +229,37 @@ export default function ClientScheduleMentorshipPage() {
             <div className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-white/10 text-left max-w-lg mx-auto space-y-3">
               <div className="flex justify-between items-center text-xs">
                 <span className="text-slate-400">Date &amp; Day:</span>
-                <span className="font-bold text-slate-800 dark:text-white">{successData.session_date} ({successData.session_day})</span>
+                <span className="font-bold text-slate-800 dark:text-white">
+                  {successData.session_date} ({successData.session_day})
+                </span>
               </div>
               <div className="flex justify-between items-center text-xs">
-                <span className="text-slate-400">Time Slot:</span>
+                <span className="text-slate-400">Time Window:</span>
                 <span className="font-bold text-primary">{successData.time_slot}</span>
               </div>
-              <div className="flex justify-between items-center text-xs">
-                <span className="text-slate-400">Topic:</span>
-                <span className="font-semibold text-slate-800 dark:text-white">{successData.topic}</span>
-              </div>
-              {successData.meeting_link && (
-                <div className="pt-2 border-t border-slate-200 dark:border-white/10 flex items-center justify-between text-xs">
-                  <span className="text-slate-400">Google Meet:</span>
-                  <a
-                    href={successData.meeting_link}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="font-bold text-emerald-600 dark:text-emerald-400 hover:underline inline-flex items-center gap-1"
-                  >
-                    <Video className="w-3.5 h-3.5" />
-                    <span>Join Link</span>
-                  </a>
+              {successData.exact_time && (
+                <div className="flex justify-between items-center text-xs">
+                  <span className="text-slate-400">Exact Session Time:</span>
+                  <span className="font-bold text-indigo-600 dark:text-indigo-400">
+                    {successData.exact_time}
+                  </span>
                 </div>
               )}
+              <div className="flex justify-between items-center text-xs">
+                <span className="text-slate-400">Topic:</span>
+                <span className="font-semibold text-slate-800 dark:text-white">
+                  {successData.topic}
+                </span>
+              </div>
+              
+              {/* Meeting Platform — Text requirement: "Platform - Google meet" without join link */}
+              <div className="pt-2 border-t border-slate-200 dark:border-white/10 flex items-center justify-between text-xs">
+                <span className="text-slate-400">Meeting Platform:</span>
+                <span className="font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
+                  <Video className="w-3.5 h-3.5" />
+                  <span>Platform - Google meet</span>
+                </span>
+              </div>
             </div>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
@@ -223,14 +267,14 @@ export default function ClientScheduleMentorshipPage() {
                 href="/client-dashboard"
                 className="w-full sm:w-auto py-3.5 px-6 rounded-xl font-black text-xs sm:text-sm bg-gradient-to-r from-primary to-pink-500 text-white shadow-lg shadow-primary/25 hover:from-primary-dark hover:to-pink-600 transition-all text-center"
               >
-                Return to Client Dashboard
+                Return to client dashboard
               </Link>
               <button
                 type="button"
-                onClick={() => setSuccessData(null)}
+                onClick={resetForm}
                 className="w-full sm:w-auto py-3.5 px-6 rounded-xl font-bold text-xs bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition-all text-center"
               >
-                Book Another Slot
+                Book another slot
               </button>
             </div>
           </div>
@@ -247,7 +291,7 @@ export default function ClientScheduleMentorshipPage() {
                 Schedule Mentorship Session
               </h1>
               <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
-                Select your preferred date, computed day, and 2-hour unhurried time slot.
+                Select your preferred future date, 2-hour window, and exact start time.
               </p>
             </div>
 
@@ -292,17 +336,19 @@ export default function ClientScheduleMentorshipPage() {
                 </div>
               </div>
 
-              {/* Date & Auto-Computed Day */}
+              {/* Date & Auto-Computed Day (min=today to forbid past dates) */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5">
-                    Session Date *
+                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5 flex items-center justify-between">
+                    <span>Session Date (Future Only) *</span>
+                    <span className="text-[10px] text-slate-400 font-semibold normal-case">From {todayStr}</span>
                   </label>
                   <div className="relative">
                     <Calendar className="absolute left-3.5 top-3.5 w-4 h-4 text-slate-400" />
                     <input
                       type="date"
                       required
+                      min={todayStr}
                       value={sessionDate}
                       onChange={(e) => handleDateChange(e.target.value)}
                       className="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50/50 dark:bg-slate-800/50 text-slate-900 dark:text-white text-sm outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-medium"
@@ -327,7 +373,7 @@ export default function ClientScheduleMentorshipPage() {
               {/* 6 Time Slots Selector */}
               <div>
                 <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-2">
-                  Select Time Slot (2-Hour Live Window) *
+                  1. Select 2-Hour Time Window *
                 </label>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                   {TIME_SLOTS.map((slot) => {
@@ -336,7 +382,11 @@ export default function ClientScheduleMentorshipPage() {
                       <button
                         key={slot}
                         type="button"
-                        onClick={() => setTimeSlot(slot)}
+                        onClick={() => {
+                          setTimeSlot(slot);
+                          const times = SLOT_TIMES[slot] || [];
+                          if (times.length > 0) setExactTime(times[0]);
+                        }}
                         className={`p-3.5 rounded-2xl border text-center font-bold text-xs sm:text-sm transition-all flex items-center justify-center gap-2 ${
                           isSelected
                             ? 'bg-primary text-white border-primary shadow-md shadow-primary/25 scale-[1.02]'
@@ -345,6 +395,33 @@ export default function ClientScheduleMentorshipPage() {
                       >
                         <Clock className={`w-3.5 h-3.5 ${isSelected ? 'text-white' : 'text-primary'}`} />
                         <span>{slot}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Exact Meeting Time Selector within chosen 2-hour slot */}
+              <div>
+                <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-2">
+                  2. Select Exact Meeting Time (Within {timeSlot}) *
+                </label>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                  {(SLOT_TIMES[timeSlot] || []).map((t) => {
+                    const isSelected = exactTime === t;
+                    return (
+                      <button
+                        key={t}
+                        type="button"
+                        onClick={() => setExactTime(t)}
+                        className={`py-3 px-3 rounded-xl border text-center font-bold text-xs sm:text-sm transition-all flex items-center justify-center gap-1.5 ${
+                          isSelected
+                            ? 'bg-indigo-600 text-white border-indigo-600 shadow-md shadow-indigo-500/25 scale-[1.02]'
+                            : 'bg-slate-50/60 dark:bg-slate-800/60 border-slate-200 dark:border-white/10 text-slate-700 dark:text-slate-300 hover:border-indigo-300'
+                        }`}
+                      >
+                        <Clock className={`w-3.5 h-3.5 ${isSelected ? 'text-white' : 'text-indigo-500'}`} />
+                        <span>{t}</span>
                       </button>
                     );
                   })}
@@ -373,7 +450,7 @@ export default function ClientScheduleMentorshipPage() {
                 </label>
                 <textarea
                   rows={4}
-                  placeholder="Provide repository links, error logs, or specific goals for this 2-hour sprint..."
+                  placeholder="Provide repository links, error logs, or specific goals for this 1:1 sprint..."
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   className="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50/50 dark:bg-slate-800/50 text-slate-900 dark:text-white text-sm outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-medium resize-none"
@@ -392,7 +469,7 @@ export default function ClientScheduleMentorshipPage() {
                   ) : (
                     <>
                       <Calendar className="w-4 h-4" />
-                      <span>Confirm &amp; Book Mentorship Call</span>
+                      <span>Confirm &amp; Book Mentorship Call ({exactTime})</span>
                       <ArrowRight className="w-4 h-4" />
                     </>
                   )}

@@ -347,19 +347,19 @@ function CheckoutContent() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {/* 1. Brand Name */}
                 <div>
-                  <label htmlFor="brandName" className="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5">
-                    Brand Name *
+                  <label htmlFor="brandName" className="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5 flex items-center justify-between">
+                    <span>Brand Name *</span>
+                    <span className="text-[10px] text-slate-400 font-semibold normal-case">(Locked from registration)</span>
                   </label>
                   <div className="relative">
                     <Store className="absolute left-3.5 top-3.5 w-4 h-4 text-slate-400" />
                     <input
                       id="brandName"
                       type="text"
-                      required
+                      readOnly
                       placeholder="e.g. Mitti Herbals"
                       value={brandName}
-                      onChange={(e) => setBrandName(e.target.value)}
-                      className="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50/50 dark:bg-slate-800/50 text-slate-900 dark:text-white text-sm outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-medium"
+                      className="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-100 dark:bg-slate-800/80 text-slate-700 dark:text-slate-300 text-sm outline-none cursor-not-allowed font-medium select-none"
                     />
                   </div>
                 </div>
@@ -509,7 +509,7 @@ function CheckoutContent() {
         </div>
 
         {/* Right Column: Amazon-Style Sticky Order Summary Card - order-1 on mobile, order-2 on desktop */}
-        <div className="order-1 lg:order-2 lg:col-span-4 sticky top-24 space-y-4">
+        <div className="order-1 lg:order-2 lg:col-span-4 relative lg:sticky lg:top-24 space-y-4">
           <div className="bg-white/95 dark:bg-slate-900/95 rounded-3xl p-6 sm:p-7 border-2 border-pink-200 dark:border-white/10 shadow-xl backdrop-blur-md space-y-5">
             
             <h3 className="text-lg font-black text-slate-900 dark:text-white tracking-tight pb-3 border-b border-slate-100 dark:border-white/10">
@@ -565,12 +565,12 @@ function CheckoutContent() {
               </div>
             )}
 
-            {/* Amazon-style "Pay ₹[amount]" Button */}
+            {/* Amazon-style "Pay ₹[amount]" Button in blue gradient */}
             <button
               type="button"
               onClick={handlePlaceOrder}
               disabled={isProcessing}
-              className="w-full py-4 px-6 rounded-2xl font-black text-sm bg-gradient-to-r from-amber-400 via-pink-500 to-primary hover:from-amber-500 hover:to-pink-600 text-white shadow-xl shadow-primary/25 transition-all text-center flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-95 disabled:opacity-60"
+              className="w-full py-4 px-6 rounded-2xl font-black text-sm bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 hover:from-blue-700 hover:to-indigo-700 text-white shadow-xl shadow-blue-500/25 transition-all text-center flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-95 disabled:opacity-60"
             >
               {isProcessing ? (
                 <Loader2 className="w-5 h-5 animate-spin" />
