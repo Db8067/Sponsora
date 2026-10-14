@@ -127,23 +127,15 @@ export default function BrandAlreadyCreatedScreen({
             </div>
           </div>
 
-          {/* Action CTAs */}
-          <div className="mt-6 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full">
+          {/* Action CTA */}
+          <div className="mt-6 flex flex-col items-stretch sm:items-center gap-3 w-full">
             <Link
               href={subscriptionsUrl}
-              className="flex-1 py-3.5 px-6 rounded-xl font-bold text-sm bg-gradient-to-r from-primary to-pink-500 hover:from-primary-dark hover:to-pink-600 text-white shadow-xl shadow-primary/25 transition-all text-center flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-95"
+              className="w-full sm:max-w-md py-4 px-6 rounded-2xl font-black text-sm bg-gradient-to-r from-primary to-pink-500 hover:from-primary-dark hover:to-pink-600 text-white shadow-xl shadow-primary/25 transition-all text-center flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-95"
             >
               <Rocket className="w-4 h-4" />
               <span>Choose Growth Subscription</span>
               <ArrowRight className="w-4 h-4" />
-            </Link>
-
-            <Link
-              href={passportUrl}
-              className="py-3.5 px-5 rounded-xl font-bold text-sm bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-white transition-all text-center border border-slate-200 dark:border-white/10 flex items-center justify-center gap-1.5"
-            >
-              <Store className="w-4 h-4" />
-              <span>View Brand Passport</span>
             </Link>
           </div>
 

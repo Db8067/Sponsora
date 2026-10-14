@@ -8,6 +8,10 @@ import Snowfall from '@/components/Snowfall';
 const NAV = [
   { href: '/admin', label: 'Overview & Metrics', icon: 'grid_view', match: (p: string) => p === '/admin' },
   { href: '/admin-brandform', label: 'Brand Approvals (Realtime)', icon: 'verified', badge: 'New', match: (p: string) => p.startsWith('/admin-brandform') },
+  { href: '/brand-payment', label: 'Brand Payments', icon: 'payments', badge: 'Realtime', match: (p: string) => p.startsWith('/brand-payment') },
+  { href: '/client-credential', label: 'Client Credentials', icon: 'badge', match: (p: string) => p.startsWith('/client-credential') || p.startsWith('/client-credentail') },
+  { href: '/client-information', label: 'Client Courses & Fees', icon: 'school', match: (p: string) => p.startsWith('/client-information') || p.startsWith('/celient-information') },
+  { href: '/client-schedule', label: 'Mentorship Bookings', icon: 'event_available', match: (p: string) => p.startsWith('/client-schedule') || p.startsWith('/cleint-schedule') },
   { href: '/admin-brand-delete', label: 'Deleted Brand', icon: 'delete', match: (p: string) => p.startsWith('/admin-brand-delete') },
   { href: '/admin-users', label: 'Users & Activity', icon: 'group', match: (p: string) => p.startsWith('/admin-users') },
   { href: '/setting', label: 'Settings', icon: 'settings', match: (p: string) => p === '/setting' || p.startsWith('/setting') },

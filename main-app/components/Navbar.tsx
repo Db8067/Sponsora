@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { UserButton, useUser } from "@clerk/nextjs";
-import { Menu, X, Rocket, LayoutDashboard, Banknote } from "lucide-react";
+import { Menu, X, Rocket, LayoutDashboard, Banknote, GraduationCap } from "lucide-react";
 import { useState, useEffect } from "react";
 import { ThemeToggle } from "./ThemeToggle";
 import CustomButton from "./ui/CustomButton";
@@ -22,6 +22,7 @@ export default function Navbar() {
   }, []);
 
   const navLinks = [
+    { name: "Mentorship", href: "/Online-Mentorship", icon: GraduationCap },
     { name: "Pricing", href: "/pricing", icon: Banknote },
   ];
 

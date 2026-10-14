@@ -98,3 +98,135 @@ CREATE POLICY "Allow service role management of deleted logs"
 
 -- 7) Refresh PostgREST Schema Cache immediately
 NOTIFY pgrst, 'reload schema';
+
+-- ============================================================================
+-- 8) Brand Payments & Checkout Intake Table
+-- ============================================================================
+CREATE TABLE IF NOT EXISTS public.brand_payments (
+  id                  uuid NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
+  brand_name          text NOT NULL,
+  founder_name        text,
+  phone               text,
+  email               text,
+  plan_id             integer,
+  plan_tier           text NOT NULL,
+  billing_cycle       text DEFAULT 'monthly',
+  amount              numeric NOT NULL,
+  original_amount     numeric,
+  savings             numeric,
+  currency            text DEFAULT 'INR',
+  razorpay_order_id   text,
+  razorpay_payment_id text,
+  razorpay_signature  text,
+  payment_status      text NOT NULL DEFAULT 'initiated',
+  metadata            jsonb DEFAULT '{}'::jsonb,
+  created_at          timestamp with time zone NOT NULL DEFAULT timezone('utc'::text, now()),
+  updated_at          timestamp with time zone NOT NULL DEFAULT timezone('utc'::text, now())
+);
+
+CREATE INDEX IF NOT EXISTS idx_brand_payments_email       ON public.brand_payments USING btree (email);
+CREATE INDEX IF NOT EXISTS idx_brand_payments_brand_name  ON public.brand_payments USING btree (brand_name);
+CREATE INDEX IF NOT EXISTS idx_brand_payments_status      ON public.brand_payments USING btree (payment_status);
+CREATE INDEX IF NOT EXISTS idx_brand_payments_order_id    ON public.brand_payments USING btree (razorpay_order_id);
+CREATE INDEX IF NOT EXISTS idx_brand_payments_created_at  ON public.brand_payments USING btree (created_at desc);
+
+ALTER TABLE public.brand_payments ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Allow checkout to insert brand payments" ON public.brand_payments;
+CREATE POLICY "Allow checkout to insert brand payments"
+  ON public.brand_payments FOR INSERT TO anon, authenticated WITH CHECK (true);
+
+DROP POLICY IF EXISTS "Allow checkout to update brand payments" ON public.brand_payments;
+CREATE POLICY "Allow checkout to update brand payments"
+  ON public.brand_payments FOR UPDATE TO anon, authenticated USING (true);
+
+DROP POLICY IF EXISTS "Allow select brand payments" ON public.brand_payments;
+CREATE POLICY "Allow select brand payments"
+  ON public.brand_payments FOR SELECT TO anon, authenticated USING (true);
+
+
+-- ============================================================================
+-- 9) Client Credentials Table (Username / Password for Client Portal, NO Clerk)
+-- ============================================================================
+CREATE TABLE IF NOT EXISTS public.client_credentials (
+  id          uuid NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
+  username    text UNIQUE NOT NULL,
+  password    text NOT NULL,
+  client_name text NOT NULL,
+  email       text,
+  phone       text,
+  is_active   boolean NOT NULL DEFAULT true,
+  created_at  timestamp with time zone NOT NULL DEFAULT timezone('utc'::text, now()),
+  updated_at  timestamp with time zone NOT NULL DEFAULT timezone('utc'::text, now())
+);
+
+CREATE INDEX IF NOT EXISTS idx_client_credentials_username ON public.client_credentials USING btree (username);
+CREATE INDEX IF NOT EXISTS idx_client_credentials_email    ON public.client_credentials USING btree (email);
+
+ALTER TABLE public.client_credentials ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Allow all for client_credentials" ON public.client_credentials;
+CREATE POLICY "Allow all for client_credentials"
+  ON public.client_credentials FOR ALL TO anon, authenticated USING (true) WITH CHECK (true);
+
+
+-- ============================================================================
+-- 10) Client Course Enrollments & Fee Details
+-- ============================================================================
+CREATE TABLE IF NOT EXISTS public.client_courses (
+  id                 uuid NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
+  username           text NOT NULL,
+  course_name        text NOT NULL,
+  course_description text,
+  mentor_name        text DEFAULT 'Elite Mentor',
+  total_fees         numeric NOT NULL DEFAULT 0,
+  fees_paid          numeric NOT NULL DEFAULT 0,
+  fees_due           numeric NOT NULL DEFAULT 0,
+  payment_status     text NOT NULL DEFAULT 'pending',
+  batch_start_date   text,
+  created_at         timestamp with time zone NOT NULL DEFAULT timezone('utc'::text, now()),
+  updated_at         timestamp with time zone NOT NULL DEFAULT timezone('utc'::text, now())
+);
+
+CREATE INDEX IF NOT EXISTS idx_client_courses_username   ON public.client_courses USING btree (username);
+CREATE INDEX IF NOT EXISTS idx_client_courses_created_at ON public.client_courses USING btree (created_at desc);
+
+ALTER TABLE public.client_courses ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Allow all for client_courses" ON public.client_courses;
+CREATE POLICY "Allow all for client_courses"
+  ON public.client_courses FOR ALL TO anon, authenticated USING (true) WITH CHECK (true);
+
+
+-- ============================================================================
+-- 11) Mentorship Schedules Table (Booked Calls / Slots)
+-- ============================================================================
+CREATE TABLE IF NOT EXISTS public.mentorship_schedules (
+  id           uuid NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
+  username     text NOT NULL,
+  client_name  text,
+  client_email text,
+  client_phone text,
+  session_date text NOT NULL,
+  session_day  text NOT NULL,
+  time_slot    text NOT NULL,
+  topic        text NOT NULL,
+  description  text,
+  meeting_link text DEFAULT 'https://meet.google.com/new',
+  status       text NOT NULL DEFAULT 'scheduled',
+  created_at   timestamp with time zone NOT NULL DEFAULT timezone('utc'::text, now()),
+  updated_at   timestamp with time zone NOT NULL DEFAULT timezone('utc'::text, now())
+);
+
+CREATE INDEX IF NOT EXISTS idx_mentorship_schedules_username ON public.mentorship_schedules USING btree (username);
+CREATE INDEX IF NOT EXISTS idx_mentorship_schedules_date     ON public.mentorship_schedules USING btree (session_date);
+CREATE INDEX IF NOT EXISTS idx_mentorship_schedules_status   ON public.mentorship_schedules USING btree (status);
+
+ALTER TABLE public.mentorship_schedules ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Allow all for mentorship_schedules" ON public.mentorship_schedules;
+CREATE POLICY "Allow all for mentorship_schedules"
+  ON public.mentorship_schedules FOR ALL TO anon, authenticated USING (true) WITH CHECK (true);
+
+NOTIFY pgrst, 'reload schema';
+

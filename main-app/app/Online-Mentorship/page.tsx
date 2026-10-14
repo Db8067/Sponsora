@@ -111,8 +111,8 @@ export default function OnlineMentorshipPage() {
         </section>
 
         {/* Hero Section */}
-        <section className="w-full py-10 md:py-16 px-4 sm:px-6 lg:px-8">
-          <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+        <section className="w-full py-6 sm:py-8 md:py-10 px-4 sm:px-6 lg:px-8">
+          <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center">
             {/* Left Column: Copy */}
             <div className="lg:col-span-7 space-y-6">
               <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-pink-100 dark:bg-pink-900/40 text-primary dark:text-pink-300 text-xs font-extrabold uppercase tracking-wider border border-pink-200 dark:border-pink-800/40 shadow-sm">
@@ -124,7 +124,7 @@ export default function OnlineMentorshipPage() {
                 <span className="block text-slate-900 dark:text-white mb-2 sm:mb-3">
                   1:1 Personalized Mentorship:
                 </span>
-                <span className="relative block h-[1.3em] overflow-hidden">
+                <span className="relative block min-h-[5.5rem] sm:min-h-[4.2rem] md:min-h-[4.2rem] lg:min-h-[3.6rem] overflow-hidden">
                   {SLIDE_HEADLINES.map((line, idx) => {
                     const isCurrent = idx === currentSlideIndex;
                     const isPrev = idx === (currentSlideIndex - 1 + SLIDE_HEADLINES.length) % SLIDE_HEADLINES.length;
@@ -203,11 +203,11 @@ export default function OnlineMentorshipPage() {
               <div className="relative rounded-3xl overflow-hidden shadow-2xl bg-pink-50/60 dark:bg-slate-900 border-2 border-pink-200/70 dark:border-white/10 group p-4 sm:p-6 flex items-center justify-center">
                 <div className="w-full aspect-[4/3] relative rounded-2xl overflow-hidden">
                   <Image
-                    src="/hero-art.png"
-                    alt="NextHour & Grahak Setu 1:1 Mentorship Doodle"
+                    src="/images/mentorship-hero-banner.jpg"
+                    alt="NextHour & Grahak Setu 1:1 Mentorship Artwork"
                     fill
                     sizes="(max-width: 640px) 340px, 460px"
-                    className="object-contain group-hover:scale-105 transition-transform duration-500"
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
                     priority
                   />
                 </div>
@@ -1041,18 +1041,6 @@ export default function OnlineMentorshipPage() {
           </div>
         </div>
       </main>
-
-      {/* Footer */}
-      <footer className="w-full bg-white/90 dark:bg-slate-950 border-t border-pink-100 dark:border-white/10 py-10 px-4 sm:px-8 text-xs text-slate-500 dark:text-slate-400">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
-          <p>© 2025 NextHour & Grahak Setu Accelerator Network. All rights reserved.</p>
-          <div className="flex items-center gap-6">
-            <Link href="/" className="hover:text-primary transition-colors">Home</Link>
-            <Link href="/subscriptions" className="hover:text-primary transition-colors">Subscriptions</Link>
-            <Link href="/brand-register" className="hover:text-primary transition-colors">Brand Register</Link>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 }

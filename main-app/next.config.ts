@@ -11,6 +11,10 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'res.cloudinary.com',
       },
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+      },
     ],
   },
   async rewrites() {
@@ -25,6 +29,20 @@ const nextConfig: NextConfig = {
       { source: '/admin/setting', destination: '/setting' },
       { source: '/admin-setting', destination: '/setting' },
       { source: '/admin/connectivity-check', destination: '/connectivity-check' },
+      // Brand Payment aliases
+      { source: '/brand-payments', destination: '/brand-payment' },
+      { source: '/admin/brand-payment', destination: '/brand-payment' },
+      { source: '/admin-brand-payment', destination: '/brand-payment' },
+      // Client Dashboard & Admin Client Management aliases
+      { source: '/client-credentail', destination: '/client-credential' },
+      { source: '/admin/client-credential', destination: '/client-credential' },
+      { source: '/admin/client-credentail', destination: '/client-credential' },
+      { source: '/celient-information', destination: '/client-information' },
+      { source: '/admin/client-information', destination: '/client-information' },
+      { source: '/admin/celient-information', destination: '/client-information' },
+      { source: '/cleint-schedule', destination: '/client-schedule' },
+      { source: '/admin/client-schedule', destination: '/client-schedule' },
+      { source: '/admin/cleint-schedule', destination: '/client-schedule' },
       // Mentorship route aliases
       { source: '/online-mentorship', destination: '/Online-Mentorship' },
       { source: '/Online-mentorship', destination: '/Online-Mentorship' },

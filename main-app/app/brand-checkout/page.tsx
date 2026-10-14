@@ -195,6 +195,30 @@ function CheckoutContent() {
         throw new Error(orderData.error || 'Unable to initialize Razorpay payment.');
       }
 
+      // 1) Log checkout intake & initiated payment in Supabase
+      try {
+        await fetch('/api/brand-checkout/save', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            brand_name: brandName.trim(),
+            founder_name: founderName.trim(),
+            phone: cleanPhone.slice(-10),
+            email: emailAddress.trim().toLowerCase(),
+            plan_id: plan.id,
+            plan_tier: plan.tier,
+            billing_cycle: billingParam,
+            amount: finalPrice,
+            original_amount: originalPrice,
+            savings: totalSavings,
+            razorpay_order_id: orderData.id,
+            payment_status: 'initiated',
+          }),
+        });
+      } catch (saveErr) {
+        console.warn('[checkout] initial save notice:', saveErr);
+      }
+
       const options = {
         key: orderData.key_id,
         amount: orderData.amount,
@@ -202,8 +226,31 @@ function CheckoutContent() {
         name: 'GrahakSetu',
         description: `Subscription: ${plan.tier}`,
         order_id: orderData.id,
-        handler: function (response: any) {
-          // On successful payment, redirect to post-payment welcome destination
+        handler: async function (response: any) {
+          // On successful payment, update status in Supabase table
+          try {
+            await fetch('/api/brand-checkout/save', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                brand_name: brandName.trim(),
+                founder_name: founderName.trim(),
+                phone: cleanPhone.slice(-10),
+                email: emailAddress.trim().toLowerCase(),
+                plan_id: plan.id,
+                plan_tier: plan.tier,
+                billing_cycle: billingParam,
+                amount: finalPrice,
+                razorpay_order_id: orderData.id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature,
+                payment_status: 'paid',
+              }),
+            });
+          } catch (updateErr) {
+            console.error('[checkout] paid update error:', updateErr);
+          }
+          // Redirect to post-payment welcome destination
           router.push(plan.welcomePath);
         },
         prefill: {
@@ -223,9 +270,30 @@ function CheckoutContent() {
 
       if ((window as any).Razorpay) {
         const rzp = new (window as any).Razorpay(options);
-        rzp.on('payment.failed', function (resp: any) {
+        rzp.on('payment.failed', async function (resp: any) {
           setErrorMsg('Payment Failed: ' + (resp.error?.description || 'Transaction canceled.'));
           setIsProcessing(false);
+          try {
+            await fetch('/api/brand-checkout/save', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                brand_name: brandName.trim(),
+                founder_name: founderName.trim(),
+                phone: cleanPhone.slice(-10),
+                email: emailAddress.trim().toLowerCase(),
+                plan_id: plan.id,
+                plan_tier: plan.tier,
+                billing_cycle: billingParam,
+                amount: finalPrice,
+                razorpay_order_id: orderData.id,
+                payment_status: 'failed',
+                metadata: { error: resp.error?.description || 'Failed' },
+              }),
+            });
+          } catch {
+            /* ignore */
+          }
         });
         rzp.open();
       } else {
@@ -258,8 +326,8 @@ function CheckoutContent() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        {/* Left Column: Intake Form & Review Items (Amazon Style) */}
-        <div className="lg:col-span-8 space-y-6">
+        {/* Left Column: Intake Form & Review Items (Amazon Style) - order-2 on mobile, order-1 on desktop */}
+        <div className="order-2 lg:order-1 lg:col-span-8 space-y-6">
           
           {/* Section 1: Intake Form */}
           <div className="bg-white/90 dark:bg-slate-900/90 rounded-3xl p-6 sm:p-8 border border-pink-200 dark:border-white/10 shadow-sm backdrop-blur-md">
@@ -440,8 +508,8 @@ function CheckoutContent() {
 
         </div>
 
-        {/* Right Column: Amazon-Style Sticky Order Summary Card */}
-        <div className="lg:col-span-4 sticky top-24 space-y-4">
+        {/* Right Column: Amazon-Style Sticky Order Summary Card - order-1 on mobile, order-2 on desktop */}
+        <div className="order-1 lg:order-2 lg:col-span-4 sticky top-24 space-y-4">
           <div className="bg-white/95 dark:bg-slate-900/95 rounded-3xl p-6 sm:p-7 border-2 border-pink-200 dark:border-white/10 shadow-xl backdrop-blur-md space-y-5">
             
             <h3 className="text-lg font-black text-slate-900 dark:text-white tracking-tight pb-3 border-b border-slate-100 dark:border-white/10">
@@ -497,7 +565,7 @@ function CheckoutContent() {
               </div>
             )}
 
-            {/* Amazon-style "Place Your Order and Pay" Button */}
+            {/* Amazon-style "Pay ₹[amount]" Button */}
             <button
               type="button"
               onClick={handlePlaceOrder}
@@ -509,7 +577,7 @@ function CheckoutContent() {
               ) : (
                 <>
                   <Lock className="w-4 h-4" />
-                  <span>Place Your Order and Pay</span>
+                  <span>Pay ₹{finalPrice}</span>
                   <ArrowRight className="w-4 h-4" />
                 </>
               )}
