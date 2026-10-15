@@ -102,42 +102,112 @@ function CheckoutContent() {
   const planId = rawPlanParam === '3' || rawPlanParam === 'scale' ? 3 : rawPlanParam === '2' || rawPlanParam === 'growth' ? 2 : 1;
   const billingParam = searchParams.get('billing') === 'annual' ? 'annual' : 'monthly';
   const urlBrand = searchParams.get('brand') || '';
+  const urlFounder = searchParams.get('founder') || '';
+  const urlPhone = searchParams.get('phone') || '';
+  const urlEmail = searchParams.get('email') || '';
 
   const plan = CHECKOUT_PLANS[planId];
   const finalPrice = billingParam === 'annual' ? Math.round(plan.price * 0.55) : plan.price;
   const originalPrice = billingParam === 'annual' ? plan.strikethrough * 12 : plan.strikethrough;
   const totalSavings = originalPrice - finalPrice;
 
-  // 4 Intake Form Fields
+  // 4 Intake Form Fields (Editable with Database & Cookie Prefill)
   const [brandName, setBrandName] = useState(urlBrand);
-  const [founderName, setFounderName] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [emailAddress, setEmailAddress] = useState('');
+  const [founderName, setFounderName] = useState(urlFounder);
+  const [phoneNumber, setPhoneNumber] = useState(urlPhone);
+  const [emailAddress, setEmailAddress] = useState(urlEmail);
   const [isProcessing, setIsProcessing] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
+  const [isLoadingBrand, setIsLoadingBrand] = useState(false);
 
-  // Prefill from cookies / Clerk if available
+  // Prefill from cookies, Clerk user session, and directly from Supabase database
   useEffect(() => {
+    let cookieEmail = '';
+    let cookieBrand = '';
+    let cookieFounder = '';
+    let cookiePhone = '';
+
     try {
       const match = document.cookie.match(/brand_welcome_data=([^;]+)/);
       if (match) {
         const c = JSON.parse(decodeURIComponent(match[1]));
-        if (c.brand && !brandName) setBrandName(c.brand);
-        if (c.founder && !founderName) setFounderName(c.founder);
-        if (c.phone && !phoneNumber) setPhoneNumber(c.phone);
-        if (c.email && !emailAddress) setEmailAddress(c.email);
+        if (c.brand) {
+          cookieBrand = c.brand;
+          setBrandName((prev) => prev || c.brand);
+        }
+        if (c.founder) {
+          cookieFounder = c.founder;
+          setFounderName((prev) => prev || c.founder);
+        }
+        if (c.phone) {
+          cookiePhone = c.phone;
+          setPhoneNumber((prev) => prev || c.phone);
+        }
+        if (c.email) {
+          cookieEmail = c.email;
+          setEmailAddress((prev) => prev || c.email);
+        }
       }
     } catch {
       /* ignore */
     }
 
     if (user) {
-      if (user.fullName && !founderName) setFounderName(user.fullName);
-      if (user.primaryEmailAddress?.emailAddress && !emailAddress) {
-        setEmailAddress(user.primaryEmailAddress.emailAddress);
+      if (user.fullName) {
+        setFounderName((prev) => prev || user.fullName || '');
+      }
+      const clerkEmail = user.primaryEmailAddress?.emailAddress;
+      if (clerkEmail) {
+        setEmailAddress((prev) => prev || clerkEmail);
       }
     }
-  }, [user]);
+
+    // Direct database brand lookup
+    const targetEmail =
+      user?.primaryEmailAddress?.emailAddress ||
+      cookieEmail ||
+      searchParams.get('email') ||
+      '';
+    const targetBrand = urlBrand || cookieBrand || '';
+
+    const fetchBrand = async () => {
+      try {
+        setIsLoadingBrand(true);
+        let endpoint = '';
+        if (targetEmail) {
+          endpoint = `/api/brand/check-status?email=${encodeURIComponent(targetEmail)}`;
+        } else if (targetBrand) {
+          endpoint = `/api/brand/get-details?brand=${encodeURIComponent(targetBrand)}`;
+        } else {
+          endpoint = `/api/brand/check-status`;
+        }
+
+        const res = await fetch(endpoint);
+        const data = await res.json();
+        if (data?.brand) {
+          const b = data.brand;
+          if (b.brand_name) {
+            setBrandName((prev) => prev || b.brand_name);
+          }
+          if (b.founder_name) {
+            setFounderName((prev) => prev || b.founder_name);
+          }
+          if (b.phone) {
+            setPhoneNumber((prev) => prev || b.phone);
+          }
+          if (b.email) {
+            setEmailAddress((prev) => prev || b.email);
+          }
+        }
+      } catch (err) {
+        console.warn('[checkout] database prefill warning:', err);
+      } finally {
+        setIsLoadingBrand(false);
+      }
+    };
+
+    fetchBrand();
+  }, [user, searchParams, urlBrand]);
 
   const handlePlaceOrder = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -345,21 +415,33 @@ function CheckoutContent() {
 
             <form onSubmit={handlePlaceOrder} id="checkout-form" className="space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {/* 1. Brand Name */}
+                {/* 1. Brand Name (Editable & Pre-filled from DB) */}
                 <div>
                   <label htmlFor="brandName" className="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5 flex items-center justify-between">
                     <span>Brand Name *</span>
-                    <span className="text-[10px] text-slate-400 font-semibold normal-case">(Locked from registration)</span>
+                    <span className="text-[10px] text-primary font-semibold normal-case flex items-center gap-1">
+                      {isLoadingBrand ? (
+                        <span className="flex items-center gap-1 text-slate-400">
+                          <Loader2 className="w-3 h-3 animate-spin" /> Fetching profile...
+                        </span>
+                      ) : (
+                        <span>(Editable)</span>
+                      )}
+                    </span>
                   </label>
                   <div className="relative">
                     <Store className="absolute left-3.5 top-3.5 w-4 h-4 text-slate-400" />
                     <input
                       id="brandName"
                       type="text"
-                      readOnly
+                      required
                       placeholder="e.g. Mitti Herbals"
                       value={brandName}
-                      className="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-100 dark:bg-slate-800/80 text-slate-700 dark:text-slate-300 text-sm outline-none cursor-not-allowed font-medium select-none"
+                      onChange={(e) => {
+                        setBrandName(e.target.value);
+                        if (errorMsg) setErrorMsg('');
+                      }}
+                      className="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50/50 dark:bg-slate-800/50 text-slate-900 dark:text-white text-sm outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-medium"
                     />
                   </div>
                 </div>
@@ -377,7 +459,10 @@ function CheckoutContent() {
                       required
                       placeholder="e.g. Radhika Sharma"
                       value={founderName}
-                      onChange={(e) => setFounderName(e.target.value)}
+                      onChange={(e) => {
+                        setFounderName(e.target.value);
+                        if (errorMsg) setErrorMsg('');
+                      }}
                       className="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50/50 dark:bg-slate-800/50 text-slate-900 dark:text-white text-sm outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-medium"
                     />
                   </div>
@@ -396,7 +481,10 @@ function CheckoutContent() {
                       required
                       placeholder="e.g. 9876543210"
                       value={phoneNumber}
-                      onChange={(e) => setPhoneNumber(e.target.value)}
+                      onChange={(e) => {
+                        setPhoneNumber(e.target.value);
+                        if (errorMsg) setErrorMsg('');
+                      }}
                       className="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50/50 dark:bg-slate-800/50 text-slate-900 dark:text-white text-sm outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-medium"
                     />
                   </div>
@@ -415,7 +503,10 @@ function CheckoutContent() {
                       required
                       placeholder="e.g. founder@yourbrand.com"
                       value={emailAddress}
-                      onChange={(e) => setEmailAddress(e.target.value)}
+                      onChange={(e) => {
+                        setEmailAddress(e.target.value);
+                        if (errorMsg) setErrorMsg('');
+                      }}
                       className="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50/50 dark:bg-slate-800/50 text-slate-900 dark:text-white text-sm outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all font-medium"
                     />
                   </div>

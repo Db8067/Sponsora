@@ -10,6 +10,7 @@ import {
 import SellerNavbar from '@/components/SellerNavbar';
 import Script from 'next/script';
 import BrandDisabledScreen from '@/components/brand/BrandDisabledScreen';
+import { useUser } from '@clerk/nextjs';
 
 /* ─── plan data (same as subscriptions page) ─── */
 const PLANS = [
@@ -126,10 +127,13 @@ const STORIES = [
 /* ─── Brand Passport pulled from URL params or Database ─── */
 function BrandPassport({
   onDisabled,
+  onBrandLoaded,
 }: {
   onDisabled?: (brandName: string, email: string) => void;
+  onBrandLoaded?: (brand: { brandName: string; founderName: string; phone: string; email: string }) => void;
 }) {
   const searchParams = useSearchParams();
+  const { user } = useUser();
   const [disabled, setDisabled] = useState(false);
   const [disabledBrandName, setDisabledBrandName] = useState('');
   const [brandData, setBrandData] = useState({
@@ -168,7 +172,9 @@ function BrandPassport({
       /* ignore */
     }
 
-    const target = brandParam || slugParam || emailParam || cookieBrand || cookieEmail;
+    const clerkEmail = user?.primaryEmailAddress?.emailAddress?.trim().toLowerCase();
+    const target = brandParam || slugParam || emailParam || cookieBrand || cookieEmail || clerkEmail;
+
     if (target) {
       const q = new URLSearchParams();
       if (brandParam) q.set('brand', brandParam);
@@ -176,6 +182,7 @@ function BrandPassport({
       else if (emailParam) q.set('email', emailParam);
       else if (cookieBrand) q.set('brand', cookieBrand);
       else if (cookieEmail) q.set('email', cookieEmail);
+      else if (clerkEmail) q.set('email', clerkEmail);
 
       fetch(`/api/brand/get-details?${q.toString()}`)
         .then((res) => res.json())
@@ -184,39 +191,45 @@ function BrandPassport({
             setDisabled(true);
             setDisabledBrandName(data.brandName || 'Your Brand');
             document.cookie = 'brand_welcome_data=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
-            onDisabled?.(data.brandName || 'Your Brand', data.email || cookieEmail);
+            onDisabled?.(data.brandName || 'Your Brand', data.email || cookieEmail || clerkEmail || '');
           } else if (data?.ok && data.brand) {
-            setBrandData({
+            const loaded = {
               brandName: data.brand.brand_name || cookieBrand || 'Your Brand',
               founderName: data.brand.founder_name || cookieFounder || 'Founder',
               category: data.brand.category || cookieCategory || 'D2C Brand',
               phone: data.brand.phone || cookiePhone || '',
-              email: data.brand.email || cookieEmail || '',
+              email: data.brand.email || cookieEmail || clerkEmail || '',
               logo: data.brand.logo || cookieLogo || '',
-            });
+            };
+            setBrandData(loaded);
+            onBrandLoaded?.(loaded);
           } else {
-            setBrandData({
+            const fallback = {
               brandName: brandParam || slugParam || cookieBrand || 'Your Brand',
               founderName: searchParams.get('founder') || cookieFounder || 'Founder',
               category: searchParams.get('category') || cookieCategory || 'D2C Brand',
               phone: searchParams.get('phone') || cookiePhone || '',
-              email: searchParams.get('email') || cookieEmail || '',
+              email: searchParams.get('email') || cookieEmail || clerkEmail || '',
               logo: searchParams.get('logo') || cookieLogo || '',
-            });
+            };
+            setBrandData(fallback);
+            onBrandLoaded?.(fallback);
           }
         })
         .catch(() => {
-          setBrandData({
+          const fallback = {
             brandName: brandParam || slugParam || cookieBrand || 'Your Brand',
             founderName: searchParams.get('founder') || cookieFounder || 'Founder',
             category: searchParams.get('category') || cookieCategory || 'D2C Brand',
             phone: searchParams.get('phone') || cookiePhone || '',
-            email: searchParams.get('email') || cookieEmail || '',
+            email: searchParams.get('email') || cookieEmail || clerkEmail || '',
             logo: searchParams.get('logo') || cookieLogo || '',
-          });
+          };
+          setBrandData(fallback);
+          onBrandLoaded?.(fallback);
         });
     }
-  }, [searchParams, onDisabled]);
+  }, [searchParams, user, onDisabled, onBrandLoaded]);
 
   if (disabled) {
     return (
@@ -326,6 +339,12 @@ export default function BrandSubscriptionsPage() {
   const [isPageDisabled, setIsPageDisabled] = useState(false);
   const [disabledBrandName, setDisabledBrandName] = useState('');
   const [disabledBrandEmail, setDisabledBrandEmail] = useState('');
+  const [loadedBrand, setLoadedBrand] = useState<{
+    brandName: string;
+    founderName: string;
+    phone: string;
+    email: string;
+  } | null>(null);
 
   const discountedPrice = (price: number) =>
     billing === 'annual' ? Math.round(price * 0.83) : price;
@@ -348,9 +367,25 @@ export default function BrandSubscriptionsPage() {
     setIsProcessing(planId);
     const cookieData = getSecureCookie('brand_welcome_data');
     const urlBrand = typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('brand') || '' : '';
-    const brand = cookieData?.brand || urlBrand || '';
+    const brand = loadedBrand?.brandName && loadedBrand.brandName !== 'Your Brand'
+      ? loadedBrand.brandName
+      : cookieData?.brand || urlBrand || '';
+    const founder = loadedBrand?.founderName && loadedBrand.founderName !== 'Founder'
+      ? loadedBrand.founderName
+      : cookieData?.founder || '';
+    const phone = loadedBrand?.phone || cookieData?.phone || '';
+    const email = loadedBrand?.email || cookieData?.email || '';
 
-    router.push(`/brand-checkout?plan=${planId}&billing=${billing}&brand=${encodeURIComponent(brand)}`);
+    const queryParams = new URLSearchParams({
+      plan: String(planId),
+      billing,
+      ...(brand ? { brand } : {}),
+      ...(founder ? { founder } : {}),
+      ...(phone ? { phone } : {}),
+      ...(email ? { email } : {}),
+    });
+
+    router.push(`/brand-checkout?${queryParams.toString()}`);
   };
 
   if (isPageDisabled) {
@@ -384,6 +419,9 @@ export default function BrandSubscriptionsPage() {
               setIsPageDisabled(true);
               setDisabledBrandName(name);
               setDisabledBrandEmail(email);
+            }}
+            onBrandLoaded={(brand) => {
+              setLoadedBrand(brand);
             }}
           />
         </Suspense>

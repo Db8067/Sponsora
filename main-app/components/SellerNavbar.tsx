@@ -34,48 +34,49 @@ export default function SellerNavbar() {
 
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-white dark:bg-slate-900 shadow-sm">
-      <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-        <div className="flex items-center gap-2">
+      <div className="container mx-auto px-4 h-16 flex items-center justify-between gap-2 xl:gap-6">
+        <div className="flex items-center gap-2 shrink-0">
           <Link href="/" className="flex items-center">
-            <img src="/images/logo-light.png" alt="GrahakSetu Logo" className="h-12 sm:h-14 md:h-[4.5rem] w-auto dark:hidden block object-contain" />
-            <img src="/images/logo-dark.png" alt="GrahakSetu Logo" className="h-12 sm:h-14 md:h-[4.5rem] w-auto hidden dark:block object-contain" />
+            <img src="/images/logo-light.png" alt="GrahakSetu Logo" className="h-10 sm:h-12 md:h-14 w-auto dark:hidden block object-contain" />
+            <img src="/images/logo-dark.png" alt="GrahakSetu Logo" className="h-10 sm:h-12 md:h-14 w-auto hidden dark:block object-contain" />
           </Link>
         </div>
         
-        <nav className="hidden lg:flex items-center gap-6 absolute left-1/2 -translate-x-1/2">
-          <Link href="/brand-register" className="text-sm font-medium text-slate-600 hover:text-primary dark:text-slate-300 transition-colors whitespace-nowrap">
+        <nav className="hidden lg:flex items-center gap-3.5 xl:gap-6 justify-center flex-1 min-w-0">
+          <Link href="/brand-register" className="text-xs xl:text-sm font-medium text-slate-600 hover:text-primary dark:text-slate-300 transition-colors whitespace-nowrap">
             Brand Register
           </Link>
-          <Link href="/sell-online" className="text-sm font-medium text-slate-600 hover:text-primary dark:text-slate-300 transition-colors whitespace-nowrap">
+          <Link href="/sell-online" className="text-xs xl:text-sm font-medium text-slate-600 hover:text-primary dark:text-slate-300 transition-colors whitespace-nowrap">
             Sell online
           </Link>
           
-          <Link href="/subscriptions" className="text-sm font-medium text-slate-600 hover:text-primary dark:text-slate-300 transition-colors whitespace-nowrap">
+          <Link href="/subscriptions" className="text-xs xl:text-sm font-medium text-slate-600 hover:text-primary dark:text-slate-300 transition-colors whitespace-nowrap">
             Subscriptions
           </Link>
 
-          <Link href="/Online-Mentorship" className="text-sm font-medium text-slate-600 hover:text-primary dark:text-slate-300 transition-colors whitespace-nowrap">
+          <Link href="/Online-Mentorship" className="text-xs xl:text-sm font-medium text-slate-600 hover:text-primary dark:text-slate-300 transition-colors whitespace-nowrap">
             Mentorship
           </Link>
 
-          <Link href="/marketplace" className="text-sm font-medium text-slate-600 hover:text-primary dark:text-slate-300 transition-colors whitespace-nowrap">
+          <Link href="/marketplace" className="text-xs xl:text-sm font-medium text-slate-600 hover:text-primary dark:text-slate-300 transition-colors whitespace-nowrap">
             Marketplace
           </Link>
 
-          <span className="text-sm font-medium text-slate-400 dark:text-slate-500 whitespace-nowrap cursor-not-allowed" title="Soon to be added">
+          <span className="text-xs xl:text-sm font-medium text-slate-400 dark:text-slate-500 whitespace-nowrap cursor-not-allowed flex items-center" title="Soon to be added">
             Creator program <span className="text-[10px] font-bold bg-pink-100 text-pink-600 dark:bg-pink-900/40 dark:text-pink-400 px-1.5 py-0.5 rounded-md ml-1 shadow-sm border border-pink-200 dark:border-pink-800">Soon</span>
           </span>
           
         </nav>
 
-        <div className="hidden lg:flex items-center gap-4">
+        <div className="hidden lg:flex items-center gap-2.5 xl:gap-3.5 shrink-0">
           {brandInfo && (
             <Link
               href={brandInfo.dashboard_url || `/brand-subscriptions?brand=${brandInfo.slug}`}
-              className="text-xs font-black text-primary bg-primary/10 hover:bg-primary hover:text-white px-3 py-1.5 rounded-full border border-primary/20 transition-all flex items-center gap-1.5 shadow-sm"
+              title={`${brandInfo.brand_name} Dashboard`}
+              className="text-xs font-black text-primary bg-primary/10 hover:bg-primary hover:text-white px-3 py-1.5 rounded-full border border-primary/20 transition-all flex items-center gap-1.5 shadow-sm max-w-[170px] xl:max-w-[220px] shrink-0"
             >
-              <LayoutDashboard className="w-3.5 h-3.5" />
-              <span>{brandInfo.brand_name} Dashboard</span>
+              <LayoutDashboard className="w-3.5 h-3.5 shrink-0" />
+              <span className="truncate">{brandInfo.brand_name} Dashboard</span>
             </Link>
           )}
 
@@ -84,11 +85,11 @@ export default function SellerNavbar() {
           ) : isSignedIn ? (
             <UserButton />
           ) : (
-            <Link href="/sign-in" className="text-sm font-semibold text-slate-700 hover:text-pink-600 dark:text-slate-200 transition-colors">
+            <Link href="/sign-in" className="text-xs xl:text-sm font-semibold text-slate-700 hover:text-pink-600 dark:text-slate-200 transition-colors">
               Login
             </Link>
           )}
-          <Link href="/brand-register" className="text-sm font-semibold bg-primary text-white px-5 py-2.5 rounded-xl hover:bg-primary-dark transition-colors shadow-lg shadow-primary/20">
+          <Link href="/brand-register" className="text-xs xl:text-sm font-semibold bg-primary text-white px-4 xl:px-5 py-2.5 rounded-xl hover:bg-primary-dark transition-colors shadow-lg shadow-primary/20 whitespace-nowrap">
             Get Customers
           </Link>
         </div>
