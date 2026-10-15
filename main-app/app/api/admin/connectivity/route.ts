@@ -3,6 +3,7 @@ import { getAdminAuth } from '@/lib/admin-data';
 import { getAdminClient } from '@/lib/supabase-admin';
 import { clerkClient } from '@clerk/nextjs/server';
 import { v2 as cloudinary } from 'cloudinary';
+import { getRazorpayDiagnostics } from '@/lib/razorpay';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -210,31 +211,33 @@ export async function GET() {
     // 7. Razorpay Payment Gateway Realtime Health Check
     const rzpStart = performance.now();
     try {
-      const key_id = process.env.RAZORPAY_KEY_ID;
+      const diag = await getRazorpayDiagnostics();
       const rzpRes = await fetch('https://api.razorpay.com', {
         headers: { 'User-Agent': 'GrahakSetu-Health-Monitor' },
         next: { revalidate: 0 },
       });
       const rzpLatency = Math.round(performance.now() - rzpStart);
 
+      const isConfigured = diag.activeMode === 'live' ? diag.liveConfigured : diag.testConfigured;
+      const keyPrefix = diag.activeMode === 'live' ? diag.liveKeyPrefix : diag.testKeyPrefix;
+
       if (rzpRes.ok) {
         checks.push({
-          name: 'Razorpay Payment Gateway API',
+          name: `Razorpay Payment Gateway API (${diag.activeMode.toUpperCase()} Mode)`,
           category: 'payment',
-          status: rzpLatency < 1500 ? 'operational' : 'degraded',
+          status: isConfigured ? (rzpLatency < 1500 ? 'operational' : 'degraded') : 'degraded',
           latencyMs: rzpLatency,
-          details: `Razorpay API cluster live (HTTP ${rzpRes.status}). ${
-            key_id ? `Merchant Key "${key_id.slice(0, 8)}..." configured.` : 'Ready for payment intent processing.'
-          }`,
-          meta: { configured: Boolean(key_id), keyIdPrefix: key_id ? key_id.slice(0, 8) : null },
+          details: `Razorpay cluster live (HTTP ${rzpRes.status}). Active Mode: ${diag.activeMode.toUpperCase()} (${diag.source}). Key: ${keyPrefix}. Webhook: ${diag.webhookConfigured ? 'Active' : 'Unconfigured'}.`,
+          meta: { ...diag },
         });
       } else {
         checks.push({
-          name: 'Razorpay Payment Gateway API',
+          name: `Razorpay Payment Gateway API (${diag.activeMode.toUpperCase()} Mode)`,
           category: 'payment',
           status: 'degraded',
           latencyMs: rzpLatency,
           details: `Razorpay response HTTP ${rzpRes.status} (${rzpRes.statusText})`,
+          meta: { ...diag },
         });
       }
     } catch (err: any) {

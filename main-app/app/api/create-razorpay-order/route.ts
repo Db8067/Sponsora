@@ -1,45 +1,47 @@
 import { NextResponse } from 'next/server';
-import Razorpay from 'razorpay';
+import { getRazorpayClient } from '@/lib/razorpay';
+
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
 
 export async function POST(req: Request) {
   try {
-    // Authentication removed: anyone can create an order.
     const userId = 'guest';
 
     const body = await req.json();
     const { amount, planId } = body; // amount in INR
 
-    if (!amount) {
-      return NextResponse.json({ error: 'Amount is required' }, { status: 400 });
+    if (!amount || Number(amount) <= 0) {
+      return NextResponse.json({ error: 'Valid payment amount is required' }, { status: 400 });
     }
 
-    // Ensure user has provided Razorpay keys in .env.local
-    const key_id = process.env.RAZORPAY_KEY_ID;
-    const key_secret = process.env.RAZORPAY_KEY_SECRET;
-
-    if (!key_id || !key_secret) {
-      return NextResponse.json(
-        { error: 'Razorpay keys are missing. Please add RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET to your environment variables.' },
-        { status: 500 }
-      );
-    }
-
-    const razorpay = new Razorpay({
-      key_id,
-      key_secret,
-    });
+    // Initialize client dynamically based on active mode (DB site_settings or env)
+    const { client: razorpay, mode, keyId } = await getRazorpayClient();
 
     const options = {
-      amount: amount * 100, // Convert INR to paise
-      currency: "INR",
-      receipt: `receipt_${Date.now()}_${userId.slice(0, 8)}`,
+      amount: Math.round(Number(amount) * 100), // Convert INR to paise
+      currency: 'INR',
+      receipt: `rcpt_${Date.now()}_${userId.slice(0, 6)}`,
+      notes: {
+        plan: planId || 'Subscription',
+        mode,
+      },
     };
 
     const order = await razorpay.orders.create(options);
 
-    return NextResponse.json({ ...order, key_id });
-  } catch (error) {
-    console.error('Error creating Razorpay order:', error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json({
+      ...order,
+      key_id: keyId,
+      mode,
+    });
+  } catch (error: any) {
+    console.error('[create-razorpay-order] error:', error?.message || error);
+    return NextResponse.json(
+      {
+        error: error?.message || 'Unable to initialize Razorpay order. Please check payment gateway configuration.',
+      },
+      { status: 500 }
+    );
   }
 }

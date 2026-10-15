@@ -16,6 +16,7 @@ const NAV = [
   { href: '/admin-brand-delete', label: 'Deleted Brand', icon: 'delete', match: (p: string) => p.startsWith('/admin-brand-delete') },
   { href: '/admin-users', label: 'Users & Activity', icon: 'group', match: (p: string) => p.startsWith('/admin-users') },
   { href: '/setting', label: 'Settings', icon: 'settings', match: (p: string) => p === '/setting' || p.startsWith('/setting') },
+  { href: '/razorpay-mode', label: 'Razorpay Mode', icon: 'toggle_on', badge: 'Live / Test', match: (p: string) => p.startsWith('/razorpay-mode') },
   { href: '/connectivity-check', label: 'Connectivity Check', icon: 'wifi_tethering', badge: 'Live', match: (p: string) => p.startsWith('/connectivity-check') },
 ];
 

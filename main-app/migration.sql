@@ -234,6 +234,26 @@ DROP POLICY IF EXISTS "Allow all for mentorship_schedules" ON public.mentorship_
 CREATE POLICY "Allow all for mentorship_schedules"
   ON public.mentorship_schedules FOR ALL TO anon, authenticated USING (true) WITH CHECK (true);
 
+-- ============================================================================
+-- 12) Site Settings (Runtime System Configurations e.g. Razorpay Mode)
+-- ============================================================================
+CREATE TABLE IF NOT EXISTS public.site_settings (
+  key        text PRIMARY KEY,
+  value      jsonb,
+  updated_at timestamp with time zone DEFAULT timezone('utc'::text, now())
+);
+
+ALTER TABLE public.site_settings ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Allow all for site_settings" ON public.site_settings;
+CREATE POLICY "Allow all for site_settings"
+  ON public.site_settings FOR ALL TO anon, authenticated USING (true) WITH CHECK (true);
+
+-- Ensure brand_payments has payment_mode column
+ALTER TABLE public.brand_payments
+  ADD COLUMN IF NOT EXISTS payment_mode text DEFAULT 'test';
+
 NOTIFY pgrst, 'reload schema';
+
 
 

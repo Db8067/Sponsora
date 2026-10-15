@@ -16,6 +16,8 @@ import {
   Filter,
 } from 'lucide-react';
 
+import Link from 'next/link';
+
 interface PaymentRow {
   id: string;
   brand_name: string;
@@ -107,15 +109,25 @@ export default function BrandPaymentClient() {
           </p>
         </div>
 
-        <button
-          type="button"
-          onClick={fetchPayments}
-          disabled={isRefreshing}
-          className="self-start sm:self-auto px-4 py-2 rounded-xl bg-white border border-pink-200 text-slate-700 hover:text-primary text-xs font-bold shadow-sm transition-all flex items-center gap-2 hover:bg-pink-50 disabled:opacity-50"
-        >
-          <RefreshCw className={`w-3.5 h-3.5 ${isRefreshing ? 'animate-spin text-primary' : ''}`} />
-          <span>Refresh Realtime</span>
-        </button>
+        <div className="flex items-center gap-2 self-start sm:self-auto">
+          <Link
+            href="/razorpay-mode"
+            className="px-3.5 py-2 rounded-xl bg-pink-50 border border-pink-200 text-primary hover:bg-primary hover:text-white text-xs font-bold shadow-sm transition-all flex items-center gap-1.5"
+          >
+            <CreditCard className="w-3.5 h-3.5" />
+            <span>Gateway Mode</span>
+          </Link>
+
+          <button
+            type="button"
+            onClick={fetchPayments}
+            disabled={isRefreshing}
+            className="px-4 py-2 rounded-xl bg-white border border-pink-200 text-slate-700 hover:text-primary text-xs font-bold shadow-sm transition-all flex items-center gap-2 hover:bg-pink-50 disabled:opacity-50"
+          >
+            <RefreshCw className={`w-3.5 h-3.5 ${isRefreshing ? 'animate-spin text-primary' : ''}`} />
+            <span>Refresh Realtime</span>
+          </button>
+        </div>
       </div>
 
       {/* Metrics Row */}
@@ -262,7 +274,7 @@ export default function BrandPaymentClient() {
                       )}
                     </td>
 
-                    <td className="py-3.5 px-4">
+                    <td className="py-3.5 px-4 space-y-1">
                       <span
                         className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider ${
                           item.payment_status === 'paid'
@@ -281,6 +293,21 @@ export default function BrandPaymentClient() {
                         )}
                         <span>{item.payment_status}</span>
                       </span>
+
+                      {/* Payment Mode Tag */}
+                      {item.metadata?.payment_mode && (
+                        <div>
+                          <span
+                            className={`text-[9px] font-extrabold uppercase px-1.5 py-0.5 rounded ${
+                              item.metadata.payment_mode === 'live'
+                                ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                                : 'bg-amber-50 text-amber-700 border border-amber-200'
+                            }`}
+                          >
+                            {item.metadata.payment_mode}
+                          </span>
+                        </div>
+                      )}
                     </td>
 
                     <td className="py-3.5 px-4 font-mono text-[11px] text-slate-600 space-y-0.5">

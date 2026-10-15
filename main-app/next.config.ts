@@ -29,6 +29,8 @@ const nextConfig: NextConfig = {
       { source: '/admin/setting', destination: '/setting' },
       { source: '/admin-setting', destination: '/setting' },
       { source: '/admin/connectivity-check', destination: '/connectivity-check' },
+      { source: '/admin/razorpay-mode', destination: '/razorpay-mode' },
+      { source: '/admin-razorpay-mode', destination: '/razorpay-mode' },
       // Brand Payment aliases
       { source: '/brand-payments', destination: '/brand-payment' },
       { source: '/admin/brand-payment', destination: '/brand-payment' },
