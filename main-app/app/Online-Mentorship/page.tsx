@@ -30,10 +30,10 @@ export default function OnlineMentorshipPage() {
 
   // Animated sliding headline state
   const SLIDE_HEADLINES = [
-    '1-2 Hour Live Sprints Until Every Doubt Is Crystal Clear.',
-    'Build Real Production Systems With Your Mentor Live.',
+    '1-2 Hour Online Sessions Until Every Doubt Is Crystal Clear.',
+    'Build & Earn by just making simple projects.',
     'Direct Pitch Access to 50+ Verified Grahak Setu Brands.',
-    'Close $2k–$5k/mo Foreign Client Retainers With Confidence.',
+    'Close deal with 10+ Client daily With Confidence.',
   ];
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
 
@@ -63,12 +63,12 @@ export default function OnlineMentorshipPage() {
             <div className="lg:col-span-7 flex flex-col items-start space-y-6">
               <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-pink-100 dark:bg-pink-900/40 text-primary dark:text-pink-300 text-xs font-extrabold uppercase tracking-wider border border-pink-200 dark:border-pink-800/40 shadow-sm">
                 <Clock className="w-3.5 h-3.5" />
-                <span>THE UNRUSHED MENTORSHIP STANDARD</span>
+                <span>1:1 Personalized Mentorship</span>
               </div>
 
               <h1 className="w-full text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tight leading-[1.18]">
                 <span className="block text-slate-900 dark:text-white mb-2 sm:mb-3">
-                  1:1 Personalized Mentorship:
+                  Learn, Build & Earn:
                 </span>
                 {/* Grid stack ensures container naturally sizes to the tallest headline with zero clipping or overlap */}
                 <span className="grid items-start overflow-hidden py-1">
@@ -97,7 +97,7 @@ export default function OnlineMentorshipPage() {
 
               <div className="w-full p-4 sm:p-5 rounded-2xl bg-white/75 dark:bg-slate-900/75 border border-pink-100 dark:border-white/10 backdrop-blur-sm shadow-sm">
                 <p className="text-sm sm:text-base md:text-lg text-slate-600 dark:text-slate-300 leading-relaxed">
-                  Tired of 30-minute rushed consultations where 15 minutes are wasted just explaining your project? We sit with you 1-on-1 for 1 to 2 full hours, screen-sharing directly, writing code, and building your real systems together.
+                  Tired of 30-minute rushed Online Sessions where 15 minutes are wasted just explaining your project? We sit with you 1-on-1 for 1 to 2 full hours, screen-sharing directly, writing code, and building your real systems together.
                 </p>
               </div>
 
@@ -105,11 +105,11 @@ export default function OnlineMentorshipPage() {
               <div className="w-full grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
                 <div className="p-3.5 bg-white/85 dark:bg-slate-800/85 rounded-2xl border border-pink-100 dark:border-white/10 shadow-sm flex items-center gap-2.5 backdrop-blur-sm">
                   <Terminal className="w-5 h-5 text-primary shrink-0" />
-                  <span className="font-bold text-xs sm:text-sm text-slate-800 dark:text-white">Live Code Reviews</span>
+                  <span className="font-bold text-xs sm:text-sm text-slate-800 dark:text-white">Earn with AI</span>
                 </div>
                 <div className="p-3.5 bg-white/85 dark:bg-slate-800/85 rounded-2xl border border-pink-100 dark:border-white/10 shadow-sm flex items-center gap-2.5 backdrop-blur-sm">
                   <MessageSquare className="w-5 h-5 text-emerald-600 shrink-0" />
-                  <span className="font-bold text-xs sm:text-sm text-slate-800 dark:text-white">Mentor WhatsApp</span>
+                  <span className="font-bold text-xs sm:text-sm text-slate-800 dark:text-white">Get Leads & Clients</span>
                 </div>
                 <div className="p-3.5 bg-white/85 dark:bg-slate-800/85 rounded-2xl border border-pink-100 dark:border-white/10 shadow-sm flex items-center gap-2.5 backdrop-blur-sm">
                   <Share2 className="w-5 h-5 text-purple-600 shrink-0" />
@@ -133,7 +133,7 @@ export default function OnlineMentorshipPage() {
                   onClick={() => setIsComingSoonOpen(true)}
                   className="inline-flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-white/85 dark:bg-slate-800/85 hover:bg-white dark:hover:bg-slate-800 text-slate-800 dark:text-white border border-pink-200 dark:border-white/10 font-bold text-sm sm:text-base transition-all hover:shadow-md text-center"
                 >
-                  <span>Explore Mentorship Plans</span>
+                  <span>Explore all the Services</span>
                   <BookOpen className="w-4 h-4" />
                 </button>
               </div>
@@ -148,7 +148,7 @@ export default function OnlineMentorshipPage() {
                     ))}
                 </div>
                 <span className="font-black text-slate-800 dark:text-white">4.98 / 5.0</span>
-                <span>from 140+ real client builds &amp; agency operators</span>
+                <span>from 140+ real Brands builds &amp; buisness operators</span>
               </div>
             </div>
 
@@ -168,10 +168,10 @@ export default function OnlineMentorshipPage() {
                 <div className="flex items-center justify-between gap-3 px-2 pt-1 text-xs">
                   <div className="flex items-center gap-2 font-bold text-slate-800 dark:text-white">
                     <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-                    <span>1-on-1 Screen-Share Implementation</span>
+                    <span>Learn, Earn & Build</span>
                   </div>
                   <span className="px-2.5 py-1 rounded-full bg-pink-100 dark:bg-pink-900/40 text-primary font-extrabold text-[11px]">
-                    1–2 Hr Sprints
+                    Start Earning Today
                   </span>
                 </div>
               </div>
@@ -184,13 +184,13 @@ export default function OnlineMentorshipPage() {
           <div className="max-w-7xl mx-auto space-y-12">
             <div className="text-center max-w-3xl mx-auto space-y-3">
               <span className="text-xs font-extrabold uppercase tracking-widest text-primary">
-                The Mentor Reality Gap
+                The Gap in Learning & Earning
               </span>
               <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
                 Why 30-Minute Mentorship Calls Are Completely Broken
               </h2>
               <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300">
-                You don&apos;t need generic advice. You need an elite operator sitting beside your IDE, untangling architecture, fixing edge cases, and pushing to production together.
+                Learning AI is only the first step. Without consistent hands-on mentorship, practical implementation, and access to genuine business opportunities, it can be difficult to turn that learning into income.
               </p>
             </div>
 
@@ -209,7 +209,7 @@ export default function OnlineMentorshipPage() {
                     </div>
                   </div>
                   <span className="px-3 py-1 rounded-full bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 text-xs font-bold">
-                    Net Output: 0 Code
+                    Net Output: 0 Learning
                   </span>
                 </div>
 
@@ -240,13 +240,13 @@ export default function OnlineMentorshipPage() {
                       <span className="text-red-500">17% of call</span>
                     </div>
                     <p className="text-slate-500 dark:text-slate-400 italic">
-                      Rushed clock-watching: &ldquo;Hey, I have another hard stop call now, schedule another paid session!&rdquo;
+                      Rushed clock-watching: &ldquo;Hey, I have another hard stop call now, schedule another session tomorrow!&rdquo;
                     </p>
                   </div>
                 </div>
 
                 <div className="p-4 rounded-2xl bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-900/30 space-y-1 text-xs">
-                  <p className="font-bold text-red-600 dark:text-red-400">The Inevitable Outcome:</p>
+                  <p className="font-bold text-red-600 dark:text-red-400">The Outcome:</p>
                   <p className="text-slate-600 dark:text-slate-400">
                     You log off more confused than before, your bugs remain unresolved, and you waste another week spinning in circles.
                   </p>
@@ -261,12 +261,12 @@ export default function OnlineMentorshipPage() {
                       ✓
                     </span>
                     <div>
-                      <h3 className="font-bold text-base text-slate-900 dark:text-white">NextHour 1:1 Deep Sprint</h3>
+                      <h3 className="font-bold text-base text-slate-900 dark:text-white">Grahak Setu - 1:1 Mentorship</h3>
                       <p className="text-xs text-slate-500 dark:text-slate-400">1 to 2 Uncapped Full Hours</p>
                     </div>
                   </div>
                   <span className="px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 text-xs font-bold">
-                    Shipped in Production
+                    Learn, Build & Earn
                   </span>
                 </div>
 
@@ -313,9 +313,9 @@ export default function OnlineMentorshipPage() {
                 </div>
 
                 <div className="p-4 rounded-2xl bg-emerald-100/70 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/40 space-y-1 text-xs">
-                  <p className="font-bold text-emerald-800 dark:text-emerald-300">The NextHour Outcome:</p>
+                  <p className="font-bold text-emerald-800 dark:text-emerald-300">The Outcome:</p>
                   <p className="text-slate-700 dark:text-slate-300">
-                    A tested, deployed feature working on the live internet. Zero unanswered questions when the call finishes.
+                    You build the proejct, you learned, Doubts Solve and you get clients and customer for your brand.
                   </p>
                 </div>
               </div>
@@ -329,7 +329,7 @@ export default function OnlineMentorshipPage() {
                     Interactive Time Utilization Breakdown
                   </h4>
                   <p className="text-xs text-slate-500 dark:text-slate-400">
-                    Where your actual minutes are spent across 1-on-1 sprint sessions
+                    Where your actual minutes are spent across 1-on-1 sessions
                   </p>
                 </div>
                 <div className="flex flex-wrap items-center gap-3 text-xs font-semibold">
@@ -370,7 +370,7 @@ export default function OnlineMentorshipPage() {
                   17 Hands-On Mastery Tracks
                 </span>
                 <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
-                  Everything We Build With You 1-on-1
+                  Learn all about AI with Grahak Setu...
                 </h2>
               </div>
               <button
@@ -378,7 +378,7 @@ export default function OnlineMentorshipPage() {
                 onClick={() => setIsComingSoonOpen(true)}
                 className="px-6 py-3 rounded-xl bg-gradient-to-r from-primary to-pink-500 hover:from-primary-dark hover:to-pink-600 text-white font-bold text-xs sm:text-sm shadow-md transition-all shrink-0 flex items-center gap-1.5 self-start md:self-auto"
               >
-                <span>View Retainer Plans</span>
+                <span>View Services Plans</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
             </div>
@@ -415,7 +415,7 @@ export default function OnlineMentorshipPage() {
               </h2>
 
               <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed">
-                Most courses leave you stranded with projects that sit abandoned in GitHub. NextHour mentees get direct access to our verified{' '}
+                Most courses leave you stranded with projects that sit abandoned in GitHub. Grahak Setu mentees get direct access to our verified{' '}
                 <strong className="text-slate-900 dark:text-white font-bold">Grahak Setu brand pipeline</strong>.
               </p>
 
@@ -535,7 +535,7 @@ export default function OnlineMentorshipPage() {
               {[
                 {
                   q: "What happens if my technical doubt isn't resolved in 1 hour?",
-                  a: "That is the exact reason we built NextHour. Unlike marketplaces that cut your call off at 30 minutes on the dot, our standard session window is 1 to 2 full hours. If a complex database migration or webhook handler takes 105 minutes, your mentor remains on screen with you until it passes all integration tests.",
+                  a: "That is the exact reason we built Grahak Setu. Unlike marketplaces that cut your call off at 30 minutes on the dot, our standard session window is 1 to 2 full hours. If a complex database migration or webhook handler takes 105 minutes, your mentor remains on screen with you until it passes all integration tests.",
                 },
                 {
                   q: 'How does the Grahak Setu 50+ brand pipeline actually work?',
