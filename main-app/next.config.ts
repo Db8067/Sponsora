@@ -48,8 +48,6 @@ const nextConfig: NextConfig = {
       // Mentorship route aliases
       { source: '/online-mentorship', destination: '/Online-Mentorship' },
       { source: '/Online-mentorship', destination: '/Online-Mentorship' },
-      { source: '/Online-Mentorship/:service', destination: '/online-mentorship/:service' },
-      { source: '/Online-mentorship/:service', destination: '/online-mentorship/:service' },
       // /brand-register-<brand-name> -> app/brand-register?brand=<brand-name>
       { source: '/brand-register-:slug', destination: '/brand-register?brand=:slug' },
       // /brand-welcome rewrite aliases

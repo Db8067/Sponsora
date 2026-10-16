@@ -1,43 +1,23 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
-import Script from 'next/script';
 import { useRouter } from 'next/navigation';
 import Snowfall from '@/components/Snowfall';
 import SellerNavbar from '@/components/SellerNavbar';
-import { useUser } from '@clerk/nextjs';
 import {
   Check,
   ArrowRight,
-  Loader2,
   Sparkles,
   ShieldCheck,
   Clock,
-  Zap,
-  Star,
-  Terminal,
-  MessageSquare,
   Handshake,
-  Globe,
-  Bot,
   CheckCircle2,
   X,
   Code2,
-  Layers,
-  TrendingUp,
 } from 'lucide-react';
 
-/* ─────────────────────────────────────────────────────────────────────────────
-   HOW TO SWAP / ADD CARD IMAGES:
-   To customize any image on this page:
-   1. Place your PNG/JPG image in the `public/images/` directory.
-   2. Update the `image` property in the PLANS or PROOF_CARDS arrays below to
-      point to `/images/your-image-name.png` (or any external HTTPS URL).
-───────────────────────────────────────────────────────────────────────────── */
-
-interface MentorshipPlan {
+export interface MentorshipPlan {
   id: string;
   tier: string;
   badge: string;
@@ -46,12 +26,11 @@ interface MentorshipPlan {
   quarterlyPrice: number;
   monthlyStrikethrough: string;
   quarterlyStrikethrough: string;
-  image: string;
   highlight?: boolean;
   features: string[];
 }
 
-const PLANS: MentorshipPlan[] = [
+export const PLANS: MentorshipPlan[] = [
   {
     id: 'dfy-engine',
     tier: 'Track 01: DFY Tech & Clients',
@@ -61,7 +40,6 @@ const PLANS: MentorshipPlan[] = [
     quarterlyPrice: 24000, // ₹8,000/mo effective (20% off)
     monthlyStrikethrough: '₹18,000',
     quarterlyStrikethrough: '₹48,000',
-    image: '/images/hero-art.png',
     highlight: false,
     features: [
       'Complete modern custom website built from scratch in Next.js 15',
@@ -82,7 +60,6 @@ const PLANS: MentorshipPlan[] = [
     quarterlyPrice: 36000, // ₹12,000/mo effective (20% off)
     monthlyStrikethrough: '₹28,000',
     quarterlyStrikethrough: '₹72,000',
-    image: '/images/tech_events_doodle.png',
     highlight: true,
     features: [
       '1 to 2 hour uncapped live sprints (no 30-min timers or rush)',
@@ -103,7 +80,6 @@ const PLANS: MentorshipPlan[] = [
     quarterlyPrice: 52000, // ₹17,333/mo effective (20% off)
     monthlyStrikethrough: '₹44,000',
     quarterlyStrikethrough: '₹1,10,000',
-    image: '/images/workshops_doodle.png',
     highlight: false,
     features: [
       'Everything in 1:1 Live Tech Mentorship (₹15,000 value)',
@@ -114,30 +90,6 @@ const PLANS: MentorshipPlan[] = [
       'Co-branded case study validation to win enterprise deals',
       'Save ₹3,000/month compared to standalone services',
     ],
-  },
-];
-
-const PROOF_CARDS = [
-  {
-    title: 'Enterprise WhatsApp Automation',
-    tag: 'Meta Cloud API',
-    metric: '98.4% Open Rate',
-    sub: 'Sub-1s handoff with CRM & Google Sheets auto-sync',
-    image: '/images/sell_online_1.png',
-  },
-  {
-    title: 'Autonomous Multi-Agent Swarm',
-    tag: 'LangChain + pgvector',
-    metric: '12 Production Workflows',
-    sub: 'Multi-agent RAG reasoning with deterministic tool calling',
-    image: '/images/tech_events_doodle.png',
-  },
-  {
-    title: 'High-Converting Web App',
-    tag: 'Next.js 15 + Tailwind',
-    metric: '0.8s Mobile Speed',
-    sub: '100% Core Web Vitals score & direct UPI payment gateway',
-    image: '/images/hero-art.png',
   },
 ];
 
@@ -163,73 +115,46 @@ const TECH_STACK = [
 
 export default function MentorshipSubscriptionPage() {
   const router = useRouter();
-  const { isSignedIn, user } = useUser();
   const [billing, setBilling] = useState<'monthly' | 'quarterly'>('monthly');
-  const [selectedPlan, setSelectedPlan] = useState<string>('1on1-mentorship');
-  const [isProcessing, setIsProcessing] = useState<string | null>(null);
+  const [highlightedCardId, setHighlightedCardId] = useState<string>('1on1-mentorship');
+  const cardRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
-  const handleSubscribe = async (plan: MentorshipPlan) => {
-    setIsProcessing(plan.id);
+  // Scroll detection to highlight card and change button to pink when scrolled through
+  useEffect(() => {
+    const handleScroll = () => {
+      const windowCenter = window.innerHeight / 2;
+      let closestId = highlightedCardId;
+      let minDistance = Infinity;
 
-    if (!isSignedIn) {
-      router.push(`/sign-in?redirect_url=${encodeURIComponent('/mentorship-subscription')}`);
-      return;
-    }
+      Object.entries(cardRefs.current).forEach(([id, el]) => {
+        if (!el) return;
+        const rect = el.getBoundingClientRect();
+        const cardCenter = rect.top + rect.height / 2;
+        const distance = Math.abs(windowCenter - cardCenter);
 
-    const priceToPay = billing === 'quarterly' ? plan.quarterlyPrice : plan.monthlyPrice;
-
-    try {
-      const res = await fetch('/api/create-razorpay-order', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          amount: priceToPay,
-          planId: `Mentorship: ${plan.tier} (${billing})`,
-        }),
+        if (rect.bottom > 100 && rect.top < window.innerHeight - 80) {
+          if (distance < minDistance) {
+            minDistance = distance;
+            closestId = id;
+          }
+        }
       });
 
-      const orderData = await res.json();
-      if (!res.ok) {
-        alert('Failed to initialize subscription: ' + (orderData.error || 'Server error'));
-        return;
+      if (closestId && closestId !== highlightedCardId) {
+        setHighlightedCardId(closestId);
       }
+    };
 
-      const options = {
-        key: orderData.key_id,
-        amount: orderData.amount,
-        currency: orderData.currency,
-        name: 'GrahakSetu Mentorship',
-        description: `Enrollment in ${plan.tier} (${billing})`,
-        order_id: orderData.id,
-        handler: function (response: any) {
-          alert('Enrollment successful! Payment ID: ' + response.razorpay_payment_id + '\nOur lead mentor will reach out on WhatsApp within 60 minutes.');
-          router.push('/Online-Mentorship?enrolled=true');
-        },
-        prefill: {
-          name: user?.fullName || 'Mentee',
-          email: user?.primaryEmailAddress?.emailAddress || '',
-        },
-        theme: {
-          color: '#e11d48',
-        },
-      };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [highlightedCardId]);
 
-      const rzp = new (window as any).Razorpay(options);
-      rzp.on('payment.failed', function (response: any) {
-        alert('Payment Failed: ' + response.error.description);
-      });
-      rzp.open();
-    } catch (err: any) {
-      console.error(err);
-      alert('Network error while processing subscription.');
-    } finally {
-      setIsProcessing(null);
-    }
+  const handleGoToCheckout = (plan: MentorshipPlan) => {
+    router.push(`/client-checkout?plan=${encodeURIComponent(plan.id)}&billing=${encodeURIComponent(billing)}`);
   };
 
   return (
     <div className="flex flex-col min-h-screen bg-transparent relative selection:bg-pink-100 selection:text-primary">
-      <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="lazyOnload" />
       <Snowfall />
       <SellerNavbar />
 
@@ -280,10 +205,10 @@ export default function MentorshipSubscriptionPage() {
           </div>
         </div>
 
-        {/* 3 Pricing Cards Grid */}
+        {/* 3 Pricing Cards Grid (Images Removed, Scroll-Highlighted with White to Pink Button) */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch pt-2">
           {PLANS.map((plan) => {
-            const isSelected = selectedPlan === plan.id;
+            const isHighlighted = highlightedCardId === plan.id;
             const price = billing === 'quarterly' ? plan.quarterlyPrice : plan.monthlyPrice;
             const period = billing === 'quarterly' ? '/ quarter' : '/ month';
             const strikethrough = billing === 'quarterly' ? plan.quarterlyStrikethrough : plan.monthlyStrikethrough;
@@ -291,160 +216,100 @@ export default function MentorshipSubscriptionPage() {
             return (
               <div
                 key={plan.id}
-                onClick={() => setSelectedPlan(plan.id)}
-                className={`cursor-pointer rounded-3xl p-6 sm:p-8 transition-all flex flex-col justify-between relative backdrop-blur-md group ${
-                  plan.highlight
-                    ? 'bg-white/95 dark:bg-slate-900/95 border-2 border-primary shadow-2xl shadow-primary/20 scale-[1.02]'
-                    : isSelected
-                    ? 'bg-white/95 dark:bg-slate-900/95 border-2 border-pink-300 dark:border-pink-800 shadow-xl'
-                    : 'bg-white/85 dark:bg-slate-900/85 border border-pink-100 dark:border-white/10 shadow-lg hover:border-pink-200 hover:shadow-xl'
+                ref={(el) => {
+                  cardRefs.current[plan.id] = el;
+                }}
+                onMouseEnter={() => setHighlightedCardId(plan.id)}
+                onClick={() => setHighlightedCardId(plan.id)}
+                className={`cursor-pointer rounded-3xl p-6 sm:p-8 transition-all duration-300 flex flex-col justify-between relative backdrop-blur-md group ${
+                  isHighlighted
+                    ? 'bg-white/95 dark:bg-slate-900/95 border-2 border-primary shadow-2xl shadow-primary/25 scale-[1.02] ring-2 ring-primary/20 z-20'
+                    : 'bg-white/85 dark:bg-slate-900/85 border border-pink-100 dark:border-white/10 shadow-lg hover:border-pink-300 hover:shadow-xl'
                 }`}
               >
-                {/* Badge */}
-                <div className="flex items-center justify-between gap-2 mb-4">
-                  <span
-                    className={`inline-flex items-center px-3 py-1 rounded-full text-[11px] font-extrabold uppercase tracking-wider ${
-                      plan.highlight
-                        ? 'bg-primary text-white'
-                        : 'bg-pink-100 dark:bg-pink-900/40 text-primary dark:text-pink-300'
-                    }`}
-                  >
-                    {plan.badge}
-                  </span>
-                  {billing === 'quarterly' && (
-                    <span className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded-md border border-emerald-200 dark:border-emerald-800">
-                      20% Discount Applied
+                <div>
+                  {/* Badge */}
+                  <div className="flex items-center justify-between gap-2 mb-4">
+                    <span
+                      className={`inline-flex items-center px-3 py-1 rounded-full text-[11px] font-extrabold uppercase tracking-wider transition-colors duration-300 ${
+                        isHighlighted
+                          ? 'bg-primary text-white'
+                          : 'bg-pink-100 dark:bg-pink-900/40 text-primary dark:text-pink-300'
+                      }`}
+                    >
+                      {plan.badge}
                     </span>
-                  )}
-                </div>
-
-                {/* Card Artwork Image */}
-                <div className="w-full h-36 relative rounded-2xl overflow-hidden bg-pink-50/50 dark:bg-slate-800/50 mb-5 border border-pink-100/60 dark:border-white/5">
-                  <Image
-                    src={plan.image}
-                    alt={plan.tier}
-                    fill
-                    sizes="(max-width: 640px) 100vw, 360px"
-                    className="object-contain p-2 group-hover:scale-105 transition-transform duration-500"
-                  />
-                </div>
-
-                {/* Title & Tagline */}
-                <div className="space-y-2 mb-6">
-                  <h3 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
-                    {plan.tier}
-                  </h3>
-                  <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed min-h-[40px]">
-                    {plan.tagline}
-                  </p>
-                </div>
-
-                {/* Price */}
-                <div className="p-4 rounded-2xl bg-pink-50/50 dark:bg-slate-800/50 border border-pink-100 dark:border-white/10 mb-6">
-                  <div className="text-xs font-semibold text-slate-400 line-through">
-                    {strikethrough}
+                    {billing === 'quarterly' && (
+                      <span className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded-md border border-emerald-200 dark:border-emerald-800">
+                        20% Discount Applied
+                      </span>
+                    )}
                   </div>
-                  <div className="flex items-baseline gap-1 mt-0.5">
-                    <span className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white">
-                      ₹{price.toLocaleString('en-IN')}
-                    </span>
-                    <span className="text-xs font-bold text-slate-500 dark:text-slate-400">
-                      {period}
-                    </span>
+
+                  {/* Title & Tagline */}
+                  <div className="space-y-2 mb-6">
+                    <h3 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
+                      {plan.tier}
+                    </h3>
+                    <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed min-h-[44px]">
+                      {plan.tagline}
+                    </p>
                   </div>
-                  <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">
-                    {billing === 'quarterly' ? 'Billed quarterly · Priority Sprint Slots' : 'Monthly recurring retainer · Cancel anytime'}
-                  </p>
+
+                  {/* Price */}
+                  <div className="p-4 rounded-2xl bg-pink-50/50 dark:bg-slate-800/50 border border-pink-100 dark:border-white/10 mb-6">
+                    <div className="text-xs font-semibold text-slate-400 line-through">
+                      {strikethrough}
+                    </div>
+                    <div className="flex items-baseline gap-1 mt-0.5">
+                      <span className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-white">
+                        ₹{price.toLocaleString('en-IN')}
+                      </span>
+                      <span className="text-xs font-bold text-slate-500 dark:text-slate-400">
+                        {period}
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">
+                      {billing === 'quarterly' ? 'Billed quarterly · Priority Sprint Slots' : 'Monthly recurring retainer · Cancel anytime'}
+                    </p>
+                  </div>
+
+                  {/* Features List */}
+                  <div className="space-y-3 mb-8">
+                    <span className="text-[11px] font-extrabold uppercase text-slate-400 tracking-wider">
+                      Included in this Retainer
+                    </span>
+                    <ul className="space-y-2.5">
+                      {plan.features.map((feat, i) => (
+                        <li key={i} className="flex items-start gap-2.5 text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
+                          <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
+                          <span>{feat}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
 
-                {/* Features List */}
-                <div className="space-y-3 mb-8 flex-1">
-                  <span className="text-[11px] font-extrabold uppercase text-slate-400 tracking-wider">
-                    Included in this Retainer
-                  </span>
-                  <ul className="space-y-2.5">
-                    {plan.features.map((feat, i) => (
-                      <li key={i} className="flex items-start gap-2.5 text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
-                        <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
-                        <span>{feat}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                {/* CTA Button */}
+                {/* Subscription Card Action Button: White by default, Pink when scrolled through */}
                 <button
                   type="button"
                   onClick={(e) => {
                     e.stopPropagation();
-                    handleSubscribe(plan);
+                    handleGoToCheckout(plan);
                   }}
-                  disabled={isProcessing === plan.id}
-                  className={`w-full py-4 px-6 rounded-2xl font-black text-sm flex items-center justify-center gap-2 transition-all shadow-xl hover:scale-[1.02] active:scale-95 disabled:opacity-60 ${
-                    plan.highlight
-                      ? 'bg-gradient-to-r from-primary to-pink-500 hover:from-primary-dark hover:to-pink-600 text-white shadow-primary/25'
-                      : 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 hover:bg-slate-800 dark:hover:bg-slate-100 shadow-slate-900/10'
+                  className={`w-full py-4 px-6 rounded-2xl font-black text-sm flex items-center justify-center gap-2 transition-all duration-300 shadow-lg hover:scale-[1.02] active:scale-95 ${
+                    isHighlighted
+                      ? 'bg-gradient-to-r from-primary to-pink-500 hover:from-primary-dark hover:to-pink-600 text-white shadow-pink-500/25 ring-2 ring-pink-500/30'
+                      : 'bg-white dark:bg-slate-800 text-slate-800 dark:text-white border border-slate-200 dark:border-white/10 hover:border-pink-300 shadow-sm'
                   }`}
                 >
-                  {isProcessing === plan.id ? (
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                  ) : (
-                    <>
-                      <span>Enroll in {plan.badge}</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </>
-                  )}
+                  <span>Pay ₹{price.toLocaleString('en-IN')}</span>
+                  <ArrowRight className="w-4 h-4" />
                 </button>
               </div>
             );
           })}
         </div>
-
-        {/* ── Visual Proof & Production Delivery ── */}
-        <section className="space-y-6 pt-4">
-          <div className="text-center max-w-xl mx-auto space-y-2">
-            <span className="text-xs font-black uppercase text-primary tracking-wider">Production Output</span>
-            <h2 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white">
-              Real Systems Built During Mentorship Sprints
-            </h2>
-            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
-              Zero toy projects. You build real production systems deployed on live domains and cloud infrastructure.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {PROOF_CARDS.map((card, i) => (
-              <div
-                key={i}
-                className="bg-white/80 dark:bg-slate-800/80 rounded-2xl p-5 border border-pink-100 dark:border-white/10 shadow-sm backdrop-blur-sm space-y-4 group"
-              >
-                <div className="w-full h-36 relative rounded-xl overflow-hidden bg-pink-50/60 dark:bg-slate-900/50 border border-pink-100 dark:border-white/5">
-                  <Image
-                    src={card.image}
-                    alt={card.title}
-                    fill
-                    sizes="(max-width: 640px) 100vw, 320px"
-                    className="object-contain p-2 group-hover:scale-105 transition-transform duration-500"
-                  />
-                </div>
-                <div className="space-y-1">
-                  <span className="text-[10px] font-black uppercase text-primary tracking-wider bg-pink-100 dark:bg-pink-900/40 px-2 py-0.5 rounded-md">
-                    {card.tag}
-                  </span>
-                  <h4 className="font-bold text-base text-slate-900 dark:text-white pt-1">
-                    {card.title}
-                  </h4>
-                  <p className="text-xs font-black text-emerald-600 dark:text-emerald-400">
-                    {card.metric}
-                  </p>
-                  <p className="text-xs text-slate-500 dark:text-slate-400">
-                    {card.sub}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
 
         {/* ── Production Tool Stack ── */}
         <section className="bg-white/80 dark:bg-slate-800/80 rounded-3xl p-6 sm:p-10 border border-pink-100 dark:border-white/10 shadow-sm backdrop-blur-sm space-y-6">
@@ -483,7 +348,7 @@ export default function MentorshipSubscriptionPage() {
               Side-by-Side Track Comparison
             </h3>
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-              Complete transparency into each track's live sprint access and deliverable commitments.
+              Complete transparency into each track&apos;s live sprint access and deliverable commitments.
             </p>
           </div>
 

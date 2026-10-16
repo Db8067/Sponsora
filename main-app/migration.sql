@@ -304,3 +304,56 @@ WHERE NOT EXISTS (
 
 NOTIFY pgrst, 'reload schema';
 
+-- ============================================================================
+-- 9) Client Checkout & Mentorship Subscription Payments Table
+-- ============================================================================
+CREATE TABLE IF NOT EXISTS public.client_payments (
+  id                  uuid NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
+  client_name         text NOT NULL,
+  phone               text NOT NULL,
+  email               text NOT NULL,
+  goal                text,
+  plan_id             text NOT NULL,
+  plan_tier           text NOT NULL,
+  billing_cycle       text DEFAULT 'monthly',
+  amount              numeric NOT NULL,
+  original_amount     numeric,
+  savings             numeric,
+  currency            text DEFAULT 'INR',
+  razorpay_order_id   text,
+  razorpay_payment_id text,
+  razorpay_signature  text,
+  payment_status      text NOT NULL DEFAULT 'initiated' CHECK (payment_status IN ('initiated', 'paid', 'failed', 'refunded')),
+  payment_mode        text DEFAULT 'test',
+  metadata            jsonb DEFAULT '{}'::jsonb,
+  created_at          timestamp with time zone NOT NULL DEFAULT timezone('utc'::text, now()),
+  updated_at          timestamp with time zone NOT NULL DEFAULT timezone('utc'::text, now())
+);
+
+CREATE INDEX IF NOT EXISTS idx_client_payments_email       ON public.client_payments USING btree (email);
+CREATE INDEX IF NOT EXISTS idx_client_payments_phone       ON public.client_payments USING btree (phone);
+CREATE INDEX IF NOT EXISTS idx_client_payments_status      ON public.client_payments USING btree (payment_status);
+CREATE INDEX IF NOT EXISTS idx_client_payments_order_id    ON public.client_payments USING btree (razorpay_order_id);
+CREATE INDEX IF NOT EXISTS idx_client_payments_created_at  ON public.client_payments USING btree (created_at desc);
+CREATE INDEX IF NOT EXISTS idx_client_payments_plan_id     ON public.client_payments USING btree (plan_id);
+
+ALTER TABLE public.client_payments ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Allow checkout to insert client payments" ON public.client_payments;
+CREATE POLICY "Allow checkout to insert client payments"
+  ON public.client_payments FOR INSERT TO anon, authenticated WITH CHECK (true);
+
+DROP POLICY IF EXISTS "Allow checkout to update client payments" ON public.client_payments;
+CREATE POLICY "Allow checkout to update client payments"
+  ON public.client_payments FOR UPDATE TO anon, authenticated USING (true);
+
+DROP POLICY IF EXISTS "Allow select client payments" ON public.client_payments;
+CREATE POLICY "Allow select client payments"
+  ON public.client_payments FOR SELECT TO anon, authenticated USING (true);
+
+DROP POLICY IF EXISTS "Allow service role management of client payments" ON public.client_payments;
+CREATE POLICY "Allow service role management of client payments"
+  ON public.client_payments FOR ALL TO service_role USING (true);
+
+NOTIFY pgrst, 'reload schema';
+

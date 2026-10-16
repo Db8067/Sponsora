@@ -16,38 +16,11 @@ import {
   Star,
   ArrowRight,
   BookOpen,
-  Bot,
-  Mic,
-  Laptop,
-  Search,
-  Globe,
-  Video,
   Handshake,
-  Users,
   ChevronDown,
-  Check,
-  X,
-  Phone,
-  Mail,
-  Calendar,
-  Sparkles,
-  Zap,
-  Building,
-  Target,
 } from 'lucide-react';
 
 export default function OnlineMentorshipPage() {
-  // Form submission state
-  const [formData, setFormData] = useState({
-    fullName: '',
-    phone: '',
-    email: '',
-    goal: 'whatsapp',
-    stage: 'starter',
-  });
-  const [submitted, setSubmitted] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
   // FAQ Accordion open index
   const [openFaq, setOpenFaq] = useState<number | null>(0);
 
@@ -71,15 +44,6 @@ export default function OnlineMentorshipPage() {
     setOpenFaq(openFaq === index ? null : index);
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    // Simulate diagnostic request logging
-    await new Promise((resolve) => setTimeout(resolve, 600));
-    setIsSubmitting(false);
-    setSubmitted(true);
-  };
-
   return (
     <div className="flex flex-col min-h-screen bg-transparent relative selection:bg-pink-100 selection:text-primary">
       <Snowfall />
@@ -88,28 +52,6 @@ export default function OnlineMentorshipPage() {
       <SellerNavbar />
 
       <main className="flex-1 w-full relative z-10 pt-4 sm:pt-6">
-        {/* Cohort Trust Bar */}
-        <section className="w-full bg-white/70 dark:bg-slate-900/70 border-b border-pink-100 dark:border-white/10 py-2.5 px-4 sm:px-8 backdrop-blur-md">
-          <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3 text-xs">
-            <div className="flex items-center gap-2.5">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 font-bold border border-emerald-200 dark:border-emerald-800">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                Active Cohort Open
-              </span>
-              <span className="text-slate-600 dark:text-slate-300 hidden sm:inline">
-                Strict limit: Only 12 mentees accepted per month for uncompromised mentor focus.
-              </span>
-            </div>
-            <div className="flex items-center gap-3 sm:gap-4 text-slate-600 dark:text-slate-300 font-medium">
-              <span className="flex items-center gap-1 text-emerald-600 dark:text-emerald-400 font-bold">
-                <CheckCircle2 className="w-4 h-4" /> 100% Doubt Resolution Guarantee
-              </span>
-              <span className="hidden md:inline text-slate-300 dark:text-slate-700">•</span>
-              <span className="hidden md:inline">Zero 30-Min Timers</span>
-            </div>
-          </div>
-        </section>
-
         {/* Hero Section */}
         <section className="w-full py-8 sm:py-12 md:py-16 px-4 sm:px-6 lg:px-8">
           <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
@@ -174,10 +116,12 @@ export default function OnlineMentorshipPage() {
               {/* Action Buttons */}
               <div className="w-full pt-1 flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
                 <a
-                  href="#apply"
+                  href="https://wa.me/918527296771?text=Hi%2C%20I%20would%20like%20to%20get%20started%20with%201%3A1%20Personalized%20Mentorship%20at%20Grahak%20Setu."
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-gradient-to-r from-primary to-pink-500 hover:from-primary-dark hover:to-pink-600 text-white font-bold text-sm sm:text-base shadow-xl shadow-primary/25 transition-all hover:scale-[1.02] active:scale-95 text-center"
                 >
-                  <span>Book Free 1:1 Diagnostic Call</span>
+                  <span>Let&apos;s start</span>
                   <ArrowRight className="w-4 h-4" />
                 </a>
                 <Link
@@ -241,7 +185,7 @@ export default function OnlineMentorshipPage() {
                 Why 30-Minute Mentorship Calls Are Completely Broken
               </h2>
               <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300">
-                You don't need generic advice. You need an elite operator sitting beside your IDE, untangling architecture, fixing edge cases, and pushing to production together.
+                You don&apos;t need generic advice. You need an elite operator sitting beside your IDE, untangling architecture, fixing edge cases, and pushing to production together.
               </p>
             </div>
 
@@ -345,7 +289,7 @@ export default function OnlineMentorshipPage() {
                   <div className="p-3.5 rounded-xl bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-100 dark:border-emerald-900/30 space-y-1">
                     <div className="flex justify-between font-bold text-emerald-800 dark:text-emerald-300">
                       <span>00:50 - 01:20 (30 Min)</span>
-                      <span>Stress-Test & Edge Cases</span>
+                      <span>Stress-Test &amp; Edge Cases</span>
                     </div>
                     <p className="text-slate-600 dark:text-slate-400">
                       Testing failure scenarios, rate-limits, database triggers, and prompting robustness live with you.
@@ -385,13 +329,13 @@ export default function OnlineMentorshipPage() {
                 </div>
                 <div className="flex flex-wrap items-center gap-3 text-xs font-semibold">
                   <span className="flex items-center gap-1.5 text-slate-600 dark:text-slate-400">
-                    <span className="w-3 h-3 rounded bg-slate-400" /> 15% Strategy & Sync
+                    <span className="w-3 h-3 rounded bg-slate-400" /> 15% Strategy &amp; Sync
                   </span>
                   <span className="flex items-center gap-1.5 text-primary">
-                    <span className="w-3 h-3 rounded bg-primary" /> 60% Build & Code
+                    <span className="w-3 h-3 rounded bg-primary" /> 60% Build &amp; Code
                   </span>
                   <span className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400">
-                    <span className="w-3 h-3 rounded bg-emerald-500" /> 25% Testing & Deploy
+                    <span className="w-3 h-3 rounded bg-emerald-500" /> 25% Testing &amp; Deploy
                   </span>
                 </div>
               </div>
@@ -406,26 +350,23 @@ export default function OnlineMentorshipPage() {
               <div className="grid grid-cols-3 text-center text-xs text-slate-600 dark:text-slate-400 pt-1">
                 <div>15m Rapid Alignment</div>
                 <div className="font-bold text-primary">60m Active Pair Execution</div>
-                <div>25m Live Verification & Client Demo</div>
+                <div>25m Live Verification &amp; Client Demo</div>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Comprehensive Skill Curriculum Section (All 17 Tracks) */}
+        {/* Comprehensive Skill Curriculum Section (All 17 Tracks - Clean Headlines Only) */}
         <section id="curriculum" className="w-full py-16 px-4 sm:px-6 lg:px-8">
-          <div className="max-w-7xl mx-auto space-y-12">
+          <div className="max-w-7xl mx-auto space-y-8">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-              <div className="max-w-3xl space-y-3">
+              <div className="max-w-3xl space-y-2">
                 <span className="text-xs font-extrabold uppercase tracking-widest text-primary">
                   17 Hands-On Mastery Tracks
                 </span>
                 <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 dark:text-white tracking-tight">
                   Everything We Build With You 1-on-1
                 </h2>
-                <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300">
-                  No generic slideshows or pre-recorded fluff. You pick any skill or combine them. Click any track to see the full deep-dive syllabus.
-                </p>
               </div>
               <Link
                 href="/mentorship-subscription"
@@ -436,65 +377,17 @@ export default function OnlineMentorshipPage() {
               </Link>
             </div>
 
-            {/* Curriculum Grid (17 Tracks) */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* Clean Track Headlines - No Cards, No Images, No Descriptions */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-4 pt-2">
               {MENTORSHIP_SERVICES.map((s, idx) => (
-                <Link
-                  key={s.slug}
-                  href={`/online-mentorship/${s.slug}`}
-                  className="group p-6 bg-white/85 dark:bg-slate-850/85 rounded-3xl border border-pink-100 dark:border-white/10 hover:border-pink-300 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all flex flex-col justify-between space-y-5 backdrop-blur-sm"
-                >
-                  <div className="space-y-4">
-                    {/* Cute Doodle Header */}
-                    <div className="w-full aspect-[16/10] relative rounded-2xl overflow-hidden bg-pink-50/50 dark:bg-slate-900 border border-pink-100 dark:border-white/10 shadow-inner flex items-center justify-center">
-                      <Image
-                        src={s.doodle}
-                        alt={s.title}
-                        fill
-                        sizes="(max-width: 640px) 300px, 360px"
-                        className="object-contain p-2 group-hover:scale-105 transition-transform duration-500"
-                      />
-                    </div>
-
-                    <div className="space-y-1">
-                      <div className="flex items-center justify-between">
-                        <span className="text-[10px] font-extrabold text-primary uppercase tracking-wider px-2 py-0.5 rounded bg-pink-100 dark:bg-pink-900/40">
-                          Track {String(idx + 1).padStart(2, '0')} · {s.badge}
-                        </span>
-                        <span className="material-symbols-outlined text-slate-300 group-hover:text-pink-500 text-[18px] transition-colors">
-                          arrow_forward
-                        </span>
-                      </div>
-                      <h3 className="font-extrabold text-base text-slate-900 dark:text-white group-hover:text-primary transition-colors">
-                        {s.title}
-                      </h3>
-                    </div>
-
-                    <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed line-clamp-3">
-                      {s.description}
-                    </p>
-
-                    <div className="flex flex-wrap gap-1.5 pt-1">
-                      {s.tools.slice(0, 3).map((tool, i) => (
-                        <span
-                          key={i}
-                          className="px-2 py-0.5 rounded-md text-[10px] font-semibold bg-pink-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-pink-100 dark:border-white/10"
-                        >
-                          {tool}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="pt-3 border-t border-pink-100 dark:border-white/10 flex items-center justify-between text-xs font-bold">
-                    <span className="text-slate-500 dark:text-slate-400 text-[11px] flex items-center gap-1">
-                      <Clock className="w-3.5 h-3.5 text-emerald-500" /> 1-2 Hr Live Sprints
-                    </span>
-                    <span className="text-primary group-hover:underline flex items-center gap-0.5">
-                      Explore Track →
-                    </span>
-                  </div>
-                </Link>
+                <div key={s.slug} className="flex items-start gap-3 py-1">
+                  <span className="text-xs font-black text-primary shrink-0 mt-0.5">
+                    {String(idx + 1).padStart(2, '0')}.
+                  </span>
+                  <h3 className="font-bold text-sm sm:text-base text-slate-900 dark:text-white leading-snug">
+                    {s.title}
+                  </h3>
+                </div>
               ))}
             </div>
           </div>
@@ -538,7 +431,7 @@ export default function OnlineMentorshipPage() {
               <div className="p-4 rounded-2xl bg-white/90 dark:bg-slate-800/90 border border-emerald-200 dark:border-emerald-900/40 shadow-sm flex items-center justify-between">
                 <div>
                   <div className="font-black text-lg text-slate-900 dark:text-white">54 Active Brands</div>
-                  <p className="text-xs text-slate-500 dark:text-slate-400">Looking for AI & WhatsApp Automation today</p>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">Looking for AI &amp; WhatsApp Automation today</p>
                 </div>
                 <span className="px-4 py-1.5 rounded-full bg-emerald-600 text-white font-bold text-xs shadow-md">
                   100% Pipeline Access
@@ -552,7 +445,7 @@ export default function OnlineMentorshipPage() {
                 <div className="flex items-center gap-2">
                   <span className="w-3 h-3 rounded-full bg-emerald-500 animate-pulse" />
                   <span className="font-bold text-sm sm:text-base text-slate-800 dark:text-white">
-                    Recent Mentee Placements & Deployments
+                    Recent Mentee Placements &amp; Deployments
                   </span>
                 </div>
                 <span className="text-xs font-semibold text-primary">Verified by Grahak Setu</span>
@@ -568,7 +461,7 @@ export default function OnlineMentorshipPage() {
                         Contract Closed
                       </span>
                     </div>
-                    <p className="text-slate-500 dark:text-slate-400">Automated WhatsApp Abandoned Cart & Order Tracking Bot</p>
+                    <p className="text-slate-500 dark:text-slate-400">Automated WhatsApp Abandoned Cart &amp; Order Tracking Bot</p>
                   </div>
                   <div className="text-left sm:text-right shrink-0">
                     <span className="font-black text-emerald-600 dark:text-emerald-400 text-sm">₹85,000 Retainer</span>
@@ -617,297 +510,7 @@ export default function OnlineMentorshipPage() {
           </div>
         </section>
 
-        {/* 3-Step Enrollment Path */}
-        <section className="w-full py-16 px-4 sm:px-6 lg:px-8">
-          <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
-            {/* Visual presentation */}
-            <div className="lg:col-span-7 relative rounded-3xl overflow-hidden shadow-2xl group border border-pink-200 dark:border-white/10 bg-white/90 dark:bg-slate-900 p-6 flex flex-col items-center justify-center">
-              <div className="w-full aspect-[16/10] relative rounded-2xl overflow-hidden">
-                <Image
-                  src="/workshops_doodle.png"
-                  alt="Live 1:1 Architecture & Production Sprints"
-                  fill
-                  sizes="(max-width: 640px) 340px, 500px"
-                  className="object-contain group-hover:scale-105 transition-transform duration-700"
-                />
-              </div>
-              <div className="w-full pt-4 text-center sm:text-left">
-                <span className="inline-block px-3 py-1 rounded-full bg-primary text-white text-[11px] font-bold mb-2">
-                  PRODUCTION GRADE ARCHITECTURE
-                </span>
-                <h3 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">
-                  From Blank Screen to Boardroom Demos
-                </h3>
-                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 max-w-xl mt-1">
-                  Every workflow is designed so you can present it confidently to founders, CTOs, and non-technical stakeholders alike.
-                </p>
-              </div>
-            </div>
-
-            {/* 3 Steps */}
-            <div className="lg:col-span-5 space-y-6">
-              <div className="space-y-2">
-                <span className="text-xs font-extrabold uppercase tracking-widest text-primary">
-                  Zero Risk Onboarding
-                </span>
-                <h2 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight">
-                  How Your Mentorship Sprints Begin
-                </h2>
-                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300">
-                  We don&apos;t accept anyone without making sure we can genuinely double their skills and client income.
-                </p>
-              </div>
-
-              <div className="space-y-4">
-                <div className="flex items-start gap-4 p-4 rounded-2xl bg-white/80 dark:bg-slate-800/80 border border-pink-100 dark:border-white/10 shadow-sm">
-                  <div className="w-9 h-9 rounded-xl bg-primary text-white flex items-center justify-center font-bold text-base shrink-0 shadow-sm shadow-primary/30">
-                    1
-                  </div>
-                  <div className="space-y-0.5">
-                    <h4 className="font-bold text-sm text-slate-900 dark:text-white">
-                      15-Minute Technical Diagnostic (Free)
-                    </h4>
-                    <p className="text-xs text-slate-500 dark:text-slate-400">
-                      We review your current skillset, target project, and agency or career goals to ensure a 100% fit.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-4 p-4 rounded-2xl bg-white/80 dark:bg-slate-800/80 border border-pink-100 dark:border-white/10 shadow-sm">
-                  <div className="w-9 h-9 rounded-xl bg-primary text-white flex items-center justify-center font-bold text-base shrink-0 shadow-sm shadow-primary/30">
-                    2
-                  </div>
-                  <div className="space-y-0.5">
-                    <h4 className="font-bold text-sm text-slate-900 dark:text-white">
-                      Custom Sprint Roadmap & WhatsApp Onboarding
-                    </h4>
-                    <p className="text-xs text-slate-500 dark:text-slate-400">
-                      You receive your dedicated mentor channel, sprint calendar, and setup checklist on WhatsApp within 2 hours.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-4 p-4 rounded-2xl bg-white/80 dark:bg-slate-800/80 border border-emerald-200 dark:border-emerald-800/40 shadow-sm">
-                  <div className="w-9 h-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-bold text-base shrink-0 shadow-sm shadow-emerald-600/30">
-                    3
-                  </div>
-                  <div className="space-y-0.5">
-                    <h4 className="font-bold text-sm text-slate-900 dark:text-white">
-                      First 2-Hour Deep Sprint
-                    </h4>
-                    <p className="text-xs text-slate-500 dark:text-slate-400">
-                      We dive straight into your primary blocker or project architecture. By minute 90, you have working code running live.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* High-Trust Booking Form Section */}
-        <section id="apply" className="w-full py-16 px-4 sm:px-6 lg:px-8">
-          <div className="max-w-7xl mx-auto">
-            <div className="bg-white/95 dark:bg-slate-850/95 rounded-3xl shadow-2xl overflow-hidden grid grid-cols-1 lg:grid-cols-12 border border-pink-200 dark:border-white/10 backdrop-blur-md">
-              {/* Form Side */}
-              <div className="lg:col-span-7 p-6 sm:p-10 space-y-6">
-                <div className="space-y-2">
-                  <span className="inline-flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 text-xs font-bold uppercase tracking-wider">
-                    <Clock className="w-3.5 h-3.5" /> 4 Cohort Spots Remaining For This Cycle
-                  </span>
-                  <h3 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight">
-                    Lock In Your 1:1 Diagnostic Call
-                  </h3>
-                  <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300">
-                    Speak directly with a lead mentor. We will audit your current project architecture and outline your exact 30-day build sprint. Completely free, no obligations.
-                  </p>
-                </div>
-
-                {submitted ? (
-                  <div className="p-8 bg-emerald-50 dark:bg-emerald-950/40 rounded-2xl space-y-4 text-center border border-emerald-200 dark:border-emerald-800/40 animate-in fade-in zoom-in-95">
-                    <div className="w-16 h-16 rounded-full bg-emerald-500 text-white mx-auto flex items-center justify-center shadow-lg shadow-emerald-500/25">
-                      <Check className="w-8 h-8 stroke-[3]" />
-                    </div>
-                    <h4 className="text-xl font-bold text-slate-900 dark:text-white">
-                      Your Diagnostic Session is Requested!
-                    </h4>
-                    <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 max-w-md mx-auto">
-                      Our lead mentor will reach out on WhatsApp to <strong className="text-slate-900 dark:text-white">{formData.phone || 'your phone'}</strong> within 90 minutes with your direct Google Meet link and preparatory checklist.
-                    </p>
-                    <div className="p-3 rounded-xl bg-white dark:bg-slate-800 inline-flex items-center gap-2 text-xs text-emerald-700 dark:text-emerald-300 font-bold border border-emerald-200 dark:border-white/10 shadow-sm">
-                      <MessageSquare className="w-4 h-4" /> Priority WhatsApp notification queued.
-                    </div>
-                  </div>
-                ) : (
-                  <form onSubmit={handleSubmit} className="space-y-4">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div className="space-y-1">
-                        <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
-                          Your Full Name
-                        </label>
-                        <input
-                          required
-                          type="text"
-                          value={formData.fullName}
-                          onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
-                          placeholder="e.g. Aryan Mehra"
-                          className="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-pink-100 dark:border-white/10 text-slate-900 dark:text-white placeholder:text-slate-400 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 transition-all"
-                        />
-                      </div>
-                      <div className="space-y-1">
-                        <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
-                          WhatsApp Number (For Direct Call)
-                        </label>
-                        <input
-                          required
-                          type="tel"
-                          value={formData.phone}
-                          onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                          placeholder="+91 98765 43210"
-                          className="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-pink-100 dark:border-white/10 text-slate-900 dark:text-white placeholder:text-slate-400 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 transition-all"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="space-y-1">
-                      <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
-                        Email Address
-                      </label>
-                      <input
-                        required
-                        type="email"
-                        value={formData.email}
-                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                        placeholder="aryan@yourcompany.com"
-                        className="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-pink-100 dark:border-white/10 text-slate-900 dark:text-white placeholder:text-slate-400 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 transition-all"
-                      />
-                    </div>
-
-                    <div className="space-y-1">
-                      <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
-                        What is your primary goal or biggest technical blocker?
-                      </label>
-                      <select
-                        value={formData.goal}
-                        onChange={(e) => setFormData({ ...formData, goal: e.target.value })}
-                        className="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-800 border border-pink-100 dark:border-white/10 text-slate-900 dark:text-white text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 transition-all"
-                      >
-                        <option value="whatsapp">Building WhatsApp AI Bot for clients</option>
-                        <option value="rag">Creating Custom AI Agent / RAG Pipeline</option>
-                        <option value="clients">Closing International $2k-$5k Retainers</option>
-                        <option value="voice">Building Real-time Voice AI Callers</option>
-                        <option value="fullstack">Fullstack SaaS Application Deployment</option>
-                        <option value="other">Multiple overlapping goals / Need audit</option>
-                      </select>
-                    </div>
-
-                    <div className="space-y-1.5">
-                      <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
-                        Current Monthly Revenue or Career Stage
-                      </label>
-                      <div className="grid grid-cols-3 gap-2 text-xs">
-                        {['starter', 'growth', 'agency'].map((stg) => (
-                          <label
-                            key={stg}
-                            className={`flex items-center justify-center p-3 rounded-xl border cursor-pointer font-bold transition-all text-center ${
-                              formData.stage === stg
-                                ? 'bg-primary text-white border-primary shadow-sm shadow-primary/20'
-                                : 'bg-slate-50 dark:bg-slate-800 border-pink-100 dark:border-white/10 text-slate-700 dark:text-slate-300 hover:border-pink-300'
-                            }`}
-                          >
-                            <input
-                              type="radio"
-                              name="stage"
-                              value={stg}
-                              checked={formData.stage === stg}
-                              onChange={() => setFormData({ ...formData, stage: stg })}
-                              className="sr-only"
-                            />
-                            <span>
-                              {stg === 'starter' ? '₹0 - ₹50k' : stg === 'growth' ? '₹50k - ₹2L' : '₹2L+ (Agency)'}
-                            </span>
-                          </label>
-                        ))}
-                      </div>
-                    </div>
-
-                    <div className="pt-2">
-                      <button
-                        type="submit"
-                        disabled={isSubmitting}
-                        className="w-full py-4 rounded-xl bg-gradient-to-r from-primary to-pink-500 hover:from-primary-dark hover:to-pink-600 text-white font-bold text-sm sm:text-base shadow-xl shadow-primary/25 transition-all hover:scale-[1.01] active:scale-95 flex items-center justify-center gap-2 disabled:opacity-50"
-                      >
-                        <span>
-                          {isSubmitting ? 'Reserving...' : 'Confirm Diagnostic Booking & Lock ₹15,000 Rate'}
-                        </span>
-                        <Calendar className="w-4 h-4" />
-                      </button>
-                    </div>
-
-                    <p className="text-[11px] text-center text-slate-500 dark:text-slate-400">
-                      🔒 100% Privacy. We never share your data. Direct mentor WhatsApp response within 90 minutes.
-                    </p>
-                  </form>
-                )}
-              </div>
-
-              {/* Pledge Side */}
-              <div className="lg:col-span-5 bg-gradient-to-br from-pink-50/80 via-white to-pink-100/60 dark:from-slate-800 dark:via-slate-850 dark:to-slate-800 p-6 sm:p-10 flex flex-col justify-between space-y-6 border-t lg:border-t-0 lg:border-l border-pink-200 dark:border-white/10">
-                <div className="space-y-4">
-                  <div>
-                    <span className="text-xs font-bold uppercase tracking-wider text-primary">
-                      MENTORSHIP COMMITMENT
-                    </span>
-                    <h4 className="text-xl font-bold text-slate-900 dark:text-white mt-0.5">
-                      The NextHour Pledge
-                    </h4>
-                  </div>
-
-                  <div className="space-y-3 text-xs">
-                    <div className="p-3.5 rounded-2xl bg-white/90 dark:bg-slate-900/90 shadow-sm border border-pink-100 dark:border-white/5 space-y-1">
-                      <span className="font-bold flex items-center gap-1.5 text-slate-800 dark:text-white">
-                        <ShieldCheck className="w-4 h-4 text-emerald-500" /> Real 1-on-1, Never Pre-Recorded
-                      </span>
-                      <p className="text-slate-500 dark:text-slate-400">
-                        Every minute is spent live with you on Google Meet or Screen-Share. Zero generic slides.
-                      </p>
-                    </div>
-
-                    <div className="p-3.5 rounded-2xl bg-white/90 dark:bg-slate-900/90 shadow-sm border border-pink-100 dark:border-white/5 space-y-1">
-                      <span className="font-bold flex items-center gap-1.5 text-slate-800 dark:text-white">
-                        <ShieldCheck className="w-4 h-4 text-emerald-500" /> Unrushed Doubt Resolution
-                      </span>
-                      <p className="text-slate-500 dark:text-slate-400">
-                        If your bug takes 1 hour and 45 minutes to solve, we stay until it works in production.
-                      </p>
-                    </div>
-
-                    <div className="p-3.5 rounded-2xl bg-white/90 dark:bg-slate-900/90 shadow-sm border border-pink-100 dark:border-white/5 space-y-1">
-                      <span className="font-bold flex items-center gap-1.5 text-slate-800 dark:text-white">
-                        <ShieldCheck className="w-4 h-4 text-emerald-500" /> Grahak Setu Brand Backing
-                      </span>
-                      <p className="text-slate-500 dark:text-slate-400">
-                        Access to 50+ enterprise and D2C brands looking for automation partners.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="bg-white/95 dark:bg-slate-900/90 p-4 rounded-2xl border border-pink-200 dark:border-white/10 shadow-sm space-y-1">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-slate-700 dark:text-slate-300">Transparent Retainer</span>
-                    <span className="text-xl font-black text-primary">₹15,000 / mo</span>
-                  </div>
-                  <p className="text-[11px] text-slate-500 dark:text-slate-400">
-                    Flat, predictable, and cancelable with a single tap. No minimum lock-in period.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* FAQ Accordion Section */}
+        {/* FAQ Accordion Section (LAST SECTION ON THE PAGE) */}
         <section className="w-full py-16 px-4 sm:px-6 lg:px-8 bg-white/50 dark:bg-slate-900/50 border-t border-pink-100 dark:border-white/10">
           <div className="max-w-3xl mx-auto space-y-8">
             <div className="text-center space-y-2">
@@ -967,32 +570,6 @@ export default function OnlineMentorshipPage() {
             </div>
           </div>
         </section>
-
-        {/* Sticky Bottom Quick Conversion Bar */}
-        <div className="sticky bottom-0 left-0 right-0 w-full bg-white/95 dark:bg-slate-900/95 backdrop-blur-md py-3 px-4 sm:px-8 z-40 shadow-2xl border-t-2 border-primary/20">
-          <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
-            <div className="flex items-center gap-4">
-              <div className="hidden sm:block">
-                <span className="text-[10px] font-extrabold uppercase text-primary">1:1 Deep Mentorship</span>
-                <p className="text-sm font-black text-slate-900 dark:text-white">
-                  ₹15,000 <span className="text-xs font-normal text-slate-500">/ month flat</span>
-                </p>
-              </div>
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 text-xs font-bold">
-                <span className="w-2 h-2 rounded-full bg-emerald-500" />
-                <span>1-2 Hr Sprints Guaranteed</span>
-              </div>
-            </div>
-
-            <a
-              href="#apply"
-              className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-primary to-pink-500 hover:from-primary-dark hover:to-pink-600 text-white font-bold text-xs sm:text-sm shadow-md transition-all flex items-center gap-1.5"
-            >
-              <span>Apply For Diagnostic Call</span>
-              <ArrowRight className="w-4 h-4" />
-            </a>
-          </div>
-        </div>
       </main>
     </div>
   );
