@@ -14,7 +14,7 @@ import {
 } from 'lucide-react';
 
 export default function BrandDashboardPopup() {
-  const { user, isLoaded } = useUser();
+  const { user, isSignedIn, isLoaded } = useUser();
   const [isOpen, setIsOpen] = useState(false);
   const [brandInfo, setBrandInfo] = useState<{
     brand_name: string;
@@ -23,35 +23,27 @@ export default function BrandDashboardPopup() {
   } | null>(null);
 
   useEffect(() => {
-    // Read from cookie first for instant check
-    let cookieEmail = '';
-    let cookieBrand = '';
-    try {
-      const match = document.cookie.match(/brand_welcome_data=([^;]+)/);
-      if (match) {
-        const c = JSON.parse(decodeURIComponent(match[1]));
-        cookieEmail = c.email || '';
-        cookieBrand = c.brand || '';
-      }
-    } catch {
-      /* ignore */
+    if (!isLoaded) return;
+
+    // Require the user to be logged in before showing "Go to your Brand Dashboard" popup
+    if (!isSignedIn || !user) {
+      setBrandInfo(null);
+      setIsOpen(false);
+      return;
     }
 
-    const checkEmail = user?.primaryEmailAddress?.emailAddress || cookieEmail;
-    if (!checkEmail && !isLoaded) return;
+    const checkEmail =
+      user.primaryEmailAddress?.emailAddress ||
+      user.emailAddresses?.[0]?.emailAddress ||
+      '';
+    if (!checkEmail) return;
 
     const checkPaidStatus = async () => {
       try {
-        const q = checkEmail
-          ? `?email=${encodeURIComponent(checkEmail)}`
-          : cookieBrand
-          ? `?brand=${encodeURIComponent(cookieBrand)}`
-          : '';
-
-        const res = await fetch(`/api/brand/check-status${q}`);
+        const res = await fetch(`/api/brand/check-status?email=${encodeURIComponent(checkEmail)}`);
         const data = await res.json().catch(() => null);
 
-        if (data?.registered && data?.has_paid && data?.brand) {
+        if (data?.registered && data?.is_authenticated_owner && data?.has_paid && data?.brand) {
           const info = {
             brand_name: data.brand.brand_name || 'Your Brand',
             slug: data.brand.slug || 'brand',
@@ -63,6 +55,9 @@ export default function BrandDashboardPopup() {
           if (!dismissedSession) {
             setIsOpen(true);
           }
+        } else {
+          setBrandInfo(null);
+          setIsOpen(false);
         }
       } catch (err) {
         console.error('[checkPaidStatus error]:', err);
@@ -70,7 +65,7 @@ export default function BrandDashboardPopup() {
     };
 
     checkPaidStatus();
-  }, [user, isLoaded]);
+  }, [user, isSignedIn, isLoaded]);
 
   // Intercept "Get Customers" or "Brand Register" clicks if brand has paid subscription
   useEffect(() => {

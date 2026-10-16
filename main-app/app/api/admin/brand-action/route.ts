@@ -118,7 +118,7 @@ export async function POST(req: Request) {
       // 1. Fetch brand row first to retrieve logo image URL and email
       const { data: brand, error: fetchErr } = await client
         .from('brand_registrations')
-        .select('id, brand_name, brand_logo_url, email')
+        .select('id, brand_name, brand_logo_url, email, clerk_user_id')
         .eq('id', id)
         .single();
 
@@ -126,9 +126,26 @@ export async function POST(req: Request) {
         return NextResponse.json({ ok: false, error: fetchErr?.message || 'Brand not found.' }, { status: 404 });
       }
 
-      // 2. Insert into deleted_brand_logs to decommission brand email
+      // 2. Clear ALL payment logs from brand_payments for this brand's email and brand_name
       if (brand?.email) {
         try {
+          await client.from('brand_payments').delete().ilike('email', brand.email.trim());
+        } catch (payErr) {
+          console.error('[brand_payments email delete error]:', payErr);
+        }
+      }
+      if (brand?.brand_name) {
+        try {
+          await client.from('brand_payments').delete().ilike('brand_name', brand.brand_name.trim());
+        } catch (payNameErr) {
+          console.error('[brand_payments brand_name delete error]:', payNameErr);
+        }
+      }
+
+      // 3. Insert into deleted_brand_logs to decommission brand email until they re-register as a new user
+      if (brand?.email) {
+        try {
+          await client.from('deleted_brand_logs').delete().ilike('email', brand.email.trim());
           await client.from('deleted_brand_logs').insert({
             email: brand.email.toLowerCase().trim(),
             brand_name: brand.brand_name,
@@ -139,7 +156,7 @@ export async function POST(req: Request) {
         }
       }
 
-      // 3. Permanently delete image from Cloudinary if logo URL is present
+      // 4. Permanently delete image from Cloudinary if logo URL is present
       const logoUrl = brand?.brand_logo_url;
       if (logoUrl) {
         const publicId = extractCloudinaryPublicId(logoUrl);
@@ -159,7 +176,7 @@ export async function POST(req: Request) {
         }
       }
 
-      // 4. Permanently delete text record from Supabase
+      // 5. Permanently delete text record from Supabase
       const { error: deleteErr } = await client
         .from('brand_registrations')
         .delete()
@@ -171,7 +188,7 @@ export async function POST(req: Request) {
 
       return NextResponse.json({
         ok: true,
-        message: `Brand "${brand.brand_name}" and all associated assets have been permanently deleted.`,
+        message: `Brand "${brand.brand_name}" and all associated payment logs & assets have been permanently deleted.`,
       });
     }
 

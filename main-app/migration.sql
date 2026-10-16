@@ -253,7 +253,54 @@ CREATE POLICY "Allow all for site_settings"
 ALTER TABLE public.brand_payments
   ADD COLUMN IF NOT EXISTS payment_mode text DEFAULT 'test';
 
+-- ============================================================================
+-- 13) Automatic Cleanup of Payment Logs on Brand Deletion & Tier Verification
+-- ============================================================================
+
+-- Allow deleting payment logs when a brand is permanently deleted
+DROP POLICY IF EXISTS "Allow delete brand payments" ON public.brand_payments;
+CREATE POLICY "Allow delete brand payments"
+  ON public.brand_payments FOR DELETE TO anon, authenticated USING (true);
+
+-- Composite index for fast subscription tier verification (99 / 499 / 1499)
+CREATE INDEX IF NOT EXISTS idx_brand_payments_email_status_amount
+  ON public.brand_payments USING btree (email, payment_status, amount);
+
+-- Trigger function: Whenever a brand is permanently deleted from brand_registrations,
+-- automatically delete all payment logs for that brand's email and brand_name
+CREATE OR REPLACE FUNCTION public.fn_cleanup_brand_payments_on_delete()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+SECURITY DEFINER
+AS $$
+BEGIN
+  IF OLD.email IS NOT NULL THEN
+    DELETE FROM public.brand_payments WHERE lower(trim(email)) = lower(trim(OLD.email));
+  END IF;
+  IF OLD.brand_name IS NOT NULL THEN
+    DELETE FROM public.brand_payments WHERE lower(trim(brand_name)) = lower(trim(OLD.brand_name));
+  END IF;
+  RETURN OLD;
+END;
+$$;
+
+DROP TRIGGER IF EXISTS trg_cleanup_brand_payments_on_delete ON public.brand_registrations;
+CREATE TRIGGER trg_cleanup_brand_payments_on_delete
+  AFTER DELETE ON public.brand_registrations
+  FOR EACH ROW
+  EXECUTE FUNCTION public.fn_cleanup_brand_payments_on_delete();
+
+-- One-time cleanup of any orphaned payment logs whose brand is no longer active
+DELETE FROM public.brand_payments bp
+WHERE NOT EXISTS (
+  SELECT 1
+  FROM public.brand_registrations br
+  WHERE br.status NOT IN ('deleted', 'blocked')
+    AND (
+      lower(trim(br.email)) = lower(trim(bp.email))
+      OR lower(trim(br.brand_name)) = lower(trim(bp.brand_name))
+    )
+);
+
 NOTIFY pgrst, 'reload schema';
-
-
 

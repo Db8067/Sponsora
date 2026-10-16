@@ -78,18 +78,24 @@ export async function POST(req: Request) {
 
   const primaryClient = candidates[0];
 
-  // 1. Strict Conflict Checks: Prevent registration if Phone, Instagram, or Website belongs to another active brand
+  // 1. Strict Conflict Checks: Prevent registration if Email (when not authenticated as owner), Phone, Instagram, or Website belongs to another active brand
   try {
     const { data: conflicts } = await primaryClient
       .from('brand_registrations')
-      .select('id, brand_name, email, whatsapp_number, instagram_handle, brand_website, store_link')
+      .select('id, brand_name, email, clerk_user_id, whatsapp_number, instagram_handle, brand_website, store_link')
       .neq('status', 'deleted')
       .neq('status', 'blocked')
       .limit(300);
 
     if (conflicts && conflicts.length > 0) {
       for (const b of conflicts) {
-        if (b.email?.toLowerCase() === normalizedEmail) continue; // Same user updating their profile is permitted
+        if (b.email?.toLowerCase() === normalizedEmail) {
+          // If the user is NOT logged in (or logged in as a different user), block hijacking an existing brand's email
+          if (!clerkUserId || (b.clerk_user_id && b.clerk_user_id !== clerkUserId)) {
+            return bad(`🌸 Oops! The email "${normalizedEmail}" is already linked to "${b.brand_name}". Please sign in with this account or use a different business email!`, 409);
+          }
+          continue; // Authenticated owner updating their own profile is permitted
+        }
 
         if (b.whatsapp_number && b.whatsapp_number === phone.value) {
           return bad(`🌸 Oops! WhatsApp number ${phone.value} is already linked to "${b.brand_name}". Please use your brand's unique contact number!`, 409);
@@ -117,39 +123,64 @@ export async function POST(req: Request) {
 
   let lastError = '';
   for (const client of candidates) {
-    // Check if brand with this email already exists — update instead of inserting duplicate
     try {
       const { data: existing } = await client
         .from('brand_registrations')
-        .select('id')
+        .select('id, status, brand_name')
         .ilike('email', normalizedEmail)
         .limit(1);
 
       if (existing && existing.length > 0) {
-        const { error: updErr } = await client
-          .from('brand_registrations')
-          .update({ ...row, status: 'pending' })
-          .eq('id', existing[0].id);
-
-        if (!updErr) {
-          // Immediately purge any deleted logs so user is fully unblocked
+        const prev = existing[0];
+        // If previous brand was deleted or blocked, delete the old record & payment logs so it gets a brand new system UUID
+        if (prev.status === 'deleted' || prev.status === 'blocked') {
           try {
+            await client.from('brand_payments').delete().ilike('email', normalizedEmail);
+            if (prev.brand_name) {
+              await client.from('brand_payments').delete().ilike('brand_name', prev.brand_name);
+            }
             await client.from('deleted_brand_logs').delete().ilike('email', normalizedEmail);
+            await client.from('brand_registrations').delete().eq('id', prev.id);
           } catch {}
-          return NextResponse.json({ ok: true, slug: slugify(brandName), updated: true });
+        } else {
+          const { error: updErr } = await client
+            .from('brand_registrations')
+            .update({ ...row, status: 'pending' })
+            .eq('id', prev.id);
+
+          if (!updErr) {
+            try {
+              await client.from('deleted_brand_logs').delete().ilike('email', normalizedEmail);
+            } catch {}
+            return NextResponse.json({ ok: true, slug: slugify(brandName), updated: true });
+          }
         }
       }
     } catch {
       /* fallback to insert */
     }
 
+    // Before inserting a fresh brand registration, clear any stale deleted_brand_logs or orphaned payment logs for this email/brand
+    try {
+      const { data: delLog } = await client
+        .from('deleted_brand_logs')
+        .select('email, brand_name')
+        .ilike('email', normalizedEmail)
+        .limit(1);
+      if (delLog && delLog.length > 0) {
+        await client.from('brand_payments').delete().ilike('email', normalizedEmail);
+        if (delLog[0].brand_name) {
+          await client.from('brand_payments').delete().ilike('brand_name', delLog[0].brand_name);
+        }
+      }
+      await client.from('deleted_brand_logs').delete().ilike('email', normalizedEmail);
+      // Also clear any orphaned payment logs if no active registration existed prior to this insert
+      await client.from('brand_payments').delete().ilike('email', normalizedEmail);
+    } catch {}
+
     const { error } = await client.from('brand_registrations').insert(row);
     if (!error) {
-      // Immediately purge any deleted logs so user is fully unblocked
-      try {
-        await client.from('deleted_brand_logs').delete().ilike('email', normalizedEmail);
-      } catch {}
-      return NextResponse.json({ ok: true, slug: slugify(brandName) });
+      return NextResponse.json({ ok: true, slug: slugify(brandName), new_user: true });
     }
     lastError = error.message;
     console.error('[brand/register] insert failed:', error);

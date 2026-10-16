@@ -80,11 +80,12 @@ export default function BrandRegisterPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
 
-  const { user } = useUser();
+  const { user, isSignedIn } = useUser();
   const [activeBrandProfile, setActiveBrandProfile] = useState<ActiveBrandInfo | null>(null);
   const [paidBrandInfo, setPaidBrandInfo] = useState<PaidBrandInfo | null>(null);
   const [forceShowForm, setForceShowForm] = useState(false);
 
+  const [emailConflict, setEmailConflict] = useState<string | null>(null);
   const [phoneConflict, setPhoneConflict] = useState<string | null>(null);
   const [gstConflict, setGstConflict] = useState<string | null>(null);
   const [igConflict, setIgConflict] = useState<string | null>(null);
@@ -110,11 +111,15 @@ export default function BrandRegisterPage() {
     }
   }, [user, email]);
 
-  // Check if an existing active brand registration exists (to optionally inform the user or show BrandAlreadyCreatedScreen)
+  // Check if an existing active brand registration exists
+  // IMPORTANT: Only show PaidBrandDashboardScreen or BrandAlreadyCreatedScreen if the user is LOGGED IN and owns that email!
+  // If logged out (or using someone else's email), show a friendly conflict message asking them to sign in or use another email.
   useEffect(() => {
     const checkEmail = (email || user?.primaryEmailAddress?.emailAddress || '').trim();
     if (!checkEmail || !validateEmailSyntax(checkEmail).valid) {
       setActiveBrandProfile(null);
+      setPaidBrandInfo(null);
+      setEmailConflict(null);
       return;
     }
 
@@ -126,24 +131,44 @@ export default function BrandRegisterPage() {
         if (!active) return;
 
         if (data?.registered && data.brand && data.brand.status !== 'deleted' && data.brand.status !== 'blocked') {
-          setActiveBrandProfile(data.brand);
-          if (data.has_paid) {
-            setPaidBrandInfo({
-              brand_name: data.brand.brand_name,
-              founder_name: data.brand.founder_name,
-              slug: data.brand.slug,
-              logo: data.brand.logo,
-              email: data.brand.email,
-              dashboard_url: data.dashboard_url,
-              plan_tier: data.payment?.plan_tier,
-              amount: data.payment?.amount,
-            });
+          const signedInEmail = user?.primaryEmailAddress?.emailAddress?.toLowerCase();
+          const isOwner = Boolean(
+            isSignedIn &&
+              user &&
+              (data.is_authenticated_owner ||
+                (signedInEmail && signedInEmail === checkEmail.toLowerCase()))
+          );
+
+          if (isOwner) {
+            setEmailConflict(null);
+            setActiveBrandProfile(data.brand);
+            if (data.has_paid) {
+              setPaidBrandInfo({
+                brand_name: data.brand.brand_name,
+                founder_name: data.brand.founder_name,
+                slug: data.brand.slug,
+                logo: data.brand.logo,
+                email: data.brand.email,
+                dashboard_url: data.dashboard_url,
+                plan_tier: data.payment?.plan_tier,
+                amount: data.payment?.amount,
+              });
+            } else {
+              setPaidBrandInfo(null);
+            }
           } else {
+            // User is logged out or signed in with a different email! Do NOT show dashboard screen!
+            setActiveBrandProfile(null);
             setPaidBrandInfo(null);
+            setEmailConflict(
+              data.email_conflict_message ||
+                `🌸 Oops! The email "${checkEmail}" is already linked to "${data.brand.brand_name}". Please sign in with this account to access your brand dashboard, or use a different business email!`
+            );
           }
         } else {
           setActiveBrandProfile(null);
           setPaidBrandInfo(null);
+          setEmailConflict(null);
         }
       } catch {
         /* ignore */
@@ -154,7 +179,7 @@ export default function BrandRegisterPage() {
       active = false;
       clearTimeout(timer);
     };
-  }, [user, email]);
+  }, [user, isSignedIn, email]);
 
   // Conflict checks: Phone
   useEffect(() => {
@@ -296,6 +321,7 @@ export default function BrandRegisterPage() {
     if (!igParse.valid) problems.push((igParse as any).error);
     else if (igV.status === 'invalid') problems.push(igV.message || 'Instagram account is not valid.');
     if (!webV.valid) problems.push(webV.error!);
+    if (emailConflict) problems.push(emailConflict);
     if (phoneConflict) problems.push(phoneConflict);
     if (gstConflict) problems.push(gstConflict);
     if (igConflict) problems.push(igConflict);
@@ -510,6 +536,23 @@ export default function BrandRegisterPage() {
                       />
                     </div>
                     <FieldMsg state={emailV} />
+                    {emailConflict && (
+                      <div className="mt-2 p-3 rounded-xl border border-pink-200 bg-pink-50 dark:bg-pink-950/40 dark:border-pink-800/50 text-pink-700 dark:text-pink-300 text-xs font-medium leading-relaxed flex flex-col gap-2 animate-in fade-in">
+                        <div className="flex items-start gap-2">
+                          <span className="text-sm shrink-0">🌸</span>
+                          <span>{emailConflict}</span>
+                        </div>
+                        {!isSignedIn && (
+                          <Link
+                            href={`/sign-in?redirect_url=${encodeURIComponent('/brand-register')}`}
+                            className="self-start inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary text-white font-bold text-[11px] hover:bg-primary-dark transition-colors shadow-xs"
+                          >
+                            <span>Sign In to Access Your Brand</span>
+                            <ArrowRight className="w-3 h-3" />
+                          </Link>
+                        )}
+                      </div>
+                    )}
                   </div>
                   <div>
                     <div className="flex items-center justify-between mb-1.5">

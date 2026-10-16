@@ -84,6 +84,7 @@ export default async function WelcomePage({ params }: { params: Promise<{ slug: 
     founder: matchedBrand?.founder_name || 'Founder',
     email: matchedBrand?.email,
     phone: matchedBrand?.whatsapp_number,
+    logo: matchedBrand?.brand_logo_url || undefined,
     plan: amount === '1499' ? 'Business Scale' : amount === '499' ? 'Growth Pro' : 'Starter Maker',
     amount: amount
   };

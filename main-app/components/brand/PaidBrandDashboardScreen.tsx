@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import Snowfall from '@/components/Snowfall';
 import SellerNavbar from '@/components/SellerNavbar';
+import { useUser } from '@clerk/nextjs';
 import {
   Sparkles,
   ArrowRight,
@@ -32,14 +33,18 @@ export default function PaidBrandDashboardScreen({
 }: {
   brand: PaidBrandInfo;
 }) {
+  const { isSignedIn } = useUser();
   const brandSlug = brand.slug || encodeURIComponent(brand.brand_name || 'brand');
-  const dashboardHref =
+  const rawDashboardHref =
     brand.dashboard_url ||
     (brand.amount === 99
       ? `/${brandSlug}-welcome-99`
       : brand.amount === 1499
       ? `/${brandSlug}-welcome-1499`
       : `/${brandSlug}-welcome-499`);
+  const dashboardHref = isSignedIn
+    ? rawDashboardHref
+    : `/sign-in?redirect_url=${encodeURIComponent(rawDashboardHref)}`;
 
   return (
     <div className="min-h-screen flex flex-col bg-pink-50/30 dark:bg-slate-950 relative selection:bg-pink-100 selection:text-primary">
@@ -83,7 +88,7 @@ export default function PaidBrandDashboardScreen({
               className="w-full sm:flex-1 py-4 px-6 rounded-2xl font-black text-sm bg-gradient-to-r from-primary to-pink-500 hover:from-primary-dark hover:to-pink-600 text-white shadow-xl shadow-primary/25 transition-all text-center flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-95"
             >
               <LayoutDashboard className="w-4 h-4" />
-              <span>Go to your Brand Dashboard</span>
+              <span>{isSignedIn ? 'Go to your Brand Dashboard' : 'Login to Open Brand Dashboard'}</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
 

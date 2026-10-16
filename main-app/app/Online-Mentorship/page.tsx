@@ -111,32 +111,35 @@ export default function OnlineMentorshipPage() {
         </section>
 
         {/* Hero Section */}
-        <section className="w-full py-6 sm:py-8 md:py-10 px-4 sm:px-6 lg:px-8">
-          <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center">
+        <section className="w-full py-8 sm:py-12 md:py-16 px-4 sm:px-6 lg:px-8">
+          <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
             {/* Left Column: Copy */}
-            <div className="lg:col-span-7 space-y-6">
+            <div className="lg:col-span-7 flex flex-col items-start space-y-6">
               <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-pink-100 dark:bg-pink-900/40 text-primary dark:text-pink-300 text-xs font-extrabold uppercase tracking-wider border border-pink-200 dark:border-pink-800/40 shadow-sm">
                 <Clock className="w-3.5 h-3.5" />
                 <span>THE UNRUSHED MENTORSHIP STANDARD</span>
               </div>
 
-              <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tight leading-tight">
+              <h1 className="w-full text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tight leading-[1.18]">
                 <span className="block text-slate-900 dark:text-white mb-2 sm:mb-3">
                   1:1 Personalized Mentorship:
                 </span>
-                <span className="relative block min-h-[5.5rem] sm:min-h-[4.2rem] md:min-h-[4.2rem] lg:min-h-[3.6rem] overflow-hidden">
+                {/* Grid stack ensures container naturally sizes to the tallest headline with zero clipping or overlap */}
+                <span className="grid items-start overflow-hidden py-1">
                   {SLIDE_HEADLINES.map((line, idx) => {
                     const isCurrent = idx === currentSlideIndex;
-                    const isPrev = idx === (currentSlideIndex - 1 + SLIDE_HEADLINES.length) % SLIDE_HEADLINES.length;
+                    const isPrev =
+                      idx === (currentSlideIndex - 1 + SLIDE_HEADLINES.length) % SLIDE_HEADLINES.length;
                     return (
                       <span
                         key={line}
-                        className={`absolute inset-x-0 top-0 text-primary transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+                        aria-hidden={!isCurrent}
+                        className={`col-start-1 row-start-1 text-primary transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
                           isCurrent
                             ? 'translate-y-0 opacity-100 pointer-events-auto'
                             : isPrev
-                            ? '-translate-y-full opacity-0 pointer-events-none'
-                            : 'translate-y-full opacity-0 pointer-events-none'
+                            ? '-translate-y-6 opacity-0 pointer-events-none'
+                            : 'translate-y-6 opacity-0 pointer-events-none'
                         }`}
                       >
                         {line}
@@ -146,28 +149,30 @@ export default function OnlineMentorshipPage() {
                 </span>
               </h1>
 
-              <p className="text-base sm:text-lg text-slate-600 dark:text-slate-300 leading-relaxed max-w-2xl">
-                Tired of 30-minute rushed consultations where 15 minutes are wasted just explaining your project? We sit with you 1-on-1 for 1 to 2 full hours, screen-sharing directly, writing code, and building your real systems together.
-              </p>
+              <div className="w-full p-4 sm:p-5 rounded-2xl bg-white/75 dark:bg-slate-900/75 border border-pink-100 dark:border-white/10 backdrop-blur-sm shadow-sm">
+                <p className="text-sm sm:text-base md:text-lg text-slate-600 dark:text-slate-300 leading-relaxed">
+                  Tired of 30-minute rushed consultations where 15 minutes are wasted just explaining your project? We sit with you 1-on-1 for 1 to 2 full hours, screen-sharing directly, writing code, and building your real systems together.
+                </p>
+              </div>
 
               {/* Value Pills */}
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-1">
-                <div className="p-3 bg-white/80 dark:bg-slate-800/80 rounded-2xl border border-pink-100 dark:border-white/10 shadow-sm flex items-center gap-2.5 backdrop-blur-sm">
+              <div className="w-full grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
+                <div className="p-3.5 bg-white/85 dark:bg-slate-800/85 rounded-2xl border border-pink-100 dark:border-white/10 shadow-sm flex items-center gap-2.5 backdrop-blur-sm">
                   <Terminal className="w-5 h-5 text-primary shrink-0" />
                   <span className="font-bold text-xs sm:text-sm text-slate-800 dark:text-white">Live Code Reviews</span>
                 </div>
-                <div className="p-3 bg-white/80 dark:bg-slate-800/80 rounded-2xl border border-pink-100 dark:border-white/10 shadow-sm flex items-center gap-2.5 backdrop-blur-sm">
+                <div className="p-3.5 bg-white/85 dark:bg-slate-800/85 rounded-2xl border border-pink-100 dark:border-white/10 shadow-sm flex items-center gap-2.5 backdrop-blur-sm">
                   <MessageSquare className="w-5 h-5 text-emerald-600 shrink-0" />
                   <span className="font-bold text-xs sm:text-sm text-slate-800 dark:text-white">Mentor WhatsApp</span>
                 </div>
-                <div className="p-3 bg-white/80 dark:bg-slate-800/80 rounded-2xl border border-pink-100 dark:border-white/10 shadow-sm flex items-center gap-2.5 backdrop-blur-sm">
+                <div className="p-3.5 bg-white/85 dark:bg-slate-800/85 rounded-2xl border border-pink-100 dark:border-white/10 shadow-sm flex items-center gap-2.5 backdrop-blur-sm">
                   <Share2 className="w-5 h-5 text-purple-600 shrink-0" />
                   <span className="font-bold text-xs sm:text-sm text-slate-800 dark:text-white">Grahak Setu Access</span>
                 </div>
               </div>
 
               {/* Action Buttons */}
-              <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+              <div className="w-full pt-1 flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
                 <a
                   href="#apply"
                   className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-gradient-to-r from-primary to-pink-500 hover:from-primary-dark hover:to-pink-600 text-white font-bold text-sm sm:text-base shadow-xl shadow-primary/25 transition-all hover:scale-[1.02] active:scale-95 text-center"
@@ -175,17 +180,17 @@ export default function OnlineMentorshipPage() {
                   <span>Book Free 1:1 Diagnostic Call</span>
                   <ArrowRight className="w-4 h-4" />
                 </a>
-                <a
-                  href="#curriculum"
-                  className="inline-flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-white/80 dark:bg-slate-800/80 hover:bg-white dark:hover:bg-slate-800 text-slate-800 dark:text-white border border-pink-200 dark:border-white/10 font-bold text-sm sm:text-base transition-all hover:shadow-md text-center"
+                <Link
+                  href="/mentorship-subscription"
+                  className="inline-flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-white/85 dark:bg-slate-800/85 hover:bg-white dark:hover:bg-slate-800 text-slate-800 dark:text-white border border-pink-200 dark:border-white/10 font-bold text-sm sm:text-base transition-all hover:shadow-md text-center"
                 >
-                  <span>Explore Curriculum</span>
+                  <span>Explore Mentorship Plans</span>
                   <BookOpen className="w-4 h-4" />
-                </a>
+                </Link>
               </div>
 
               {/* Rating Proof */}
-              <div className="flex items-center gap-2 pt-1 text-xs text-slate-500 dark:text-slate-400">
+              <div className="flex flex-wrap items-center gap-2 pt-1 text-xs text-slate-500 dark:text-slate-400">
                 <div className="flex text-amber-400">
                   {Array(5)
                     .fill(0)
@@ -194,14 +199,14 @@ export default function OnlineMentorshipPage() {
                     ))}
                 </div>
                 <span className="font-black text-slate-800 dark:text-white">4.98 / 5.0</span>
-                <span>from 140+ real client builds & agency operators</span>
+                <span>from 140+ real client builds &amp; agency operators</span>
               </div>
             </div>
 
-            {/* Right Column: Visual Showcase & Dual Retainer Card */}
-            <div className="lg:col-span-5 relative space-y-4">
-              <div className="relative rounded-3xl overflow-hidden shadow-2xl bg-pink-50/60 dark:bg-slate-900 border-2 border-pink-200/70 dark:border-white/10 group p-4 sm:p-6 flex items-center justify-center">
-                <div className="w-full aspect-[4/3] relative rounded-2xl overflow-hidden">
+            {/* Right Column: Clean Visual Showcase */}
+            <div className="lg:col-span-5 relative">
+              <div className="relative rounded-3xl overflow-hidden shadow-2xl bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-2 border-pink-200/70 dark:border-white/10 group p-4 sm:p-5 flex flex-col gap-4">
+                <div className="w-full aspect-[4/3] relative rounded-2xl overflow-hidden bg-pink-50 dark:bg-slate-800">
                   <Image
                     src="/images/mentorship-hero-banner.jpg"
                     alt="NextHour & Grahak Setu 1:1 Mentorship Artwork"
@@ -211,67 +216,15 @@ export default function OnlineMentorshipPage() {
                     priority
                   />
                 </div>
-              </div>
-
-              {/* Transparent Highlight Retainer Card */}
-              <div className="bg-white/95 dark:bg-slate-850/95 backdrop-blur-md p-6 rounded-3xl shadow-xl border-2 border-primary/40 space-y-4 relative -mt-8 mx-2 sm:mx-4 z-20">
-                <div className="flex items-center justify-between pb-2 border-b border-pink-100 dark:border-white/10">
-                  <span className="text-xs font-black uppercase tracking-wider text-primary">
-                    Transparent Monthly Retainers
-                  </span>
-                  <span className="px-2.5 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 text-[11px] font-bold">
-                    Zero Hidden Fees
+                <div className="flex items-center justify-between gap-3 px-2 pt-1 text-xs">
+                  <div className="flex items-center gap-2 font-bold text-slate-800 dark:text-white">
+                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+                    <span>1-on-1 Screen-Share Implementation</span>
+                  </div>
+                  <span className="px-2.5 py-1 rounded-full bg-pink-100 dark:bg-pink-900/40 text-primary font-extrabold text-[11px]">
+                    1–2 Hr Sprints
                   </span>
                 </div>
-
-                {/* Tier 1: 1:1 Mentorship */}
-                <div className="p-3.5 rounded-2xl bg-pink-50/60 dark:bg-slate-800/80 border border-pink-100 dark:border-white/10 flex items-center justify-between">
-                  <div>
-                    <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded bg-pink-200 text-pink-800">1:1 Deep Sprints</span>
-                    <h4 className="font-extrabold text-sm text-slate-900 dark:text-white mt-1">1:1 Live Mentorship</h4>
-                    <p className="text-[11px] text-slate-500">1-2 hour sessions until doubt clear</p>
-                  </div>
-                  <div className="text-right">
-                    <span className="text-xl font-black text-primary">₹15,000</span>
-                    <span className="text-[11px] text-slate-500 block">/ month</span>
-                  </div>
-                </div>
-
-                {/* Tier 2: DFY Engine */}
-                <div className="p-3.5 rounded-2xl bg-emerald-50/60 dark:bg-slate-800/80 border border-emerald-100 dark:border-white/10 flex items-center justify-between">
-                  <div>
-                    <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded bg-emerald-200 text-emerald-800">Done-For-You</span>
-                    <h4 className="font-extrabold text-sm text-slate-900 dark:text-white mt-1">DFY Website + Clients</h4>
-                    <p className="text-[11px] text-slate-500">We build site &amp; deliver clients</p>
-                  </div>
-                  <div className="text-right">
-                    <span className="text-xl font-black text-emerald-600 dark:text-emerald-400">₹10,000</span>
-                    <span className="text-[11px] text-slate-500 block">/ month</span>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-2 gap-2 pt-1 text-xs font-semibold text-slate-800 dark:text-slate-200">
-                  <div className="flex items-center gap-1.5">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" /> 1-2 Hr Sprints
-                  </div>
-                  <div className="flex items-center gap-1.5">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" /> Doubt Clear Guarantee
-                  </div>
-                  <div className="flex items-center gap-1.5">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" /> Direct Mentor WhatsApp
-                  </div>
-                  <div className="flex items-center gap-1.5">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" /> Pitch to 50+ Brands
-                  </div>
-                </div>
-
-                <Link
-                  href="/mentorship-subscription"
-                  className="w-full py-3 rounded-xl bg-gradient-to-r from-primary to-pink-500 hover:from-primary-dark hover:to-pink-600 text-white font-bold text-xs shadow-md transition-all flex items-center justify-center gap-1.5"
-                >
-                  <span>View All Plans &amp; Enroll</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </Link>
               </div>
             </div>
           </div>
