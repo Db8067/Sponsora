@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import Snowfall from '@/components/Snowfall';
 import SellerNavbar from '@/components/SellerNavbar';
+import ComingSoonView from '@/components/ComingSoonView';
 import {
   Check,
   ArrowRight,
@@ -152,6 +153,27 @@ export default function MentorshipSubscriptionPage() {
   const handleGoToCheckout = (plan: MentorshipPlan) => {
     router.push(`/client-checkout?plan=${encodeURIComponent(plan.id)}&billing=${encodeURIComponent(billing)}`);
   };
+
+  // Display Coming Soon view as requested
+  const SHOW_COMING_SOON = true;
+
+  if (SHOW_COMING_SOON) {
+    return (
+      <div className="flex flex-col min-h-screen bg-transparent relative selection:bg-pink-100 selection:text-primary">
+        <Snowfall />
+        <SellerNavbar />
+
+        <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-16 flex items-center justify-center relative z-10">
+          <ComingSoonView
+            title="Coming Soon"
+            subtitle="Something Amazing is on the way! We are currently putting the finishing touches on our mentorship plans."
+            backHref="/Online-Mentorship"
+            backText="Back to Mentorship"
+          />
+        </main>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col min-h-screen bg-transparent relative selection:bg-pink-100 selection:text-primary">

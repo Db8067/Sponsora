@@ -6,6 +6,7 @@ import Script from 'next/script';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Snowfall from '@/components/Snowfall';
 import SellerNavbar from '@/components/SellerNavbar';
+import ComingSoonView from '@/components/ComingSoonView';
 import { useUser } from '@clerk/nextjs';
 import {
   ShieldCheck,
@@ -651,6 +652,26 @@ function ClientCheckoutContent() {
 }
 
 export default function ClientCheckoutPage() {
+  const SHOW_COMING_SOON = true;
+
+  if (SHOW_COMING_SOON) {
+    return (
+      <div className="min-h-screen flex flex-col bg-pink-50/40 dark:bg-slate-950 relative selection:bg-pink-100 selection:text-primary">
+        <Snowfall />
+        <SellerNavbar />
+
+        <main className="flex-1 w-full px-4 sm:px-6 lg:px-8 py-8 sm:py-16 flex items-center justify-center relative z-10">
+          <ComingSoonView
+            title="Coming Soon"
+            subtitle="Something Amazing is on the way! The client checkout is currently being prepared. In the meantime, connect directly with your lead mentor on WhatsApp."
+            backHref="/Online-Mentorship"
+            backText="Back to Mentorship"
+          />
+        </main>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen flex flex-col bg-pink-50/40 dark:bg-slate-950 relative selection:bg-pink-100 selection:text-primary">
       <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="lazyOnload" />

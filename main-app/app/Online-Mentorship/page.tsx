@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import Snowfall from '@/components/Snowfall';
 import SellerNavbar from '@/components/SellerNavbar';
+import ComingSoonView from '@/components/ComingSoonView';
 import { MENTORSHIP_SERVICES } from '@/lib/mentorship-data';
 import {
   Clock,
@@ -21,6 +22,9 @@ import {
 } from 'lucide-react';
 
 export default function OnlineMentorshipPage() {
+  // Coming Soon modal state
+  const [isComingSoonOpen, setIsComingSoonOpen] = useState(false);
+
   // FAQ Accordion open index
   const [openFaq, setOpenFaq] = useState<number | null>(0);
 
@@ -124,13 +128,14 @@ export default function OnlineMentorshipPage() {
                   <span>Let&apos;s start</span>
                   <ArrowRight className="w-4 h-4" />
                 </a>
-                <Link
-                  href="/mentorship-subscription"
+                <button
+                  type="button"
+                  onClick={() => setIsComingSoonOpen(true)}
                   className="inline-flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-white/85 dark:bg-slate-800/85 hover:bg-white dark:hover:bg-slate-800 text-slate-800 dark:text-white border border-pink-200 dark:border-white/10 font-bold text-sm sm:text-base transition-all hover:shadow-md text-center"
                 >
                   <span>Explore Mentorship Plans</span>
                   <BookOpen className="w-4 h-4" />
-                </Link>
+                </button>
               </div>
 
               {/* Rating Proof */}
@@ -368,13 +373,14 @@ export default function OnlineMentorshipPage() {
                   Everything We Build With You 1-on-1
                 </h2>
               </div>
-              <Link
-                href="/mentorship-subscription"
+              <button
+                type="button"
+                onClick={() => setIsComingSoonOpen(true)}
                 className="px-6 py-3 rounded-xl bg-gradient-to-r from-primary to-pink-500 hover:from-primary-dark hover:to-pink-600 text-white font-bold text-xs sm:text-sm shadow-md transition-all shrink-0 flex items-center gap-1.5 self-start md:self-auto"
               >
                 <span>View Retainer Plans</span>
                 <ArrowRight className="w-4 h-4" />
-              </Link>
+              </button>
             </div>
 
             {/* Clean Track Headlines - No Cards, No Images, No Descriptions */}
@@ -571,6 +577,15 @@ export default function OnlineMentorshipPage() {
           </div>
         </section>
       </main>
+
+      {/* Coming Soon Modal */}
+      <ComingSoonView
+        isModal
+        isOpen={isComingSoonOpen}
+        onClose={() => setIsComingSoonOpen(false)}
+        title="Coming Soon"
+        subtitle="Something Amazing is on the way! We are putting the finishing touches on our mentorship plans."
+      />
     </div>
   );
 }
